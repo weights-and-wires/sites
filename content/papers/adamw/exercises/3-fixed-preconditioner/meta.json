@@ -1,0 +1,10 @@
+{
+  "title": "Decay against L2 with a fixed preconditioner",
+  "goal": "Reproduce Proposition 3 (Section 2). An optimizer uses a fixed preconditioner $M = \\mathrm{diag}(s)^{-1}$, so each coordinate's gradient is divided by a positive scale $s_i$. The step is $\\theta \\leftarrow \\theta - \\alpha\\,\\nabla f(\\theta)\\oslash s$, either with an L2 term in the gradient or with decoupled decay.\n\nWrite three functions. All take `theta`, `grad` (the loss gradient), the scales `s`, `alpha`, and return new arrays without modifying their inputs.\n\n- `l2_precond_step(theta, grad, s, alpha, lam_l2)` divides `grad + lam_l2 * theta` by `s`, scales by `alpha`, and subtracts.\n- `decoupled_precond_step(theta, grad, s, alpha, lam)` returns `(1 - lam) * theta - alpha * grad / s` (Appendix A, Equation 12).\n- `equivalent_l2(lam, alpha, s)` returns the per-coordinate L2 coefficients `lam_l2` such that `l2_precond_step` gives the same iterates as `decoupled_precond_step` with decay `lam`. It returns an array with the shape of `s`.",
+  "hints": [
+    "Write the two updates on one coordinate. L2 subtracts `alpha * lam_l2 * theta / s`. Decay subtracts `lam * theta`. Set them equal.",
+    "Proposition 3 writes the answer as $\\lambda' = \\lambda / \\alpha$ on the loss $\\frac{\\lambda'}{2}\\lVert\\theta \\odot \\sqrt{s}\\rVert_2^2$. The gradient of that term is $\\lambda' s_i \\theta_i$, so the coefficient on $\\frac12\\theta_i^2$ is $\\lambda' s_i$.",
+    "The result is `lam / alpha * s`. When all `s_i` are equal, every coordinate gets the same value."
+  ],
+  "runtime": "pyodide"
+}
