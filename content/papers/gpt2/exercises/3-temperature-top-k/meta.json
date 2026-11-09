@@ -1,0 +1,11 @@
+{
+  "title": "Temperature and top-k sampling",
+  "goal": "To generate a summary, Section 3.6 samples with top-$k$ and $k = 2$ instead of decoding greedily. Write `sample_probs(logits, temperature=1.0, top_k=None)`, which turns a vector of logits into the probability vector that a sampler draws from:\n\n1. Divide the logits by `temperature`.\n2. If `top_k` is not `None`, keep the `top_k` largest scaled logits and give every other token probability 0.\n3. Apply a softmax over the kept tokens, so the result sums to 1.\n\nThe starter includes `sample`, which draws a token id from your probabilities with a NumPy random generator.",
+  "hints": [
+    "Temperature divides the logits before the softmax. A temperature below 1 sharpens the distribution.",
+    "`np.argsort(z)[-k:]` gives the indices of the `k` largest values. Set every other logit to `-np.inf` before the softmax, and `exp(-inf)` is exactly 0.",
+    "Renormalizing is automatic if you mask before the softmax. If you mask after the softmax, divide by the new sum.",
+    "If `top_k` is at least the vocabulary size, nothing is removed."
+  ],
+  "runtime": "pyodide"
+}

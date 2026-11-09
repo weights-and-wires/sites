@@ -1,0 +1,11 @@
+{
+  "title": "Next-token loss and perplexity",
+  "goal": "A language model factorizes $p(x)$ into next-token conditionals (Section 2, Equation 1). Training minimizes the average negative log-probability of each token given the tokens before it, and perplexity is the exponential of that average (Section 3.1).\n\nWrite two functions:\n\n- `lm_loss(logits, tokens)` takes `logits` of shape `(T, V)` and an integer array `tokens` of length `T`. Row `t` of `logits` is the model's prediction for the token at position `t + 1`, made after reading tokens `0` to `t`. Return the mean negative log-probability, in nats, over the `T - 1` predictions that have a target.\n- `perplexity(logits, tokens)` returns `exp(lm_loss(...))`.\n\nThe starter includes the signatures. You write a numerically stable log-softmax inside `lm_loss`.",
+  "hints": [
+    "Row `t` predicts `tokens[t + 1]`, so drop the last row of `logits` and the first entry of `tokens`.",
+    "`log_softmax(z) = z - max(z) - log(sum(exp(z - max(z))))`. Subtracting the maximum keeps `exp` from overflowing when logits are around 1000.",
+    "Pick each target's log-probability with `logp[np.arange(T - 1), tokens[1:]]`, negate it, and take the mean.",
+    "Perplexity uses the natural logarithm's inverse, `np.exp`, not `2 **`, because the loss is in nats."
+  ],
+  "runtime": "pyodide"
+}
