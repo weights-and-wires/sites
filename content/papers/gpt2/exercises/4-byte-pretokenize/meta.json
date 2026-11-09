@@ -1,0 +1,11 @@
+{
+  "title": "Byte-level pre-tokenization",
+  "goal": "Section 2.2 starts BPE from 256 byte values and stops it from merging across character categories, with an exception for spaces. Without the rule, \"dog\", \"dog.\", \"dog!\", and \"dog?\" would each grow their own merges. The paper doesn't give the exact rule. This exercise follows the shape of OpenAI's released splitting pattern, simplified.\n\nWrite `pretokenize(text)`, which returns a list of strings that join back to `text`. Split `text` into maximal runs of one category: letters (`str.isalpha`), digits (`str.isdigit`), or other non-space characters. A single space directly before a run joins that run, so `\" dog\"` is one piece. Any other whitespace stands alone: with several spaces in a row, only the last one joins the next run.\n\nAlso write `to_bytes(text)`, which returns the UTF-8 bytes of `text` as a list of integers from 0 to 255.\n\nThe starter provides `category(ch)`.",
+  "hints": [
+    "Walk through the string with an index. At a non-space character, extend the index while `category` stays the same.",
+    "At a space character, first find the end of the whitespace run. If the run ends before the string does and its last character is `\" \"`, everything but that last space is one piece, and the last space starts the next run.",
+    "A newline before a word does not join the word. Only a literal space does.",
+    "`list(text.encode(\"utf-8\"))` gives the bytes."
+  ],
+  "runtime": "pyodide"
+}
