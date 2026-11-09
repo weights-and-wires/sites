@@ -1,0 +1,10 @@
+{
+  "title": "Semantic tokens from k-means",
+  "goal": "The paper takes embeddings from an intermediate layer of w2v-BERT, normalizes them so that each dimension has zero mean and unit variance, and uses the index of the nearest k-means centroid as the semantic token (Section III-B). The first two stages also remove consecutive repetitions of semantic tokens (Section IV-B).\n\nWrite `semantic_tokens(feats, centroids, mean, std)`. It takes features of shape `(T, D)`, centroids of shape `(K, D)` that live in the normalized space, and per-dimension `mean` and `std` of shape `(D,)`. It returns an integer array of length `T`. Use squared Euclidean distance.\n\nWrite `collapse_repeats(tokens)`, which removes consecutive repeats. It returns `(kept, run_lengths)`: the collapsed tokens, and for each kept token the number of frames in its run.",
+  "hints": [
+    "Normalize the features with `(feats - mean) / std` before the distance. The centroids are already in that space.",
+    "The token is the index of the nearest centroid, so use `argmin` over the distances.",
+    "A token starts a new run when it differs from the previous token. `np.diff` and `np.flatnonzero` give the run boundaries."
+  ],
+  "runtime": "pyodide"
+}
