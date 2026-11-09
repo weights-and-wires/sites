@@ -1,0 +1,10 @@
+{
+  "title": "The multitask prompt",
+  "goal": "Whisper chooses its task from the first decoder tokens (Section 2.3, Figure 1). The prompt is, in order: optional previous text after `<|startofprev|>`, then `<|startoftranscript|>`, a language token such as `<|en|>`, a task token (`<|transcribe|>` or `<|translate|>`), and `<|notimestamps|>` when timestamps are off.\n\nWrite two functions:\n\n- `build_prompt(language, task, timestamps, prev_tokens=None)` returns the prompt as a list of strings. Raise `ValueError` for any task other than `transcribe` or `translate`.\n- `prompt_loss_mask(tokens)` takes a full training sequence and returns a list of booleans, one per token. It is `False` for the previous-text tokens (strictly between `<|startofprev|>` and `<|startoftranscript|>`) and `True` everywhere else. The paper masks the loss over the previous context only (Section 2.3). This exercise keeps the two marker tokens themselves in the loss.",
+  "hints": [
+    "Build the list in prompt order. The previous-text block comes first, and only when `prev_tokens` is non-empty.",
+    "`<|notimestamps|>` is added when `timestamps` is `False`, and it goes last, after the task token.",
+    "For the mask, find the index of `<|startofprev|>` and of `<|startoftranscript|>` with `tokens.index`. When the first marker is absent, nothing is masked."
+  ],
+  "runtime": "pyodide"
+}

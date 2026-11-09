@@ -1,0 +1,11 @@
+{
+  "title": "Log-Mel features and the 30 s window",
+  "goal": "Whisper turns 16 kHz audio into an 80-channel log-magnitude Mel spectrogram, computed on 25 ms windows with a 10 ms stride (Section 2.2). A 30 s chunk is 480,000 samples, and the encoder expects an `(80, 3000)` input.\n\nThe starter gives you the constants and a finished `mel_filterbank()`, which returns an `(80, 201)` matrix. Write `log_mel_spectrogram(audio, filters)`. Follow the steps in the docstring, which match the released code. The paper states only the window, the stride, the 80 channels, and a global scale to $[-1, 1]$. The log10, the 8-decade clamp, and the `(x + 4) / 4` scaling come from the released code.",
+  "hints": [
+    "Pad with `np.pad(audio, N_FFT // 2, mode=\"reflect\")`. A padded signal of length $n + 400$ gives $1 + n / 160$ frames, which is 3001 for 30 s. The last frame is dropped.",
+    "Build all frames at once: `idx = np.arange(N_FFT)[None, :] + HOP * np.arange(n_frames)[:, None]`, then `padded[idx]` has shape `(n_frames, 400)`.",
+    "Use `np.hanning(N_FFT + 1)[:-1]` for the periodic Hann window. `np.hanning(N_FFT)` is the symmetric one and gives slightly different values.",
+    "The clamp is `np.maximum(log_spec, log_spec.max() - 8.0)`, and its maximum is over the whole spectrogram, not per frame."
+  ],
+  "runtime": "pyodide"
+}
