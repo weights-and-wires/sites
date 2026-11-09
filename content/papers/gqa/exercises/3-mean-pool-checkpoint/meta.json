@@ -1,0 +1,11 @@
+{
+  "title": "Mean-pool a checkpoint",
+  "goal": "Implement the checkpoint conversion from Sections 2.1 and 2.2. To convert a multi-head checkpoint to GQA-$G$, build each group's key head and value head by mean-pooling the original heads in that group. Figure 4 shows that mean pooling beats taking one head and beats random initialization.\n\nWrite `mean_pool_heads(W, H, G)`. `W` is a key or value projection of shape `(d_model, H * d_k)`, where column block `i` of width `d_k` is head `i`. Return shape `(d_model, G * d_k)`. Group `g` averages the `H // G` neighboring heads `g * (H // G)` through `(g + 1) * (H // G) - 1`. `G` divides `H`.\n\nYou convert only the key and value projections. Query heads and the output projection stay as they are.",
+  "hints": [
+    "Reshape `W` to `(d_model, G, H // G, d_k)`. The head axis is `H // G` heads per group, in order.",
+    "Average over the axis of size `H // G` and reshape back to `(d_model, G * d_k)`.",
+    "Average and don't add: a sum scales the keys by `H // G`, which changes every softmax.",
+    "Check yourself with `G = H`, which must return `W` unchanged, and `G = 1`, which must return the mean over all heads."
+  ],
+  "runtime": "pyodide"
+}
