@@ -1,0 +1,10 @@
+{
+  "title": "Per-tensor scaling",
+  "goal": "Before a tensor is cast to FP8, it is multiplied by a scaling factor, and the result is divided by the same factor afterwards (Section 2). The paper says that the general idea is to choose the factor \"such that the maximum magnitude in the tensor becomes close to the maximum representable magnitude\" of the format. Overflows saturate.\n\nThe starter includes a finished `quantize(x, fmt)` from the previous exercise. Write two functions:\n\n- `amax_scale(x, fmt)` returns the scale $s = \\text{fmt max} / \\max|x|$. Return `1.0` for an all-zero tensor.\n- `scaled_roundtrip(x, fmt)` scales `x`, casts it to FP8 with `quantize`, and divides by the scale. It returns the dequantized `float64` tensor.",
+  "hints": [
+    "The format maximum is `FORMATS[fmt][\"max\"]`: 448 for E4M3 and 57,344 for E5M2.",
+    "Use `np.max(np.abs(x))`. The largest value in magnitude can be negative.",
+    "The scale multiplies before the cast and divides after it. If you forget the division, the output is $s$ times too large."
+  ],
+  "runtime": "pyodide"
+}

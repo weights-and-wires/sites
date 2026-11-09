@@ -1,0 +1,10 @@
+{
+  "title": "Decode an FP8 byte",
+  "goal": "Table 1 of the paper (Section 3) lists the bit layout of the two FP8 encodings. Write `decode(code, fmt)`, which turns an integer `code` in `0..255` into the float that the byte `S.E.M` encodes. `fmt` is `\"e4m3\"` or `\"e5m2\"`.\n\nThe starter gives the field widths and biases in `FORMATS`. Handle three cases: subnormals (exponent field 0), normals, and the special values. E5M2 follows IEEE 754 and uses the top exponent for infinities and NaNs. E4M3 has no infinities and keeps a single NaN pattern, `S.1111.111` (Section 3.1).",
+  "hints": [
+    "Split the byte with shifts and masks: the sign is bit 7, the exponent is the next `ebits` bits, and the mantissa is the low `mbits` bits.",
+    "A normal value is $(-1)^S \\cdot (1 + M / 2^m) \\cdot 2^{E - \\text{bias}}$. A subnormal value is $(-1)^S \\cdot (M / 2^m) \\cdot 2^{1 - \\text{bias}}$. The subnormal exponent is `1 - bias`, not `-bias`.",
+    "For E4M3, only the pattern with exponent field 15 and mantissa 7 is NaN. The other patterns with exponent field 15 are ordinary numbers up to 448. For E5M2, exponent field 31 with mantissa 0 is infinity, and the other mantissas are NaN."
+  ],
+  "runtime": "pyodide"
+}
