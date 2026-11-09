@@ -1,0 +1,10 @@
+{
+  "title": "The monotonic improvement bound",
+  "goal": "Implement the lower bound on the true return from Section 3, then check it numerically.\n\nThe starter includes finished helpers `policy_value` and `surrogate_and_epsilon(P, r, rho0, gamma, pi, pi_new)`. The second returns `(eta, L, epsilon)`, where `L` is $L_\\pi(\\tilde\\pi)$ from Equation 3 and `epsilon` is $\\max_{s,a} |A_\\pi(s, a)|$. The arrays have the same shapes as in Exercise 1: `P[s, a, s']`, `r[s]`, `rho0[s]`, and `pi[s, a]`. Write four functions:\n\n- `max_tv(pi, pi_new)` returns $D_{TV}^{\\max}(\\pi, \\tilde\\pi) = \\max_s \\tfrac12 \\sum_a |\\pi(a \\mid s) - \\tilde\\pi(a \\mid s)|$ (Equation 7).\n- `max_kl(pi, pi_new)` returns $D_{KL}^{\\max}(\\pi, \\tilde\\pi) = \\max_s D_{KL}(\\pi(\\cdot \\mid s) \\,\\|\\, \\tilde\\pi(\\cdot \\mid s))$. The old policy is the first argument.\n- `penalty_constant(epsilon, gamma)` returns $C = 4\\epsilon\\gamma/(1-\\gamma)^2$ (Equation 9).\n- `improvement_bound(P, r, rho0, gamma, pi, pi_new, divergence=\"kl\")` returns $L_\\pi(\\tilde\\pi) - C\\,D_{TV}^{\\max}(\\pi, \\tilde\\pi)^2$ when `divergence=\"tv\"` (Theorem 1, Equation 8) and $L_\\pi(\\tilde\\pi) - C\\,D_{KL}^{\\max}(\\pi, \\tilde\\pi)$ when `divergence=\"kl\"` (Equation 9).\n\nThe tests reproduce the numbers on the page, then check on 200 random MDPs that $\\eta(\\tilde\\pi)$ never falls below either bound.",
+  "hints": [
+    "`pi` and `pi_new` have shape `(S, A)`. Sum over the action axis (`axis=1`) first, and take the maximum over states last.",
+    "The KL divergence is not symmetric. $D_{KL}(\\pi \\,\\|\\, \\tilde\\pi) = \\sum_a \\pi(a \\mid s) \\log \\frac{\\pi(a \\mid s)}{\\tilde\\pi(a \\mid s)}$ weights the log ratio by the old policy.",
+    "The Theorem 1 bound squares the total variation divergence: $\\alpha^2$ with $\\alpha = D_{TV}^{\\max}$. The KL bound doesn't square anything, because $D_{TV}^2 \\le D_{KL}$ already absorbed the square."
+  ],
+  "runtime": "pyodide"
+}

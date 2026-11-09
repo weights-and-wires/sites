@@ -1,0 +1,11 @@
+{
+  "title": "Conjugate gradient and the step length",
+  "goal": "Implement the two numerical pieces of Appendix C that turn a gradient $g$ into a trust-region step.\n\n- `conjugate_gradient(fvp, b, iters=10, tol=1e-10)` approximately solves $Ax = b$, where $A$ is the Fisher matrix. It must use only the function `fvp(v)`, which returns $Av$. Never form $A$. Start from $x = 0$, run at most `iters` iterations, and stop early when $r^\\top r < \\text{tol}$.\n- `max_step_length(s, As, delta)` returns $\\beta = \\sqrt{2\\delta / (s^\\top A s)}$, the largest step along the search direction $s \\approx A^{-1} g$ for which the quadratic model of the KL divergence stays at $\\delta$. The caller passes `As`, the product $As$, because CG has already computed it.\n\nThe tests use the $2 \\times 2$ system from the page and random positive-definite systems.",
+  "hints": [
+    "Keep three vectors: the solution `x`, the residual `r = b - A x`, and the search direction `p`. Start with `x = 0`, `r = b`, and `p = r`.",
+    "One iteration: `alpha = (r @ r) / (p @ A p)`, then `x += alpha * p`, `r -= alpha * A p`, then `p = r_new + ((r_new @ r_new) / (r_old @ r_old)) * p`.",
+    "In exact arithmetic, CG solves an $n \\times n$ system in at most $n$ iterations. If a test with 2 iterations on a $2 \\times 2$ system fails, check the formula for the new direction `p`.",
+    "From $\\tfrac12 \\beta^2 s^\\top A s = \\delta$, solve for $\\beta$. Check the factor of 2 and the square root."
+  ],
+  "runtime": "pyodide"
+}
