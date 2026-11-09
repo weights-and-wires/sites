@@ -129,6 +129,7 @@ type Stage struct {
 type Course struct {
 	ID       string   `yaml:"id"`
 	Name     string   `yaml:"name"`
+	Mark     string   `yaml:"mark"`
 	URL      string   `yaml:"url"`
 	Blurb    string   `yaml:"blurb"`
 	Lessons  int      `yaml:"lessons"`
@@ -139,13 +140,45 @@ type Course struct {
 	Progress string   `yaml:"progress"`
 	Repo     string   `yaml:"repo"`
 	Glob     string   `yaml:"glob"`
-	Paths    []Link   `yaml:"paths"`
+	Paths    []string `yaml:"paths"`
 }
 
-// Link is a labelled URL.
-type Link struct {
-	Label string `yaml:"label"`
-	URL   string `yaml:"url"`
+// Path is a reading path, read from content/paths/<id>.md.
+type Path struct {
+	ID    string `yaml:"id"`
+	Title string `yaml:"title"`
+	Body  string `yaml:"-"`
+}
+
+// LoadPaths reads every content/paths/*.md. A missing directory means no
+// paths yet.
+func LoadPaths(dir string) ([]Path, error) {
+	files, err := filepath.Glob(filepath.Join(dir, "*.md"))
+	if err != nil {
+		return nil, err
+	}
+	var paths []Path
+	for _, f := range files {
+		src, err := os.ReadFile(f)
+		if err != nil {
+			return nil, err
+		}
+		meta, body, err := SplitFrontMatter(src)
+		if err != nil {
+			return nil, fmt.Errorf("%s: %w", f, err)
+		}
+		var p Path
+		if err := yaml.Unmarshal(meta, &p); err != nil {
+			return nil, fmt.Errorf("%s: %w", f, err)
+		}
+		if p.ID == "" {
+			p.ID = strings.TrimSuffix(filepath.Base(f), ".md")
+		}
+		p.Body = string(body)
+		paths = append(paths, p)
+	}
+	sort.Slice(paths, func(i, j int) bool { return paths[i].ID < paths[j].ID })
+	return paths, nil
 }
 
 // LoadHub reads the hub catalogue and sorts courses by their suggested order.
@@ -159,7 +192,14 @@ func LoadHub(path string) (Hub, error) {
 		return h, fmt.Errorf("%s: %w", path, err)
 	}
 	seen := map[string]bool{}
+	stages := map[string]bool{}
+	for _, st := range h.Stages {
+		stages[st.ID] = true
+	}
 	for _, c := range h.Courses {
+		if !stages[c.Stage] {
+			return h, fmt.Errorf("%s: course %q has unknown stage %q", path, c.ID, c.Stage)
+		}
 		if c.ID == "" || c.Name == "" || c.URL == "" {
 			return h, fmt.Errorf("%s: every course needs id, name, and url", path)
 		}
