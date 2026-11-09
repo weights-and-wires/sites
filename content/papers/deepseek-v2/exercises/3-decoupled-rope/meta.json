@@ -1,0 +1,10 @@
+{
+  "title": "Decoupled RoPE scores",
+  "goal": "Write `rope(x, pos)` and `decoupled_scores(qC, kC, qR, kR, d_h, d_hR)` for one sequence of `T` tokens.\n\n- `rope(x, pos, base=10000.0)` rotates the pair `(x[2j], x[2j+1])` of the last axis by `pos * base**(-2j/d)`. `x` has shape `(..., T, d)` and `pos` has shape `(T,)`.\n- `decoupled_scores` returns the pre-softmax score matrix of shape `(n_h, T, T)` from Equations 14-18: the dot product of $[q^C; \\mathrm{RoPE}(q^R)]$ with $[k^C; \\mathrm{RoPE}(k^R)]$, divided by $\\sqrt{d_h + d_h^R}$. Positions are `arange(T)`.\n\nShapes: `qC`, `kC` are `(T, n_h, d_h)`; `qR` is `(T, n_h, d_hR)`; `kR` is `(T, d_hR)` and is shared by all heads. `qR` and `kR` arrive before RoPE. Entry `[i, t, j]` is the score of query `t` against key `j` in head `i`. Don't apply a causal mask.",
+  "hints": [
+    "`rope` is the formula you wrote for the RoPE page: split even and odd coordinates, then `a*cos - b*sin` and `a*sin + b*cos`.",
+    "Use only `qC @ kC` for the content part, with no rotation. The point of decoupling is that the cached latent path carries no position.",
+    "Rotate `qR` and `kR` with the same positions, then combine with `np.einsum`. Broadcast `kR` over heads."
+  ],
+  "runtime": "pyodide"
+}

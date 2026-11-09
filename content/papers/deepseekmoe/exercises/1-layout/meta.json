@@ -1,0 +1,10 @@
+{
+  "title": "Expert layout and routing choices",
+  "goal": "Fine-grained segmentation splits each of $N$ experts into $m$ smaller ones, and shared expert isolation reserves $K_s$ of the $mN$ experts for every token (Section 3.1, Equations 6-7, and Section 3.2, Equations 9-10). Write `layout(N, K, m=1, Ks=0)`.\n\nReturn a dictionary with these keys:\n\n- `n_routed`: the number of routed experts, $mN - K_s$.\n- `k_active`: the number of routed experts each token activates, $mK - K_s$.\n- `expert_size`: the size of one expert relative to a standard FFN, $1/m$.\n- `total_ffn`: the expert parameters in units of one standard FFN, counting shared and routed experts.\n- `active_ffn`: the activated expert parameters per token in the same units, counting the shared experts.\n- `combinations`: the number of distinct sets of routed experts a token can pick, $\\binom{n_\\text{routed}}{k_\\text{active}}$.\n\nThe paper's example is $N = 16$, $K = 2$: top-2 routing gives 120 combinations and $m = 4$ gives $\\binom{64}{8} = 4{,}426{,}165{,}368$.",
+  "hints": [
+    "`math.comb(n, k)` is the binomial coefficient and returns an exact integer.",
+    "Shared experts are part of the $mN$ experts, so they are subtracted from both the routed count and the active routed count.",
+    "Each expert has size $1/m$ FFNs. The active count includes the $K_s$ shared experts, so `active_ffn` is $(K_s + (mK - K_s))/m = K$ for every $m$ and $K_s$."
+  ],
+  "runtime": "pyodide"
+}

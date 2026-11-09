@@ -1,0 +1,11 @@
+{
+  "title": "Absorb the up-projection",
+  "goal": "Implement causal multi-head latent attention two ways, without the decoupled RoPE part. Use row-stacked inputs: `H` has shape `(T, d)`, and the paper's column-vector product $W h_t$ becomes `H @ W.T`.\n\n- `mla_naive(H, WQ, WDKV, WUK, WUV, n_h, d_h)` computes $c_t^{KV} = W^{DKV} h_t$, expands $k_t^C = W^{UK} c_t^{KV}$ and $v_t^C = W^{UV} c_t^{KV}$ (Equations 9-11), then runs ordinary causal attention per head with scale $\\sqrt{d_h}$ (Equation 7).\n- `mla_absorbed(...)` takes the same arguments but never builds keys or values. It moves $W^{UK}$ to the query side and $W^{UV}$ to after the weighted sum (Section 2.1.2).\n\nBoth return the concatenated head outputs $[o_{t,1}; \\dots; o_{t,n_h}]$ with shape `(T, n_h * d_h)`, before $W^O$. Shapes: `WQ` is `(n_h*d_h, d)`, `WDKV` is `(d_c, d)`, `WUK` and `WUV` are `(n_h*d_h, d_c)`. Head `i` uses rows `i*d_h:(i+1)*d_h` of `WUK` and `WUV`.",
+  "hints": [
+    "Per head, the score is $q^\\top W^{UK}_i c_j$. Compute `q_i @ WUK_i`, which has width `d_c`, then multiply by the cached latents `C.T`.",
+    "Keep the scale at $\\sqrt{d_h}$ in both functions. The absorbed query has width $d_c$, but the score is the same number as before.",
+    "Apply the softmax weights to the latents first: `weights @ C` has width `d_c`. Then multiply by `WUV_i.T` to get width `d_h`.",
+    "Fill masked scores with `-1e9` before the softmax, and subtract the row maximum."
+  ],
+  "runtime": "pyodide"
+}

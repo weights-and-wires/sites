@@ -1,0 +1,11 @@
+{
+  "title": "Auxiliary-loss-free balancing",
+  "goal": "DeepSeek-V3 balances expert load with a bias $b_i$ per routed expert instead of an auxiliary loss (Section 2.1.2). The bias is added to the affinity only to choose the top $K_r$ experts (Equation 16). The gating value still comes from the original affinity, normalized over the chosen experts (Equation 13). After each step, the bias of an overloaded expert drops by $\\gamma$ and the bias of an underloaded expert rises by $\\gamma$.\n\nWrite the following functions. Here `s` is a `(T, N)` array of affinities $s_{i,t}$ for `T` tokens and `N` routed experts, and `b` has shape `(N,)`:\n\n- `select_experts(s, b, k)` returns an integer array of shape `(T, k)` with the indices of the top `k` values of `s + b` in each row.\n- `gate_values(s, idx)` returns a `(T, k)` array with the original `s` values of the chosen experts, divided by their row sum.\n- `expert_load(idx, n)` returns the number of tokens routed to each of the `n` experts.\n- `update_bias(b, load, gamma)` returns the new bias: `gamma` less for experts with above-average load, `gamma` more for experts with below-average load, and unchanged for experts at the average.",
+  "hints": [
+    "`np.argsort(-(s + b), axis=1)[:, :k]` gives the top `k` indices of each row.",
+    "The bias only changes which experts are chosen. Take the values for the gates from `s`, not from `s + b`.",
+    "`np.bincount(idx.ravel(), minlength=n)` counts the tokens per expert.",
+    "`-gamma * np.sign(load - load.mean())` is the update. It is 0 where the load equals the mean."
+  ],
+  "runtime": "pyodide"
+}
