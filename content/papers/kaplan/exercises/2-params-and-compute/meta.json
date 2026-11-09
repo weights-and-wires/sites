@@ -1,0 +1,10 @@
+{
+  "title": "Parameters and training compute",
+  "goal": "Section 2.1 defines the model size $N$ as the number of non-embedding parameters, $N \\approx 2\\, d_\\text{model}\\, n_\\text{layer}\\,(2\\, d_\\text{attn} + d_\\text{ff})$ (Equation 2.1), and the training compute as $C \\approx 6NBS$ (Section 1.3). Write four functions:\n\n- `non_embedding_params(n_layer, d_model, d_attn=None, d_ff=None)`. `d_attn` defaults to `d_model` and `d_ff` defaults to `4 * d_model`.\n- `embedding_params(n_vocab, n_ctx, d_model)`, the $(n_\\text{vocab} + n_\\text{ctx})\\, d_\\text{model}$ term of Table 1.\n- `forward_flops_per_token(n_layer, d_model, n_ctx, d_attn=None, d_ff=None)`, Equation 2.2: $2N + 2\\, n_\\text{layer}\\, n_\\text{ctx}\\, d_\\text{attn}$.\n- `training_compute_pf_days(n_params, batch_tokens, steps)`. One PF-day is $10^{15} \\times 24 \\times 3600$ operations; the starter defines `PF_DAY`.\n\nThe tests include shapes that don't have $d_\\text{ff} = 4\\, d_\\text{model}$, because the standard-shape shortcut $12\\, n_\\text{layer}\\, d_\\text{model}^2$ hides that bug.",
+  "hints": [
+    "Write the general formula first. For `d_attn = d_model` and `d_ff = 4 * d_model` it collapses to `12 * n_layer * d_model**2`, which is a good check.",
+    "Don't add embedding parameters to $N$. The paper excludes them on purpose (Section 3.2, Figure 6).",
+    "The `6` in $C = 6NBS$ is 2 for the forward pass plus about 4 for the backward pass (Section 2.1). `batch_tokens` already counts tokens, so don't multiply by the context length again."
+  ],
+  "runtime": "pyodide"
+}
