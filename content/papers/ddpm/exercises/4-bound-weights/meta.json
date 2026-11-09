@@ -1,0 +1,10 @@
+{
+  "title": "From the bound to the simplified loss",
+  "goal": "Check Equation 12 numerically. With $p_\\theta(x_{t-1}|x_t) = \\mathcal{N}(\\mu_\\theta, \\sigma_t^2 I)$, the term $L_{t-1}$ of the bound (Equation 5) has the form $\\frac{1}{2\\sigma_t^2}\\|\\tilde\\mu_t - \\mu_\\theta\\|^2$ plus a constant (Equation 8). With the $\\epsilon$ parameterization of Equation 11 it becomes $w_t\\,\\|\\epsilon - \\epsilon_\\theta\\|^2$.\n\n`bound_weight(t, betas, alpha_bars, sigma2)` returns $w_t = \\frac{\\beta_t^2}{2\\sigma_t^2\\alpha_t(1-\\bar\\alpha_t)}$, the weight in Equation 12. `sigma2` is the value of $\\sigma_t^2$.\n\n`kl_term_from_eps(eps, eps_pred, t, betas, alpha_bars, sigma2)` returns the KL divergence $D_{KL}(q(x_{t-1}|x_t,x_0) \\,\\|\\, p_\\theta(x_{t-1}|x_t))$ for one example when $\\sigma_t^2 = \\tilde\\beta_t$, written as $w_t\\|\\epsilon - \\epsilon_\\theta\\|^2$. The tests compare it with the KL divergence between two Gaussians, computed directly.",
+  "hints": [
+    "Equation 12 needs $\\alpha_t = 1 - \\beta_t$ and $\\bar\\alpha_t$ = `alpha_bars[t - 1]`.",
+    "`kl_term_from_eps` is the weight times the squared norm of `eps - eps_pred`, summed over the data dimensions.",
+    "Two Gaussians with the same covariance $\\sigma^2 I$ have $D_{KL} = \\|\\mu_1 - \\mu_2\\|^2 / (2\\sigma^2)$. That is how the tests build the reference."
+  ],
+  "runtime": "pyodide"
+}

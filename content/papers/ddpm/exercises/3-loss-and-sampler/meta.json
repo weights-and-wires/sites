@@ -1,0 +1,11 @@
+{
+  "title": "Training loss and sampler",
+  "goal": "Implement Algorithm 1 (one loss evaluation) and Algorithm 2 (sampling) with an epsilon-prediction model `eps_model(x, t)`.\n\n`ddpm_loss(eps_model, x0, t, eps, alpha_bars)` builds $x_t = \\sqrt{\\bar\\alpha_t}\\,x_0 + \\sqrt{1-\\bar\\alpha_t}\\,\\epsilon$ and returns $\\|\\epsilon - \\epsilon_\\theta(x_t, t)\\|^2$ (Equation 14), summed over the data dimensions and averaged over the batch. The model gets `x_t` and the integer array `t`, never `x_0`.\n\n`sample(eps_model, shape, betas, rng, sigma=\"beta\")` starts from $x_T \\sim \\mathcal{N}(0, I)$ and runs $t = T, \\dots, 1$ with $x_{t-1} = \\frac{1}{\\sqrt{\\alpha_t}}\\left(x_t - \\frac{1-\\alpha_t}{\\sqrt{1-\\bar\\alpha_t}}\\epsilon_\\theta(x_t, t)\\right) + \\sigma_t z$ (Algorithm 2, line 4). Here $z \\sim \\mathcal{N}(0, I)$ for $t > 1$ and $z = 0$ for $t = 1$. Set $\\sigma_t^2 = \\beta_t$ when `sigma=\"beta\"` and $\\sigma_t^2 = \\tilde\\beta_t$ when `sigma=\"beta_tilde\"` (Section 3.2). The sampler calls `eps_model(x, t)` with `t` as a single integer.",
+  "hints": [
+    "Sum the squared error over the last axis, then average over the batch. Averaging over every entry divides the loss by the data dimension.",
+    "Draw the noise with `rng.standard_normal(shape)` and branch on `t > 1`. Adding noise at the last step leaves residual noise in the output.",
+    "The loop counts down: `for t in range(T, 0, -1)`. Read `betas[t - 1]` and `alpha_bars[t - 1]`.",
+    "For $\\tilde\\beta_t$ use $\\bar\\alpha_{t-1} = 1$ when $t = 1$. The noise is skipped there anyway."
+  ],
+  "runtime": "pyodide"
+}

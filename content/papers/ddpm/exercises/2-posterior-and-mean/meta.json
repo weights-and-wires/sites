@@ -1,0 +1,10 @@
+{
+  "title": "Posterior and epsilon-parameterized mean",
+  "goal": "Implement two functions from Sections 2 and 3.2.\n\n`posterior_mean_var(x_t, x0, t, betas, alpha_bars)` returns the mean $\\tilde\\mu_t(x_t, x_0)$ and variance $\\tilde\\beta_t$ of $q(x_{t-1} | x_t, x_0)$ (Equations 6 and 7). Use $\\bar\\alpha_0 = 1$, so that at $t = 1$ the variance is 0 and the mean is $x_0$.\n\n`mean_from_eps(x_t, eps_pred, t, betas, alpha_bars)` returns $\\mu_\\theta(x_t, t) = \\frac{1}{\\sqrt{\\alpha_t}}\\left(x_t - \\frac{\\beta_t}{\\sqrt{1-\\bar\\alpha_t}}\\epsilon_\\theta\\right)$ (Equation 11).\n\n`t` is a single integer from 1 to `T`. The starter includes finished `make_schedule` and `q_sample` helpers.",
+  "hints": [
+    "Write $\\alpha_t = 1 - \\beta_t$ yourself, and get $\\bar\\alpha_t$ from `alpha_bars[t - 1]`.",
+    "For $\\bar\\alpha_{t-1}$ don't write `alpha_bars[t - 2]`. At `t = 1` that index is `-1`, which silently reads $\\bar\\alpha_T$. Branch on `t == 1` and use 1.0.",
+    "To check yourself, build $x_t$ with `q_sample` from a known $\\epsilon$. Then `mean_from_eps(x_t, eps, ...)` must equal `posterior_mean_var(x_t, x0, ...)[0]`."
+  ],
+  "runtime": "pyodide"
+}
