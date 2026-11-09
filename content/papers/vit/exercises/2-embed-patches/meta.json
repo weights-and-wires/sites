@@ -1,0 +1,10 @@
+{
+  "title": "Patch embeddings, class token, and position embeddings",
+  "goal": "Write `embed_patches(img, P, E, x_class, E_pos)`, which computes $z_0$ from Equation 1 of the paper:\n\n$$z_0 = [x_{\\text{class}};\\, x_p^1 E;\\, x_p^2 E;\\, \\cdots;\\, x_p^N E] + E_{pos}$$\n\n`E` has shape `(P*P*C, D)`, `x_class` has shape `(D,)`, and `E_pos` has shape `(N + 1, D)`. The class token goes first, the position embeddings are added to every row (including the class row), and the projection has no bias. The result has shape `(N + 1, D)`.\n\nThe starter includes a finished `patchify` from exercise 1.",
+  "hints": [
+    "`patchify(img, P) @ E` gives the `(N, D)` patch embeddings.",
+    "`np.vstack([x_class[None, :], proj])` puts the class token in row 0.",
+    "Add `E_pos` after you stack. The class token gets a position embedding too."
+  ],
+  "runtime": "pyodide"
+}

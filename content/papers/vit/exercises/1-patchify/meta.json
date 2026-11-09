@@ -1,0 +1,11 @@
+{
+  "title": "Patchify and unpatchify",
+  "goal": "Section 3.1 reshapes an image $x \\in \\mathbb{R}^{H \\times W \\times C}$ into $N = HW/P^2$ flattened patches $x_p \\in \\mathbb{R}^{N \\times (P^2 \\cdot C)}$. Write `patchify(img, P)` and its exact inverse `unpatchify(patches, H, W, C, P)`.\n\nPatches come in raster order: left to right along the first patch row, then the next row. Inside a patch, flatten the pixels in `(row, column, channel)` order. Use only `reshape` and `transpose`. Nothing is computed or lost, so `unpatchify(patchify(img, P), ...)` must return the original image exactly.",
+  "hints": [
+    "Split each spatial axis in two first: `img.reshape(H // P, P, W // P, P, C)`. The axes are now (patch row, row in patch, patch column, column in patch, channel).",
+    "Move the two patch-grid axes to the front with `transpose(0, 2, 1, 3, 4)`, then reshape to `(N, P * P * C)`.",
+    "Without the transpose, `reshape(N, P * P * C)` runs without an error but puts pixels from different patches in one row.",
+    "`unpatchify` applies the same steps in reverse order: reshape to `(H // P, W // P, P, P, C)`, transpose with `(0, 2, 1, 3, 4)` again (it swaps axes 1 and 2, so it is its own inverse), and reshape to `(H, W, C)`."
+  ],
+  "runtime": "pyodide"
+}
