@@ -1,0 +1,10 @@
+{
+  "title": "The residual block",
+  "goal": "Implement the two-layer building block of Figure 2. With $\\mathcal{F}(x) = W_2\\,\\sigma(W_1 x)$ and $\\sigma$ the ReLU (Section 3.2), the block computes\n\n$$y = \\sigma\\big(\\mathcal{F}(x, \\{W_i\\}) + x\\big)$$\n\nwhen the shortcut is the identity (Equation 1), and $y = \\sigma(\\mathcal{F}(x, \\{W_i\\}) + W_s x)$ when a projection $W_s$ matches the dimensions (Equation 2). The paper omits the biases, and so do you.\n\nWrite `residual_block(x, W1, W2, Ws=None)`. The vector `x` is one-dimensional. `Ws=None` means the identity shortcut.",
+  "hints": [
+    "Compute the inner part first: `F = W2 @ relu(W1 @ x)`. There is a ReLU between the two matrices.",
+    "The second nonlinearity comes after the addition (Figure 2), so apply `relu` to `F + shortcut`, not to `F` alone.",
+    "Pick the shortcut with one line: `x if Ws is None else Ws @ x`."
+  ],
+  "runtime": "pyodide"
+}

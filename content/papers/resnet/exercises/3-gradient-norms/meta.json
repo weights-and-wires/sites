@@ -1,0 +1,10 @@
+{
+  "title": "Gradient norm per layer, plain versus residual",
+  "goal": "The paper says a residual block $y = \\mathcal{F}(x, \\{W_i\\}) + x$ (Section 3.2, Equation 1) lets the solver start from an identity mapping. A direct consequence is on the backward pass: $\\partial y / \\partial x = I + \\partial \\mathcal{F} / \\partial x$, so the gradient has a path that no weight matrix shrinks. Measure it.\n\nThe starter builds a 20-matrix plain net and a 10-block residual net with the same weight scale, and provides one forward and one backward step per layer. Write `input_grad_norms(net, x, residual)`. It runs the forward pass, stores each layer's cache, and walks backward from $L = \\tfrac12 \\lVert h_n \\rVert^2$. It returns the $n + 1$ norms $\\lVert \\partial L / \\partial h_l \\rVert$ for $l = 0, \\dots, n$, ordered from the input to the output.\n\nThe tests compare your norms with finite differences, then check that the plain net's input gradient is more than 1000 times smaller than its output gradient while the residual net's is not.\n\nThis toy net has no batch normalization. The paper's plain nets do, and Section 4.1 argues that their degradation isn't caused by vanishing gradients. See Pitfalls on the page.",
+  "hints": [
+    "Call `layer_forward(layer, h, residual)` in a loop and append each `cache`. Start the backward pass with `g = h`, because $\\partial L / \\partial h_n = h_n$ for this loss.",
+    "Walk the layers and caches in reverse with `zip(reversed(net), reversed(caches))`. `layer_backward` returns the gradient at that layer's input.",
+    "You collect the norms from the output to the input, so reverse the list before you return it. Entry 0 belongs to the input."
+  ],
+  "runtime": "pyodide"
+}
