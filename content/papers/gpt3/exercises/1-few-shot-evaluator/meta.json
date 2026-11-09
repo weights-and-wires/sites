@@ -1,0 +1,11 @@
+{
+  "title": "A few-shot prompt evaluator",
+  "goal": "Section 2 defines few-shot evaluation: put $K$ demonstrations of a task in the context, then one more context with no answer, and read the model's completion. Section 3.9.1 scores arithmetic by exact match, and Section 2.4 draws the $K$ demonstrations at random from the task's training set. Write two functions:\n\n- `format_prompt(demos, query, description=None)` returns the prompt text. Each demonstration is `Q: <question>\\nA: <answer>` followed by a blank line. The prompt ends with `Q: <query>\\nA:` and nothing after it. When `description` is given, it comes first, followed by a blank line.\n- `evaluate(model, dataset, pool, k, seed=0)` returns the exact-match accuracy of `model`, a function from a prompt string to a completion string. For each `(question, answer)` in `dataset`, draw `k` demonstrations without replacement from `pool` using one `np.random.default_rng(seed)` shared across the whole dataset, skip any pool entry whose question equals the current one, build the prompt, and count a hit when `model(prompt).strip() == answer`. Raise `ValueError` when fewer than `k` demonstrations are available.\n\nThe tests use stub models, so nothing here needs a real language model. One stub learns a made-up operation only from the demonstrations in its prompt.",
+  "hints": [
+    "A real model's completion after `A:` begins with a space, so strip it before comparing.",
+    "Exact match means `==`, not `in`. A completion of `1245` is wrong when the answer is `124`.",
+    "Build the list of allowed pool indices for each query first, then call `rng.choice(allowed, size=k, replace=False)`. When `k` is larger than `len(allowed)`, raise `ValueError` yourself.",
+    "If the evaluation set overlaps the pool, a demonstration with the same question as the query would leak its answer into the prompt."
+  ],
+  "runtime": "pyodide"
+}

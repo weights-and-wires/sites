@@ -1,0 +1,10 @@
+{
+  "title": "Multiple-choice scoring",
+  "goal": "On a multiple-choice task, Section 2.4 gives the model $K$ solved examples plus one unanswered context, then \"compare[s] the LM likelihood of each completion\". For most tasks it compares the per-token likelihood, to normalize for length. For ARC, OpenBookQA, and RACE it normalizes by the unconditional probability of each completion instead:\n\n$$\\frac{P(\\text{completion} \\mid \\text{context})}{P(\\text{completion} \\mid \\text{answer context})}$$\n\nwhere the answer context is a generic string such as `Answer: `.\n\nEach option is a dictionary with `ctx`, the list of per-token log-probabilities of the completion given the context, and `unc`, the same for the answer context (or `None`). Write two functions:\n\n- `score(option, mode)` returns a float. Mode `\"sum\"` is the total log-likelihood, `\"mean\"` is the per-token average, and `\"ratio\"` is the log of the ratio above, with no length normalization. Raise `ValueError` for an unknown mode, and for `\"ratio\"` when `unc` is `None`.\n- `choose(options, mode)` returns the index of the highest score, taking the first index on a tie.",
+  "hints": [
+    "A log of a ratio is a difference of log-probabilities. The log of $P(c \\mid \\text{context})$ is the sum of the per-token values in `ctx`.",
+    "The ratio mode is the sum, not the mean, of both lists. Dividing by the length is the other rule.",
+    "`np.argmax` returns the first index among equal maxima."
+  ],
+  "runtime": "pyodide"
+}
