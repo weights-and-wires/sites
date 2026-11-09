@@ -1,0 +1,11 @@
+{
+  "title": "Additive attention for one decoder step",
+  "goal": "Implement one step of the paper's attention (Section 3.1, Equations 5 and 6, with the alignment model from Appendix A.1.2): $e_{ij} = v_a^\\top \\tanh(W_a s_{i-1} + U_a h_j)$, $\\alpha_{ij} = \\operatorname{softmax}_j(e_{ij})$, and $c_i = \\sum_j \\alpha_{ij} h_j$.\n\nWrite `additive_attention(s_prev, H, Wa, Ua, va)`, which returns `(c, alpha)`. `s_prev` has shape `(n,)`. `H` has shape `(Tx, 2n)`, one annotation per row. `Wa` has shape `(n_prime, n)`, `Ua` has shape `(n_prime, 2n)`, and `va` has shape `(n_prime,)`. The context `c` has shape `(2n,)` and the weights `alpha` have shape `(Tx,)`.\n\nThe starter includes a finished stable `softmax`.",
+  "hints": [
+    "Compute the pre-activation for all positions at once: `Wa @ s_prev` has shape `(n_prime,)`, and `H @ Ua.T` has shape `(Tx, n_prime)`. NumPy broadcasts the sum.",
+    "Keep the `tanh`. Without it the score splits into a term for `s_prev` and a term for `h_j`, and the first term cancels in the softmax.",
+    "The score for position $j$ is the dot product of `va` with row $j$ of the tanh output.",
+    "The context is `alpha @ H`, a weighted sum of the rows of `H`."
+  ],
+  "runtime": "pyodide"
+}
