@@ -1,0 +1,10 @@
+{
+  "title": "Gated activation unit",
+  "goal": "Each WaveNet layer applies the gated activation unit (Section 2.3, Equation 2)\n\n$$z = \\tanh(W_{f,k} * x) \\odot \\sigma(W_{g,k} * x)$$\n\nwhere $*$ is a causal dilated convolution, $W_f$ is the filter weight and $W_g$ is the gate weight. Write `gated_activation(x, Wf, Wg, dilation=1)`.\n\n`x` has shape `(C_in, T)`. `Wf` and `Wg` have shape `(k, C_out, C_in)`, where `Wf[j]` multiplies the input at offset `(k - 1 - j) * dilation` samples in the past. The result has shape `(C_out, T)`. The starter gives you `causal_conv(x, W, dilation)`, which computes one multi-channel causal convolution.",
+  "hints": [
+    "Compute the two convolutions separately, `causal_conv(x, Wf, dilation)` and `causal_conv(x, Wg, dilation)`. The filter and the gate use different weights.",
+    "The filter goes through `np.tanh`. The gate goes through the sigmoid $1/(1+e^{-a})$. Swapping them gives a different function, and the tests check the sign of the output.",
+    "Multiply the two results element-wise with `*`, not with `@`."
+  ],
+  "runtime": "pyodide"
+}

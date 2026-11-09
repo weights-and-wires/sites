@@ -1,0 +1,10 @@
+{
+  "title": "Receptive field of a dilated stack",
+  "goal": "A stack of causal convolutions with filter length $k$ and dilations $d_1, \\dots, d_L$ has receptive field $R = 1 + (k-1)\\sum_i d_i$ (Section 2.1; Figure 2 gives $5 = \\#\\text{layers} + k - 1$ for four undilated layers with $k = 2$, and the text gives 1024 for the block $1, 2, \\dots, 512$).\n\nWrite two functions:\n\n- `receptive_field(dilations, kernel_size=2)` returns $R$ from the formula.\n- `measured_receptive_field(dilations, kernel_size=2)` returns $R$ by brute force. Put a unit impulse at index 0, send it through the stack, and find the last output it reaches. If that output is at index $i$, the receptive field is $i + 1$. The starter gives you `stack_forward`, a linear stack of all-ones filters, so no output can cancel to zero.",
+  "hints": [
+    "Each layer with dilation $d$ and filter length $k$ adds $(k-1)d$ samples of past context.",
+    "For the brute-force version, make a signal long enough: `R + 5` samples is enough room. Put a 1 at index 0, run `stack_forward`, and find the largest index with a nonzero output.",
+    "With dilation, the outputs the impulse reaches are not contiguous, so counting the nonzero entries gives the wrong answer. Use the position of the last one."
+  ],
+  "runtime": "pyodide"
+}
