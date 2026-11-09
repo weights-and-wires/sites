@@ -1,0 +1,10 @@
+{
+  "title": "RMSNorm",
+  "goal": "LLaMA normalizes the input of every sub-layer with RMSNorm (Section 2.2, citing Zhang and Sennrich, 2019):\n\n$$y_i = \\frac{x_i}{\\sqrt{\\frac{1}{d}\\sum_{j=1}^{d} x_j^2 + \\epsilon}}\\, g_i$$\n\nWrite `rmsnorm(x, g, eps=1e-6)`. `x` has shape `(..., d)` and `g` has shape `(d,)`. Normalize over the last axis only, and don't subtract the mean. The paper writes no $\\epsilon$ in the formula; implementations add it inside the square root so that a zero vector doesn't divide by zero.",
+  "hints": [
+    "The mean square is `np.mean(x ** 2, axis=-1, keepdims=True)`. Use `keepdims=True` so the division broadcasts.",
+    "Add `eps` to the mean square, then take the square root: `np.sqrt(ms + eps)`. Adding it after the square root gives a different number when `eps` is large.",
+    "Compare with LayerNorm: LayerNorm subtracts the mean and divides by the standard deviation. RMSNorm divides by the root mean square and keeps the mean."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "One GRPO step on a bandit",
+  "goal": "Take a policy with no state: a softmax over $K$ arms with logits `logits`, where an \"output\" is one arm. A group is $G$ pulls with rewards `rewards`. The paper does one update after each exploration stage (Section 4.2), so $\\pi_{\\theta_{old}} = \\pi_\\theta$, the ratio is 1, and the clip is inactive. The gradient of Equation 3 is then the coefficient of Equation 20 times $\\nabla_\\theta\\log\\pi_\\theta(a_i)$:\n\n$$\\frac1G\\sum_{i=1}^G\\Big(\\hat A_i + \\beta\\Big(\\frac{\\pi_{ref}(a_i)}{\\pi_\\theta(a_i)} - 1\\Big)\\Big)\\,\\nabla_\\theta\\log\\pi_\\theta(a_i)$$\n\nWrite `grpo_update(logits, actions, rewards, logits_ref, lr, beta)`. It returns `logits + lr * gradient` and doesn't change its inputs. The starter gives you `softmax` and a finished `group_advantages`. For a softmax policy, $\\nabla_{\\text{logits}}\\log\\pi(a) = \\mathrm{onehot}(a) - \\pi$.",
+  "hints": [
+    "`pi = softmax(logits)` and `pi_ref = softmax(logits_ref)`. The KL coefficient uses `pi_ref[actions] / pi[actions]`, with the reference on top.",
+    "Build `coef = adv + beta * (pi_ref[actions] / pi[actions] - 1)`, a vector of length `G`. Then `grad = (coef[:, None] * (np.eye(K)[actions] - pi)).mean(axis=0)`.",
+    "The advantages sum to 0, but the KL part of the coefficient doesn't, so the `- pi` term matters once `beta > 0`. The tests check the gradient against finite differences of the objective.",
+    "Return a new array. Don't write into `logits`."
+  ],
+  "runtime": "pyodide"
+}

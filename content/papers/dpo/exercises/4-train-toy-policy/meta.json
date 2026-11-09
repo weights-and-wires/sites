@@ -1,0 +1,10 @@
+{
+  "title": "Train DPO and recover the preferences",
+  "goal": "Train a policy over three responses to one prompt, using only preference counts, and check that DPO finds the optimum that Equation 4 predicts.\n\n`C` is a `(K, K)` matrix: `C[i, j]` is how many times response `i` was preferred to response `j`, and `C[i, i] = 0`. The starter gives you `mean_grad(theta, ref_logits, C, beta)`, the gradient of the mean DPO loss over all counted pairs, and `mean_loss`.\n\nWrite `train_dpo(ref_logits, C, beta, lr, steps)`. Start from `theta = ref_logits` (the paper initializes $\\pi_\\theta$ to $\\pi_{\\text{ref}}$, Section 3), take `steps` plain gradient-descent steps, and return `(theta, losses)`. `losses[t]` is the mean loss before step `t`, so `losses` has `steps` entries. Don't change `ref_logits`: the reference policy stays fixed during training.",
+  "hints": [
+    "Write `theta = ref_logits.copy()`. Without the copy, `theta -= ...` edits the reference in place, and the implicit reward $\\beta\\log(\\pi_\\theta/\\pi_{\\text{ref}})$ is then always 0.",
+    "Each step is `theta = theta - lr * mean_grad(theta, ref_logits, C, beta)`. Record `mean_loss(theta, ref_logits, C, beta)` before you update.",
+    "When the counts follow the Bradley-Terry probabilities of a true reward $r^*$, the optimum is $\\pi^*(y) \\propto \\pi_{\\text{ref}}(y)\\exp(r^*(y)/\\beta)$. The tests use a learning rate of $8/\\beta^2$."
+  ],
+  "runtime": "pyodide"
+}
