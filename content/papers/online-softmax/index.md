@@ -183,7 +183,7 @@ Section 7 suggests fusing the softmax with the preceding layer to avoid a round 
 - **Calling it one pass.** Online softmax computes $m_V$ and $d_V$ in one pass. The outputs still need a second pass over $x$, so the total is 3 accesses, not 2. Only the top-$K$ fusion, which discards the outputs, reaches 1.
 - **Reading the speedups as universal.** The numbers in Section 5 are for float32 on one GPU generation (Tesla V100, CUDA 9.1), with a benchmark in CUDA C. Section 7 says the authors didn't test CPUs. The 1.33x figure is the reduction in accesses, and 1.3x is the best speedup the paper measures.
 - **Ignoring the bound on $d$.** Section 3 notes that $1 \le d_j \le j$, so a float32 $d$ is safe for up to about $1.7 \times 10^{37}$ elements, and a longer vector needs a 64-bit $d$. Real vectors are far shorter, but the bound explains why the algorithm is safe.
-- **Merging block summaries without sorting out the last block.** A blocked implementation that drops or pads the partial last block gives a normalizer that is silently wrong. Exercise 2 tests a leftover block that holds the maximum.
+- **Dropping the partial last block.** A blocked implementation that drops or pads the partial last block gives a normalizer that is silently wrong. Exercise 2 tests a leftover block that holds the maximum.
 - **Breaking ties in top-$K$ the other way.** Algorithm 4 swaps only when $u_k < u_{k+1}$, so equal values keep their input order. Swapping on $\le$ returns the later index first.
 
 ## Further reading
