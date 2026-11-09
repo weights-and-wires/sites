@@ -1,0 +1,10 @@
+{
+  "title": "The efficient frontier in closed form",
+  "goal": "Minimizing $\\hat L(N, D)$ under $6ND = C$ has a closed-form answer (Section 3.3, Equation 4):\n\n$$N_{opt}(C) = G\\left(\\frac{C}{6}\\right)^{a}, \\quad D_{opt}(C) = G^{-1}\\left(\\frac{C}{6}\\right)^{b}, \\quad G = \\left(\\frac{\\alpha A}{\\beta B}\\right)^{\\frac{1}{\\alpha+\\beta}}, \\quad a = \\frac{\\beta}{\\alpha+\\beta},\\ b = \\frac{\\alpha}{\\alpha+\\beta}.$$\n\nWrite `frontier(c)`, which returns `(n_opt, d_opt)` for the constants in the starter.",
+  "hints": [
+    "Compute `g` first, then `a` and `b`. Note that $a$ pairs with $\\beta$ in the numerator, and $b$ pairs with $\\alpha$.",
+    "The base of both power laws is $C/6$, not $C$.",
+    "A self-check: `6 * n_opt * d_opt` must equal `c`, because $G$ cancels in the product and $a + b = 1$."
+  ],
+  "runtime": "pyodide"
+}

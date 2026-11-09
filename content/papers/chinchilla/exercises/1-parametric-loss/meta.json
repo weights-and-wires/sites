@@ -1,0 +1,10 @@
+{
+  "title": "Parametric loss and the IsoFLOP curve",
+  "goal": "Section 3.3 models the final training loss as $\\hat L(N, D) = E + A/N^{\\alpha} + B/D^{\\beta}$ (Equation 2). Write `loss_hat(n, d)` with the constants from Appendix D.2, Equation 10, which are already defined in the starter. Then write `isoflop_curve(c, sizes)`: for a fixed budget $C = 6ND$, return the arrays `(d, loss)` of training tokens and predicted loss for every model size in `sizes`.",
+  "hints": [
+    "`loss_hat` is one line: `E + A / n**ALPHA + B / d**BETA`. Use `np.asarray` so that it accepts arrays.",
+    "The budget rule is $C = 6ND$, so $D = C / (6N)$. Check the units: for $C = 5.88 \\times 10^{23}$ and $N = 7 \\times 10^{10}$, you should get $D = 1.4 \\times 10^{12}$.",
+    "`isoflop_curve` calls `loss_hat` with the computed `d`. Don't hard-code a tokens-per-parameter ratio."
+  ],
+  "runtime": "pyodide"
+}
