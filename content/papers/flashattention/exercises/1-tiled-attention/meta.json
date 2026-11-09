@@ -1,0 +1,11 @@
+{
+  "title": "Tiled attention with an online softmax",
+  "goal": "Implement the forward pass of Algorithm 1 (Section 3.1) in NumPy. Write `flash_attention_forward(Q, K, V, Br, Bc, tau=1.0)`. `Q` has shape `(N, d)`, `K` has shape `(M, d)`, and `V` has shape `(M, dv)`. The function returns `(O, m, l)`:\n\n- `O` has shape `(N, dv)` and equals $\\operatorname{softmax}(\\tau QK^\\top)V$.\n- `m` has shape `(N,)` and holds the row maximum of $\\tau QK^\\top$.\n- `l` has shape `(N,)` and holds $\\sum_j e^{S_{ij} - m_i}$, the softmax normalization statistic.\n\nLoop over blocks of `K` and `V` in the outer loop (lines 5-6) and over blocks of `Q` in the inner loop (lines 7-8), as the paper does. The only arrays you may form are of size `Br x Bc`, plus vectors of length `Br`: the function must never build the full `N x M` score matrix. The paper's Section 3 writes $S = QK^\\top$ with no scale. The `tau` argument is the scale $\\tau$ that Algorithm 4 uses.",
+  "hints": [
+    "Keep `O`, `l`, and `m` as arrays of length `N` in the outer scope, initialized to zeros, zeros, and `-np.inf` (line 2). Slice them by the row block `i` inside the inner loop.",
+    "For one block, compute `S = tau * Qi @ Kj.T`, then `m_t = S.max(axis=1)`, `P_t = np.exp(S - m_t[:, None])`, and `l_t = P_t.sum(axis=1)` (line 10).",
+    "Merge with the old statistics (line 11): `m_new = np.maximum(m_i, m_t)` and `l_new = np.exp(m_i - m_new) * l_i + np.exp(m_t - m_new) * l_t`. On the first block `m_i` is `-inf`, and `np.exp(-inf)` is 0, so the old state drops out.",
+    "The update of `O` (line 12) rescales the old output by `l_i * exp(m_i - m_new)` and the new block's contribution by `exp(m_t - m_new)`, adds them, and divides by `l_new`. This `O` is always a properly normalized average."
+  ],
+  "runtime": "pyodide"
+}

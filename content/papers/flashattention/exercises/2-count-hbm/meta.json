@@ -1,0 +1,11 @@
+{
+  "title": "Count the HBM traffic",
+  "goal": "FlashAttention's claim is about memory traffic, so count it. The unit is one matrix element read from or written to HBM. Write three functions:\n\n- `block_sizes(d, M)` returns `(Bc, Br)` from Algorithm 1, line 1: $B_c = \\lceil M / 4d \\rceil$ and $B_r = \\min(B_c, d)$.\n- `standard_hbm_accesses(N, d)` counts Algorithm 0 line by line (Section 2.2): line 1 reads $Q$ and $K$ and writes $S$, line 2 reads $S$ and writes $P$, and line 3 reads $P$ and $V$ and writes $O$.\n- `flash_hbm_accesses(N, d, M)` counts Algorithm 1: line 6 loads $K_j$ and $V_j$ once each; per outer iteration, line 8 loads $Q$, $O$, $\\ell$, and $m$ (all $N$ rows), and lines 12-13 write $O$, $\\ell$, and $m$. There are $T_c = \\lceil N / B_c \\rceil$ outer iterations. Ignore the initialization on line 2.\n\n$Q, K, V, O \\in \\mathbb{R}^{N \\times d}$ and $\\ell, m \\in \\mathbb{R}^{N}$. `M` is the SRAM size in elements.",
+  "hints": [
+    "`standard_hbm_accesses` has no loop. Add the three lines: $(2Nd + N^2) + (N^2 + N^2) + (N^2 + 2Nd)$.",
+    "In `flash_hbm_accesses`, the $K$ and $V$ traffic is $2Nd$ in total, not per iteration. Everything else repeats $T_c$ times.",
+    "Per iteration, the loads are $Nd$ for $Q$, $Nd$ for $O$, and $N$ each for $\\ell$ and $m$. The writes are $Nd$ for $O$ and $N$ each for $\\ell$ and $m$.",
+    "Use `math.ceil` for $B_c$ and $T_c$. A last partial block still costs a full pass over $Q$ and $O$."
+  ],
+  "runtime": "pyodide"
+}
