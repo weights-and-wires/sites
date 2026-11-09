@@ -1,0 +1,11 @@
+{
+  "title": "Speedup and the best draft length",
+  "goal": "Turn the analysis in Section 3 into code. Write four functions:\n\n- `acceptance_rate(p, q)` returns $\\alpha$ for one position, $\\sum_x \\min(p(x), q(x))$ (Theorem 3.5).\n- `expected_tokens(alpha, gamma)` returns $\\frac{1 - \\alpha^{\\gamma+1}}{1 - \\alpha}$ (Equation 1). For $\\alpha = 1$ the limit is $\\gamma + 1$.\n- `walltime_speedup(alpha, gamma, c)` returns $\\frac{1 - \\alpha^{\\gamma+1}}{(1 - \\alpha)(\\gamma c + 1)}$ (Theorem 3.8).\n- `best_gamma(alpha, c, max_gamma=40)` returns the integer $\\gamma \\in [1, \\text{max\\_gamma}]$ with the largest speedup (Section 3.5). Break ties toward the smaller $\\gamma$.\n\nThe tests check Table 1 and Table 4 of the paper.",
+  "hints": [
+    "`np.minimum(p, q).sum()` computes $\\alpha$. Convert the inputs with `np.asarray` first.",
+    "For $\\alpha = 1$ the formula divides by zero. Return `gamma + 1` in that case.",
+    "A speedup below 1 means speculative decoding is slower than the baseline. `best_gamma` still returns the best $\\gamma$ and the caller decides whether to use it.",
+    "`max(range(1, max_gamma + 1), key=...)` returns the first maximum, which is the smaller $\\gamma$ on a tie."
+  ],
+  "runtime": "pyodide"
+}

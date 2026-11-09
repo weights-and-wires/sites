@@ -1,0 +1,10 @@
+{
+  "title": "Verify a draft (Algorithm 1)",
+  "goal": "Implement the verification half of Algorithm 1 (Section 2.3). The draft model has already proposed $\\gamma$ tokens $x_1, \\dots, x_\\gamma$ with distributions $q_1, \\dots, q_\\gamma$, and the target model has returned $p_1, \\dots, p_{\\gamma+1}$ in one parallel pass.\n\nWrite `verify_draft(p_dists, q_dists, draft, r, rng)`.\n\n- `p_dists` has shape `(gamma + 1, V)`, `q_dists` has shape `(gamma, V)`, `draft` holds `gamma` token IDs, and `r` holds `gamma` uniform draws from $U(0, 1)$.\n- Find $n$, the number of accepted guesses: $n$ is the first index $i$ where $r_i > p_i(x_i)/q_i(x_i)$, or $\\gamma$ if there is none.\n- Draw the final token $t$ from $p_{n+1}$ if $n = \\gamma$, and from $\\operatorname{norm}(\\max(0, p_{n+1} - q_{n+1}))$ otherwise.\n- Return the list `draft[:n] + [t]` of Python ints.\n\nThe paper counts from 1. Your arrays count from 0, so the paper's $p_{n+1}$ is `p_dists[n]`. The starter includes `residual_distribution`.",
+  "hints": [
+    "Loop over positions in order and `break` at the first rejection. A later guess can't be accepted once an earlier one failed, because it was drafted from a prefix that no longer exists.",
+    "If the loop finishes with no rejection, `n == gamma`. Then the extra token comes from `p_dists[gamma]`, the distribution after the last draft token. It costs no extra target pass.",
+    "On a rejection at index `n`, use `p_dists[n]` and `q_dists[n]` for the residual. Check that you don't use the index of the previous guess."
+  ],
+  "runtime": "pyodide"
+}
