@@ -1,0 +1,10 @@
+{
+  "title": "Sequence lengths for a clip",
+  "goal": "AudioLM keeps each stage's sequence short by splitting the work (Section III-C). Write `sequence_lengths(seconds, sr=16000, acoustic_hop=320, semantic_hop=640, Q=12, Qp=4, chunk_s=3)`, which returns a dict of integer token counts for a clip with `seconds` seconds of audio, using the paper's defaults (Sections III-B and IV-B). The keys are:\n\n- `semantic`: $T_S = T / 640$.\n- `acoustic_coarse`: $T_A \\cdot Q'$.\n- `acoustic_all`: $T_A \\cdot Q$.\n- `stage1`: the stage 1 sequence, which is the semantic tokens.\n- `stage2`: the semantic tokens followed by the coarse acoustic tokens.\n- `stage3_chunk`: one stage 3 chunk of `chunk_s` seconds. It holds all $Q$ layers of acoustic tokens and no semantic tokens.\n- `stage3_chunks`: how many chunks cover the clip, with a shorter last chunk allowed.\n- `one_stage`: the length if you modeled the semantic tokens and all acoustic tokens in one sequence.\n\nUse integer division for $T_S$ and $T_A$.",
+  "hints": [
+    "`T = seconds * sr` samples. $T_A = T / 320$ and $T_S = T / 640$, so $T_A = 2 T_S$.",
+    "Stage 2 predicts only the coarse layers, so it has $T_S + T_A Q'$ tokens, not $T_S + T_A Q$.",
+    "Stage 3 drops the semantic tokens because the fine tokens are conditionally independent of them given the coarse tokens. Use `math.ceil` for the number of chunks."
+  ],
+  "runtime": "pyodide"
+}
