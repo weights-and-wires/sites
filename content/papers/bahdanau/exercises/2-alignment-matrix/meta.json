@@ -1,0 +1,11 @@
+{
+  "title": "The alignment matrix for a whole sentence",
+  "goal": "Evaluate the alignment model for every decoder step at once. Appendix A.1.2 notes that $U_a h_j$ doesn't depend on $i$, so you can compute it once per source position.\n\nWrite `alignment_matrix(S_prev, H, Wa, Ua, va)`. `S_prev` has shape `(Ty, n)`, where row $i$ is the state $s_{i-1}$. `H` has shape `(Tx, 2n)`. The weights have the shapes from exercise 1. Return `(alpha, C)`: `alpha` has shape `(Ty, Tx)` with entry $\\alpha_{ij}$ (Equation 6, the matrix that Figure 3 plots), and `C` has shape `(Ty, 2n)` with row $i$ equal to $c_i$ (Equation 5).\n\nUse no Python loops.",
+  "hints": [
+    "Compute `A = S_prev @ Wa.T` with shape `(Ty, n_prime)` and `B = H @ Ua.T` with shape `(Tx, n_prime)`. Then `A[:, None, :] + B[None, :, :]` has shape `(Ty, Tx, n_prime)`.",
+    "Apply `np.tanh` to the 3-D array, then contract the last axis with `va` to get the scores `e` with shape `(Ty, Tx)`.",
+    "The softmax runs over the source positions, which is axis 1 of `e`. Each row of `alpha` must sum to 1. Each column does not have to.",
+    "`C = alpha @ H`."
+  ],
+  "runtime": "pyodide"
+}
