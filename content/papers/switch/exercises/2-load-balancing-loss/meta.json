@@ -1,0 +1,11 @@
+{
+  "title": "Load-balancing loss",
+  "goal": "Without a pressure toward balance, the router sends most tokens to a few experts. The paper adds an auxiliary loss (Section 2.2, Equations 4 to 6):\n\n$$\\text{loss} = \\alpha \\cdot N \\cdot \\sum_{i=1}^{N} f_i \\cdot P_i$$\n\nwhere $f_i$ is the fraction of tokens whose top-1 choice is expert $i$, and $P_i$ is the mean router probability for expert $i$.\n\nWrite two functions. Both take `p`, the `(T, N)` matrix of router probabilities $p_i(x)$.\n\n- `expert_fractions(p)` returns `(f, P)`, each of shape `(N,)`.\n- `load_balancing_loss(p, alpha=1e-2)` returns the scalar loss.",
+  "hints": [
+    "$f_i$ counts hard assignments: take the argmax of each row first. It is the part that has no gradient.",
+    "$P_i$ is the plain mean of column $i$ of `p`. It is the part that carries the gradient to the router.",
+    "Both $f$ and $P$ sum to 1. With uniform routing, $\\sum_i f_i P_i = N \\cdot (1/N)(1/N) = 1/N$, which is why the loss multiplies by $N$.",
+    "Use `np.bincount(idx, minlength=N) / T` for $f$."
+  ],
+  "runtime": "pyodide"
+}

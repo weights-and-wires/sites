@@ -1,0 +1,10 @@
+{
+  "title": "Top-1 router",
+  "goal": "A Switch layer sends each token to exactly one expert (Section 2.1, Equation 1). Write `switch_route(x, Wr)`.\n\n- `x` has shape `(T, d_model)`, one row per token.\n- `Wr` has shape `(d_model, N)`, the router weights $W_r$ for $N$ experts.\n\nReturn three arrays: `p` with shape `(T, N)` (the gate probabilities $p_i(x)$ from the softmax over experts), `idx` with shape `(T,)` (the chosen expert for each token), and `gate` with shape `(T,)` (the probability $p_{idx}(x)$ of the chosen expert, which scales that expert's output).\n\nThe logits are $h(x) = W_r \\cdot x$. In this row-vector layout, that is `x @ Wr`.",
+  "hints": [
+    "The softmax runs over the expert axis (the last axis of the `(T, N)` logits), not over the tokens.",
+    "Subtract each token's maximum logit before `np.exp`. Router logits can be large, and the paper casts the router to float32 for this reason (Section 2.4).",
+    "`p[np.arange(T), idx]` picks one probability from each row."
+  ],
+  "runtime": "pyodide"
+}
