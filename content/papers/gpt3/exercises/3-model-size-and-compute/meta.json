@@ -1,0 +1,11 @@
+{
+  "title": "Parameters and training compute",
+  "goal": "Table 2.1 lists $n_{\\text{layers}}$ and $d_{\\text{model}}$ for eight models. Section 2.1 says the architecture is GPT-2's with $d_{\\text{ff}} = 4\\,d_{\\text{model}}$, and every model has $n_{\\text{ctx}} = 2048$. Appendix D estimates training compute as $6ND$ flops for $N$ parameters and $D$ tokens, and reports it in petaflop/s-days of $8.64 \\times 10^{19}$ flops each. Write five functions:\n\n- `block_params(d)`: one Transformer block with biases on every linear layer and two layer norms (gain and bias each). Use fused attention weights of shape $(d, 3d)$ and $(d, d)$, and feed-forward weights of shape $(d, 4d)$ and $(4d, d)$.\n- `n_params(layers, d_model, n_vocab=50257, n_ctx=2048)`: token embeddings, learned position embeddings, all blocks, and one final layer norm. The output projection shares the token embedding matrix.\n- `train_flops(n_params, n_tokens)`: $6ND$.\n- `petaflop_days(flops)`.\n- `attention_fraction(d_model, n_ctx)`: the share of forward-pass flops spent on the $QK^\\top$ and $AV$ products at full context with dense attention. Count a multiply-add as 2 flops. Per token and per layer, those two products cost $4\\,n_{\\text{ctx}}\\,d_{\\text{model}}$, and the weight matrices cost $2 \\times 12\\,d_{\\text{model}}^2$.",
+  "hints": [
+    "Attention weights: $d \\cdot 3d + 3d$ for the fused QKV projection and $d \\cdot d + d$ for the output projection. The feed-forward network is $d \\cdot 4d + 4d$ and $4d \\cdot d + d$. The layer norms add $2 \\cdot 2d$. The total is $12 d^2 + 13 d$.",
+    "Sharing the output projection with the token embedding means the vocabulary matrix is counted once.",
+    "The fraction is attention flops over attention plus weight flops: $4 n d / (4 n d + 24 d^2)$.",
+    "Check the 175B model against Table D.1: about 174.6 billion parameters and $3.14 \\times 10^{23}$ flops."
+  ],
+  "runtime": "pyodide"
+}
