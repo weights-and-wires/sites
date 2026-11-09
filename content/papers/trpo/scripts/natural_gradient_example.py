@@ -47,6 +47,10 @@ beta = np.sqrt(2 * delta / (x2 @ F2 @ x2))
 print("s^T A s                  =", round(x2 @ F2 @ x2, 6))
 print("beta = sqrt(2 delta/s^T A s), delta = 0.01 =", round(beta, 6))
 print("quadratic KL of beta*s   =", round(0.5 * beta**2 * (x2 @ F2 @ x2), 6))
+print("2 * delta                =", 2 * delta)
+print("2 * delta / (s^T A s)    =", round(2 * delta / (x2 @ F2 @ x2), 6))
+print("residual norm after 2    =", f"{np.linalg.norm(g2 - F2 @ x2):.1e}")
+print("g . s (equals s^T A s)   =", round(g2 @ x2, 6))
 
 # ---- 2. Softmax policy: Fisher matrix, natural gradient step, line search ----
 rng = np.random.default_rng(0)
