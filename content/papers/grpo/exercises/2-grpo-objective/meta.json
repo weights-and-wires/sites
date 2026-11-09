@@ -1,0 +1,11 @@
+{
+  "title": "The GRPO objective and its KL estimator",
+  "goal": "Implement two pieces of Equation 3 for one group of $G$ outputs.\n\n1. `kl_k3(logp, logp_ref)` is the estimator of Equation 4, $\\frac{\\pi_{ref}}{\\pi_\\theta} - \\log\\frac{\\pi_{ref}}{\\pi_\\theta} - 1$, computed from log-probabilities of the sampled tokens. It works elementwise.\n2. `grpo_objective(logp_new, logp_old, logp_ref, adv, mask, eps, beta)` returns the value of the objective for the group (the quantity to maximize, without the outer expectation over questions). Per token, it takes $\\min(r\\hat A,\\ \\operatorname{clip}(r, 1-\\epsilon, 1+\\epsilon)\\hat A)$ with $r = \\pi_\\theta/\\pi_{\\theta_{old}}$ and subtracts $\\beta$ times the KL estimate. It then averages the tokens of each output with $1/|o_i|$, and averages over the $G$ outputs with $1/G$.\n\nThe arrays `logp_new`, `logp_old`, and `logp_ref` have shape `(G, T)`. `adv` has shape `(G,)`: outcome supervision gives every token of output $i$ the same $\\hat A_i$. `mask` has shape `(G, T)` and is 1 for real tokens and 0 for padding, so $|o_i|$ is the row sum of the mask.",
+  "hints": [
+    "With `d = logp_ref - logp`, the estimator is `np.exp(d) - d - 1`. Swapping the arguments gives a different, also non-negative number, so the tests check the direction.",
+    "The ratio is `np.exp(logp_new - logp_old)`. Broadcast the advantage with `adv[:, None]` so it multiplies every token of its row.",
+    "Sum each row over its real tokens, `(per_token * mask).sum(axis=1)`, divide by `mask.sum(axis=1)`, and only then take the mean over rows. One global mean over all tokens weights long outputs more.",
+    "The KL term sits inside the per-token bracket and is not part of `adv`. That separation is the paper's point about Equation 3."
+  ],
+  "runtime": "pyodide"
+}

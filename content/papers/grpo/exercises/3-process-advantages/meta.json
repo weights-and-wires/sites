@@ -1,0 +1,10 @@
+{
+  "title": "Process-supervision advantages",
+  "goal": "Outcome supervision gives every token the same advantage. Process supervision (Section 4.1.3) scores each reasoning step instead. Given $G$ outputs, output $i$ has $K_i$ step rewards. The paper normalizes the rewards with the mean and standard deviation of the whole set $R$ of step rewards (all steps of all outputs in the group): $\\widetilde r = (r - \\operatorname{mean}(R)) / \\operatorname{std}(R)$. The advantage of a token is then the sum of the normalized rewards of its own step and of all later steps in that output: $\\hat A_{i,t} = \\sum_{index(j) \\ge t} \\widetilde r_i^{index(j)}$.\n\nWrite `process_advantages(step_rewards)`. `step_rewards` is a list of $G$ 1-D arrays; array $i$ holds the $K_i$ step rewards of output $i$ in order. Return a list of $G$ arrays with the advantage of each step (every token inside step $j$ shares it). Use the population standard deviation and add `1e-6` to it in the denominator.",
+  "hints": [
+    "Concatenate all the arrays first, `np.concatenate(step_rewards)`, and take one mean and one std from the result. Normalizing each output on its own would make every output's advantages sum to a fixed value, and an output with all-bad steps would look average.",
+    "The sum over later steps is a reverse cumulative sum: `np.cumsum(x[::-1])[::-1]`.",
+    "With one step per output, the answer must equal the outcome-supervision advantages of Exercise 1."
+  ],
+  "runtime": "pyodide"
+}
