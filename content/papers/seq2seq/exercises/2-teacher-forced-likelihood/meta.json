@@ -1,0 +1,10 @@
+{
+  "title": "Teacher-forced sequence likelihood",
+  "goal": "Equation 1 factors $p(y_1, \\ldots, y_{T'} \\mid x_1, \\ldots, x_T)$ into a product of per-step softmax probabilities, and Section 3.2 trains by maximizing its log. Write three functions. The target includes the final `<EOS>` token (Section 2).\n\n- `decoder_inputs(target, eos)` returns the teacher-forced inputs: the `<EOS>` that ends the source, followed by the target without its last token. In Figure 1, the target `W X Y Z <EOS>` gets the inputs `<EOS> W X Y Z`.\n- `sequence_log_prob(logits, target)` takes decoder logits of shape `(T', V)` and an integer target of length `T'`, and returns $\\log p(y \\mid x) = \\sum_t \\log p(y_t \\mid v, y_1, \\ldots, y_{t-1})$. It must stay finite for logits near 1000.\n- `perplexity(total_log_prob, n_tokens)` returns the per-token perplexity $\\exp(-\\text{total} / n)$. Section 3.3 reports perplexity but doesn't define it; this is the usual definition.",
+  "hints": [
+    "Subtract the row maximum before you exponentiate, then use `z - log(sum(exp(z)))`. The softmax runs over the vocabulary axis (the last one).",
+    "Pick the target's log probability from each row with `lp[np.arange(T), target]`.",
+    "The decoder input at step $t$ is the target token from step $t - 1$, so the inputs are the targets shifted right by one position."
+  ],
+  "runtime": "pyodide"
+}
