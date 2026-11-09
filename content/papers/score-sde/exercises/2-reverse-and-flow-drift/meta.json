@@ -1,0 +1,10 @@
+{
+  "title": "Reverse-time drift and probability-flow drift",
+  "goal": "For the VP-SDE the forward drift is $f(x, t) = -\\tfrac12\\beta(t)\\,x$ and the diffusion coefficient is $g(t) = \\sqrt{\\beta(t)}$.\n\n`gaussian_score(x, t, m0, s0)` returns $\\nabla_x \\log p_t(x)$ when the data are $x(0) \\sim \\mathcal{N}(m_0, s_0^2)$. Under the VP-SDE, $p_t$ is Gaussian with mean $m(t)\\,m_0$ and variance $m(t)^2 s_0^2 + \\sigma^2(t)$, where $m(t)$ and $\\sigma^2(t)$ are the kernel quantities from Appendix B, Equation 33.\n\n`reverse_sde_drift(x, t, score)` returns the drift of the reverse-time SDE, $f(x, t) - g(t)^2\\,\\nabla_x \\log p_t(x)$ (Section 3.2, Equation 6).\n\n`pf_ode_drift(x, t, score)` returns the drift of the probability-flow ODE, $f(x, t) - \\tfrac12 g(t)^2\\,\\nabla_x \\log p_t(x)$ (Section 4.3, Equation 13).\n\nIn the last two functions `score` is the value of $\\nabla_x \\log p_t(x)$ at `x`, as an array shaped like `x`.",
+  "hints": [
+    "The score of $\\mathcal{N}(\\mu, v)$ is $-(x - \\mu)/v$. Here $\\mu = m(t)\\,m_0$ and $v = m(t)^2 s_0^2 + 1 - m(t)^2$.",
+    "The two drifts differ only in the coefficient on the score term: $g^2$ for the SDE and $\\tfrac12 g^2$ for the ODE. The ODE has no noise term to share the work.",
+    "If you want to see why the half is right, run the finite-difference test in `tests.py` by hand: it checks that $\\partial_t p_t = -\\partial_x[\\,\\text{drift}\\cdot p_t\\,]$ for your ODE drift."
+  ],
+  "runtime": "pyodide"
+}

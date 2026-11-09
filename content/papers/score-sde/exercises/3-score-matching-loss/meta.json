@@ -1,0 +1,11 @@
+{
+  "title": "Denoising score matching for the VP-SDE",
+  "goal": "Implement one evaluation of the continuous objective (Section 3.3, Equation 7) for the VP-SDE with the weighting $\\lambda(t) = \\sigma^2(t)$.\n\n`dsm_loss(score_model, x0, t, eps)` takes a batch `x0` of shape `(batch, dim)`, times `t` of shape `(batch,)` in $(0, 1]$, and noise `eps` of shape `(batch, dim)`. Build $x(t) = m(t)\\,x(0) + \\sigma(t)\\,\\epsilon$ from the perturbation kernel (Appendix B, Equation 33), where $m(t) = e^{-\\frac12\\int_0^t\\beta}$ and $\\sigma^2(t) = 1 - e^{-\\int_0^t\\beta}$. The target is $\\nabla_{x(t)} \\log p_{0t}(x(t) \\mid x(0)) = -(x(t) - m(t)\\,x(0))/\\sigma^2(t)$.\n\nReturn $\\sigma^2(t)\\,\\|s_\\theta(x(t), t) - \\text{target}\\|_2^2$, summed over the data dimensions and averaged over the batch. The model is called as `score_model(x_t, t)` and never sees `x0`.\n\nThe paper says to choose $\\lambda \\propto 1 / \\mathbb{E}[\\|\\nabla \\log p_{0t}\\|_2^2]$ (Section 3.3). For this kernel that is $\\lambda = \\sigma^2(t)$.",
+  "hints": [
+    "Compute the target from the noise: $-(x(t) - m\\,x(0))/\\sigma^2 = -\\epsilon/\\sigma$. Both forms give the same number.",
+    "`t` has one value per row. Reshape $m$ and $\\sigma^2$ to `(batch, 1)` so they broadcast over the data dimensions.",
+    "Sum the squared error over the last axis, multiply by $\\sigma^2(t)$ for each row, then average over the batch.",
+    "With $\\lambda = \\sigma^2$, predicting the score as $-\\hat\\epsilon/\\sigma$ turns the loss into $\\|\\hat\\epsilon - \\epsilon\\|^2$, the DDPM objective."
+  ],
+  "runtime": "pyodide"
+}
