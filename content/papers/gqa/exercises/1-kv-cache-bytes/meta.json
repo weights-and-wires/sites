@@ -1,0 +1,11 @@
+{
+  "title": "KV-cache bytes",
+  "goal": "Size the KV cache for MHA, GQA, and MQA. Section 2.2 says that going from $H$ key-value heads to $G$ cuts the cache, and the data loaded at each decoding step, by a factor of $H/G$.\n\nWrite two functions.\n\n- `kv_cache_bytes_per_token(n_layers, n_kv_heads, d_head, bytes_per_value=2)` returns the bytes that one token adds to the cache. Each layer stores one key and one value vector per KV head.\n- `max_concurrent_sequences(gpu_bytes, weight_bytes, seq_len, n_layers, n_kv_heads, d_head, bytes_per_value=2)` returns how many full-length sequences fit in the memory left after the weights. Return a whole number, rounded down.\n\n`n_kv_heads` is $G$: 32 for MHA at 7B scale, 8 for GQA-8, and 1 for MQA.",
+  "hints": [
+    "A token stores a key and a value, so the per-token size has a factor of 2.",
+    "The per-token size uses `n_kv_heads`, the number of cached heads, and not the number of query heads.",
+    "Per-sequence bytes are `seq_len` times the per-token bytes. Free memory is `gpu_bytes - weight_bytes`.",
+    "Use integer floor division, `//`. A sequence that only half fits doesn't fit."
+  ],
+  "runtime": "pyodide"
+}
