@@ -1,0 +1,11 @@
+{
+  "title": "Toy latent diffusion with a PCA autoencoder",
+  "goal": "Build the two-stage pipeline of Figure 3 at toy scale. The perceptual compression stage $(E, D)$ is PCA, and the diffusion model runs in the PCA latent space, as in Equation 2.\n\nWrite four functions:\n\n- `fit_pca(X, k)` returns `(mean, W)`, where `W` has shape `(k, D)` and holds the top-`k` principal directions as orthonormal rows.\n- `encode(X, mean, W)` returns $z = E(x)$ with shape `(n, k)`.\n- `decode(Z, mean, W)` returns $\\tilde x = D(z)$ with shape `(n, D)`.\n- `analytic_eps(zt, abar, m, Sigma)` returns the exact $\\epsilon_\\theta(z_t, t)$ for Gaussian latents $z_0 \\sim \\mathcal{N}(m, \\Sigma)$. With $z_t = \\sqrt{\\bar\\alpha}\\, z_0 + \\sqrt{1 - \\bar\\alpha}\\, \\epsilon$, it is $\\sqrt{1 - \\bar\\alpha}\\, \\Sigma_t^{-1}(z_t - \\sqrt{\\bar\\alpha}\\, m)$ with $\\Sigma_t = \\bar\\alpha \\Sigma + (1 - \\bar\\alpha) I$.\n\nThe starter has a finished sampler and a finished `generate`, which samples in the latent space and decodes. Your four functions make the samples match the data.",
+  "hints": [
+    "Center the data first: `np.linalg.svd(X - mean, full_matrices=False)` returns the principal directions as the rows of `Vt`. Keep the first `k` rows.",
+    "`encode` subtracts the mean and projects with `W.T`. `decode` projects back with `W` and adds the mean.",
+    "For `analytic_eps`, build `Sigma_t` as a `(k, k)` matrix. `np.linalg.solve(Sigma_t, v)` applies its inverse to a column vector `v`, so transpose the batch of rows before and after.",
+    "$\\bar\\alpha = 1$ gives $\\epsilon = 0$, and $\\bar\\alpha = 0$ gives $\\epsilon = z_t$."
+  ],
+  "runtime": "pyodide"
+}
