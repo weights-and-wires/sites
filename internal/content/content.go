@@ -181,7 +181,9 @@ func LoadPapers(dir string) ([]Paper, error) {
 			return nil, fmt.Errorf("%s: %w", path, err)
 		}
 		var p Paper
-		if err := yaml.Unmarshal(meta, &p); err != nil {
+		dec := yaml.NewDecoder(bytes.NewReader(meta))
+		dec.KnownFields(true)
+		if err := dec.Decode(&p); err != nil {
 			return nil, fmt.Errorf("%s: %w", path, err)
 		}
 		if p.ID == "" {
