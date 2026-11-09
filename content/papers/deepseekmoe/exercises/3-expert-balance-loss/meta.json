@@ -1,0 +1,10 @@
+{
+  "title": "Expert-level balance loss",
+  "goal": "Implement the expert-level balance loss of Section 3.3 (Equations 12-14). Write `expert_balance_loss(s, idx, alpha=1.0)`.\n\n- `s` has shape `(T, N')`: the affinities $s_{i,t}$ of the routed experts, each row summing to 1.\n- `idx` has shape `(T, K')`: the routed experts each token selected.\n- $N'$ is `s.shape[1]` and $K'$ is `idx.shape[1]`.\n\nThe loss is $\\alpha \\sum_{i=1}^{N'} f_i P_i$, where $f_i = \\frac{N'}{K' T} \\sum_{t} \\mathbb{1}(\\text{token } t \\text{ selects expert } i)$ and $P_i = \\frac{1}{T} \\sum_t s_{i,t}$. Return a float.",
+  "hints": [
+    "Count the tokens per expert with `np.bincount(idx.ravel(), minlength=N')`. Each token selects an expert at most once, so this is the sum of the indicators.",
+    "$P_i$ is the column mean of `s`. It is the mean over all routed affinities, including those of experts the token didn't select.",
+    "With perfectly balanced routing, $f_i = 1$ and $P_i = 1/N'$, so the loss is exactly `alpha`."
+  ],
+  "runtime": "pyodide"
+}

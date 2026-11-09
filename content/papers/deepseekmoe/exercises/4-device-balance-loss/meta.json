@@ -1,0 +1,10 @@
+{
+  "title": "Device-level balance loss",
+  "goal": "Implement the device-level balance loss of Section 3.3 (Equations 15-17). Write `device_balance_loss(f, P, groups, alpha=1.0)`.\n\n- `f` and `P` are arrays of length $N'$ holding $f_j$ and $P_j$ from Equations 13 and 14.\n- `groups` is a list of lists of expert indices: group $i$ is the set $\\mathcal{E}_i$ of experts on device $i$.\n\nThe loss is $\\alpha \\sum_{i=1}^{D} f'_i P'_i$, where $f'_i = \\frac{1}{|\\mathcal{E}_i|} \\sum_{j \\in \\mathcal{E}_i} f_j$ is the **mean** of the group's $f_j$ and $P'_i = \\sum_{j \\in \\mathcal{E}_i} P_j$ is the **sum** of the group's $P_j$. Return a float.",
+  "hints": [
+    "Build one pair per group with `f[g].mean()` and `P[g].sum()`, where `g` is a list of indices.",
+    "Groups can have different sizes. The mean in $f'_i$ divides by $|\\mathcal{E}_i|$, not by $N'$.",
+    "When every device holds the same share of the load, $f'_i = 1$ and $P'_i = 1/D$, so the loss is `alpha`."
+  ],
+  "runtime": "pyodide"
+}
