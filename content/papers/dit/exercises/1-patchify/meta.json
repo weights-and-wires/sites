@@ -1,0 +1,10 @@
+{
+  "title": "Patchify and unpatchify",
+  "goal": "DiT turns a noised latent of shape $(I, I, C)$ into $T = (I/p)^2$ tokens of length $p^2 C$, and the final layer turns tokens back into a spatial layout (Section 3.2, Figure 4, and the \"Transformer decoder\" paragraph). Write `patchify(z, p)`, which returns an array of shape `(T, p*p*C)` with the patches in raster order (left to right, then top to bottom), and `unpatchify(tokens, p, C)`, which inverts it.\n\nWithin a token, pixels run in raster order and the channels are the fastest axis. For the 4x4 latent on the page with `p = 2`, token 0 is `[0, 1, 4, 5]` and token 1 is `[2, 3, 6, 7]`.",
+  "hints": [
+    "Split each spatial axis in two first: `z.reshape(g, p, g, p, C)`, where `g = I // p`. Axes 0 and 2 index the grid, and axes 1 and 3 index pixels inside a patch.",
+    "Move the two grid axes to the front with `transpose(0, 2, 1, 3, 4)` before you flatten. Without the transpose, `reshape` runs but mixes pixels from different patches.",
+    "`unpatchify` applies the same transpose, because swapping axes 1 and 2 is its own inverse."
+  ],
+  "runtime": "pyodide"
+}

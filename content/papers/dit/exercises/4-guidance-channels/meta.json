@@ -1,0 +1,10 @@
+{
+  "title": "Guidance on three channels",
+  "goal": "DiT predicts both noise and a diagonal covariance, so its output has $2C$ channels: the first $C$ are $\\epsilon$ and the last $C$ are the covariance (Section 3.2, \"Transformer decoder\"). Classifier-free guidance (Section 3.1) is $\\hat\\epsilon = \\epsilon(x_t, \\varnothing) + s \\cdot (\\epsilon(x_t, c) - \\epsilon(x_t, \\varnothing))$. Appendix A says the authors applied guidance only to the first three channels of the latent, not all four.\n\nWrite `guided_output(out_cond, out_uncond, s, C=4, n_guided=3)`. Both inputs have shape `(2*C, H, W)`. Return an array of shape `(2*C, H, W)` whose first `n_guided` channels hold the guided noise, whose remaining noise channels (up to `C`) copy the conditional pass, and whose covariance channels (`C` onward) copy the conditional pass.",
+  "hints": [
+    "Start from `out = out_cond.copy()`, then overwrite only `out[:n_guided]`.",
+    "With `s = 1` the guided noise equals the conditional noise. Use that to check your formula.",
+    "Do not guide the covariance channels. The formula in Section 3.1 is for $\\epsilon$ only."
+  ],
+  "runtime": "pyodide"
+}
