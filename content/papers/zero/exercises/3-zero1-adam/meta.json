@@ -1,0 +1,10 @@
+{
+  "title": "Simulate ZeRO stage 1 with Adam",
+  "goal": "Simulate $P_{os}$ (Section 5.1) on `nd` workers. Every worker keeps the full parameter vector, but worker `i` stores Adam's $m$ and $v$ only for slice `i`.\n\nWrite `zero1_step(params, worker_grads, m_shards, v_shards, t, lr=0.1)`:\n\n- `params` is the full parameter vector, shape `(psi,)`.\n- `worker_grads` has shape `(nd, psi)`: each worker's local gradient for its own micro-batch.\n- `m_shards` and `v_shards` are lists of `nd` arrays. Entry `i` has the length of slice `i` from `shard_slices(psi, nd)`. Update them in place.\n- `t` is the step number, starting at 1.\n\nThe step averages the gradients, lets each worker update only its own slice with `adam_update`, then all-gathers the slices. Return the new full parameter vector. It must equal a plain data-parallel Adam step.\n\nThe starter gives you `adam_update` and `shard_slices`.",
+  "hints": [
+    "Average the worker gradients first: `worker_grads.mean(axis=0)`. In the real system a reduce-scatter delivers only slice `i` of this average to worker `i`.",
+    "Loop over `shard_slices(psi, nd)`. For slice `s` on worker `i`, call `adam_update(params[s], g[s], m_shards[i], v_shards[i], t, lr)`.",
+    "Store the returned `m` and `v` back into `m_shards[i]` and `v_shards[i]`, so the next step sees them. Concatenate the new slices in worker order for the all-gather."
+  ],
+  "runtime": "pyodide"
+}

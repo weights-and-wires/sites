@@ -1,0 +1,10 @@
+{
+  "title": "Reduce-scatter, all-gather, and communication volume",
+  "goal": "Section 7 says that an all-reduce is a reduce-scatter followed by an all-gather, and that each moves $\\Psi$ elements per process. Simulate that in NumPy. Each worker's data is one row of a 2D array, so `xs[i]` is worker `i`'s vector.\n\nWrite three functions and one table:\n\n- `reduce_scatter(xs)` sums `xs` over workers and returns a list of `nd` shards. Worker `i` keeps shard `i`, which is chunk `i` of the sum. Split with `np.array_split` so that lengths needn't divide evenly.\n- `all_gather(shards)` returns a list of `nd` arrays. Each is the concatenation of all shards.\n- `all_reduce(xs)` is `all_gather(reduce_scatter(xs))`.\n- `comm_volume(stage)` returns the elements moved per process per step, in units of $\\Psi$ (Section 7.1 and Section 7.2). Use 0 for plain data parallelism, and 1, 2, 3 for the ZeRO stages.",
+  "hints": [
+    "A reduce-scatter reduces first and scatters second. Sum over axis 0, then cut the result into `nd` chunks.",
+    "Data parallelism does one all-reduce on gradients: $2\\Psi$. Stages 1 and 2 swap it for a reduce-scatter of gradients plus an all-gather of updated parameters.",
+    "Stage 3 gathers parameters twice, once in the forward pass and once in the backward pass (Section 7.2.2), on top of the reduce-scatter of gradients."
+  ],
+  "runtime": "pyodide"
+}
