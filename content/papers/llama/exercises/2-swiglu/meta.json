@@ -1,0 +1,10 @@
+{
+  "title": "SwiGLU feed-forward",
+  "goal": "LLaMA replaces the ReLU feed-forward network with a SwiGLU one and shrinks the hidden width to $\\frac{2}{3} 4d$ (Section 2.2, citing Shazeer, 2020). The paper doesn't print the formula. Shazeer's form is\n\n$$\\mathrm{FFN}_{\\mathrm{SwiGLU}}(x) = \\big(\\mathrm{SiLU}(x W_1) \\odot (x V)\\big) W_2, \\qquad \\mathrm{SiLU}(a) = a\\,\\sigma(a)$$\n\nWrite three functions:\n\n- `silu(a)` applies SiLU elementwise.\n- `swiglu_ffn(x, W1, V, W2)` takes `x` of shape `(..., d)`, `W1` and `V` of shape `(d, h)`, and `W2` of shape `(h, d)`, and returns an array of shape `(..., d)`. The SiLU goes on the `W1` branch only.\n- `ffn_hidden(d, multiple_of=256)` returns the hidden width `h`: take `int(2 * 4 * d / 3)` and round it up to the next multiple of `multiple_of`. The paper doesn't give the rounding rule. The released code uses 256, and the result matches the widths behind Table 2's parameter counts.",
+  "hints": [
+    "`silu(a) = a / (1 + np.exp(-a))`.",
+    "The gate and the value are two different projections of the same `x`. Only the gate goes through SiLU, and the two are then multiplied elementwise, before `W2`.",
+    "To round `n` up to a multiple of `m`, use `m * math.ceil(n / m)`, or `-(-n // m) * m` with integers."
+  ],
+  "runtime": "pyodide"
+}

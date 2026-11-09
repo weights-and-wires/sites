@@ -1,0 +1,11 @@
+{
+  "title": "A LLaMA block",
+  "goal": "Assemble one LLaMA decoder block from the three changes in Section 2.2: pre-normalization with RMSNorm, SwiGLU, and rotary embeddings on the queries and keys.\n\nThe starter gives you finished `rmsnorm`, `swiglu_ffn`, `apply_rope`, and `softmax`. You write `llama_block(x, p, n_heads, positions=None)`:\n\n- `x` has shape `(n, d)`. `p` is a dict with `g1`, `g2` (shape `(d,)`), `Wq`, `Wk`, `Wv`, `Wo` (shape `(d, d)`), `W1`, `V` (shape `(d, h)`), and `W2` (shape `(h, d)`). There are no biases.\n- `positions` defaults to `np.arange(n)`.\n- Attention sub-layer: `x = x + Attention(RMSNorm(x))`. Split `Wq`, `Wk`, and `Wv` outputs into `n_heads` heads of width `d // n_heads`, rotate each head's queries and keys with `apply_rope`, apply a causal mask, use scaled dot-product attention with $\\sqrt{d_{\\text{head}}}$, merge the heads, and multiply by `Wo`. Don't rotate the values.\n- Feed-forward sub-layer: `x = x + SwiGLU(RMSNorm(x))`.\n\nThe tests use invariants that only a correct pre-norm, RoPE, causal block satisfies, plus one seeded reference value.",
+  "hints": [
+    "Pre-norm means the norm sits inside the residual branch: `x = x + attn(rmsnorm(x, g1))`. The residual stream itself is never normalized, except inside the branches.",
+    "Reshape `(n, d)` to `(n, n_heads, d_head)` and transpose to `(n_heads, n, d_head)`. Loop over heads to call `apply_rope` on `(n, d_head)` slices.",
+    "The causal mask is `np.tril(np.ones((n, n), dtype=bool))`. Replace masked scores with `-1e9` before the softmax. Merge heads with `transpose(1, 0, 2).reshape(n, d)`.",
+    "If a test says the output changed when you scaled `x`, check that the norm is applied before the sub-layer and that the residual adds the raw `x`."
+  ],
+  "runtime": "pyodide"
+}
