@@ -1,0 +1,11 @@
+{
+  "title": "Train a 1-D GAN by hand",
+  "goal": "Write the gradients for Algorithm 1 (Section 3) on a model small enough to differentiate by hand. The data distribution is $N(3, 1)$.\n\n- The generator is $G(z) = \\mu + e^{s} z$ with $z \\sim N(0, 1)$ and parameters `pg = [mu, s]`.\n- The discriminator is $D(x) = \\sigma(w_1 x + w_2 x^2 + b)$ with parameters `pd = [w1, w2, b]`. The $x^2$ feature lets $D$ separate two Gaussians with different widths.\n\nImplement two functions. The starter supplies `sigmoid`, `features`, and a `train` loop that calls them.\n\n- `d_grad(pd, x_real, x_fake)` returns the gradient with respect to `pd` of the discriminator loss $-\\frac1m\\sum_i[\\log D(x^{(i)}) + \\log(1 - D(x_{\\text{fake}}^{(i)}))]$. The loop descends on it, which ascends the stochastic gradient in Algorithm 1.\n- `g_grad(pg, pd, z)` returns the gradient with respect to `pg` of the **non-saturating** generator loss $-\\frac1m\\sum_i \\log D(G(z^{(i)}))$ (Section 3). Hold `pd` fixed, and apply the chain rule through $x = \\mu + e^{s}z$.",
+  "hints": [
+    "With logits $a = w_1 x + w_2 x^2 + b$, the discriminator loss has $\\partial/\\partial a = -(1 - D)/m$ on real points and $+D/m$ on fake points. Then $\\partial a / \\partial \\text{pd} = [x, x^2, 1]$, which is the row of `features(x)`.",
+    "For the generator, $\\partial L / \\partial a = -(1 - D)/m$, and $\\partial a / \\partial x = w_1 + 2 w_2 x$. Multiply them to get $\\partial L / \\partial x$ per sample.",
+    "Then $\\partial x / \\partial \\mu = 1$ and $\\partial x / \\partial s = e^{s} z$. Sum over the minibatch.",
+    "Check yourself with finite differences on a fixed batch before you run `train`."
+  ],
+  "runtime": "pyodide"
+}

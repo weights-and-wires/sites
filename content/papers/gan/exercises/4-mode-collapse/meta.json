@@ -1,0 +1,10 @@
+{
+  "title": "Measure mode collapse",
+  "goal": "A GAN gives no density $p_g(x)$ (Section 6), so you compare samples. Write three functions to diagnose a generator on one-dimensional data.\n\n- `histogram(samples, edges)` returns the probability mass in each bin as an array that sums to 1. Samples outside `[edges[0], edges[-1]]` are dropped before you normalize.\n- `js_divergence(p, q)` returns the Jensen-Shannon divergence (natural log) of two histograms. Use the convention $0 \\log 0 = 0$.\n- `modes_covered(samples, modes, radius, min_frac)` returns how many of the centers in `modes` have at least `min_frac` of all samples within `radius` (distance strictly less than `radius`).\n\nA generator that collapses onto one mode has a low value from `modes_covered` and a high `js_divergence` against the data, even when each sample it draws looks real.",
+  "hints": [
+    "`np.histogram(samples, bins=edges)` returns counts. Divide by the counts' sum, not by `len(samples)`, so that dropped samples don't leave the mass below 1.",
+    "Reuse the divergence from exercise 1: `m = (p + q) / 2`, then two KL terms summed only where the first argument is positive.",
+    "Compute the fraction for each mode as `np.mean(np.abs(samples - c) < radius)`, and count the modes whose fraction is at least `min_frac`."
+  ],
+  "runtime": "pyodide"
+}
