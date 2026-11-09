@@ -1,0 +1,10 @@
+{
+  "title": "The loss balancer",
+  "goal": "Implement the balancer of Section 3.4 (Equation 5). Given the gradients $g_i = \\partial \\ell_i / \\partial \\hat{x}$ of several losses, it returns the gradient that the optimizer backpropagates instead of $\\sum_i \\lambda_i g_i$.\n\n`balance(grads, weights, ema, beta=0.999, R=1.0)` returns `(g_total, new_ema)`.\n\n- `grads` is a list of NumPy arrays, one per loss, all with the shape of $\\hat{x}$. `weights` is the list of $\\lambda_i$.\n- `ema` is `None` on the first call, or an array holding the running average $\\langle \\lVert g_i \\rVert_2 \\rangle_\\beta$ of each loss.\n- Update the running average with the current norms: `new_ema = beta * ema + (1 - beta) * norms`. On the first call, set `new_ema = norms`. The paper says only \"exponential moving average\", so this update rule is this page's reading.\n- Return $\\sum_i \\tilde{g}_i$ with $\\tilde{g}_i = R \\, \\frac{\\lambda_i}{\\sum_j \\lambda_j} \\, \\frac{g_i}{\\langle \\lVert g_i \\rVert_2 \\rangle_\\beta}$, using `new_ema`.",
+  "hints": [
+    "`norms = np.array([np.linalg.norm(g) for g in grads])` gives $\\lVert g_i \\rVert_2$ for the flattened array.",
+    "Divide each weight by the sum of all the weights, not by the largest or by the count. With $\\sum_i \\lambda_i = 1$ each weight is then the fraction of the gradient norm that loss gets.",
+    "Update the running average before you divide, so the first call has a norm of exactly `R * weight / sum(weights)` per loss."
+  ],
+  "runtime": "pyodide"
+}
