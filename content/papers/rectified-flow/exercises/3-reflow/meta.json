@@ -1,0 +1,11 @@
+{
+  "title": "One round of reflow",
+  "goal": "Rectification turns a coupling $(X_0, X_1)$ into the coupling $(Z_0, Z_1)$ of the flow $\\mathrm{d}Z_t = v^X(Z_t, t)\\,\\mathrm{d}t$ that starts from $Z_0 = X_0$ (Section 2.1, Algorithm 1; Section 3.2, Definition 3.4). Reflow repeats it on the new pairs (Algorithm 4, after the references). On a toy you can use the kernel estimator from Exercise 1, which the starter includes as `kernel_velocity`, in place of a trained network.\n\nWrite two functions.\n\n- `euler_path(x0, x1, h, n_steps)` simulates the flow induced by the pairs `(x0, x1)` with the kernel bandwidth `h`. Start each trajectory at its own `x0`. Use `n_steps` Euler steps of size $1/n$, and evaluate the field at the start time of each step, $t = k/n$. Return an array of shape `(n_steps + 1, n, d)`.\n- `reflow(x0, x1, h, n_steps)` returns the new coupling `(x0, z1)`: the same noise points paired with where the flow carries them.\n\nThe tests use crossing couplings, where Theorem 3.5 says the transport cost drops, and a straight coupling, which Theorem 3.6 says is a fixed point of `reflow`.",
+  "hints": [
+    "Start with `z = np.array(x0, dtype=float)` and a list `path = [z]`. In each step, `z = z + (1 / n_steps) * kernel_velocity(z, k / n_steps, x0, x1, h)`, then append `z`. Always pass the original `x0` and `x1` as the pairs, not the current `z`.",
+    "The last step has $t = 1 - 1/n$, so the factor $1/(1 - t)$ in the field is finite. Evaluating at the end of the step, $t = (k + 1)/n$, divides by zero on the final step.",
+    "`reflow` returns `x0` unchanged and takes `z1` from `euler_path(...)[-1]`. Keep the pairing: row $i$ of `z1` is where row $i$ of `x0` ended up.",
+    "With one pair the field on its line is the constant $x_1 - x_0$, so `euler_path` reproduces the straight line $x_t = t x_1 + (1 - t) x_0$ exactly."
+  ],
+  "runtime": "pyodide"
+}
