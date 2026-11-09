@@ -1,0 +1,10 @@
+{
+  "title": "Prompt-conditioned continuation on a toy model",
+  "goal": "VALL-E never updates its weights for a new speaker. The 3-second acoustic prompt sits in the context and the model continues it in the same voice (Section 4.3). This exercise builds the smallest model that shows the effect: a Bayesian mixture over $K$ \"speakers\", each a first-order Markov chain over $V$ tokens with transition matrix `trans[k]`.\n\nWrite `speaker_posterior(prompt, trans, prior)`, the posterior over speakers given the prompt, which is $p(k \\mid \\text{prompt}) \\propto p(k) \\prod_{t} \\text{trans}[k, \\text{prompt}_t, \\text{prompt}_{t+1}]$. Write `next_token_dist(prefix, trans, prior)`, the mixture $\\sum_k p(k \\mid \\text{prefix})\\, \\text{trans}[k, \\text{prefix}_{-1}, \\cdot]$. Write `continue_greedy(prefix, n, trans, prior)`, which appends $n$ arg-max tokens and returns the whole list. This toy is not VALL-E's computation. It is the behavior that VALL-E has to learn implicitly.",
+  "hints": [
+    "Work in log space. Add `np.log(trans[:, a, b])` for each adjacent pair, then subtract the maximum before `np.exp`.",
+    "A prompt with one token has no transitions, so the posterior is the prior.",
+    "In `continue_greedy`, recompute the next-token distribution from the grown prefix on every step, because each new token is more evidence about the speaker."
+  ],
+  "runtime": "pyodide"
+}
