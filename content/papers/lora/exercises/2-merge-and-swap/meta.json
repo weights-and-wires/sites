@@ -1,0 +1,10 @@
+{
+  "title": "Merge and swap adapters",
+  "goal": "At inference LoRA adds no latency, because the update can be folded into the weight: \"we can explicitly compute and store $W = W_0 + BA$\" (Section 4.1). Task switching works the same way in reverse.\n\nThe starter includes a finished `lora_forward`. Write:\n\n- `merge(W0, A, B, alpha)` returns the merged weight $W_0 + \\frac{\\alpha}{r} BA$, with shape `(d, k)`.\n- `unmerge(W, A, B, alpha)` removes an adapter from a merged weight.\n- `swap(W, old, new, alpha)` takes a merged weight `W` and two `(A, B)` pairs and returns the weight with `old` removed and `new` added.\n\nThe merged weight must give the same outputs as the unmerged layer. Use the same `alpha / r` scale as the forward pass.",
+  "hints": [
+    "`B @ A` has shape `(d, k)`. Remember the factor `alpha / r`, because the forward pass includes it.",
+    "`unmerge` subtracts exactly what `merge` added.",
+    "`swap` is an unmerge with the old pair followed by a merge with the new pair. The two pairs can have different ranks."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,10 @@
+{
+  "title": "A LoRA linear layer",
+  "goal": "Implement the LoRA forward pass (Section 4.1, Equation 3). The pretrained weight is `W0` with shape `(d, k)`, `B` has shape `(d, r)`, and `A` has shape `(r, k)`. The input `X` holds one example per row, with shape `(n, k)`, so each row `x` gives $h = W_0 x + \\frac{\\alpha}{r} B A x$ and the batch result is `(n, d)`.\n\nWrite two functions:\n\n- `init_lora(d, k, r, seed=0, sigma=0.02)` returns `(A, B)`. Use the paper's initialization: `A` is Gaussian with standard deviation `sigma`, and `B` is all zeros (Section 4.1).\n- `lora_forward(X, W0, A, B, alpha)` returns the `(n, d)` output, with the update scaled by $\\alpha / r$.",
+  "hints": [
+    "`X @ W0.T` is the frozen path. The batch version of $Ax$ is `X @ A.T`, with shape `(n, r)`.",
+    "Multiply by `B.T` after `A`. The order `X @ A.T @ B.T` never builds the `(d, k)` matrix `BA`.",
+    "Read `r` from `A.shape[0]`. Scale only the update, not the frozen path."
+  ],
+  "runtime": "pyodide"
+}

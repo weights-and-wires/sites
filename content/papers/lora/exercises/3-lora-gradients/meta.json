@@ -1,0 +1,11 @@
+{
+  "title": "Gradients of A and B",
+  "goal": "Only `A` and `B` are trained; `W0` is frozen (Section 4.1). Derive and write the gradients of the layer $H = X W_0^\\top + \\frac{\\alpha}{r} X A^\\top B^\\top$ for a batch `X` of shape `(n, k)`.\n\nThe starter includes a finished `lora_forward`. Write `lora_grads(X, A, B, alpha, dH)`, where `dH` is the gradient of the loss with respect to the output `H`, with shape `(n, d)`. Return `(dA, dB)` with the shapes of `A` and `B`. The frozen weight gets no gradient, so it isn't an argument.\n\nThe tests check your gradients against finite differences. They also check the fact that surprises most readers: with $B = 0$, the gradient of `A` is exactly zero, and only `B` moves on the first step.",
+  "hints": [
+    "Let `s = alpha / r` and `Z = X @ A.T`, with shape `(n, r)`. Then `H = X @ W0.T + s * Z @ B.T`.",
+    "`dB = s * dH.T @ Z`. Check the shape: `(d, n) @ (n, r)` gives `(d, r)`.",
+    "Send the gradient back through `B` first: `dZ = s * dH @ B`, with shape `(n, r)`. Then `dA = dZ.T @ X`.",
+    "`dA` contains `B`. When `B` is all zeros, so is `dA`."
+  ],
+  "runtime": "pyodide"
+}
