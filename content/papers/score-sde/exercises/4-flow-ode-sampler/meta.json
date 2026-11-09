@@ -1,0 +1,11 @@
+{
+  "title": "Sample a 2-D toy model with the probability-flow ODE",
+  "goal": "Implement `pf_ode_sample(score_fn, x_T, n_steps, eps)`, which integrates the probability-flow ODE (Section 4.3, Equation 13) backward in time with Euler steps:\n\n$$\\frac{\\mathrm{d}x}{\\mathrm{d}t} = -\\tfrac12\\beta(t)\\,x - \\tfrac12\\beta(t)\\,s(x, t).$$\n\nThe times are `ts = np.linspace(1.0, eps, n_steps + 1)`. At step $k$ you are at `t = ts[k]` with step `dt = ts[k + 1] - ts[k]`, which is negative, and you update $x \\leftarrow x + \\text{drift}(x, t)\\,\\mathrm{d}t$. The function takes no random generator, because the ODE is deterministic: the same `x_T` always gives the same output.\n\n`score_fn(x, t)` takes `x` of shape `(n, 2)` and a float `t`, and returns the score $\\nabla_x \\log p_t(x)$. The starter gives you `toy_score`, the exact score of a three-mode Gaussian mixture under the VP-SDE, so no network is needed. The paper uses $\\epsilon = 10^{-3}$ for VP SDEs with ODE solvers (Appendix D.4).",
+  "hints": [
+    "Start from `x = x_T.copy()` so the caller's array is not changed.",
+    "The Euler update uses the time at the start of the step: `x = x + drift(x, ts[k]) * (ts[k + 1] - ts[k])`.",
+    "`dt` is negative. If you write `np.linspace(eps, 1.0, ...)` you integrate in the wrong direction.",
+    "The ODE has no noise term. If your function needs a random generator, something is wrong."
+  ],
+  "runtime": "pyodide"
+}
