@@ -1,0 +1,10 @@
+{
+  "title": "Move right: tile a matmul",
+  "goal": "Section 5 of the paper says that cache optimizations raise operational intensity by cutting DRAM traffic. Tiling is the standard example for matmul.\n\nCompute $C = AB$ for $n \\times n$ matrices. Split $C$ into $T \\times T$ tiles. For each output tile, stream the matching $T$-wide strips of $A$ and $B$ through on-chip memory. Assume a tile fits on chip. The DRAM traffic is then $2n^3/T$ elements of $A$ and $B$, plus $n^2$ elements to write $C$.\n\n- `tiled_matmul_intensity(n, tile, b)` returns FLOPs per DRAM byte, where `b` is bytes per element and the FLOP count is $2n^3$.\n- `min_tile_for_ridge(n, ridge, b)` returns the smallest integer `tile` in `1..n` whose intensity is at least `ridge`, or `None` if even `tile = n` can't reach it.",
+  "hints": [
+    "bytes = `b * (2 * n**3 / tile + n**2)`. With `tile = n` this is `3 * b * n**2`, the compulsory traffic from exercise 2.",
+    "Intensity rises with `tile`, so a binary search works. A plain loop over `1..n` is fast enough for `n` up to 8192.",
+    "Return `None`, not `n`, when `tile = n` still falls short of the ridge point."
+  ],
+  "runtime": "pyodide"
+}

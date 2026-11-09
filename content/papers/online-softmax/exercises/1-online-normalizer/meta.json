@@ -1,0 +1,10 @@
+{
+  "title": "One-pass normalizer",
+  "goal": "Implement Algorithm 3 (lines 1-6) from the paper. Write `online_normalizer(xs)`, which reads `xs` exactly once, from left to right, and returns `(m, d)`: the maximum $m_V$ and the normalizer $d_V = \\sum_j e^{x_j - m_V}$.\n\nThe tests pass `xs` as a one-shot iterator, so a second pass over the input finds nothing. The starter includes a finished `online_softmax` that calls your function and then runs the second pass of Algorithm 3 (lines 7-9).",
+  "hints": [
+    "Start from $m_0 = -\\infty$ and $d_0 = 0$. `math.inf` and `-math.inf` are fine inputs to `math.exp`: `math.exp(-math.inf)` is `0.0`, which makes the first step work without a special case.",
+    "On each element, compute the new maximum first. Then $d_j = d_{j-1} e^{m_{j-1} - m_j} + e^{x_j - m_j}$ (Algorithm 3, line 5). Both exponents are at most 0.",
+    "Don't call `max(xs)` before the loop. That is the first pass of safe softmax, and it uses up the iterator."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,10 @@
+{
+  "title": "Backward pass through a residual block",
+  "goal": "For $y = \\sigma(\\mathcal{F}(x) + x)$ with $\\mathcal{F}(x) = W_2\\,\\sigma(W_1 x)$ (Section 3.2, Equation 1), the input gradient has two terms. One goes through $\\mathcal{F}$. The other goes straight through the shortcut, and no weight matrix scales it.\n\nWrite `block_backward(x, W1, W2, g_out)`. Given $g_{\\text{out}} = \\partial L / \\partial y$, return the tuple `(g_x, gW1, gW2)`. The starter has a finished `block_forward` that the tests use for finite differences.",
+  "hints": [
+    "Name the intermediate values: `a = W1 @ x`, `r = relu(a)`, `z = W2 @ r + x`, `y = relu(z)`. Then go backward one name at a time.",
+    "The output ReLU gates the gradient first: `g_z = g_out * (z > 0)`. After that, $z = W_2 r + x$ sends `g_z` to two places.",
+    "The shortcut contributes `g_z` directly to `g_x`. The path through $\\mathcal{F}$ contributes `W1.T @ ((W2.T @ g_z) * (a > 0))`. Add the two."
+  ],
+  "runtime": "pyodide"
+}

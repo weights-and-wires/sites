@@ -1,0 +1,11 @@
+{
+  "title": "Activation statistics through depth",
+  "goal": "Layer normalization fixes the mean and the variance of the summed inputs in every layer (Section 3). Measure what that does. Write `layer_stds(x, weights, use_ln)`, which pushes `x` of shape `(N, H)` through a stack of ReLU layers and returns an array of shape `(L, N)`. Row `l` holds the standard deviation, across the features, of the summed inputs $a^l = W^l h^l$ of every example. If `use_ln` is true, normalize $a^l$ with the finished `layer_norm` before you measure it. Then apply ReLU to get $h^{l+1}$.\n\nThe tests use weights with scale 2, which makes the signal grow without normalization, and scale 1, which makes it shrink.",
+  "hints": [
+    "Use `a = h @ W.T` for the summed inputs, because the weights have shape `(H_out, H_in)`.",
+    "Measure after the normalization and before the ReLU. The ReLU changes the statistics.",
+    "Use `a.std(axis=-1)` for the per-example standard deviation. Stack the per-layer results with `np.stack`.",
+    "Feed `np.maximum(a, 0)` to the next layer."
+  ],
+  "runtime": "pyodide"
+}

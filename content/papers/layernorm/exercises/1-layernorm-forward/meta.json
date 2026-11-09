@@ -1,0 +1,11 @@
+{
+  "title": "Layer norm forward",
+  "goal": "Implement the forward pass of layer normalization (Section 3, Equations 3 and 5 with $f$ left out). For an input `x` of shape `(..., H)`, compute the mean and the variance of each example over the last axis, standardize, then apply the gain and the bias:\n\n$$y = g \\odot \\frac{x - \\mu}{\\sqrt{\\sigma^2 + \\epsilon}} + b$$\n\nWrite `layer_norm(x, gain, bias, eps=1e-5)`. It returns `y` with the shape of `x`. The paper's Equation 3 has no $\\epsilon$; implementations add one inside the square root to avoid dividing by zero.",
+  "hints": [
+    "`x.mean(axis=-1, keepdims=True)` gives one mean per example and broadcasts back against `x`.",
+    "The paper divides the sum of squares by $H$, not $H - 1$. That is `x.var(axis=-1, keepdims=True)` with the default `ddof=0`.",
+    "Put $\\epsilon$ inside the square root: `np.sqrt(var + eps)`. The tests use a large `eps` to tell the two placements apart.",
+    "The gain and the bias have shape `(H,)`, so they broadcast over the leading axes by themselves."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,10 @@
+{
+  "title": "A replay memory",
+  "goal": "Implement the replay memory $\\mathcal{D}$ of Algorithm 1 (Section 4). It stores the last $N$ transitions $e_t = (\\phi_t, a_t, r_t, \\phi_{t+1})$ and samples minibatches uniformly at random.\n\n- `ReplayBuffer(capacity, state_dim)` builds an empty memory of capacity $N$.\n- `push(s, a, r, s2, done)` stores one transition. When the memory is full it overwrites the oldest one.\n- `len(buffer)` returns the number of stored transitions, at most `capacity`.\n- `sample(batch_size, rng)` returns `(S, A, R, S2, D)`: `batch_size` transitions drawn uniformly **with replacement** from the stored ones, as arrays with leading dimension `batch_size`. Use `rng.integers(len(self), size=batch_size)` for the indices, where `rng` is a `numpy.random.Generator`.\n\nThe rows of the five arrays must belong to the same transitions.",
+  "hints": [
+    "Keep five arrays of length `capacity` and an integer `pos` for the next write. After a write, set `pos = (pos + 1) % capacity`, and track `size = min(size + 1, capacity)`.",
+    "Draw indices from `range(len(self))`, not from `range(capacity)`. Before the memory fills, the tail of each array is still zeros.",
+    "Draw one index array and use it on all five arrays. Drawing the indices separately for each array pairs a state with another transition's reward."
+  ],
+  "runtime": "pyodide"
+}

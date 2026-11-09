@@ -1,0 +1,11 @@
+{
+  "title": "The surrogate objective L",
+  "goal": "Build the quantities behind Equations 1 to 3 in Section 2 of the paper, for a small MDP with a tabular policy.\n\nThe arrays use these shapes. `P[s, a, s']` is $P(s' \\mid s, a)$, `r[s]` is the reward $r(s)$, `rho0[s]` is the start distribution $\\rho_0$, and `pi[s, a]` is $\\pi(a \\mid s)$. The starter includes a finished `policy_value(P, r, pi, gamma)` that returns `(P_pi, V)`. Write three functions:\n\n- `visitation(P, rho0, pi, gamma)` returns the unnormalized discounted visitation $\\rho_\\pi(s) = \\sum_{t \\ge 0} \\gamma^t P(s_t = s)$. It sums to $1/(1-\\gamma)$.\n- `advantages(P, r, pi, gamma)` returns the `(S, A)` array $A_\\pi(s, a) = Q_\\pi(s, a) - V_\\pi(s)$, where $Q_\\pi(s, a) = r(s) + \\gamma \\sum_{s'} P(s' \\mid s, a) V_\\pi(s')$.\n- `surrogate(P, r, rho0, gamma, pi, pi_new)` returns $L_\\pi(\\tilde\\pi) = \\eta(\\pi) + \\sum_s \\rho_\\pi(s) \\sum_a \\tilde\\pi(a \\mid s) A_\\pi(s, a)$ (Equation 3), with $\\eta(\\pi) = \\rho_0^\\top V_\\pi$.\n\nThe tests use the two-state MDP from the page, and they check Equation 1 and the first-order match in Equation 4.",
+  "hints": [
+    "$\\rho_\\pi^\\top = \\rho_0^\\top (I - \\gamma P_\\pi)^{-1}$, where $P_\\pi$ is the state-to-state matrix under $\\pi$. Solve the transposed system, or invert and use `G.T @ rho0`. Using `G @ rho0` gives the wrong vector unless $P_\\pi$ is symmetric.",
+    "`np.einsum(\"sat,t->sa\", P, V)` computes $\\sum_{s'} P(s' \\mid s, a) V(s')$ for every `(s, a)` pair.",
+    "A quick check on `advantages`: $\\sum_a \\pi(a \\mid s) A_\\pi(s, a) = 0$ in every state, because $V_\\pi$ is the average of $Q_\\pi$ under $\\pi$.",
+    "In `surrogate`, the new policy multiplies the advantages of the old policy. The visitation also comes from the old policy."
+  ],
+  "runtime": "pyodide"
+}

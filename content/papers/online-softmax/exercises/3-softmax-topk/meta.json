@@ -1,0 +1,10 @@
+{
+  "title": "Fused softmax and top-k",
+  "goal": "Algorithm 4 fuses the online normalizer with a running top-$K$. Write `online_softmax_topk(xs, k)`. It reads `xs` once, keeps the running $m$ and $d$ and the $K$ largest values with their indices, and returns `(v, z)`: the softmax probabilities of the top $K$ elements, in descending order, and their 0-based indices.\n\nIt must never store the full probability vector. On ties, the element that came first in `xs` ranks first, as in Algorithm 4, which swaps only when $u_k < u_{k+1}$.",
+  "hints": [
+    "Keep two lists, `u` (values) and `p` (indices), of length $K+1$. Start `u` at `-inf`. Write each new element into the last slot, then bubble it up while the value above it is strictly smaller (lines 8-15).",
+    "The online update of $m$ and $d$ (lines 6-7) is the same as in Exercise 1 and covers every element, including the ones the top-$K$ list throws away.",
+    "After the loop, the output for slot $i$ is $e^{u_i - m_V} / d_V$ (line 18). Use the final $m_V$ and $d_V$, not the largest kept value."
+  ],
+  "runtime": "pyodide"
+}

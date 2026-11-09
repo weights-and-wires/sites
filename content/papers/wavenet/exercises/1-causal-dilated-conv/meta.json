@@ -1,0 +1,10 @@
+{
+  "title": "Causal dilated convolution",
+  "goal": "Write `causal_conv1d(x, w, dilation=1)` for a 1-D signal `x` of length `T` and a filter `w` of length `k` (Section 2.1, Figure 3). The output has length `T`, and\n\n$$y_t = \\sum_{j=0}^{k-1} w_j \\, x_{t-(k-1-j)d}$$\n\nwhere $d$ is the dilation and `x` is zero for negative indexes. `w[k-1]` multiplies the current sample, and `w[0]` multiplies the oldest sample in the window. The output at time $t$ must never depend on $x_{t+1}, x_{t+2}, \\dots$.",
+  "hints": [
+    "Left-pad `x` with `(k - 1) * dilation` zeros. Then output `t` reads the padded array at positions `t + j * dilation` for `j = 0 .. k-1`.",
+    "Padding on the right, or using `np.convolve(..., mode=\"same\")`, lets the output see the future. The causality test catches that.",
+    "Tap `j` of the filter is shifted right by `(k - 1 - j) * dilation` samples. Tap `k - 1` isn't shifted."
+  ],
+  "runtime": "pyodide"
+}

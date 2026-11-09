@@ -1,0 +1,10 @@
+{
+  "title": "Saturating and non-saturating generator losses",
+  "goal": "Implement the losses from Section 3 on discriminator **logits**. Write $D(x) = \\sigma(a)$, where $a$ is the logit. Every function takes arrays of logits and averages over the minibatch.\n\n- `log_sigmoid(a)` returns $\\log \\sigma(a)$ without overflow, even for $a = -1000$.\n- `discriminator_loss(real_logits, fake_logits)` returns the negative of the minibatch estimate of Equation 1: $-\\frac1m\\sum_i[\\log D(x^{(i)}) + \\log(1 - D(G(z^{(i)})))]$.\n- `generator_loss(fake_logits, non_saturating)` returns $\\frac1m\\sum_i \\log(1 - D(G(z^{(i)})))$ when `non_saturating` is `False`, and $-\\frac1m\\sum_i \\log D(G(z^{(i)}))$ when it is `True`. The generator descends on both.\n- `generator_grad(fake_logits, non_saturating)` returns the gradient of `generator_loss` with respect to `fake_logits`, including the $1/m$ factor.",
+  "hints": [
+    "`log_sigmoid(a) = -np.logaddexp(0, -a)`. Also note that $\\log(1 - \\sigma(a)) = \\log\\sigma(-a)$, so you never form $1 - D$.",
+    "For the gradients, use $\\sigma'(a) = \\sigma(a)(1 - \\sigma(a))$. Then $\\frac{d}{da}\\log(1 - \\sigma(a)) = -\\sigma(a)$ and $\\frac{d}{da}[-\\log\\sigma(a)] = -(1 - \\sigma(a))$.",
+    "Compute $\\sigma(a)$ stably as `np.exp(log_sigmoid(a))`. Compare the two gradients at $a = -5$ to see what saturation means."
+  ],
+  "runtime": "pyodide"
+}

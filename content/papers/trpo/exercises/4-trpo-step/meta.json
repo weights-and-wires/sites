@@ -1,0 +1,11 @@
+{
+  "title": "A TRPO step: Fisher-vector product and line search",
+  "goal": "Put the pieces of Section 6 and Appendix C together on a softmax policy.\n\nThe policy picks one of $K$ actions in each of $N$ sampled states, with logits $\\phi(s, a)^\\top \\theta$. The array `phi` has shape `(N, K, d)` and `theta` has shape `(d,)`. The starter includes `probs` and a finished `conjugate_gradient` (your solution from Exercise 3). Write two functions:\n\n- `fisher_vector_product(phi, theta, v)` returns $Fv$ for the Fisher matrix $F$, which is the Hessian of the mean KL divergence at `theta` (Appendix C.1). Never build the $d \\times d$ matrix. For each state, center the features, $c_k = \\phi_k - \\sum_j p_j \\phi_j$. Then $Fv$ is the average over states of $\\sum_k p_k\\, c_k\\,(c_k \\cdot v)$.\n- `trpo_step(theta_old, g, fvp, delta, surrogate, kl, shrink=0.5, max_backtracks=10)` returns the new parameters. Compute $s \\approx F^{-1} g$ with 10 CG iterations, then $\\beta = \\sqrt{2\\delta / s^\\top F s}$. Then run the line search from Appendix C: try $\\theta_{old} + \\text{shrink}^k \\beta s$ for $k = 0, 1, \\dots$, and return the first candidate with `kl(theta) <= delta` and `surrogate(theta) > surrogate(theta_old)`. If none qualifies, return `theta_old`.\n\nThe tests check `fisher_vector_product` against a finite-difference Hessian of the KL, and they check the line search with objectives where the quadratic model is wrong.",
+  "hints": [
+    "`p = probs(phi, theta)` has shape `(N, K)`. `phi_bar = np.einsum(\"nk,nkd->nd\", p, phi)` is the mean feature per state.",
+    "`c @ v` has shape `(N, K)`: the dot product of every centered feature with `v`. Then `np.einsum(\"nk,nkd,nk->d\", p, c, c @ v)` sums $p_k c_k (c_k \\cdot v)$ over actions and states. Divide by `N`.",
+    "Without centering, you get the second moment of the features instead of their covariance under the policy. The result looks reasonable and is wrong.",
+    "In the line search, test both conditions. The step $\\beta s$ uses a quadratic model of the KL and a linear model of the objective, so either can fail for the real functions."
+  ],
+  "runtime": "pyodide"
+}
