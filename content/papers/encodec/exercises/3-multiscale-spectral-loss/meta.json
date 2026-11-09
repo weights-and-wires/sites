@@ -1,0 +1,10 @@
+{
+  "title": "Multi-scale spectral reconstruction loss",
+  "goal": "Implement the frequency-domain reconstruction loss of Section 3.4, Equation 1, with one simplification: this exercise compares magnitude STFTs and skips the mel filterbank (the paper uses 64-bin mel-spectrograms).\n\nThe starter gives you `stft_mag(x, n_fft)`, a magnitude STFT with a Hann window and hop `n_fft // 4`, shaped `(frames, n_fft // 2 + 1)`. Write `spectral_loss(x, x_hat, exponents=range(5, 12))`, which returns\n\n$$\\frac{1}{|\\alpha|\\,|e|} \\sum_{\\alpha_i \\in \\alpha} \\sum_{i \\in e} \\lVert S_i(x) - S_i(\\hat{x}) \\rVert_1 + \\alpha_i \\lVert S_i(x) - S_i(\\hat{x}) \\rVert_2$$\n\nwith all $\\alpha_i = 1$, so $|\\alpha| = 1$ and the loss is the mean over scales of (sum of absolute differences) plus (Euclidean norm of the differences). Scale $i$ uses the window `2 ** i`. $\\lVert\\cdot\\rVert_2$ is the norm, not its square.\n\nAlso write `time_l1(x, x_hat)`, the time-domain term $\\ell_t = \\lVert x - \\hat{x} \\rVert_1$.",
+  "hints": [
+    "`np.abs(d).sum()` is the L1 norm of a matrix `d`. `np.linalg.norm(d)` is its Frobenius norm, the L2 norm of the flattened array.",
+    "Average over the scales at the end: sum the per-scale values and divide by the number of scales.",
+    "If your loss for `x_hat = 0.9 * x` is not exactly 0.1 times the loss for `x_hat = 0`, check that you did not square the L2 term."
+  ],
+  "runtime": "pyodide"
+}
