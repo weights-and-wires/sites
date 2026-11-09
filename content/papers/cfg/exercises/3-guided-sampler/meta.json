@@ -1,0 +1,11 @@
+{
+  "title": "Guided ancestral sampler",
+  "goal": "Implement Algorithm 2 for a one-dimensional toy problem with two classes, $x \\mid c \\sim \\mathcal{N}(\\mu_c, 1)$ and $\\mu = (-2, +2)$. The starter gives you an exact noise predictor `toy_eps_model(z, c, lam)`, so you need no network. Passing `c = NULL` returns the unconditional prediction $\\epsilon(z_\\lambda)$.\n\n`sample_cfg(eps_model, c, w, n, T, rng, v=0.0)` draws $z_1 \\sim \\mathcal{N}(0, I)$ and, for $t = 1, \\dots, T$, forms $\\tilde\\epsilon_t = (1+w)\\,\\epsilon_\\theta(z_t, c) - w\\,\\epsilon_\\theta(z_t)$ (Algorithm 2, line 3) and $\\tilde x_t = (z_t - \\sigma_{\\lambda_t}\\tilde\\epsilon_t)/\\alpha_{\\lambda_t}$ (line 4). For $t < T$ it samples $z_{t+1}$ from the Gaussian with mean $\\tilde\\mu_{\\lambda_{t+1}|\\lambda_t}(z_t, \\tilde x_t)$ (Equation 3) and the interpolated variance of Equation 4 (line 5). At $t = T$ it returns $\\tilde x_T$ with no noise.\n\nCall `rng.standard_normal` exactly $T$ times: once for $z_1$ and $T - 1$ times for the steps.",
+  "hints": [
+    "The mean is $\\tilde\\mu_{\\lambda'|\\lambda}(z, x) = e^{\\lambda-\\lambda'}(\\alpha_{\\lambda'}/\\alpha_\\lambda)\\,z + (1 - e^{\\lambda-\\lambda'})\\,\\alpha_{\\lambda'}\\,x$ (Equation 3). Here $\\lambda' = \\lambda_{t+1}$ and $\\lambda = \\lambda_t$.",
+    "With the default `v = 0` the variance is $\\tilde\\sigma^2_{\\lambda'|\\lambda} = (1 - e^{\\lambda-\\lambda'})\\,\\sigma_{\\lambda'}^2$. Equation 4 interpolates in log space, so `var = var_tilde ** (1 - v) * var_fwd ** v`.",
+    "Call the model twice per step: once with `c` and once with `NULL`. Both calls see the same `z` and the same `lam[t]`.",
+    "Return $\\tilde x_T$ on the last step. Do not draw noise there."
+  ],
+  "runtime": "pyodide"
+}
