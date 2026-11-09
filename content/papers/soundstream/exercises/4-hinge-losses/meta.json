@@ -1,0 +1,10 @@
+{
+  "title": "Hinge adversarial losses over several discriminators",
+  "goal": "SoundStream trains with a hinge loss, averaged over discriminators and over time (Section III-E, Equations 1 and 2). Write the following functions. Each takes a list with one 1-D array of logits per discriminator, and the arrays can have different lengths `T_k`.\n\n- `discriminator_loss(real_logits, fake_logits)` returns `L_D` (Equation 1).\n- `generator_adv_loss(fake_logits)` returns `L_G^adv` (Equation 2).\n- `generator_loss(l_adv, l_feat, l_rec, lam_adv=1.0, lam_feat=100.0, lam_rec=1.0)` returns the weighted sum of Equation 6 with the paper's default weights.\n\nThe page's example is a test: for real logits `[1.5, 0.2, 2.0, -0.3]` and fake logits `[-0.5, 0.8, -2.0, 1.2]`, `L_D = 1.65` and `L_G^adv = 1.175`.",
+  "hints": [
+    "The real term is `np.maximum(0, 1 - D(x))`. The fake term is `np.maximum(0, 1 + D(G(x)))`. The generator term is `np.maximum(0, 1 - D(G(x)))`.",
+    "Average over time first, inside each discriminator, then average over the discriminators. A single mean over all the logits weights a long discriminator more heavily than a short one.",
+    "In `generator_loss`, the feature term has weight 100 by default."
+  ],
+  "runtime": "pyodide"
+}

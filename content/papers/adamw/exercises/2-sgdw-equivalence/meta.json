@@ -1,0 +1,10 @@
+{
+  "title": "SGD: L2 equals decay only after rescaling",
+  "goal": "Implement the two SGD variants in Algorithm 1 (Section 2) with momentum factor $\\beta_1$, and the conversion in Proposition 1. The schedule multiplier $\\eta_t$ is fixed at 1.\n\nWrite three functions. The step functions take the loss gradient `grad` (without any regularizer), return `(theta_new, m_new)`, and must not modify their inputs.\n\n- `sgd_l2_step(theta, grad, m, alpha, lam, beta1)` is SGD with L2 regularization. Line 6 adds $\\lambda\\theta_{t-1}$ to the gradient, line 8 updates the momentum $m_t = \\beta_1 m_{t-1} + \\alpha g_t$, and line 9 subtracts $m_t$.\n- `sgdw_step(theta, grad, m, alpha, lam, beta1)` is SGDW. The momentum sees only `grad`, and line 9 subtracts $m_t + \\lambda\\theta_{t-1}$.\n- `l2_factor(lam, alpha)` returns the L2 factor $\\lambda'$ that makes plain SGD (with $\\beta_1 = 0$) match weight decay $\\lambda$ (Proposition 1).",
+  "hints": [
+    "Both steps share `m_new = beta1 * m + alpha * g`. For L2, `g = grad + lam * theta`. For SGDW, `g = grad`.",
+    "SGDW subtracts the decay after the momentum: `theta - m_new - lam * theta`. The decay is never multiplied by `alpha` and never enters `m`.",
+    "Proposition 1 says $\\lambda' = \\lambda / \\alpha$. Check it on one step with `beta1 = 0`: `theta - alpha * (grad + lam2 * theta)` should equal `(1 - lam) * theta - alpha * grad`."
+  ],
+  "runtime": "pyodide"
+}

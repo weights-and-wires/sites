@@ -1,0 +1,11 @@
+{
+  "title": "Bitrate and quantizer dropout",
+  "goal": "Do the bitrate arithmetic of Section III-C and Section V-D, and sample the quantizer count for quantizer dropout.\n\n- `frame_rate(fs, strides)` returns embedding frames per second, `fs / M`, where `M` is the product of the strides (Section III-A).\n- `bitrate(fs, strides, n_q, n_codes)` returns bits per second when `n_q` quantizers of `n_codes` entries each encode every frame.\n- `num_quantizers(target_bps, fs, strides, n_codes)` returns the largest integer `n_q` whose bitrate does not exceed `target_bps`.\n- `sample_nq(n_q_max, rng)` draws `n_q` uniformly at random from the integers `1` to `n_q_max`, both included (Section III-C). `rng` is a `numpy.random.Generator`.\n\nThe tests use the paper's numbers: 75 frames per second at 24 kHz with strides `(2, 4, 5, 8)`, and 1024-entry codebooks.",
+  "hints": [
+    "`M` is a product of the strides, not a sum: `(2, 4, 5, 8)` gives `M = 320`.",
+    "One quantizer with `N` entries costs `log2(N)` bits per frame, so `n_q` quantizers cost `n_q * log2(N)` bits per frame. Multiply by the frame rate for bits per second.",
+    "Add a small tolerance before you take the floor, because `6000 / 750` can land a hair below 8 in floating point.",
+    "`rng.integers(low, high)` excludes `high`. You need `n_q_max` to be possible, and `0` to be impossible."
+  ],
+  "runtime": "pyodide"
+}

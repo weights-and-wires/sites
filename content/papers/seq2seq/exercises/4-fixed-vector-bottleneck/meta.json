@@ -1,0 +1,10 @@
+{
+  "title": "Plot accuracy against length: the fixed-vector bottleneck",
+  "goal": "Section 2 sets the decoder's initial state to $v$, the last hidden state of the encoder, so $v$ is the only channel from the source to the target. This exercise measures that channel in a linear toy, not an LSTM. The encoder is the linear recurrence $h_t = A h_{t-1} + E_{:, x_t}$ with $h_0 = 0$, and the decoder is a linear readout fitted by ridge regression.\n\nWrite three functions. The helpers `make_encoder` and `experiment` are finished for you.\n\n- `encode(tokens, E, A)` returns $v = h_T$ for a list of token IDs. `E` has shape `(H, V)` and `A` has shape `(H, H)`.\n- `fit_readout(Hs, Y, ridge)` returns the `(H, k)` matrix `W` that minimizes $\\lVert Hs\\,W - Y \\rVert^2 + \\text{ridge}\\,\\lVert W \\rVert^2$.\n- `token_accuracy(W, Hs, tokens)` takes the states `Hs` of shape `(N, H)` and the source tokens of shape `(N, n)`, reads out `Hs @ W` as `(N, n, V)` scores, and returns the fraction of positions where the arg max equals the true token.\n\nThe tests then check that accuracy is near 1 for short inputs and falls for long ones at a fixed state size.",
+  "hints": [
+    "Loop over the tokens: `h = A @ h + E[:, t]`. Start from a vector of zeros of length `H`.",
+    "The ridge solution is `np.linalg.solve(Hs.T @ Hs + ridge * np.eye(H), Hs.T @ Y)`.",
+    "`(Hs @ W).reshape(N, n, V).argmax(-1)` gives predicted tokens, and each source token has V scores in a row."
+  ],
+  "runtime": "pyodide"
+}

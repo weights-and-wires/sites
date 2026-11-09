@@ -1,0 +1,10 @@
+{
+  "title": "Left-to-right beam search",
+  "goal": "Section 3.2 describes the decoder. It keeps at most $B$ partial hypotheses. At each step it extends every hypothesis with every word, keeps the $B$ most likely extensions by log probability, and removes a hypothesis that ends in `<EOS>` from the beam and adds it to the set of complete hypotheses.\n\nWrite `beam_search(step_fn, beam_size, eos, max_len)`.\n\n- `step_fn(prefix)` takes a tuple of token IDs and returns a NumPy array of log probabilities over the vocabulary for the next token.\n- Rank all extensions of all live hypotheses together, and keep the top `beam_size`. An extension that ends in `eos` takes one of those slots, then moves to the complete set.\n- Stop when the beam is empty or after `max_len` steps. Discard hypotheses that are still live at that point.\n- Return a list of `(tokens, log_prob)` for complete hypotheses, best first. `tokens` is a tuple that ends with `eos`, and `log_prob` is the sum of the step log probabilities.\n\nThe paper doesn't say how to break ties, whether to normalize by length, or when to stop. This exercise makes the choices above.",
+  "hints": [
+    "Keep `beam` as a list of `(prefix, score)` pairs, starting with `[((), 0.0)]`. A score is a running sum of log probabilities.",
+    "Build a candidate list of `(prefix + (tok,), score + lp[tok])` for every live hypothesis and every token, sort it by score in descending order, and take the first `beam_size`.",
+    "Split the survivors: the ones whose last token is `eos` go to the complete list, and the others form the next beam."
+  ],
+  "runtime": "pyodide"
+}

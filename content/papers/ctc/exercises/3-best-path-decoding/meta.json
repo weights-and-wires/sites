@@ -1,0 +1,10 @@
+{
+  "title": "Best path decoding",
+  "goal": "Implement best path decoding (Section 3.2, Equation 4): $h(x) \\approx \\mathcal{B}(\\pi^*)$, where $\\pi^*$ takes the most active output at every frame.\n\nWrite `best_path_decode(y, blank=0)`. It takes `y` of shape `(T, K)` and returns a tuple of labels, with repeats merged and blanks removed.\n\nThen write `path_probability(y, path)`, the product of $y^t_{\\pi_t}$ over the frames (Equation 2). The tests use it to show that best path decoding can return a labelling that is less probable than another one.",
+  "hints": [
+    "`y.argmax(axis=1)` takes the arg max over the symbols for each frame. `axis=0` would pick a frame for each symbol.",
+    "Merge repeats before you drop blanks, so that `a - a` gives `aa` and `a a` gives `a`.",
+    "`path_probability` multiplies one entry per frame: `y[t, path[t]]`."
+  ],
+  "runtime": "pyodide"
+}

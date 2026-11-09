@@ -1,0 +1,11 @@
+{
+  "title": "The backward pass and the CTC gradient",
+  "goal": "Section 4.2 turns the forward and backward variables into the error signal that the network receives. The starter gives you `ctc_forward` from Exercise 2 and asks for two more functions.\n\n- `ctc_backward(y, label, blank=0)` returns `beta` of shape `(T, 2*len(label)+1)`, unscaled (Equations 9 to 11). `beta[t, s]` is $\\beta_{t+1}(s+1)$ in the paper's 1-based notation. Like $\\alpha$, it includes the factor $y^t_{l'_s}$ at time $t$.\n- `ctc_grad(y, label, blank=0)` returns $\\partial O^{ML} / \\partial u^t_k$ for one training example (Equation 16), as an array of shape `(T, K)`. Here $O^{ML} = -\\ln p(l \\mid x)$, $u$ are the unnormalized outputs, and `y` is their softmax. Without rescaling, Equation 16 reads $y^t_k - \\dfrac{1}{y^t_k\\, p(l \\mid x)} \\sum_{s \\in lab(l,k)} \\alpha_t(s)\\beta_t(s)$.",
+  "hints": [
+    "The backward recursion mirrors the forward one. Initialize `beta[T-1, S-1] = y[T-1, blank]` and `beta[T-1, S-2] = y[T-1, lp[S-2]]`. For earlier `t`, start from `beta[t+1, s] + beta[t+1, s+1]`, add `beta[t+1, s+2]` when `lp[s]` is not a blank and `lp[s] != lp[s+2]`, and multiply by `y[t, lp[s]]`.",
+    "A correct `beta` satisfies Equation 14: for every `t`, `sum_s alpha[t, s] * beta[t, s] / y[t, lp[s]]` equals `p`.",
+    "For each frame `t`, build a vector `acc` of length `K` and add `alpha[t, s] * beta[t, s]` to `acc[lp[s]]` for every `s`. Several positions of `l'` can share one symbol, and the blank appears at every other position.",
+    "The gradient for frame `t` is `y[t] - acc / (y[t] * p)`. Divide by `y[t, k]` once. Equation 15 has $y^2$ because it differentiates with respect to $y$. The softmax backward step removes one factor, and Equation 14 turns the correction term into $y^t_k$."
+  ],
+  "runtime": "pyodide"
+}

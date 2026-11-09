@@ -1,0 +1,11 @@
+{
+  "title": "A one-level U-Net forward pass",
+  "goal": "Assemble a one-level U-Net in NumPy with the paper's building blocks (Section 2, Figure 1). The starter gives you `conv2d_valid`, `relu`, `maxpool2`, and `crop_and_concat`. Write two functions.\n\n`upconv2x2(x, W, b)` is the 2x2 up-convolution with stride 2. `x` has shape `(Cin, h, w)`, `W` has shape `(Cin, Cout, 2, 2)`, and `b` has shape `(Cout,)`. Each input pixel paints one non-overlapping 2x2 block: `out[o, 2i + a, 2j + c] = sum_c' x[c', i, j] * W[c', o, a, c] + b[o]`. The output has shape `(Cout, 2h, 2w)`.\n\n`tiny_unet(x, P)` runs one contracting step, a bottom, and one expanding step, in this order: two 3x3 convolutions with ReLU (`c1`, `c2`), a 2x2 max pool, two 3x3 convolutions with ReLU (`c3`, `c4`), the up-convolution `up` with no ReLU, `crop_and_concat` of the `c2` output (as the skip) with the up-convolution output, two 3x3 convolutions with ReLU (`c5`, `c6`), and a final 1x1 convolution `head` with no ReLU. `P[name]` holds a `(weights, bias)` pair. For a `1 x 20 x 20` input, the output has shape `(K, 4, 4)`.",
+  "hints": [
+    "A loop over `a` and `c` in `range(2)` is enough: `out[:, a::2, c::2] = np.einsum('ihw,io->ohw', x, W[:, :, a, c])`, then add the bias.",
+    "Keep the `c2` output in a variable before you pool. That is the skip. Pass it to `crop_and_concat` as the first argument.",
+    "Only the six 3x3 convolutions get a ReLU. The up-convolution and the 1x1 head don't, as in Section 2 and Figure 1.",
+    "Trace the sizes for a 20 x 20 input: 18, 16, pool 8, 6, 4, up-conv 8, the skip crops from 16 to 8, convolutions 6 and 4."
+  ],
+  "runtime": "pyodide"
+}
