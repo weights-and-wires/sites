@@ -1,0 +1,10 @@
+{
+  "title": "Route parameters to Muon or AdamW",
+  "goal": "The blog post (\"Definition\" and \"Empirical considerations\") says Muon is for the 2D parameters of hidden layers, and that scalar and vector parameters, the input embedding, and the output head belong to AdamW. Convolutional filters can use Muon after flattening their last three dimensions.\n\nWrite `route(name, shape)`, which returns `\"muon\"` or `\"adamw\"`, and `flatten_for_muon(G)`, which returns the 2D matrix that Muon orthogonalizes.\n\nThe rules are as follows:\n\n- A parameter whose full name starts with one of the prefixes in `ADAMW_PREFIXES` goes to AdamW, whatever its shape.\n- Otherwise a parameter with 2 or 4 dimensions goes to Muon.\n- Everything else (scalars, vectors, 3D arrays) goes to AdamW.\n- `flatten_for_muon` leaves a 2D array alone and reshapes a 4D array `(out, in, kh, kw)` to `(out, in * kh * kw)`.",
+  "hints": [
+    "Use `name.startswith(ADAMW_PREFIXES)`. `startswith` accepts a tuple. A test checks that a hidden matrix named `blocks.2.attn.head_mix.weight` isn't mistaken for the output head, so a substring test such as `\"head\" in name` is wrong.",
+    "Check the name first and the number of dimensions second. An embedding table is 2D, and it still goes to AdamW.",
+    "`G.reshape(G.shape[0], -1)` merges all trailing dimensions into one."
+  ],
+  "runtime": "pyodide"
+}

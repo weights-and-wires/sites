@@ -1,0 +1,10 @@
+{
+  "title": "One Muon step",
+  "goal": "Write `muon_step(W, G, B, lr, mu)`, one update of Muon for a single weight matrix (the blog post's \"Definition\", Algorithm 2, lines 4 to 6). The inputs are the weight `W`, the gradient `G` (the paper's $G_t$), and the momentum buffer `B` (the paper's $B_{t-1}$).\n\nCompute $B_t = \\mu B_{t-1} + G_t$, then $O_t = \\mathrm{NewtonSchulz5}(B_t)$, then $W_t = W_{t-1} - \\eta O_t$. Return `(W_new, B_new)` and leave the inputs unchanged. The starter includes a finished `newton_schulz`.\n\nThis is plain momentum, as in the algorithm box. The Nesterov variant that the blog post says works a bit better is out of scope here.",
+  "hints": [
+    "The momentum buffer accumulates raw gradients, not orthogonalized ones. Orthogonalize the buffer after you update it.",
+    "Don't scale the gradient by `1 - mu`. The buffer is $\\mu B + G$, which is not an exponential moving average.",
+    "The step is `W - lr * O`. A Muon step has singular values near `lr`, whatever the size of the gradient."
+  ],
+  "runtime": "pyodide"
+}
