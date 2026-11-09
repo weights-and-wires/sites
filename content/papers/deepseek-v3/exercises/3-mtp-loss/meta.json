@@ -1,0 +1,12 @@
+{
+  "title": "Multi-token prediction loss",
+  "goal": "DeepSeek-V3 adds sequential multi-token prediction (MTP) modules to the main model (Section 2.2). Module $k$ takes the previous depth's hidden state $h^{k-1}_i$ and the embedding of token $t_{i+k}$, and its output predicts token $t_{i+k+1}$. Write the following functions. The tests use $T$ for the input length, so a sequence has tokens $t_1, \\ldots, t_{T+1}$, and the code uses 0-based arrays.\n\n- `rmsnorm(x, eps=1e-6)` normalizes each row of `x` by its root mean square, with no learned gain.\n- `mtp_combine(h_prev, emb_next, M)` is Equation 21: apply `rmsnorm` to `h_prev` and to `emb_next` separately, concatenate them, and multiply by `M` of shape `(d, 2d)`. Rows of `h_prev` and `emb_next` are tokens, so the result has shape `(n, d)`.\n- `mtp_loss(logits, tokens, k)` is Equation 24. `logits` has shape `(T - k, V)`: row $i - 1$ is the output of depth $k$ at position $i$, for $i = 1, \\ldots, T-k$, and it predicts $t_{i+k+1}$. `tokens` is the integer array $t_1, \\ldots, t_{T+1}$. Return the cross-entropy summed over the rows and divided by $T$, as Equation 24 is written.\n- `mtp_total(losses, lam)` is Equation 25: $\\lambda$ times the mean of the per-depth losses.",
+  "hints": [
+    "`rmsnorm` is `x / np.sqrt(np.mean(x**2, axis=-1, keepdims=True) + eps)`.",
+    "Equation 21 concatenates the two normalized vectors, `h` first. Then `M @ [h; e]` for one token is `concat @ M.T` for a batch of rows.",
+    "Position $i$ (1-based) predicts $t_{i+k+1}$. In 0-based code, row `r` of `logits` predicts `tokens[r + k + 1]`.",
+    "Compute a stable log-softmax by subtracting the row maximum before the exponential.",
+    "The divisor is `T = len(tokens) - 1`, not the number of rows of `logits`."
+  ],
+  "runtime": "pyodide"
+}
