@@ -1,0 +1,11 @@
+{
+  "title": "Rule-based rewards",
+  "goal": "DeepSeek-R1-Zero trains on a reward that a program computes (Section 2.2, Equation 4): $\\text{Reward}_{rule} = \\text{Reward}_{acc} + \\text{Reward}_{format}$, with equal weights. The prompt template (Table 1) asks for `<think>...</think>` and then `<answer>...</answer>`. Write four functions for two-digit addition:\n\n- `extract_answer(text)` returns the stripped content of the **last** `<answer>...</answer>` pair, or `None`.\n- `accuracy_reward(text, gold)` returns `1.0` when that content is an integer (`-?\\d+` and nothing else) equal to `gold`, and `0.0` otherwise. The answer needs no `<think>` block.\n- `format_reward(text)` returns `1.0` when the stripped text is exactly one `<think>` block with non-blank content, then optional whitespace, then exactly one `<answer>` block with non-blank content. Anything else, including text before or after the blocks or the blocks in the other order, earns `0.0`.\n- `rule_reward(text, gold)` returns the sum.\n\nThe paper gives no regular expressions. This split of the two rewards is this page's reading of Section 2.2.",
+  "hints": [
+    "`re.findall(r\"<answer>(.*?)</answer>\", text, re.DOTALL)` returns every pair. Use the last one. Without `re.DOTALL`, a block that spans lines doesn't match.",
+    "Compare integers, not strings: `\"12\" in \"112\"` is true, and `\"012\"` is the integer 12. Use `re.fullmatch(r\"-?\\d+\", ans)` first so that \"The sum is 12\" earns nothing.",
+    "For the format, count the four tags first (each must appear exactly once), then use `re.fullmatch` with `re.DOTALL` on the stripped text. `re.search` would accept trailing text.",
+    "The two rewards are independent: an answer in the wrong tag order has accuracy 1 and format 0."
+  ],
+  "runtime": "pyodide"
+}
