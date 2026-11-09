@@ -1,0 +1,11 @@
+{
+  "title": "Lazy batch updates",
+  "goal": "Add the lazy batch updates of Section 4, Step 2 to the algorithm. Process `blocksize` columns at a time. Inside a block, keep the updates inside the block's own columns. When the block is done, update all later columns once with a single matrix product (the multi-weight form of Equation 2, in the Cholesky form of Algorithm 1):\n\n`W[:, i2:] -= E @ U[i:i2, i2:]`\n\nHere `E` holds the scaled errors of the block, one column per quantized column, and `i2` is the end of the block.\n\nWrite `gptq_blocked(W, X, bits, blocksize)`. The result must equal the unblocked algorithm for every block size. The lazy schedule changes the memory traffic, not the answer. The starter gives you `make_grid`, `quant`, and `inverse_factor`.",
+  "hints": [
+    "Keep an error matrix `E` of shape `(d_row, i2 - i)` for the current block and reset it for every block.",
+    "Inside the block, update `W[:, j:i2]` only. Later columns wait for the block update.",
+    "Store `E[:, j - i] = (W[:, j] - Q[:, j]) / U[j, j]`. The block update then uses exactly those columns.",
+    "The last block can be shorter than `blocksize`. Use `min(i + blocksize, d_col)` as its end."
+  ],
+  "runtime": "pyodide"
+}
