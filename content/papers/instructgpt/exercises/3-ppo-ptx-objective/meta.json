@@ -1,0 +1,10 @@
+{
+  "title": "The PPO-ptx objective",
+  "goal": "Equation 2 in Section 3.5 is the objective that RL training maximizes:\n\n$$\\text{objective}(\\phi) = \\mathbb{E}_{(x,y)\\sim D_{\\pi^{RL}_\\phi}}\\Big[r_\\theta(x,y) - \\beta\\log\\big(\\pi^{RL}_\\phi(y\\mid x)/\\pi^{SFT}(y\\mid x)\\big)\\Big] + \\gamma\\,\\mathbb{E}_{x\\sim D_{\\text{pretrain}}}\\big[\\log \\pi^{RL}_\\phi(x)\\big]$$\n\nWrite `ppo_ptx_objective(rm_scores, logp_rl, logp_sft, pre_logp, beta, gamma)` and return a float that estimates it from samples.\n\n- `rm_scores` has shape `(B,)`: $r_\\theta(x, y)$ for each of `B` sampled responses.\n- `logp_rl` and `logp_sft` have shape `(B, T)`: per-token log-probabilities of the sampled tokens under the RL policy and the SFT policy.\n- `pre_logp` has shape `(P,)`: $\\log\\pi^{RL}_\\phi(x)$ for each of `P` pretraining texts $x$.\n\nThe response log ratio $\\log(\\pi^{RL}(y\\mid x)/\\pi^{SFT}(y\\mid x))$ is the sum over the $T$ tokens of the per-token log ratios. Average over the samples in each expectation. With `gamma = 0` you get the objective of the \"PPO\" models; the paper sets $\\gamma = 27.8$ for its InstructGPT (\"PPO-ptx\") runs (Appendix C.4) and $\\beta = 0.02$ (Appendix C.4).",
+  "hints": [
+    "A sequence probability is a product of token probabilities, so its log ratio is a sum of per-token log ratios. Use `.sum(axis=1)` on the `(B, T)` difference.",
+    "Don't average the log ratio over tokens. That would shrink the penalty by a factor of $T$.",
+    "The pretraining term is added with a plus sign, because the objective is maximized and a higher log-likelihood is better. Take its mean over the `P` texts."
+  ],
+  "runtime": "pyodide"
+}

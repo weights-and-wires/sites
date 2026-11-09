@@ -1,0 +1,11 @@
+{
+  "title": "Reward-model loss over a ranking of K responses",
+  "goal": "Section 3.5 trains the reward model on a labeler's ranking of $K$ responses to one prompt, and uses all $\\binom{K}{2}$ pairs as a single batch element (Equation 1):\n\n$$\\text{loss}(\\theta) = -\\frac{1}{\\binom{K}{2}} \\, \\mathbb{E}_{(x, y_w, y_l) \\sim D}\\big[\\log \\sigma\\big(r_\\theta(x, y_w) - r_\\theta(x, y_l)\\big)\\big]$$\n\nWrite `reward_model_loss(rewards, ranking)`. The array `rewards` has shape `(K,)` and holds $r_\\theta(x, y_k)$ for each response. The list `ranking` holds the response indices from best to worst, as the labeler ranked them. Return the mean of $-\\log\\sigma(r_w - r_l)$ over every pair where the response that comes earlier in `ranking` is $y_w$. Return a Python float.\n\nThe inputs are already scalar scores, so this is the loss for one prompt. Averaging over prompts is a mean of these values.",
+  "hints": [
+    "Loop over positions `i < j` in `ranking`. The response `ranking[i]` is $y_w$ and `ranking[j]` is $y_l$. For $K$ responses that gives $K(K-1)/2$ pairs.",
+    "$-\\log\\sigma(d) = \\log(1 + e^{-d}) =$ `np.logaddexp(0, -d)`. A gap of 1000 overflows `np.exp` but not `logaddexp`.",
+    "Divide by the number of pairs, not by $K$. Taking the mean makes the loss comparable across prompts with different $K$.",
+    "The sign matters. The winner's reward comes first in the difference."
+  ],
+  "runtime": "pyodide"
+}
