@@ -1,0 +1,11 @@
+{
+  "title": "Find the outlier feature dimensions",
+  "goal": "Section 3.2 defines the outlier set $O$ as the feature dimensions `h` of the hidden state `X` (shape `s x h`) that hold at least one value with a large magnitude. The paper uses a threshold of `alpha = 6.0`, and Section 4.1 words the test as \"at least 6.0\".\n\nWrite `outlier_dims(X, alpha=6.0)`. It returns a sorted `int` array of the column indices `i` where `max(abs(X[:, i])) >= alpha`.\n\nThe page's example finds a single outlier column, with index 1, in a 3 x 4 matrix.",
+  "hints": [
+    "A feature is a column of `X`, so reduce over the token axis (`axis=0`).",
+    "One large value in one token is enough to put a column in `O`. Use a maximum, not a mean.",
+    "Outliers can be negative. Take `np.abs` before the maximum.",
+    "`np.where(mask)[0]` returns the indices of the `True` entries, in increasing order."
+  ],
+  "runtime": "pyodide"
+}
