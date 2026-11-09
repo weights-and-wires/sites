@@ -1,0 +1,10 @@
+{
+  "title": "Skip and mask causal tiles",
+  "goal": "In causal attention, entry $S_{ij}$ with $j > i$ is set to $-\\infty$. FlashAttention-2 uses the block structure in two ways (Section 3.1.1, \"Causal masking\"): it skips every tile whose column indices all exceed its row indices, and it applies the mask only to tiles that cross the diagonal.\n\nWrite `causal_tile_counts(N, Br, Bc)`. Split $Q$ into row blocks of `Br` rows and $K$ into column blocks of `Bc` columns, and let the last block be short. Return `(total, skipped, masked, full)`:\n\n- `skipped`: the smallest column index in the tile is greater than the largest row index.\n- `masked`: the tile is computed and the largest column index is greater than the smallest row index, so some entries need the mask.\n- `full`: the tile is computed and no entry needs the mask.\n\nAlso write `causal_speedup_bound(N, Br, Bc)`, which returns `total / (masked + full)`. The paper reports about 1.7 to 1.8 times faster than attention without the mask.",
+  "hints": [
+    "Loop over `i in range(0, N, Br)` and `j in range(0, N, Bc)`. The rows of the tile are `i` to `min(i + Br, N) - 1`, and the columns are `j` to `min(j + Bc, N) - 1`.",
+    "A tile is skipped when `col_min > row_max`. If it is not skipped, it needs the mask when `col_max > row_min`.",
+    "Check `1024, 128, 128` by hand: of the 64 tiles, 28 are above the diagonal, 8 are on it, and 28 are below it."
+  ],
+  "runtime": "pyodide"
+}
