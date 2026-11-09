@@ -1,0 +1,11 @@
+{
+  "title": "Fragmentation: contiguous vs. paged",
+  "goal": "Measure the memory waste that Section 3.1 describes and that Section 4.3 removes. A request needs `L` KV slots, one per token. Write these functions:\n\n- `blocks_needed(n_tokens, block_size)`: the number of blocks that hold `n_tokens` tokens.\n- `contiguous_waste(lengths, max_len)`: the total slots wasted when every request reserves `max_len` slots up front.\n- `paged_waste(lengths, block_size)`: the total slots wasted when each request holds only the blocks it needs.\n- `paged_cost(n_tokens, block_size)`: the slots a request occupies in the paged layout.\n- `admit_count(lengths, capacity, cost)`: serve requests in arrival order and count how many fit in `capacity` slots at once. `cost` is a function from a request length to the slots it reserves. Stop at the first request that doesn't fit; don't skip it to admit a later, smaller one.",
+  "hints": [
+    "Use integer arithmetic for the ceiling: `-(-n // b)`, or `math.ceil(n / b)`.",
+    "When `n_tokens` is an exact multiple of `block_size`, the waste is 0. A formula such as `n // b + 1` fails there.",
+    "In `admit_count`, keep a running total. A request that fills the capacity exactly still fits, so compare with `>`, not `>=`.",
+    "The paged waste of one request is `blocks_needed * block_size - n_tokens`. It is always less than `block_size`."
+  ],
+  "runtime": "pyodide"
+}
