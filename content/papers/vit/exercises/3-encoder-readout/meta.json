@@ -1,0 +1,10 @@
+{
+  "title": "The encoder block and the class-token readout",
+  "goal": "Implement two functions from Section 3.1, Equations 2 to 4.\n\n`encoder_block(z, p)` computes\n\n$$z'_\\ell = \\operatorname{MSA}(\\operatorname{LN}(z_{\\ell-1})) + z_{\\ell-1}, \\qquad z_\\ell = \\operatorname{MLP}(\\operatorname{LN}(z'_\\ell)) + z'_\\ell$$\n\nwith LayerNorm *before* each sub-block (pre-LN) and a residual connection after it. `vit_readout(z0, blocks, g, b)` applies the blocks in order and returns the image representation $y = \\operatorname{LN}(z_L^0)$ (Equation 4): the final LayerNorm of row 0, the class token.\n\nThe starter includes finished `layernorm`, `gelu`, `msa` (multi-head self-attention without a mask), and `mlp` (two layers with GELU between them). Each block is a dict of weights.",
+  "hints": [
+    "Use `layernorm(z, p[\"g1\"], p[\"b1\"])` before `msa`, and `layernorm(z, p[\"g2\"], p[\"b2\"])` before `mlp`.",
+    "Each sub-block adds to its own input, not to the normalized one: `z = z + msa(layernorm(z, ...), p)`.",
+    "`vit_readout` returns a vector of shape `(D,)`, not the whole sequence. Normalize only row 0."
+  ],
+  "runtime": "pyodide"
+}
