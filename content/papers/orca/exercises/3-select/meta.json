@@ -1,0 +1,11 @@
+{
+  "title": "The Select function",
+  "goal": "Implement `select(pool, n_rsrv, max_bs, n_slots)`, which is the `Select` function from Algorithm 1 (Section 4.2, lines 17 to 28).\n\n`pool` is a list of dicts with the keys `arrival`, `state` (`\"INITIATION\"`, `\"INCREMENT\"`, or `\"RUNNING\"`), and `max_tokens`. `n_rsrv` is the number of K/V slots reserved so far, and `n_slots` is the total. Do these steps:\n\n1. Ignore requests whose state is `RUNNING`.\n1. Go through the rest in arrival order.\n1. Stop when the batch has `max_bs` requests.\n1. For a request in `INITIATION`, reserve `max_tokens` slots. If the new total would exceed `n_slots`, **stop**.\n1. A request in `INCREMENT` already holds its reservation.\n\nReturn `(batch, n_rsrv)`, where `batch` is a list of indices into `pool`.",
+  "hints": [
+    "Build the candidate list with `sorted(..., key=lambda i: pool[i][\"arrival\"])`. Sorting is stable, so ties keep pool order.",
+    "Check `len(batch) == max_bs` at the top of the loop, as line 22 does.",
+    "Algorithm 1 uses `break` at line 25, not `continue`. A later, smaller request must not jump ahead of one that doesn't fit.",
+    "The condition is `new_n_rsrv > n_slots`. A request that exactly fills the last slots is allowed."
+  ],
+  "runtime": "pyodide"
+}

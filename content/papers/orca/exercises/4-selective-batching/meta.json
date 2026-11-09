@@ -1,0 +1,11 @@
+{
+  "title": "Selective batching",
+  "goal": "Implement one Transformer sub-layer with **selective batching** (Section 3, S2, and Figure 5). The input `x` has shape `(sum(lens), H)`. It holds the new tokens of several requests, one request after another, and `lens[r]` is the number of tokens of request `r`. This is the paper's `[sum L, H]` layout, with no batch dimension.\n\nWrite `selective_batch_layer(x, lens, Wqkv, Wo)`:\n\n1. Apply the QKV Linear to the **whole** tensor: `x @ Wqkv` has shape `(sum(lens), 3H)`. Split it into `q`, `k`, `v` by thirds of the columns.\n1. **Split** by request. Run the provided `causal_attention` on each request's rows alone.\n1. **Merge** the outputs back to `(sum(lens), H)`.\n1. Apply the Attn Out Linear: `merged @ Wo`.\n\nThe result must equal running each request through the layer on its own. This version has no K/V cache, so every request is in its initiation phase.",
+  "hints": [
+    "`q, k, v = np.split(x @ Wqkv, 3, axis=1)` gives three `(sum(lens), H)` arrays.",
+    "Keep a running `start`. Request `r` owns rows `start : start + lens[r]`. Advance `start` after each request.",
+    "Attention on the whole flat tensor would let a token read tokens of other requests. Call `causal_attention(q[s], k[s], v[s])` per slice.",
+    "Write each request's output into the same rows of an output array, then multiply by `Wo` once."
+  ],
+  "runtime": "pyodide"
+}
