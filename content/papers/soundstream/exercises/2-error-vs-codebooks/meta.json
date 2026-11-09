@@ -1,0 +1,10 @@
+{
+  "title": "Reconstruction error against the number of codebooks",
+  "goal": "Train a residual quantizer and plot its error curve, the experiment behind the paper's argument that each added quantizer refines the reconstruction (Section III-C).\n\nWrite `fit_rvq(X, n_q, n_codes, seed=0)`, which returns a list of `n_q` codebooks. Stage 1 runs k-means on `X`. Stage `i` runs k-means on the residuals left after stages `1` to `i-1`.\n\nThen write `mse_by_nq(X, codebooks)`, which returns an array of length `len(codebooks) + 1`. Entry `n` is the mean squared error `np.mean((X - X_hat) ** 2)` when only the first `n` quantizers are used. Entry 0 is the error with no quantizer, so `X_hat = 0`.\n\nThe starter includes finished `kmeans` and `quantize` helpers.",
+  "hints": [
+    "Keep a `residual` array that starts as a copy of `X`. For each stage, call `kmeans(residual, n_codes, seed=seed + i)`, then set `residual = residual - quantize(codebook, residual)`.",
+    "Fitting every stage on `X` is a bug: stage 2 would learn the same clusters as stage 1 and add almost nothing.",
+    "For `mse_by_nq`, run the stages one at a time. After each stage, add the chosen vectors to `X_hat` and record the error. Quantize the residual `X - X_hat`, not `X`."
+  ],
+  "runtime": "pyodide"
+}

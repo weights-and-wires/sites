@@ -1,0 +1,10 @@
+{
+  "title": "Residual vector quantization",
+  "goal": "Implement Algorithm 1 of the paper (Section III-C). Write `rvq_encode(y, codebooks)`, which takes embeddings `y` of shape `(S, D)` and a list of `n_q` codebooks of shape `(N, D)`, and returns `(indices, y_hat)`. `indices` has shape `(S, n_q)` and holds, for each frame and stage, the index of the nearest code vector by squared Euclidean distance. `y_hat` is the sum of the chosen code vectors.\n\nThen write `rvq_decode(indices, codebooks)`, which rebuilds `y_hat` from the indices. It must work when `indices` has fewer columns than there are codebooks, because a decoder can run at a lower bitrate by using only the first `n_q` stages.\n\nThe page's tiny example is a test: `y = [3.2, 0.9]` encodes to indices `[1, 1, 2]` and decodes to `[3.25, 0.75]`.",
+  "hints": [
+    "Keep a running `residual`, starting at `y`. At each stage, find the nearest code vector to the residual, not to `y`, then subtract that vector from the residual.",
+    "Nearest means smallest squared distance. For a batch, `((residual[:, None, :] - codebook[None]) ** 2).sum(-1)` has shape `(S, N)`, and `argmin(axis=1)` gives the indices. The largest dot product is not the nearest vector when the code vectors have different norms.",
+    "Decoding is a sum of lookups: `codebooks[i][indices[:, i]]` for each column `i` of `indices`."
+  ],
+  "runtime": "pyodide"
+}
