@@ -1,0 +1,11 @@
+{
+  "title": "A tiny DQN on a gridworld",
+  "goal": "Write one gradient step of deep Q-learning for a two-layer network, then watch it learn a 5x5 gridworld with experience replay.\n\n`dqn_step(p, S, A, R, S2, D, gamma, lr)` takes the parameter dictionary `p` (arrays `W1`, `b1`, `W2`, `b2`; modify them in place), a minibatch of `B` transitions, and a learning rate. The network is $Q(s;\\theta) = W_2^\\top \\operatorname{ReLU}(W_1^\\top s + b_1) + b_2$, with one output per action, as in Section 4.1. The step does the following:\n\n1. Compute the targets $y_j$ of Algorithm 1 from the **current** parameters, and treat them as constants.\n2. Compute the loss $\\frac{1}{B}\\sum_j (y_j - Q(s_j, a_j;\\theta))^2$.\n3. Backpropagate it, which is the gradient of Equation 3 up to a constant factor, and update every parameter with `p[k] -= lr * grad`.\n4. Return the loss from before the update.\n\nThe starter supplies the environment, the replay loop, and `train_dqn`. The tests check your gradient against finite differences, then train three agents and expect at least two to reach the goal.",
+  "hints": [
+    "Forward pass: `z1 = S @ W1 + b1`, `h = np.maximum(0, z1)`, `q = h @ W2 + b2`. Targets: `y = R + gamma * (1 - D) * q_of(S2).max(axis=1)`, computed before you touch the parameters.",
+    "Only the taken action's output has an error. Build `dq = np.zeros_like(q)` and set `dq[np.arange(B), A] = 2 * (q[np.arange(B), A] - y) / B`. The other columns of `dq` stay 0.",
+    "Then `dW2 = h.T @ dq`, `db2 = dq.sum(0)`, `dh = dq @ W2.T * (z1 > 0)`, `dW1 = S.T @ dh`, and `db1 = dh.sum(0)`. The `(z1 > 0)` factor is the ReLU derivative; leaving it out breaks the finite-difference test.",
+    "Compute every gradient before you update any parameter. Updating `W2` first and then using it to compute `dh` gives the wrong gradient."
+  ],
+  "runtime": "pyodide"
+}

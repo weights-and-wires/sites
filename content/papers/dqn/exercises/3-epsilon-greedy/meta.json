@@ -1,0 +1,10 @@
+{
+  "title": "The epsilon schedule and action selection",
+  "goal": "Write the behaviour policy of Section 2 and Section 5.\n\n- `epsilon_at(frame, eps_start=1.0, eps_end=0.1, anneal_frames=1_000_000)` returns $\\epsilon$ for a frame count: it falls linearly from `eps_start` to `eps_end` over the first `anneal_frames` frames and stays at `eps_end` afterward (Section 5).\n- `select_action(q_values, epsilon, rng)` takes the Q-values of one state, a 1-D array of length $K$, and returns an integer action. With probability $\\epsilon$ it picks one of the $K$ actions uniformly at random (the random pick can land on the greedy action). Otherwise it picks the greedy action. Draw one number with `rng.random()` first, and a random action with `rng.integers(K)` only when that draw is below `epsilon`.\n\nWith $K = 4$ and $\\epsilon = 0.5$, the greedy action is chosen with probability $0.5 + 0.5/4 = 0.625$.",
+  "hints": [
+    "Use `max(eps_end, eps_start + (eps_end - eps_start) * frame / anneal_frames)`. Without the `max`, the value keeps falling below `eps_end` after the annealing ends.",
+    "The comparison is `rng.random() < epsilon`. With `epsilon = 0` it is never true, and with `epsilon = 1` it is always true.",
+    "Return `int(np.argmax(q_values))` for the greedy branch. `argmin` looks plausible and fails every greedy test."
+  ],
+  "runtime": "pyodide"
+}
