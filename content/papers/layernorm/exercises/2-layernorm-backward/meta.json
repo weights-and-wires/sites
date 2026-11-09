@@ -1,0 +1,11 @@
+{
+  "title": "Layer norm backward",
+  "goal": "The paper gives no backward pass, so you derive it. Write `layer_norm_backward(dy, cache)` for the forward pass in the starter, which is finished for you. Let $\\hat{x} = (x - \\mu)/\\sigma$, $y = g \\odot \\hat{x} + b$, and $d\\hat{x} = g \\odot dy$. Then\n\n$$dx = \\frac{1}{\\sigma}\\Big(d\\hat{x} - \\operatorname{mean}(d\\hat{x}) - \\hat{x}\\,\\operatorname{mean}(d\\hat{x} \\odot \\hat{x})\\Big)$$\n\nwhere both means run over the feature axis. The gain and bias gradients sum over the batch: $dg = \\sum_n dy \\odot \\hat{x}$ and $db = \\sum_n dy$. The function returns `(dx, dgain, dbias)`. The tests compare against finite differences.",
+  "hints": [
+    "`cache` holds `(xhat, sigma, gain)`. You don't need to recompute the mean or the variance.",
+    "Every example is normalized on its own, so the means in the formula for $dx$ use `axis=-1, keepdims=True`.",
+    "$dg$ and $db$ sum over the batch axis (axis 0), not over the features. Each feature has its own gain and bias.",
+    "Two sanity checks: every row of $dx$ sums to zero, and every row of $dx$ is orthogonal to $\\hat{x}$ when $\\epsilon = 0$. If the check fails, one of the two correction terms is missing."
+  ],
+  "runtime": "pyodide"
+}
