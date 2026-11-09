@@ -1,0 +1,11 @@
+{
+  "title": "Token rates and stream width",
+  "goal": "Compute the numbers behind Mimi and the joint sequence (Sections 3.3.1, 3.4.1, and 3.4.4, Equation 6).\n\nWrite four functions:\n\n- `frame_rate(sample_rate, strides)` returns the frames per second of a convolutional encoder whose layers have the given strides. The total hop is the product of the strides.\n- `bitrate_bps(frame_rate, n_codebooks, codebook_size)` returns the bits per second of an RVQ with `n_codebooks` codebooks of `codebook_size` entries each. Every token costs $\\log_2$ of the codebook size in bits.\n- `sequence_steps(seconds, frame_rate, n_codebooks, flattened)` returns the number of autoregressive steps the large model takes. With `flattened=True`, one step per token. With `flattened=False`, one step per frame, as in the Temporal Transformer.\n- `n_streams(n_codebooks)` returns $K$, the number of sub-sequences in Equation 6 for one text stream plus two audio streams (Moshi and the user), each with `n_codebooks` codebooks.\n\nWith Mimi's values, you should get 12.5 Hz, 1100 bps, 30000 versus 3750 steps for 5 minutes, and $K = 17$.",
+  "hints": [
+    "Use `math.prod(strides)` for the hop. The strides multiply, so they don't add.",
+    "A codebook of 2048 entries needs `math.log2(2048) = 11` bits per token. The bitrate is `frame_rate * n_codebooks * bits`.",
+    "Round the frame count down with `int(seconds * frame_rate)`. For flattened sequences, multiply the frame count by `n_codebooks`.",
+    "Count the rows of Equation 6: one text row, then `n_codebooks` rows for each of the two audio streams."
+  ],
+  "runtime": "pyodide"
+}
