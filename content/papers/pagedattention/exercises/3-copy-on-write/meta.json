@@ -1,0 +1,11 @@
+{
+  "title": "Copy-on-write sharing",
+  "goal": "Add sharing to the block table, as in Section 4.4 (Figure 8 for parallel sampling, Figure 9 for beam search).\n\nThe starter gives you a `BlockAllocator` with reference counts and a `SeqTable` that holds `blocks` and `num_tokens`. Write two methods:\n\n- `fork()`: return a new `SeqTable` with the same blocks and the same `num_tokens`. It copies no data and takes one reference on every block.\n- `append_token()`: store one more token and return `(physical_block, offset)`. If the last block has a free slot and other sequences also reference it, do copy-on-write: allocate a new block, record `(old, new)` in `allocator.copies`, drop this sequence's reference to the old block, and write into the new one. If the last block is full, allocate a new block as usual. A block that only this sequence references is written in place.\n\n`release()` is finished. The tests replay Figure 8 and count the blocks that sharing saves.",
+  "hints": [
+    "The copy-on-write test is `allocator.ref_count(last) > 1`, checked only when the last block isn't full. A full block is never written, so no copy is needed.",
+    "After the copy, call `allocator.free(old)`. That lowers the old block's count from 2 to 1 without freeing it, which is what lets the other sample write to it in place (Figure 8).",
+    "`fork` must call `allocator.incref` for every block in the table, including full ones, so a later `release` of either sequence is safe.",
+    "In the starter, the first call to `append_token` on an empty table has nothing to copy; handle `num_tokens % block_size == 0` before the copy-on-write check."
+  ],
+  "runtime": "pyodide"
+}

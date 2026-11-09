@@ -1,0 +1,11 @@
+{
+  "title": "PagedAttention",
+  "goal": "Implement the attention of Section 4.1 (Equation 4) for one query. `paged_attention(q, pool_K, pool_V, block_table, n_tokens)` takes the query `q` of shape `(d,)`, the pools of physical key and value blocks, both of shape `(num_blocks, B, d)`, the sequence's `block_table` (a list of physical block IDs in logical order), and the number of filled tokens `n_tokens`. It returns the output $o_i$ of shape `(d,)`.\n\nThe result must equal ordinary attention over the `n_tokens` keys and values in order, with scores scaled by $1/\\sqrt{d}$. The last block can be partly filled, and its unfilled slots hold garbage that must not matter. The blocks aren't contiguous, so you must read them through the table.",
+  "hints": [
+    "Loop over the logical blocks `j`. The physical block is `block_table[j]`, and it holds `min(B, n_tokens - j * B)` valid tokens.",
+    "Compute the scores of every block first, then take one softmax over all of them (the denominator in Equation 4 sums over all blocks). A softmax per block gives a different answer.",
+    "Subtract the global maximum score before `exp`. The tests use scores in the thousands, where `exp` overflows without it.",
+    "Slice with `[:filled]` before the dot product, so unfilled slots never enter the softmax."
+  ],
+  "runtime": "pyodide"
+}
