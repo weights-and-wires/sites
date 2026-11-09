@@ -67,7 +67,8 @@ def train(seed=0, steps=5000):
     """Train with full-batch AdamW and return the best validation accuracy seen.
 
     The weight decay of 1.0 makes validation accuracy jump around, so the loop
-    evaluates every 100 steps and keeps the best value.
+    evaluates every 100 steps, keeps the best value, and stops once it
+    reaches 0.99.
     """
     torch.manual_seed(seed)
     x_tr, y_tr, x_va, y_va = make_data(seed)
@@ -83,4 +84,6 @@ def train(seed=0, steps=5000):
             with torch.no_grad():
                 acc = (model(x_va).argmax(-1) == y_va).float().mean().item()
             best = max(best, acc)
+            if best >= 0.99:
+                break  # Learned; stop early so the check stays fast.
     return best

@@ -9,7 +9,7 @@ the browser runner uses:
 2. With solution.py as submission.py. Every test must pass.
 
 Each run must finish within the time limit: 5 seconds for NumPy exercises
-(runtime "pyodide") and 30 seconds for PyTorch exercises (runtime "torch").
+(runtime "pyodide") and 60 seconds for PyTorch exercises (runtime "torch"), because CI runners are several times slower than a laptop.
 PyTorch exercises are skipped when torch isn't installed, unless you pass
 --require-torch.
 
@@ -32,7 +32,7 @@ import time
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 HARNESS = ROOT / "static/runner/harness.py"
-LIMITS = {"pyodide": 5.0, "torch": 30.0}
+LIMITS = {"pyodide": 5.0, "torch": 60.0}
 # Modules that Pyodide's core plus NumPy provides.
 PYODIDE_OK = {
     "numpy", "math", "cmath", "itertools", "functools", "collections", "random", "typing",

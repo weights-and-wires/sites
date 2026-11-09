@@ -102,7 +102,7 @@ The rules for the code are as follows:
 - Tests catch plausible wrong implementations, not just the shape of the output.
   For example, test that the softmax runs over the right axis and that a mask
   uses a large negative number rather than zero.
-- Each run takes under 5 seconds on CPU (30 seconds for `torch`).
+- Each run takes under 5 seconds on CPU. A `torch` exercise has a 60-second limit in CI; keep it under 15 seconds on a laptop.
 
 ## Validate
 
