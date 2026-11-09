@@ -1,0 +1,10 @@
+{
+  "title": "The reparameterization trick",
+  "goal": "Section 2.4 writes $z = g_\\phi(\\epsilon, x) = \\mu + \\sigma \\odot \\epsilon$ with $\\epsilon \\sim \\mathcal{N}(0, I)$, so that a Monte Carlo estimate of $\\mathbb{E}_{q_\\phi(z|x)}[f(z)]$ is differentiable in $\\mu$ and $\\sigma$.\n\nWrite `reparameterize(mu, logvar, eps)`, which returns $z$ and takes `logvar` $= \\log\\sigma^2$. Then write `pathwise_grads(mu, sigma, eps, fprime)` for scalar $\\mu$ and $\\sigma$. It returns the estimates of $\\partial/\\partial\\mu$ and $\\partial/\\partial\\sigma$ of $\\mathbb{E}[f(z)]$ by differentiating $f(\\mu + \\sigma\\epsilon)$ through the sample. `fprime` is the derivative $f'$, applied to an array of $z$ values.",
+  "hints": [
+    "The standard deviation is `np.exp(0.5 * logvar)`, not `np.exp(logvar)`.",
+    "By the chain rule, $\\partial f(\\mu + \\sigma\\epsilon)/\\partial\\mu = f'(z)$ and $\\partial f(\\mu + \\sigma\\epsilon)/\\partial\\sigma = f'(z)\\,\\epsilon$.",
+    "Average each of the two per-sample gradients over the samples."
+  ],
+  "runtime": "pyodide"
+}
