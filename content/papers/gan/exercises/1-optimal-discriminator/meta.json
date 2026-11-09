@@ -1,0 +1,11 @@
+{
+  "title": "Optimal discriminator and the JS divergence",
+  "goal": "Check Proposition 1 and Theorem 1 numerically on a discrete $x$. Write four functions; `p_data` and `p_g` are 1-D probability vectors of the same length, and all logs are natural.\n\n- `optimal_discriminator(p_data, p_g)` returns $D^*_G(x) = p_{\\text{data}}(x) / (p_{\\text{data}}(x) + p_g(x))$ (Equation 2). Where both probabilities are 0, return `0.5`.\n- `value(p_data, p_g, D)` returns $V(G, D) = \\sum_x p_{\\text{data}}(x)\\log D(x) + p_g(x)\\log(1 - D(x))$ (Equations 1 and 3). Use the convention $0 \\log 0 = 0$, so a point with $p = 0$ adds nothing even when $D$ is 0 or 1 there.\n- `jsd(p, q)` returns the Jensen-Shannon divergence $\\tfrac12 \\mathrm{KL}(p \\Vert m) + \\tfrac12 \\mathrm{KL}(q \\Vert m)$ with $m = (p + q)/2$.\n- `virtual_criterion(p_data, p_g)` returns $C(G) = V(G, D^*_G)$ (Equation 4).",
+  "hints": [
+    "Compute `denom = p_data + p_g`, divide only where `denom > 0`, and fill the rest with 0.5. `np.divide` with `out=` and `where=` does this in one call.",
+    "For `value`, mask each term: `np.where(p > 0, p * np.log(...), 0.0)`. Put a safe number inside the log for the masked entries, or NumPy warns and returns `nan`.",
+    "`jsd` only needs a small `kl` helper that sums over the points where its first argument is positive. The mixture `m` is positive wherever `p` is.",
+    "Theorem 1 gives you a self-check: `virtual_criterion(p, q)` must equal `-np.log(4) + 2 * jsd(p, q)` (Equations 5 and 6)."
+  ],
+  "runtime": "pyodide"
+}
