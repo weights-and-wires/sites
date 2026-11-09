@@ -1,0 +1,11 @@
+{
+  "title": "The guided score",
+  "goal": "Implement the combination rule of classifier-free guidance and check it against classifier guidance.\n\n`guided_eps(eps_c, eps_u, w)` returns $\\tilde\\epsilon = (1+w)\\,\\epsilon_\\theta(z_\\lambda, c) - w\\,\\epsilon_\\theta(z_\\lambda)$ (Section 3.2, Equation 6). Note the paper's convention: $w = 0$ is the plain conditional model.\n\n`implicit_classifier_grad(eps_c, eps_u, sigma)` returns $\\nabla_{z_\\lambda}\\log p^i(c|z_\\lambda) = -\\frac{1}{\\sigma_\\lambda}\\big[\\epsilon(z_\\lambda, c) - \\epsilon(z_\\lambda)\\big]$ (Section 3.2).\n\n`classifier_guided_eps(eps_c, grad_log_pc, sigma, w)` returns $\\epsilon_\\theta(z_\\lambda, c) - w\\,\\sigma_\\lambda\\nabla_{z_\\lambda}\\log p_\\theta(c|z_\\lambda)$ (Section 3.1).\n\nWith exact scores, plugging the implicit classifier into classifier guidance gives back Equation 6. The tests check that.",
+  "hints": [
+    "Equation 6 is a linear extrapolation: start at the conditional prediction and move $w$ times the difference `eps_c - eps_u` away from the unconditional one.",
+    "Check the two endpoints by hand: $w = 0$ must return `eps_c`, and $w = -1$ must return `eps_u`.",
+    "Some codebases write `eps_u + s * (eps_c - eps_u)`. That is Equation 6 with $s = 1 + w$, so make sure you use the paper's $w$.",
+    "Classifier guidance subtracts a scaled gradient, and the implicit gradient already carries a minus sign. The two signs cancel."
+  ],
+  "runtime": "pyodide"
+}

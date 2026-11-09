@@ -1,0 +1,10 @@
+{
+  "title": "The guided density on a grid",
+  "goal": "Compute what guidance aims at. For a class $c$ with density $p(x|c)$ and marginal $p(x)$, guidance with strength $w$ targets $\\tilde p(x|c) \\propto p(x|c)\\,p(c|x)^w \\propto p(x|c)^{1+w}\\,p(x)^{-w}$ (Section 3.1).\n\n`guided_density(log_pc, log_p, w, dx)` takes log densities on a uniform grid with spacing `dx` and returns the normalized guided density, so that `p.sum() * dx` is 1. It must work when the log densities are large in magnitude.\n\n`density_stats(x, p, dx)` returns the mean and standard deviation of a density on the grid.\n\nThe tests use Gaussians, where the answer has a closed form: the precision of $\\tilde p$ is $(1+w)/s_c^2 - w/s_m^2$.",
+  "hints": [
+    "Work in log space: `(1 + w) * log_pc - w * log_p`. Subtract the maximum before calling `np.exp`, so a large log density cannot overflow.",
+    "Normalize with the grid spacing: divide by `p.sum() * dx`, so that the Riemann sum of the density is 1.",
+    "The variance uses the mean you just computed: `sum((x - mean)**2 * p) * dx`."
+  ],
+  "runtime": "pyodide"
+}

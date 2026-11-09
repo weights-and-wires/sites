@@ -1,0 +1,11 @@
+{
+  "title": "Log-SNR, condition dropout, and corruption",
+  "goal": "Implement the pieces of Algorithm 1 that differ from a plain diffusion model.\n\n`alpha_sigma(lam)` returns $(\\alpha_\\lambda, \\sigma_\\lambda)$ with $\\alpha_\\lambda^2 = 1/(1+e^{-\\lambda})$ and $\\sigma_\\lambda^2 = 1 - \\alpha_\\lambda^2$ (Section 2, Equation 1).\n\n`sample_lambda(u, lam_min, lam_max)` maps $u \\in [0, 1]$ to $\\lambda = -2\\log\\tan(au + b)$ with $b = \\arctan(e^{-\\lambda_{\\max}/2})$ and $a = \\arctan(e^{-\\lambda_{\\min}/2}) - b$ (Section 2). Draw $u$ uniformly to sample $\\lambda \\sim p(\\lambda)$.\n\n`drop_condition(c, p_uncond, rng, null=-1)` replaces each label by `null` with probability `p_uncond`, independently per example (Algorithm 1, line 3). It returns a new array.\n\n`corrupt(x, lam, eps)` returns $z_\\lambda = \\alpha_\\lambda x + \\sigma_\\lambda \\epsilon$ (Algorithm 1, line 6). `lam` is a float or one value per row of `x`.",
+  "hints": [
+    "`np.where(mask, null, c)` builds a new array, so the caller's labels stay untouched.",
+    "Draw the mask with `rng.random(c.shape) < p_uncond`. One draw for the whole batch would make every example in a batch conditional or none of them.",
+    "At `u = 0` the angle is $b$, so $\\lambda = \\lambda_{\\max}$. The mapping runs downward: $\\lambda$ falls as $u$ grows.",
+    "For a per-row `lam`, reshape `alpha` and `sigma` to `(-1, 1)` so that they broadcast against `x` of shape `(batch, dim)`."
+  ],
+  "runtime": "pyodide"
+}
