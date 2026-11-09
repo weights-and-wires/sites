@@ -1,0 +1,11 @@
+{
+  "title": "Theorem 3: the vector field of a Gaussian path",
+  "goal": "Implement Theorem 3 (Section 4, Equation 15) and use it to recover the paper's diffusion field.\n\n`gaussian_vf(x, x1, t, mu, dmu, sigma, dsigma)` returns $u_t(x \\mid x_1) = \\frac{\\sigma_t'}{\\sigma_t}\\,(x - \\mu_t(x_1)) + \\mu_t'(x_1)$. The four callables `mu(t, x1)`, `dmu(t, x1)`, `sigma(t)`, and `dsigma(t)` give the mean, its time derivative, the standard deviation, and its time derivative. `x` and `x1` have shape `(n, d)`, and `t` is a float.\n\n`vp_path(beta_min, beta_max)` returns `(mu, dmu, sigma, dsigma)` for the reversed variance-preserving path of Equation 18: $\\mu_t(x_1) = \\alpha_{1-t}\\,x_1$ and $\\sigma_t = \\sqrt{1 - \\alpha_{1-t}^2}$, with $\\alpha_s = e^{-\\frac12 T(s)}$, $T(s) = \\int_0^s \\beta(r)\\,\\mathrm{d}r$, and $\\beta(r) = \\beta_{\\min} + r\\,(\\beta_{\\max} - \\beta_{\\min})$. You must write the derivatives in closed form.\n\nThe tests check your VP field against Equation 19 and your OT field against Equation 21.",
+  "hints": [
+    "Write $a(t) = \\alpha_{1-t}$. Then $a'(t) = \\tfrac12 T'(1-t)\\,a(t)$, because the argument $1 - t$ flips the sign of the usual derivative $\\alpha_s' = -\\tfrac12 T'(s)\\,\\alpha_s$.",
+    "$\\mu_t' = a'(t)\\,x_1$. For $\\sigma_t = \\sqrt{1 - a^2}$ the chain rule gives $\\sigma_t' = -a\\,a' / \\sigma_t$.",
+    "$T(s) = \\beta_{\\min}\\,s + \\tfrac12 s^2(\\beta_{\\max} - \\beta_{\\min})$ and $T'(s) = \\beta(s)$.",
+    "If your VP field is the mirror image of the expected one, you used $\\alpha_t$ where the paper uses $\\alpha_{1-t}$. The path runs from noise at $t = 0$ to data at $t = 1$."
+  ],
+  "runtime": "pyodide"
+}

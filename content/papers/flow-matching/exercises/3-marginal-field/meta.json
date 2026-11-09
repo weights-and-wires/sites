@@ -1,0 +1,11 @@
+{
+  "title": "The marginal vector field of a dataset",
+  "goal": "Implement Equation 8 for a finite dataset and the OT conditional path. With $q$ the empirical distribution on points $x_1^{(1)}, \\dots, x_1^{(N)}$, the marginal field is\n\n$$u_t(x) = \\sum_i w_i(x, t)\\, u_t(x \\mid x_1^{(i)}), \\qquad w_i(x, t) = \\frac{p_t(x \\mid x_1^{(i)})}{\\sum_j p_t(x \\mid x_1^{(j)})},$$\n\nwhere $p_t(x \\mid x_1) = \\mathcal{N}(x \\mid t\\,x_1, \\sigma_t^2 I)$ with $\\sigma_t = 1 - (1 - \\sigma_{\\min})\\,t$ (Equation 20) and $u_t(x \\mid x_1) = \\frac{x_1 - (1 - \\sigma_{\\min})\\,x}{\\sigma_t}$ (Equation 21).\n\nWrite `marginal_vf(x, t, data, sigma_min)`. `x` has shape `(n, d)`, `t` is a float in $[0, 1]$, and `data` has shape `(N, d)`. It returns shape `(n, d)`. This is the vector field that a perfectly flexible model reaches when it minimizes the CFM loss on this dataset (Theorem 2).\n\nThe tests check the continuity equation (Appendix B, Equation 26), so a wrong weighting fails even when the output has the right shape.",
+  "hints": [
+    "The weights are a softmax over $i$ of $-\\lVert x - t\\,x_1^{(i)}\\rVert^2 / (2\\sigma_t^2)$. The normalizing constants of the Gaussians are equal across $i$, so they cancel.",
+    "Each Gaussian is centered at $t\\,x_1^{(i)}$, not at $x_1^{(i)}$. At $t = 0$ every center is the origin, so every weight is equal.",
+    "Subtract the largest log-weight in each row before you exponentiate. Near $t = 1$ the variance $\\sigma_t^2$ is tiny, and a plain `np.exp` underflows to $0 / 0$.",
+    "Build an array of shape `(n, N, d)` with `x[:, None, :]` and `data[None]`, then sum over axis 1."
+  ],
+  "runtime": "pyodide"
+}
