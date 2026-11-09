@@ -1,0 +1,11 @@
+{
+  "title": "AdaMax",
+  "goal": "Section 7.1 replaces the $L_2$ norm in Adam's denominator with the infinity norm. Implement Algorithm 2 (with Equation 12 for $u_t$).\n\nWrite two functions:\n\n- `adamax_step(theta, g, m, u, t, alpha=2e-3, beta1=0.9, beta2=0.999)` returns `(theta_new, m_new, u_new)`. Use $m_t = \\beta_1 m_{t-1} + (1 - \\beta_1) g_t$, $u_t = \\max(\\beta_2 u_{t-1}, |g_t|)$, and $\\theta_t = \\theta_{t-1} - \\frac{\\alpha}{1 - \\beta_1^t}\\,\\frac{m_t}{u_t}$. The timestep `t` starts at 1, and the arrays are element-wise.\n- `adamax(grad_fn, theta0, steps, alpha=2e-3, beta1=0.9, beta2=0.999)` starts from `m = u = 0`, runs `steps` steps, and returns the final parameters.\n\nAlgorithm 2 has no $\\epsilon$. The tests never give a zero gradient on the first step, where $u_1 = 0$.",
+  "hints": [
+    "`np.maximum(beta2 * u, np.abs(g))` takes the element-wise maximum.",
+    "The max uses $|g_t|$. Without the absolute value, a negative gradient never raises $u$.",
+    "The bias correction applies to $m_t$ only, through the factor $\\alpha / (1 - \\beta_1^t)$. Per Section 7.1, $u_t$ needs none.",
+    "Since $|m_t| \\le (1 - \\beta_1^t)\\,u_t$, every step satisfies $|\\Delta_t| \\le \\alpha$."
+  ],
+  "runtime": "pyodide"
+}

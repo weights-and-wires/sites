@@ -1,0 +1,11 @@
+{
+  "title": "The Adam update",
+  "goal": "Implement Algorithm 1 from Section 2 with the paper's notation: stepsize $\\alpha$, decay rates $\\beta_1$ and $\\beta_2$, and $\\epsilon$.\n\nWrite two functions:\n\n- `adam_step(theta, g, m, v, t, alpha=1e-3, beta1=0.9, beta2=0.999, eps=1e-8)` performs one update at timestep `t` (which starts at 1). It returns `(theta_new, m_new, v_new)`. All operations are element-wise, so the arrays can have any shape. The function must not modify its inputs.\n- `adam(grad_fn, theta0, steps, alpha=1e-3, beta1=0.9, beta2=0.999, eps=1e-8)` starts from `m = v = 0`, calls `adam_step` for `t = 1, ..., steps`, and returns the final parameters. `grad_fn(theta)` returns the gradient at `theta`.",
+  "hints": [
+    "Update the biased moments first: `m = beta1 * m + (1 - beta1) * g` and `v = beta2 * v + (1 - beta2) * g * g`. Then divide by `1 - beta1 ** t` and `1 - beta2 ** t`.",
+    "The step is `alpha * m_hat / (np.sqrt(v_hat) + eps)`. The $\\epsilon$ goes outside the square root.",
+    "At `t = 1` the corrected moments equal `g` and `g * g`, so the first step is about `alpha * sign(g)`.",
+    "Build new arrays instead of using `+=` on the arguments, so the caller's `m` and `v` stay unchanged."
+  ],
+  "runtime": "pyodide"
+}
