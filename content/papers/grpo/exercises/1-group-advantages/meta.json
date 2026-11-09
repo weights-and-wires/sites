@@ -1,0 +1,10 @@
+{
+  "title": "Group-relative advantages",
+  "goal": "For each question, GRPO samples a group of $G$ outputs, scores them, and sets the advantage of every token of output $i$ to $\\hat A_{i,t} = (r_i - \\operatorname{mean}(\\mathbf{r})) / \\operatorname{std}(\\mathbf{r})$ (Section 4.1.2).\n\nWrite `group_advantages(rewards, eps=1e-6)`. The last axis of `rewards` is the group, so a `(n_questions, G)` array gets one normalization per row, and a 1-D array is a single group. Use the population standard deviation (`np.std` with its default `ddof=0`) and add `eps` to the standard deviation in the denominator, so a group of identical rewards gets advantage 0 and not `nan`. The paper doesn't state either convention.",
+  "hints": [
+    "`rewards.mean(axis=-1, keepdims=True)` keeps the group axis, so the subtraction broadcasts across each row.",
+    "Convert the input with `np.asarray(rewards, dtype=float)` first. The tests pass integer arrays.",
+    "A group where every reward is equal has `std == 0`. Without `eps`, the result is `0 / 0 = nan`, and one `nan` poisons the whole batch loss."
+  ],
+  "runtime": "pyodide"
+}
