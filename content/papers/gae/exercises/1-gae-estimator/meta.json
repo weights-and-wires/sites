@@ -1,0 +1,11 @@
+{
+  "title": "The GAE estimator",
+  "goal": "Implement the generalized advantage estimator for one trajectory, in the paper's notation (Section 3).\n\nThe trajectory has `T` steps. `rewards[t]` is $r_t$, and `values[t]` is $V(s_t)$ for $t = 0, \\dots, T-1$. The argument `last_value` is $V(s_T)$, the value of the state after the final step. Pass `0.0` when the episode ended there.\n\nWrite two functions:\n\n- `td_residuals(rewards, values, last_value, gamma)` returns the array $\\delta_t^V = r_t + \\gamma V(s_{t+1}) - V(s_t)$.\n- `gae(rewards, values, last_value, gamma, lam)` returns the array $\\hat A_t^{GAE(\\gamma,\\lambda)} = \\sum_{l \\ge 0} (\\gamma\\lambda)^l \\delta_{t+l}^V$ (Equation 16). Compute every $t$ with one backward pass, using $\\hat A_t = \\delta_t + \\gamma\\lambda \\hat A_{t+1}$.\n\nThe tests use the trajectory from the page, and they check the two special cases, Equations 17 and 18.",
+  "hints": [
+    "Build the array of next values first: `np.append(values[1:], last_value)` is $V(s_{t+1})$ for every $t$.",
+    "Loop from `t = T - 1` down to `0`, and keep a running value `acc`. Start with `acc = 0.0`, then set `acc = delta[t] + gamma * lam * acc` and store it.",
+    "The decay is $\\gamma\\lambda$, the product. Using $\\lambda$ alone ignores the discount, and using $\\gamma$ alone ignores $\\lambda$.",
+    "Check yourself with the special cases. At `lam=0` the result is `td_residuals`. At `lam=1` it is the discounted return minus `values[t]` (Equation 18)."
+  ],
+  "runtime": "pyodide"
+}

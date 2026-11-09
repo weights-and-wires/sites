@@ -1,0 +1,11 @@
+{
+  "title": "A rollout with episode boundaries",
+  "goal": "Real implementations compute GAE over a flat buffer of $N$ consecutive steps that can span several episodes, and the last episode can be cut off in the middle. Write `gae_rollout(rewards, values, dones, last_value, gamma, lam)`.\n\n- `rewards[t]` is $r_t$ and `values[t]` is $V(s_t)$, for $t = 0, \\dots, N-1$.\n- `dones[t]` is `1` when the episode ended right after step `t`, so the next entry belongs to a new episode, and `0` otherwise.\n- `last_value` is $V(s_N)$. It's used only when the final step isn't a `done` step, which means the rollout stopped in the middle of an episode.\n\nReturn the GAE advantages (Equation 16) for all $N$ steps. No advantage may depend on a reward or value from a different episode. The paper's algorithm box in Section 6.1 says \"simulate current policy until $N$ timesteps are obtained\", and this exercise covers the bookkeeping that sentence leaves out.",
+  "hints": [
+    "Use a mask `m = 1 - dones[t]`. A finished episode has no next state, so the bootstrap term is $\\gamma V(s_{t+1})\\, m$.",
+    "The backward carry needs the mask too: `acc = delta + gamma * lam * m * acc`. Without it, the advantage of the last step in one episode picks up the advantages of the first steps in the next one.",
+    "For `t = N - 1`, the next value is `last_value`. For every other `t` it's `values[t + 1]`.",
+    "A quick check: the result for two episodes joined in one buffer must equal the results for each episode on its own."
+  ],
+  "runtime": "pyodide"
+}

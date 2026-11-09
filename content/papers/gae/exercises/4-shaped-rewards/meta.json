@@ -1,0 +1,11 @@
+{
+  "title": "GAE as discounted shaped rewards",
+  "goal": "Section 4 of the paper reads GAE as a return in a reshaped MDP. Implement the pieces and check the identity.\n\n- `shape_rewards(rewards, phi, last_phi, gamma)` returns $\\tilde r_t = r_t + \\gamma\\Phi(s_{t+1}) - \\Phi(s_t)$ (Equation 20). Here `phi[t]` is $\\Phi(s_t)$ for $t < T$, and `last_phi` is $\\Phi(s_T)$.\n- `discounted_cumsum(x, discount)` returns $y_t = \\sum_{l \\ge 0} \\text{discount}^l\\, x_{t+l}$ for every $t$.\n- `gae_via_shaping(rewards, values, last_value, gamma, lam)` returns GAE by shaping with $\\Phi = V$ and then summing with the discount $\\gamma\\lambda$ (Equation 25).\n\nThe tests check Equation 21, which says that shaping subtracts $\\Phi(s_t)$ from the discounted return, and Equation 25.",
+  "hints": [
+    "For `shape_rewards`, `np.append(phi[1:], last_phi)` is $\\Phi(s_{t+1})$ for every $t$.",
+    "For `discounted_cumsum`, loop backward: `acc = x[t] + discount * acc`. A forward loop computes the wrong direction.",
+    "`gae_via_shaping` has two lines: shape with `phi = values` and `last_phi = last_value`, then call `discounted_cumsum` with `gamma * lam`.",
+    "At `lam = 0` the shaped reward alone is the answer, which is the TD residual."
+  ],
+  "runtime": "pyodide"
+}
