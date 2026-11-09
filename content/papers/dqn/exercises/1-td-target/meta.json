@@ -1,0 +1,10 @@
+{
+  "title": "TD targets and the Q-learning loss",
+  "goal": "Write the two pieces of Algorithm 1 that turn a minibatch into a loss. For a minibatch of $B$ transitions $(\\phi_j, a_j, r_j, \\phi_{j+1})$:\n\n- `td_targets(r, q_next, done, gamma)` returns the targets $y_j$ of Algorithm 1: $r_j$ for a terminal $\\phi_{j+1}$, and $r_j + \\gamma \\max_{a'} Q(\\phi_{j+1}, a'; \\theta)$ otherwise. `r` and `done` have shape `(B,)`, `done` holds 0 or 1, and `q_next` has shape `(B, K)`.\n- `dqn_loss(q, a, y)` returns the mean of $(y_j - Q(\\phi_j, a_j; \\theta))^2$ over the batch (Equation 2). `q` has shape `(B, K)` and `a` holds integer action indices of shape `(B,)`.\n\nThe tiny example on the page gives targets `[0.72, 1.0, -0.82]` and a loss of `0.4556`.",
+  "hints": [
+    "`q_next.max(axis=1)` takes the maximum over actions. `axis=0` takes it over the batch, which runs without an error and gives the wrong shape.",
+    "Multiply the bootstrap term by `(1 - done)`. Then a terminal row gets $y_j = r_j$ whatever `q_next` holds for that row.",
+    "Pick $Q(\\phi_j, a_j)$ with `q[np.arange(len(a)), a]`. `q[:, a]` builds a `(B, B)` matrix instead."
+  ],
+  "runtime": "pyodide"
+}
