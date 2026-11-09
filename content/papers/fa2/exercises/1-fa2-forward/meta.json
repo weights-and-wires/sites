@@ -1,0 +1,11 @@
+{
+  "title": "FlashAttention-2 forward pass",
+  "goal": "Implement Algorithm 1 of FlashAttention-2 (Section 3.1.1) in NumPy. Write `flash_attention2_forward(Q, K, V, Br, Bc, tau=1.0)`. `Q` has shape `(N, d)`, `K` has shape `(M, d)`, and `V` has shape `(M, dv)`. The function returns `(O, L)`:\n\n- `O` has shape `(N, dv)` and equals $\\operatorname{softmax}(\\tau QK^\\top)V$.\n- `L` has shape `(N,)` and holds the logsumexp $L_i = m_i + \\log \\ell_i$ of each row of $\\tau QK^\\top$ (lines 12-13).\n\nUnlike FlashAttention, the **outer** loop runs over blocks of `Q` (line 3) and the **inner** loop over blocks of `K` and `V` (line 6). Keep the output block **unscaled** inside the inner loop and divide by $\\ell$ once, after the loop (line 12). The only arrays you may form are of size `Br x Bc`, plus vectors of length `Br`: never build the full `N x M` score matrix. The paper omits the scale in Section 2.2; `tau` is the scale, as in the FlashAttention page.",
+  "hints": [
+    "For each row block `i`, start on-chip state `O_t = 0`, `l = 0`, and `m = -inf` (line 5), and write the results to `O[i:i+Br]` and `L[i:i+Br]` after the inner loop.",
+    "For one block, compute `S = tau * Qi @ Kj.T`, then `m_new = np.maximum(m, S.max(axis=1))` and `P = np.exp(S - m_new[:, None])` (line 9). On the first block `m` is `-inf` and `np.exp(-inf)` is 0, so the old state drops out.",
+    "The update has one rescale factor, `alpha = np.exp(m - m_new)`. Then `l = alpha * l + P.sum(axis=1)` and `O_t = alpha[:, None] * O_t + P @ Vj` (lines 9-10). Line 10 of the paper prints the factor as $\\operatorname{diag}(e^{m^{(j-1)} - m^{(j)}})^{-1}$. That inverse looks like a typo, because the exponent $m^{(j-1)} - m^{(j)}$ is already at most 0 and the update must shrink the old output when the maximum grows. Multiply by `alpha`, and the tests check the result.",
+    "After the loop, `O_i = O_t / l[:, None]` (line 12) and `L_i = m + np.log(l)` (line 13). Do not divide inside the loop."
+  ],
+  "runtime": "pyodide"
+}
