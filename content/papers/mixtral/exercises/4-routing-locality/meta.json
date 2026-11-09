@@ -1,0 +1,10 @@
+{
+  "title": "Routing repetition rate",
+  "goal": "Table 5 of the paper reports how often a token and the next token in the same text get the same expert (Section 5). Write `repeat_rates(idx)`.\n\n`idx` has shape `(T, 2)`: for each of `T` consecutive tokens, the two experts chosen, with the first choice in column 0. Return a pair `(first, either)`:\n\n- `first`: the fraction of the `T - 1` consecutive pairs whose first choices are equal.\n- `either`: the fraction of consecutive pairs whose chosen sets share at least one expert, in any slot.\n\nWith 8 experts and random routing, the expected values are $1/8 = 12.5\\%$ and $1 - (6/8)(5/7) \\approx 46.4\\%$. The paper doesn't define the second column of Table 5 beyond \"the same expert is observed as first or second choice\"; this exercise uses the set-overlap reading, because it reproduces the paper's 46% baseline.",
+  "hints": [
+    "For `first`, compare `idx[1:, 0]` with `idx[:-1, 0]`.",
+    "For `either`, compare each of the two experts of token $t+1$ with each of the two experts of token $t$. A broadcast `idx[1:, :, None] == idx[:-1, None, :]` has shape `(T-1, 2, 2)`.",
+    "Reduce the `(T-1, 2, 2)` array with `.any(axis=(1, 2))` before you take the mean. Counting the matches instead of testing for any match gives a number above 1 in some pairs."
+  ],
+  "runtime": "pyodide"
+}
