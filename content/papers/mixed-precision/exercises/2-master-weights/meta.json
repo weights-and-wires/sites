@@ -1,0 +1,10 @@
+{
+  "title": "FP32 master weights",
+  "goal": "Section 3.1 keeps an FP32 master copy of the weights. The forward and backward passes use an FP16 copy, and the optimizer updates the master copy.\n\nWrite two functions:\n\n- `fp16_only_step(w16, g16, lr)` is the naive step. It computes `w16 - lr * g16` entirely in FP16 and returns an FP16 array.\n- `master_step(master, g16, lr)` is the mixed precision step. Convert the gradient to FP32, update the FP32 `master` array, and return `(new_master, new_w16)`, where `new_w16` is the FP16 copy of the new master.\n\nThe tests show the two failures from the paper: an update that underflows in FP16, and an update that is representable but vanishes when it is added to a weight that is more than 2048 times larger.",
+  "hints": [
+    "In `master_step`, the multiplication `lr * g` must happen in FP32. Cast `g16` with `.astype(np.float32)` first.",
+    "Return the new master and `new_master.astype(np.float16)`. Don't feed the FP16 copy back into the next update.",
+    "In `fp16_only_step`, cast `lr` to `np.float16` so that nothing is promoted to FP32 behind your back."
+  ],
+  "runtime": "pyodide"
+}

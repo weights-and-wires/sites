@@ -1,0 +1,10 @@
+{
+  "title": "Accumulate in FP32",
+  "goal": "Section 3.3 says that an FP16 dot product should accumulate its partial products in FP32 and convert the result to FP16 when it writes to memory. Tensor Cores do this in hardware.\n\nWrite `dot(a16, b16, acc_dtype)`. Both inputs are FP16 vectors. Run a sequential loop over the elements, keep a running sum of type `acc_dtype` (`np.float16` or `np.float32`), and add `a[i] * b[i]` at each step with both operands converted to `acc_dtype`. Return the sum as a scalar of type `np.float16`.\n\nThe loop makes the rounding error of every addition visible. Don't call `np.dot` or `np.sum`.",
+  "hints": [
+    "Start with `s = acc_dtype(0)`. In the loop, set `s = acc_dtype(s + acc_dtype(x) * acc_dtype(y))`.",
+    "The result must be `np.float16` in both cases, because the product leaves the Tensor Core as FP16 when it is written to memory.",
+    "The classic check is a vector of 4096 ones. Above 2048 the FP16 spacing is 2, so adding 1 rounds back to the same value."
+  ],
+  "runtime": "pyodide"
+}
