@@ -1,0 +1,10 @@
+{
+  "title": "Round to FP8",
+  "goal": "FP8 tensors come from converting wider types (Section 2). Write `quantize(x, fmt)`, which rounds every float in the NumPy array `x` to the nearest value that the format `fmt` (`\"e4m3\"` or `\"e5m2\"`) can represent and returns the result as a `float64` array of the same shape.\n\nRound to nearest, with ties going to the value whose mantissa is even. Values that exceed the maximum normal magnitude saturate to $\\pm$ that maximum (Section 2). Values below the smallest normal number land on the subnormal grid. The starter gives the format parameters.",
+  "hints": [
+    "In a binade $[2^e, 2^{e+1})$ the representable values are spaced $2^{e - m}$ apart, where $m$ is the number of mantissa bits. `np.frexp(a)` returns `(f, p)` with `a = f * 2**p` and `f` in `[0.5, 1)`, so $e = p - 1$.",
+    "Below the smallest normal exponent, `1 - bias`, the spacing stops shrinking. Clamp $e$ from below with `np.maximum` and the subnormals fall out.",
+    "`np.round` rounds half to even. Compute `np.round(a / spacing) * spacing`, then clip to the format maximum and put the sign back."
+  ],
+  "runtime": "pyodide"
+}
