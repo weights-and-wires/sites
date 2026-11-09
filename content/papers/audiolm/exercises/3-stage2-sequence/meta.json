@@ -1,0 +1,10 @@
+{
+  "title": "The stage 2 sequence",
+  "goal": "The coarse acoustic stage models $p(y^q_t \\mid z, y^{\\le Q'}_{<t}, y^{<q}_t)$ over the sequence $(z_1, \\dots, z_{T_S}, y^1_1, \\dots, y^{Q'}_1, y^1_2, \\dots, y^{Q'}_{T_A})$ (Section III-C). The semantic tokens are conditioning, and the first token the model predicts during training is $y^1_1$.\n\nWrite `build_stage2(z, Y, Qp, K, N)`. Here `z` holds `T_S` semantic tokens in `[0, K)`, and `Y` has shape `(T_A, Q)` with symbols in `[0, N)`. Return `(seq, loss_mask)`. `seq` is `z`, followed by the first `Qp` columns of `Y` flattened in row-major order. Semantic ids stay as they are. The acoustic symbol of layer `q` becomes `K + q * N + symbol`. `loss_mask` is a boolean array of the same length that is `True` only at the acoustic positions, where the model must predict the token.\n\nThe page gives the id layout. The paper doesn't prescribe how to separate the two vocabularies, so this layout is a choice.",
+  "hints": [
+    "Slice with `Y[:, :Qp]` before you flatten. The fine layers belong to stage 3.",
+    "Add the layer offset `q * N` and the semantic block size `K` so that no acoustic id collides with a semantic id.",
+    "The loss mask is `False` for the first `len(z)` positions and `True` for the rest."
+  ],
+  "runtime": "pyodide"
+}

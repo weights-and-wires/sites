@@ -1,0 +1,10 @@
+{
+  "title": "Flatten the codec tokens and invert it",
+  "goal": "SoundStream gives a matrix $Y \\in \\{1, \\dots, N\\}^{T_A \\times Q}$ of codebook symbols. The paper turns it into one stream by flattening it in row-major order and adding the offset $o_i = ((i-1) \\bmod Q) \\cdot N$ to each position, so every layer has its own range of ids (Section III-B). This exercise uses 0-indexed symbols in $\\{0, \\dots, N-1\\}$, so the offset for 0-indexed position $i$ is $(i \\bmod Q) \\cdot N$.\n\nWrite `flatten_acoustic(Y, N)`, which takes an integer array of shape `(T_A, Q)` and returns a 1D array of length `T_A * Q`. Write `unflatten_acoustic(ids, Q, N)`, which inverts it and returns the `(T_A, Q)` matrix. Raise `ValueError` when a symbol in `Y` is outside `[0, N)`, and when `len(ids)` is not a multiple of `Q`.",
+  "hints": [
+    "`Y.reshape(-1)` flattens in row-major order: all `Q` layers of step 0, then all `Q` layers of step 1. `Y.T.reshape(-1)` is column-major, which is a different stream.",
+    "The offset depends on the layer, which is the position in the flat stream modulo `Q`. It does not depend on the time step.",
+    "To invert, reshape to `(-1, Q)` and subtract `np.arange(Q) * N` from the columns."
+  ],
+  "runtime": "pyodide"
+}
