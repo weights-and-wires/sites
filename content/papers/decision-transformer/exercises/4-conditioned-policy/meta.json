@@ -1,0 +1,10 @@
+{
+  "title": "A return-conditioned policy from random walks",
+  "goal": "The page's corridor has 7 cells, a start in cell 3, and a goal in cell 6. Every step gives reward $-1$, so the return-to-go from a state is minus the number of steps left. The dataset holds random walks only.\n\nA count table is a one-timestep stand-in for Decision Transformer: $\\pi(a \\mid s, \\hat{R}) = \\operatorname{count}(s, \\hat{R}, a) / \\operatorname{count}(s, \\hat{R})$. Write:\n\n- `fit_table(S, A, G)`: `S`, `A`, `G` are flat integer arrays of states, actions (0 or 1), and returns-to-go from the dataset. Return a float array `table` of shape `(N_STATES, -R_MIN + 1, 2)`, where `table[s, G - R_MIN, a]` counts the timesteps with that state, return, and action. Returns below `R_MIN` go into the bucket for `R_MIN`.\n- `action_probs(table, s, R)`: return the length-2 probability vector for state `s` and target return `R`. Clip `R` to `[R_MIN, 0]` first. If the table has no data for `(s, R)`, return `[0.5, 0.5]`.\n\nThe starter includes `step` and a `rollout` helper that decrements the target after each step. The tests train on 500 random walks and check that the target return picks the behavior.",
+  "hints": [
+    "`np.add.at(table, (S, G_idx, A), 1)` adds 1 at every `(s, g, a)` triple, including repeats. `table[S, G_idx, A] += 1` counts each repeated triple once.",
+    "Shift the clipped return by `-R_MIN` to get a non-negative index: `np.clip(G, R_MIN, 0) - R_MIN`.",
+    "Normalize over the action axis only. A cell with a zero total needs the `[0.5, 0.5]` fallback to avoid dividing by zero."
+  ],
+  "runtime": "pyodide"
+}

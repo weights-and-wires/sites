@@ -1,0 +1,10 @@
+{
+  "title": "The interleaved token sequence",
+  "goal": "Figure 1 and Algorithm 1 (Section 3) turn $K$ timesteps into $3K$ tokens in the order $\\hat{R}_1, s_1, a_1, \\dots, \\hat{R}_K, s_K, a_K$. One learned embedding per timestep is added to all three tokens of that timestep. The hidden state at the token $s_t$ predicts $a_t$.\n\nWrite two functions:\n\n- `build_tokens(R_emb, s_emb, a_emb, t_emb)`: each argument has shape `(K, d)`. Return an array of shape `(3K, d)` in the paper's order, where `t_emb[t]` was added to the return, state, and action embedding of timestep `t`.\n- `state_token_indices(K)`: return the integer array of positions, in the `(3K, d)` sequence, of the state tokens.\n\nThe starter includes a finished `causal_self_attention(X)`. The tests use it to check that the hidden state at `s_t` can't see `a_t`.",
+  "hints": [
+    "Add `t_emb` to each of the three arrays first, then place them. `np.stack([R, s, a], axis=1)` has shape `(K, 3, d)`.",
+    "Reshape `(K, 3, d)` to `(3K, d)`. In row-major order the three tokens of timestep 0 come first, then the three of timestep 1.",
+    "The state token of timestep `t` sits at position `3 * t + 1`."
+  ],
+  "runtime": "pyodide"
+}
