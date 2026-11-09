@@ -1,0 +1,12 @@
+{
+  "title": "Align two toy modalities with linear encoders",
+  "goal": "CLIP trains two encoders so that matching pairs end up close in a shared space. Here the encoders are linear: `I_f = Xi @ Wi` and `T_f = Xt @ Wt`, the same pattern as the learned projections `W_i` and `W_t` in Figure 3. The loss is the one from Exercise 1, with the features normalized and the logits scaled by `exp(t)`.\n\nWrite `loss_and_grads(Xi, Xt, Wi, Wt, t)`. `Xi` has shape `(n, d_i)`, `Xt` has shape `(n, d_t)`, `Wi` has shape `(d_i, d_e)`, and `Wt` has shape `(d_t, d_e)`. Row `k` of `Xi` is paired with row `k` of `Xt`. Return `(loss, dWi, dWt, dt)`: the symmetric loss and its exact gradients with respect to `Wi`, `Wt`, and `t`. The paper's code has no backward pass, because an autodiff framework supplies it, so this exercise derives it by hand.\n\nThe tests check your gradients against finite differences and then train a pair of linear encoders with your gradients on two views of the same hidden vectors.",
+  "hints": [
+    "Forward: `If = Xi @ Wi`, `Ie = If / norm`, the same for text, `L = np.exp(t) * Ie @ Te.T`.",
+    "The loss is the mean of two cross entropies with the diagonal as the target. Its gradient with respect to the logits is `G = (P_rows + P_cols - 2 * np.eye(n)) / (2 * n)`, where `P_rows` is the softmax of `L` along axis 1 and `P_cols` is the softmax along axis 0.",
+    "Since `L = scale * Ie @ Te.T`, the gradients with respect to the normalized embeddings are `dIe = scale * G @ Te` and `dTe = scale * G.T @ Ie`. Note the transpose in the second one.",
+    "Normalization has a Jacobian. If `e = f / |f|`, then `df = (de - e * (e . de)) / |f|` for each row: remove the part of `de` that points along `e`, then divide by the original length.",
+    "`L` is proportional to `exp(t)`, so `dt = np.sum(G * L)`. Then `dWi = Xi.T @ dIf` and `dWt = Xt.T @ dTf`."
+  ],
+  "runtime": "pyodide"
+}

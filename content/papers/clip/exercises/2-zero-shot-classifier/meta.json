@@ -1,0 +1,11 @@
+{
+  "title": "Zero-shot classifier with prompt ensembling",
+  "goal": "Section 3.1.2 turns the text encoder into a classifier. It embeds a text for every class, takes the cosine similarity between the image embedding and each class embedding, scales the result by the temperature, and applies a softmax. Section 3.1.4 builds the ensemble \"over the embedding space instead of probability space\", so one cached embedding per class stands in for many prompts.\n\nWrite two functions:\n\n- `build_classifier(prompt_embs)` takes `prompt_embs` of shape `(n_prompts, n_classes, d)`, the unnormalized text embedding of every prompt for every class. It returns a `(n_classes, d)` matrix with unit-length rows: normalize every embedding, average over the prompts, then normalize again. (The paper doesn't say whether the average is renormalized. This exercise does, so that every class has the same scale in the cosine similarity.)\n- `zero_shot_probs(image_embs, classifier, t)` takes image embeddings of shape `(n_images, d)` that aren't normalized, the classifier, and the log temperature `t`. It returns a `(n_images, n_classes)` matrix of probabilities. The logits are `exp(t)` times the cosine similarities, and each row is a softmax over the classes.",
+  "hints": [
+    "`unit = emb / np.linalg.norm(emb, axis=-1, keepdims=True)` works for any number of leading axes.",
+    "Average over the prompts axis, which is axis 0 of `prompt_embs`. Averaging unit vectors gives a vector shorter than 1, so normalize it again.",
+    "Normalize each prompt before you average. A prompt whose embedding happens to be long would otherwise outvote the others.",
+    "The softmax runs over the classes, which is the last axis of the `(n_images, n_classes)` logits. Subtract the row maximum first."
+  ],
+  "runtime": "pyodide"
+}

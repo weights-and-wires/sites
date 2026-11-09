@@ -1,0 +1,12 @@
+{
+  "title": "Symmetric contrastive loss",
+  "goal": "Implement the loss in the pseudocode of Figure 3 (Section 2.3). Given a batch of $n$ aligned image and text features, CLIP builds the $n \\times n$ matrix of scaled cosine similarities and applies cross entropy twice, once per direction, with the diagonal as the correct answer.\n\nWrite two functions:\n\n- `l2_normalize(x, axis=-1)` scales each vector along `axis` to length 1.\n- `clip_loss(I_f, T_f, t)` takes image features `I_f` and text features `T_f`, both of shape `(n, d_e)` and not yet normalized, and the log-parameterized temperature `t`. It returns the scalar `(loss_i + loss_t) / 2`. The logit scale is `exp(t)`, as in `logits = np.dot(I_e, T_e.T) * np.exp(t)`.\n\nThe loss has two terms. The row term is, for each image, the cross entropy of its row of logits (a softmax over the $n$ texts). The column term is, for each text, the cross entropy of its column (a softmax over the $n$ images). Figure 3 computes them with `axis=0` and `axis=1` and averages them, so which one you call `loss_i` doesn't matter.",
+  "hints": [
+    "Normalize both feature matrices first. The dot product of two unit vectors is their cosine similarity.",
+    "`logits = np.exp(t) * I_e @ T_e.T`. Row `i` scores image `i` against every text, and column `j` scores text `j` against every image.",
+    "Write a log-softmax that subtracts the maximum along the axis before it calls `np.exp`. A scale of `exp(t)` can be large, and `np.exp(1000)` overflows.",
+    "The loss for one direction is the mean of `-log_softmax(logits, axis)[k, k]` over `k`, which you can read off with `np.diag`. The rows use `axis=1` and the columns use `axis=0`.",
+    "Check yourself with identity similarity: if `I_f = T_f = np.eye(n)` and `t = 0`, every diagonal logit is 1 and every other logit is 0, so the loss is $\\ln(1 + (n-1)e^{-1})$."
+  ],
+  "runtime": "pyodide"
+}
