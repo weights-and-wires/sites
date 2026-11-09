@@ -1,0 +1,10 @@
+{
+  "title": "Apply rotary embeddings",
+  "goal": "Implement the rotation from Section 3.4.2, Equation 34. Write `rope(x, positions, base=10000.0)`, where `x` has shape `(..., n, d)` with `d` even, and `positions` has shape `(n,)`.\n\nThe function returns an array of the same shape. Follow the paper's pairing: coordinates `(x[2j], x[2j+1])` form pair `j` (0-indexed), and pair `j` rotates by the angle $m\\,\\theta_j$ with $\\theta_j = \\text{base}^{-2j/d}$ (Equation 15, with the paper's 1-indexed $i = j + 1$). Position `positions[t]` applies to row `t`. Every leading axis, such as batch and head, uses the same positions.",
+  "hints": [
+    "Build the angles with broadcasting: `positions[:, None] * theta[None, :]` has shape `(n, d // 2)`.",
+    "Take the even coordinates with `x[..., 0::2]` and the odd ones with `x[..., 1::2]`. The rotated pair is `(a cos - b sin, a sin + b cos)`.",
+    "Write the two results back into `out[..., 0::2]` and `out[..., 1::2]`. Don't split `x` into a first half and a second half; that is a different pairing."
+  ],
+  "runtime": "pyodide"
+}
