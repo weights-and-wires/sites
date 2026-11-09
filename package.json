@@ -4,6 +4,13 @@
   "type": "module",
   "description": "Build-time dependencies for the Go site generator.",
   "dependencies": {
+    "@codemirror/commands": "6.9.0",
+    "@codemirror/lang-python": "6.2.1",
+    "@codemirror/language": "6.11.3",
+    "@codemirror/state": "6.5.2",
+    "@codemirror/view": "6.38.6",
+    "@lezer/highlight": "1.2.1",
+    "esbuild": "0.25.10",
     "katex": "0.16.22"
   }
 }

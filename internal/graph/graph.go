@@ -35,7 +35,7 @@ func Build(papers []content.Paper) (*Graph, error) {
 			g.needs[p.ID] = append(g.needs[p.ID], r.ID)
 			g.next[r.ID] = append(g.next[r.ID], p.ID)
 		}
-		if !p.IsStub() && p.Exercises == 0 {
+		if !p.IsStub() && len(p.Exercises) == 0 {
 			problems = append(problems, fmt.Sprintf("%s: a full paper page needs at least one exercise", p.ID))
 		}
 	}

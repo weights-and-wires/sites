@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="/assets/{{.Assets.CSS}}">
 {{if .Math}}<link rel="stylesheet" href="/assets/katex/katex.min.css">{{end}}
 </head>
-<body class="site-{{.Site.ID}}">
+<body class="site-{{.Site.ID}}"{{if .Assets.WorkerJS}} data-worker-url="/assets/{{.Assets.WorkerJS}}" data-harness-url="/assets/{{.Assets.Harness}}"{{end}}>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="topbar">
   <a class="brand" href="/" aria-label="{{.Site.Name}} home">
@@ -34,6 +34,7 @@
 <footer class="site-footer">
   <span class="meta">{{.Site.Name}} · built {{.Built}}</span>
 </footer>
+{{block "scripts" .}}{{end}}
 </body>
 </html>
 {{end}}

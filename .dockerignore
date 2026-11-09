@@ -3,3 +3,4 @@ node_modules
 internal/assets/public/*
 !internal/assets/public/.gitkeep
 sites-serve
+.cache

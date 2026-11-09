@@ -1,45 +1,40 @@
 ---
-id: transformer
+id: "transformer"
 title: "Attention Is All You Need"
 authors: "Vaswani et al."
 year: 2017
 venue: "NeurIPS 2017"
 arxiv: "1706.03762"
+url: "https://arxiv.org/abs/1706.03762"
 track: architectures
 tier: core
-hours: 6
+est_hours: 6
 status: stub
-tldr: "The Transformer replaces recurrence with self-attention, so every token can read every other token in one step. That makes training parallel across the sequence and became the architecture behind modern language models."
+summary: "The architecture behind every modern LLM; the single most connected node in the graph."
+related_course: "ml: transformers"
+prereqs:
+  - id: bahdanau
+    reason: "Additive (MLP) alignment scores"
+  - id: layernorm
+    reason: "Normalize across features per example, not across the batch"
+  - id: resnet
+    reason: "Learn residual F(x) instead of H(x)"
+background: [matrix-multiplication, softmax-numerics, residual-connections, positional-information]
+course_links:
+  - title: "Scaled attention, many heads, and the causal mask"
+    url: "https://ml.ifkash.dev/lessons/047-scaled-attention-and-heads"
+  - title: "The transformer block: SwiGLU, residuals, and layer norm"
+    url: "https://ml.ifkash.dev/lessons/050-the-transformer-block"
+  - title: "Position encodings: sinusoidal clocks and rotary embeddings"
+    url: "https://ml.ifkash.dev/lessons/049-position-encodings"
 ---
 
 ## Page in progress
 
-This is a placeholder page. It shows the layout that every paper page uses.
-The full page adds the prerequisite chain, worked examples, and exercises that
-run in your browser.
+This page is a placeholder. The full page adds worked examples and exercises that run in your browser. Until then, the prerequisite panel shows what to read first.
 
-## The key idea
+## What the full page covers
 
-Each token builds a query, a key, and a value. Attention weights every value by
-how well its key matches the query, scaled by the key width $d_k$:
-
-$$
-\operatorname{Attention}(Q, K, V) = \operatorname{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right) V
-$$
-
-The following NumPy function computes the same thing for one head:
-
-```python
-import numpy as np
-
-def attention(q, k, v):
-    scores = q @ k.T / np.sqrt(k.shape[-1])
-    scores -= scores.max(axis=-1, keepdims=True)  # numerically stable softmax
-    weights = np.exp(scores)
-    weights /= weights.sum(axis=-1, keepdims=True)
-    return weights @ v
-```
-
-## Further reading
-
-- [The paper on arXiv](https://arxiv.org/abs/1706.03762)
+- Scaled dot-product self-attention
+- Multi-head attention
+- Positional encodings plus residual and LayerNorm blocks

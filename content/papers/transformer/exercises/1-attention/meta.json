@@ -1,0 +1,1 @@
+{"title": "Stable softmax and scaled dot-product attention", "goal": "Write `softmax` and `scaled_dot_product_attention`, $\\operatorname{softmax}(QK^\\top/\\sqrt{d_k})V$.", "hints": ["Subtract the row maximum before `np.exp`."]}
