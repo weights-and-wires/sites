@@ -1,0 +1,10 @@
+{
+  "title": "Resize the position embeddings for a new resolution",
+  "goal": "Section 3.2 fine-tunes at a higher resolution with the same patch size $P$. The sequence gets longer, so \"we perform 2D interpolation of the pre-trained position embeddings, according to their location in the original image.\" Write `resize_pos_embed(E_pos, g_new)`.\n\n`E_pos` has shape `(1 + g*g, D)`: row 0 belongs to the class token, and the other rows are a `g x g` grid in raster order. Return an array of shape `(1 + g_new*g_new, D)`. Keep row 0 unchanged, and resize the grid with **bilinear interpolation with aligned corners**: new index $i$ reads the source coordinate $i(g-1)/(g_{new}-1)$ along each axis, so the four corners of the grid keep their values. (The paper says only \"2D interpolation\". Bilinear with aligned corners is the choice this exercise makes.) If `g_new == 1`, use coordinate 0.",
+  "hints": [
+    "`grid = E_pos[1:].reshape(g, g, D)`. Interpolate along the rows, then along the columns. Bilinear interpolation is separable.",
+    "`pos = np.linspace(0, g - 1, g_new)` gives the source coordinates. Take `i0 = np.minimum(np.floor(pos).astype(int), g - 2)` so the last coordinate still has a left neighbor, `i1 = i0 + 1`, and weight `t = pos - i0`.",
+    "A linear ramp must stay exactly linear after the resize. Use that to check your code: if `E_pos[1:]` holds `2*row + 3*col`, new cell `(1, 3)` of a 3-to-5 resize holds 6.5."
+  ],
+  "runtime": "pyodide"
+}
