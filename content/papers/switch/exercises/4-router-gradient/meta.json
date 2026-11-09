@@ -1,0 +1,12 @@
+{
+  "title": "The router's gradient",
+  "goal": "With top-1 routing, the argmax has no gradient. Yet the router still learns, because the expert output is multiplied by the gate value $p_i(x)$ (Section 2.1: \"the gate value $p_i(x)$ in Equation 2 permits differentiability of the router\"). For one token routed to expert $i$, the layer output is\n\n$$y = p_i(x) \\, E_i(x), \\qquad E_i(x) = W_i^{\\top} x.$$\n\nWrite `switch_forward(x, Wr, W)` and `switch_backward(cache, dy)` for a layer of $N$ linear experts.\n\n- `x`: `(T, d)`. `Wr`: `(d, N)`. `W`: `(N, d, d_out)`, where `W[i]` is expert $i$'s weight matrix.\n- `switch_forward` returns `(y, cache)` with `y` of shape `(T, d_out)`.\n- `switch_backward` takes `dy`, the gradient of the loss with respect to `y`, and returns `(dWr, dW)`, the gradients with respect to `Wr` and `W`. Skip the gradient with respect to `x`.\n\nThe tests compare your gradients with finite differences, then train the layer on a toy task where four clusters of inputs need four different linear maps. A single linear map can't fit the task.",
+  "hints": [
+    "Forward: `h = x @ Wr`, `p = softmax(h)`, `i = argmax(p)`, `g = p[t, i]`, `out = x[t] @ W[i[t]]`, `y = g * out`.",
+    "Gradient to the gate: $\\partial L / \\partial g = \\sum_k dy_k \\cdot out_k$. It reaches the logits through the softmax. Only the chosen entry of $p$ receives it, so $dp = g' \\cdot e_i$ (a one-hot vector).",
+    "Softmax backward: $dh = p \\odot (dp - \\sum_j dp_j p_j)$ for each token.",
+    "Gradient to the expert: $dW_i = \\sum_{t:\\, idx_t = i} x_t \\, (g_t \\cdot dy_t)^{\\top}$. A token only updates its own expert.",
+    "Finally, $dW_r = x^{\\top} dh$."
+  ],
+  "runtime": "pyodide"
+}
