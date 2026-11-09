@@ -1,0 +1,11 @@
+{
+  "title": "Masked contrastive loss with distractors",
+  "goal": "Implement the contrastive loss $\\mathcal{L}_m$ of Section 3.2 (Equation 3).\n\nWrite two functions:\n\n- `sample_distractors(masked_idx, K, rng)` returns an integer array of shape `(len(masked_idx), K)`. Row `i` holds `K` distinct time steps drawn uniformly from the masked steps other than `masked_idx[i]`. Raise `ValueError` when fewer than `K` other masked steps exist.\n- `contrastive_loss(c, q, masked_idx, distractors, kappa)` returns the mean over masked steps of $-\\log \\frac{\\exp(\\mathrm{sim}(c_t, q_t)/\\kappa)}{\\sum_{\\tilde q} \\exp(\\mathrm{sim}(c_t, \\tilde q)/\\kappa)}$, where `sim` is cosine similarity and the candidates are $q_t$ plus its `K` distractors.\n\n`c` and `q` have shape `(T, d)`. `masked_idx` is an integer array of masked time steps, and `distractors` has shape `(len(masked_idx), K)` with values that are time steps.",
+  "hints": [
+    "Normalise `c` and `q` to unit length once, then a dot product is a cosine similarity.",
+    "For masked step `t = masked_idx[i]`, stack the candidate vectors as `q[[t, *distractors[i]]]`, so the true target sits in column 0. Divide the similarities by `kappa`.",
+    "Use a numerically stable log-sum-exp: subtract the row maximum before exponentiating. The loss for one step is `logsumexp(logits) - logits[0]`.",
+    "To draw distractors, build the array of masked steps without `t`, then call `rng.choice(others, size=K, replace=False)`."
+  ],
+  "runtime": "pyodide"
+}
