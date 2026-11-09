@@ -1,0 +1,11 @@
+{
+  "title": "Split attention heads across GPUs",
+  "goal": "Section 3 and Figure 3b split the self-attention block by heads. The $Q$, $K$, and $V$ projections are column-parallel, so each GPU holds a few whole heads and runs their attention locally. The output projection $W^O$ is row-parallel, and one all-reduce sums the partial outputs.\n\nWrite `tp_attention(X, Wq, Wk, Wv, Wo, heads, n, mask=None)` for `X` of shape `(tokens, d)`. Each weight matrix has shape `(d, d)`, and `d_k = d // heads`. Simulate `n` GPUs: GPU `r` takes columns `r*d//n` to `(r+1)*d//n` of `Wq`, `Wk`, and `Wv`, plus the matching rows of `Wo`. It holds `heads // n` heads. Return the sum of the partial outputs. Raise `ValueError` with a message that contains the word \"divisible\" when `heads` isn't divisible by `n`.\n\nThe starter provides `local_attention(X, Wq_r, Wk_r, Wv_r, local_heads, d_k, mask)`, which runs attention for the heads in one GPU's column slices and returns `(tokens, local_heads * d_k)`.",
+  "hints": [
+    "Compute `s = slice(r * cols, (r + 1) * cols)` with `cols = d // n`. Use the same `s` for `Wq`, `Wk`, `Wv` (as columns) and for `Wo` (as rows).",
+    "Slice `Wk` and `Wv` the same way you slice `Wq`. A head needs its own query, key, and value columns together.",
+    "Pass `local_heads = heads // n` and the global `d_k = d // heads` to `local_attention`. The scale must stay $1/\\sqrt{d_k}$ on every GPU.",
+    "The partial output is `local_attention(...) @ Wo[s]`. Sum the partial outputs over `r`."
+  ],
+  "runtime": "pyodide"
+}
