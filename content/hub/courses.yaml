@@ -1,19 +1,153 @@
-# Hub catalogue for courses.ifkash.dev. Task T11 fills in every course.
-title: "Courses for building AI systems from the ground up."
-lede: "Hands-on courses that run from operating systems and CPUs to GPU kernels, inference engines, and the papers behind them."
-courses:
+# Hub catalogue for courses.ifkash.dev.
+#
+# Each course has a suggested order and a roadmap stage. `lessons` is the
+# fallback count. When `repo` and `glob` are set, the build counts matching
+# files in that repo's content tree through the GitHub API (with
+# COURSES_READ_TOKEN for private repos) and falls back to `lessons` when the
+# API can't be reached. `paths` lists papers.ifkash.dev reading-path IDs; the
+# hub shows only the paths that exist in content/paths/.
+title: "Learn how AI systems work, from the <em>silicon</em> up."
+lede: "Hands-on courses that run from operating systems and CPUs to GPU kernels, inference engines, reinforcement learning, and speech, with a paper library alongside. Every lesson ends in code you write and checks that grade it."
+
+stages:
+  - id: foundations
+    label: Foundations
+    note: "How a computer runs your code"
   - id: ml
+    label: Machine learning
+    note: "Models you build and train yourself"
+  - id: systems
+    label: GPU and inference
+    note: "Make models fast on real hardware"
+  - id: applied
+    label: RL and speech
+    note: "Post-training, agents, and audio"
+  - id: papers
+    label: Papers
+    note: "Read alongside every stage"
+
+courses:
+  - id: os
+    mark: OS
+    name: Operating systems
+    url: https://os.ifkash.dev/
+    blurb: "Processes, scheduling, virtual memory, concurrency, storage, file systems, and isolation, with simulators and real Linux system calls."
+    lessons: 26
+    unit: lessons
+    stage: foundations
+    order: 1
+    tracks: [systems, python]
+    repo: kashifulhaque/os
+    glob: "content/lessons/*.md"
+  - id: cpu
+    mark: CPU
+    name: CPUs, assembly, and LLVM
+    url: https://cpu.ifkash.dev/
+    blurb: "Read and write x86-64 assembly, explain why some code is fast, follow C down to machine code, and generate LLVM IR."
+    lessons: 25
+    unit: lessons
+    stage: foundations
+    order: 2
+    tracks: [systems, compilers]
+    repo: kashifulhaque/cpu
+    glob: "content/lessons/*.md"
+  - id: arm64
+    mark: A64
+    name: ARM64 fieldnotes
+    url: https://arm64.ifkash.dev/
+    blurb: "A short static course on ARM64 assembly, with a register lab that runs in your browser."
+    lessons: 35
+    unit: lessons
+    stage: foundations
+    order: 3
+    tracks: [systems, assembly]
+  - id: ml
+    mark: ML
     name: Machine learning
     url: https://ml.ifkash.dev/
-    blurb: "From fitting a line to mixtures of experts, with an editor and a check runner beside every lesson."
-    lessons: 70
+    blurb: "From scoring a guess to a variational autoencoder. Each chapter works an example by hand, then you implement it against checks."
+    lessons: 69
     unit: lessons
-    stage: ML
-    order: 1
+    stage: ml
+    order: 4
+    tracks: [ml, python]
+    repo: weights-and-wires/ml
+    glob: "content/lessons/*.md"
+    paths: [transformer-to-modern-llm]
+  - id: gpu
+    mark: GPU
+    name: GPU programming
+    url: https://gpu.ifkash.dev/
+    blurb: "From the streaming multiprocessor to the kernels that train and serve models. Write CUDA C++ and Triton, and run every lab on an A100."
+    lessons: 27
+    unit: chapters
+    stage: systems
+    order: 5
+    tracks: [gpu, cuda, triton]
+    repo: kashifulhaque/learn-gpu
+    glob: "content/chapters/*.md"
+    paths: [path-to-flashattention]
+  - id: tpu
+    mark: TPU
+    name: Tiny TPU
+    url: https://tpu.ifkash.dev/
+    blurb: "How TPUs work, with a systolic array, a MAC unit, and a training chart you can drive in your browser."
+    lessons: 10
+    unit: lessons
+    stage: systems
+    order: 6
+    tracks: [hardware]
+  - id: qwen
+    mark: LLM
+    name: LLM inference engine
+    url: https://qwen.ifkash.dev/
+    blurb: "Build an inference engine for a Qwen hybrid model: kernels, the KV cache, the scheduler, and the server, with labs on an A100."
+    lessons: 22
+    unit: chapters
+    stage: systems
+    order: 7
+    tracks: [inference, gpu]
+    repo: kashifulhaque/learn-inference
+    glob: "content/chapters/*.md"
+    paths: [serving-an-llm-fast]
+  - id: rl
+    mark: RL
+    name: Reinforcement learning
+    url: https://rl.ifkash.dev/
+    blurb: "From a two-armed bandit to the methods that post-train language, image, speech, and robot models."
+    lessons: 64
+    unit: lessons
+    stage: applied
+    order: 8
+    tracks: [rl, post-training]
+    repo: weights-and-wires/rl
+    glob: "content/lessons/*.md"
+    paths: [rl-to-rlhf-to-reasoning]
+  - id: speech
+    mark: SP
+    name: Speech and audio
+    url: https://speech.ifkash.dev/
+    blurb: "From sampling and spectrograms to recognition, synthesis, and speech language models."
+    lessons: 65
+    unit: lessons
+    stage: applied
+    order: 9
+    tracks: [speech, audio]
+    repo: weights-and-wires/speech
+    glob: "content/lessons/*.md"
+    paths: [speech-ctc-to-speech-llms]
   - id: papers
+    mark: PDF
     name: Papers
     url: https://papers.ifkash.dev/
-    blurb: "One page per paper, with the prerequisites you need first and exercises that run in your browser."
+    blurb: "One page per paper, with the prerequisites you need first, worked examples, and exercises that run in your browser."
     unit: papers
-    stage: Papers
-    order: 2
+    stage: papers
+    order: 10
+    tracks: [reading]
+    paths:
+      - transformer-to-modern-llm
+      - path-to-flashattention
+      - rl-to-rlhf-to-reasoning
+      - speech-ctc-to-speech-llms
+      - serving-an-llm-fast

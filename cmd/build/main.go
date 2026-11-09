@@ -10,6 +10,7 @@ package main
 import (
 	"bytes"
 	"compress/gzip"
+	"context"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -18,6 +19,7 @@ import (
 	"html/template"
 	"io/fs"
 	"log"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -26,6 +28,7 @@ import (
 	"github.com/andybalholm/brotli"
 
 	"github.com/weights-and-wires/sites/internal/content"
+	"github.com/weights-and-wires/sites/internal/counts"
 	"github.com/weights-and-wires/sites/internal/graph"
 	"github.com/weights-and-wires/sites/internal/linkcheck"
 	"github.com/weights-and-wires/sites/internal/render"
@@ -68,7 +71,33 @@ type Page struct {
 	Body     template.HTML
 	Headings []render.Heading
 	Papers   []content.Paper
-	Hub      content.Hub
+	Hub      HubView
+}
+
+// HubView is the hub page: the catalogue with live counts and resolved paths.
+type HubView struct {
+	Title        template.HTML
+	Lede         string
+	Stages       []StageView
+	Courses      []CourseView
+	TotalLessons int
+}
+
+// StageView is one step of the roadmap strip.
+type StageView struct {
+	content.Stage
+	Number  string
+	Courses []CourseView
+}
+
+// CourseView is one hub card.
+type CourseView struct {
+	content.Course
+	Number     string
+	Count      int
+	Live       bool
+	StageLabel string
+	Paths      []content.Path
 }
 
 // PaperLink is a paper reference with its title resolved.
@@ -82,15 +111,17 @@ type builder struct {
 	root, out string
 	katex     string
 	built     string
+	offline   bool
 }
 
 func main() {
 	root := flag.String("root", ".", "repository root")
 	out := flag.String("out", "internal/assets/public", "output directory")
 	check := flag.Bool("check", false, "check internal links after the build")
+	offline := flag.Bool("offline", false, "use the lesson counts in courses.yaml instead of asking GitHub")
 	flag.Parse()
 
-	b := &builder{root: *root, out: *out, katex: filepath.Join(*root, "scripts/katex.mjs"), built: time.Now().UTC().Format("2006-01-02")}
+	b := &builder{root: *root, out: *out, katex: filepath.Join(*root, "scripts/katex.mjs"), built: time.Now().UTC().Format("2006-01-02"), offline: *offline}
 	if err := b.run(); err != nil {
 		log.Fatal(err)
 	}
@@ -129,6 +160,11 @@ func (b *builder) run() error {
 	if err != nil {
 		return err
 	}
+	paths, err := content.LoadPaths(filepath.Join(b.root, "content/paths"))
+	if err != nil {
+		return err
+	}
+	hubView := b.hubView(hub, paths, len(papers))
 
 	// Pull every formula out first, so KaTeX runs once for the whole build.
 	var formulas []render.Math
@@ -197,7 +233,7 @@ func (b *builder) run() error {
 			home := base
 			home.Title = "Courses · ifkash.dev"
 			home.Description = hub.Lede
-			home.Hub = hub
+			home.Hub = hubView
 			if err := b.page(site.ID, "index.html", "hub.html", home); err != nil {
 				return err
 			}
@@ -209,6 +245,59 @@ func (b *builder) run() error {
 		}
 	}
 	return b.compress()
+}
+
+// hubView fills in lesson counts and reading paths. A course whose count
+// can't be fetched keeps the count from courses.yaml.
+func (b *builder) hubView(hub content.Hub, paths []content.Path, papers int) HubView {
+	token := os.Getenv("COURSES_READ_TOKEN")
+	if token == "" {
+		token = os.Getenv("GITHUB_TOKEN")
+	}
+	client := &http.Client{}
+	byPath := map[string]content.Path{}
+	for _, p := range paths {
+		byPath[p.ID] = p
+	}
+	stageLabel := map[string]string{}
+	for _, st := range hub.Stages {
+		stageLabel[st.ID] = st.Label
+	}
+
+	v := HubView{Title: template.HTML(hub.Title), Lede: hub.Lede}
+	for i, c := range hub.Courses {
+		cv := CourseView{Course: c, Number: fmt.Sprintf("%02d", i+1), Count: c.Lessons, StageLabel: stageLabel[c.Stage]}
+		switch {
+		case c.ID == "papers":
+			cv.Count, cv.Live = papers, true
+		case c.Repo != "" && c.Glob != "" && !b.offline:
+			n, err := counts.Count(context.Background(), client, c.Repo, c.Glob, token)
+			if err != nil {
+				log.Printf("hub: %s: using the courses.yaml count (%d): %v", c.ID, c.Lessons, err)
+			} else {
+				cv.Count, cv.Live = n, true
+			}
+		}
+		for _, id := range c.Paths {
+			if p, ok := byPath[id]; ok {
+				cv.Paths = append(cv.Paths, p)
+			}
+		}
+		if c.Unit != "papers" {
+			v.TotalLessons += cv.Count
+		}
+		v.Courses = append(v.Courses, cv)
+	}
+	for i, st := range hub.Stages {
+		sv := StageView{Stage: st, Number: fmt.Sprintf("%02d", i+1)}
+		for _, cv := range v.Courses {
+			if cv.Stage == st.ID {
+				sv.Courses = append(sv.Courses, cv)
+			}
+		}
+		v.Stages = append(v.Stages, sv)
+	}
+	return v
 }
 
 // writeAssets copies the design system and site styles into assets/ with a

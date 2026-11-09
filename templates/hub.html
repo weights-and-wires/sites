@@ -1,18 +1,42 @@
 {{define "page"}}{{with .Hub}}
-<section class="hero hero-single">
+<section class="hero hero-single hub-hero">
   <div>
     <span class="kicker">Courses · ifkash.dev</span>
     <h1>{{.Title}}</h1>
     <p class="lede">{{.Lede}}</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="#roadmap">See the roadmap</a>
+      <a class="button" href="https://papers.ifkash.dev/">Browse the papers</a>
+    </div>
+    <div class="hero-meta"><span>{{len .Courses}} courses</span><span>{{.TotalLessons}} lessons and chapters</span><span>One sign-in for every course</span></div>
   </div>
 </section>
-<div class="section-heading"><div><span class="kicker">All courses</span><h2>Pick a course</h2></div></div>
-<div class="module-grid">
-{{range .Courses}}<a class="module-card" href="{{.URL}}">
-  <div class="module-card-header"><span class="module-number">{{.Stage}}</span><span class="module-icon" aria-hidden="true">{{.Order}}</span></div>
-  <h3>{{.Name}}</h3>
-  <p>{{.Blurb}}</p>
-  <div class="module-card-footer"><span class="module-count">{{if .Lessons}}{{.Lessons}} {{.Unit}}{{end}}</span><span class="module-arrow" aria-hidden="true">→</span></div>
-</a>{{end}}
-</div>
+
+<section id="roadmap" class="roadmap" aria-labelledby="roadmap-title">
+  <div class="section-heading"><div><span class="kicker">Learning roadmap</span><h2 id="roadmap-title">A suggested order</h2></div><p>Start anywhere you like. Each stage builds on the one before it.</p></div>
+  <ol class="roadmap-strip">
+  {{range .Stages}}<li class="roadmap-stage roadmap-{{.ID}}">
+    <span class="roadmap-number">{{.Number}}</span>
+    <h3>{{.Label}}</h3>
+    <p>{{.Note}}</p>
+    <ul>{{range .Courses}}<li><a href="{{.URL}}">{{.Name}}</a></li>{{end}}</ul>
+  </li>{{end}}
+  </ol>
+</section>
+
+<section aria-labelledby="all-courses">
+  <div class="section-heading"><div><span class="kicker">All courses</span><h2 id="all-courses">Pick a course</h2></div><p>Counts come from each course's content at build time.</p></div>
+  <div class="module-grid">
+  {{range .Courses}}<article class="module-card hub-card">
+    <div class="module-card-header"><span class="module-number">{{.Number}} · {{.StageLabel}}</span><span class="module-icon" aria-hidden="true">{{.Mark}}</span></div>
+    <h3><a href="{{.URL}}">{{.Name}}</a></h3>
+    <p>{{.Blurb}}</p>
+    {{if .Tracks}}<ul class="track-list" aria-label="Topics">{{range .Tracks}}<li class="chip">{{.}}</li>{{end}}</ul>{{end}}
+    {{if eq .ID "papers"}}<div class="path-links"><span class="kicker">Reading paths</span>
+      {{if .Paths}}<ul>{{range .Paths}}<li><a href="https://papers.ifkash.dev/paths/{{.ID}}/">{{.Title}}</a></li>{{end}}</ul>{{else}}<p class="meta">Five reading paths are in progress.</p>{{end}}
+    </div>{{else if .Paths}}<div class="path-links"><span class="kicker">Read alongside</span><ul>{{range .Paths}}<li><a href="https://papers.ifkash.dev/paths/{{.ID}}/">{{.Title}}</a></li>{{end}}</ul></div>{{end}}
+    <div class="module-card-footer"><span class="module-count">{{if .Count}}{{.Count}} {{.Unit}}{{end}}</span><span class="module-arrow" aria-hidden="true">→</span></div>
+  </article>{{end}}
+  </div>
+</section>
 {{end}}{{end}}
