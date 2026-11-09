@@ -1,0 +1,10 @@
+{
+  "title": "Valid sizes for an unpadded U-Net",
+  "goal": "The U-Net uses unpadded convolutions, so every 3x3 convolution trims 2 pixels from each side length, and a 2x2 max pool needs an even size (Section 2). Write `unet_output_size(n, levels=4)`, which returns the output side length for an `n` x `n` input, or `None` when the input is invalid.\n\nThe network has `levels` contracting steps. Each step applies two 3x3 convolutions and then a 2x2 pool. The bottom applies two 3x3 convolutions. Each expanding step doubles the size with the up-convolution and then applies two 3x3 convolutions. An input is invalid when a pool sees an odd size, or when a size drops to 0 or below. For `n = 572` and `levels = 4`, the answer is 388 (Figure 1).",
+  "hints": [
+    "Track one integer `s`. Subtract 4 for each pair of 3x3 convolutions, then check `s % 2` before you halve it.",
+    "Check that `s > 0` after every subtraction, so that a tiny input returns `None` and not a negative number.",
+    "On the way up, the up-convolution doubles the size (Figure 1 goes from 28 to 56), and then two convolutions subtract 4."
+  ],
+  "runtime": "pyodide"
+}

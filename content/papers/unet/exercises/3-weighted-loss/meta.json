@@ -1,0 +1,10 @@
+{
+  "title": "Border weights and the weighted pixel loss",
+  "goal": "The paper trains with a pixel-wise softmax over the channels and a cross entropy weighted by a map $w(x)$ (Section 3, Equations 1 and 2). Write two functions.\n\n`border_weight(d1, d2, w0=10.0, sigma=5.0, wc=1.0)` returns $w(x) = w_c + w_0 \\exp\\left(-\\frac{(d_1 + d_2)^2}{2\\sigma^2}\\right)$ for scalars or NumPy arrays. Here `wc` is the class-balance weight, which the page treats as a constant.\n\n`weighted_pixel_loss(logits, labels, w)` takes `logits` with shape `(K, H, W)`, integer `labels` with shape `(H, W)`, and weights `w` with shape `(H, W)`. It returns the scalar $-\\sum_x w(x) \\log p_{\\ell(x)}(x)$, where $p$ is the softmax over axis 0. The paper's Equation 1 omits the minus sign, but the loss to minimize is the negative of that sum.",
+  "hints": [
+    "Note `(d1 + d2) ** 2`, which isn't `d1 ** 2 + d2 ** 2`. The denominator is `2 * sigma ** 2`.",
+    "Compute the log-softmax directly: `shifted - np.log(np.exp(shifted).sum(axis=0))`, with `shifted = logits - logits.max(axis=0)`. A logit of 1000 overflows a naive `exp`.",
+    "`np.take_along_axis(log_p, labels[None], axis=0)[0]` picks `log p` of the true class at every pixel, and it returns shape `(H, W)`."
+  ],
+  "runtime": "pyodide"
+}
