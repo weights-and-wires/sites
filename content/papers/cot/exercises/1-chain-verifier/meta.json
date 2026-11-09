@@ -1,0 +1,11 @@
+{
+  "title": "A verifier for arithmetic chains",
+  "goal": "Section 3.2 checks chains of thought by hand: of 50 correct final answers from LaMDA 137B on GSM8K, all but two came with a logically and mathematically correct chain, and the two exceptions \"coincidentally arrived at the correct answer\". A script can check the arithmetic part of that for you. Write two functions:\n\n- `verify_chain(trace)` returns `(answer, n_steps, bad_steps)`. `answer` is the number after the last \"The answer is\" as a float (the paper's exemplars end every chain this way), or `None`. `n_steps` counts the equations of the form `a op b = c` with exactly one operator from `+ - * /`. `bad_steps` lists the text of each equation that is wrong. An equation is right when `a op b` equals `c` to the number of decimals written in `c`, so `10 / 3 = 3.3` passes and `7 / 2 = 4` fails. Division by zero is a wrong step.\n- `score_traces(traces, golds)` returns a dictionary with `answer_acc` (the share of traces whose answer equals the gold answer), `chain_valid` (the share with at least one equation and no wrong equation), and `lucky_correct` (among the traces with the right answer, the share whose chain is not valid; `0.0` when no answer is right). Raise `ValueError` when the lists differ in length.\n\nThe starter gives you the regular expressions `EQUATION` and `ANSWER`. A verifier like this one cannot catch a chain that does correct arithmetic on the wrong quantities.",
+  "hints": [
+    "Loop over `EQUATION.finditer(trace)`. Group 1 is `a`, group 2 is the operator, group 3 is `b`, and group 4 is the written result `c`. `m.group(0)` is the text of the equation.",
+    "The regular expressions never include the full stop that ends a sentence, so `= 11.` gives `11`.",
+    "Count the decimals in the written result `c` from its text, `len(c_text.split('.')[1])`, and allow a difference of half a unit in the last written decimal. For an integer result, require an exact match.",
+    "`lucky_correct` divides by the number of right answers, not by the number of traces."
+  ],
+  "runtime": "pyodide"
+}
