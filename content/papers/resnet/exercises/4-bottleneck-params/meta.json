@@ -1,0 +1,10 @@
+{
+  "title": "Count the bottleneck",
+  "goal": "Figure 5 compares a two-layer block for ResNet-34 with a three-layer \"bottleneck\" block for ResNet-50/101/152 on 56×56 feature maps (Section 4.1). The two designs have similar time complexity. The paper also says that replacing the identity shortcut of a bottleneck with a projection doubles its size, \"as the shortcut is connected to the two high-dimensional ends.\"\n\nCount the weights. Skip biases and batch normalization. Write `conv_params(k, c_in, c_out)`, `basic_block_params(c)`, `bottleneck_params(c_out, c_mid)`, and `projection_shortcut_extra_params(c_out)`. The projection is a 1×1 convolution from `c_out` to `c_out` channels.",
+  "hints": [
+    "A $k \\times k$ convolution from $c_{\\text{in}}$ to $c_{\\text{out}}$ channels has $k^2 \\, c_{\\text{in}} \\, c_{\\text{out}}$ weights. The kernel size enters squared.",
+    "The bottleneck has three convolutions: 1×1 from `c_out` to `c_mid`, 3×3 from `c_mid` to `c_mid`, and 1×1 from `c_mid` back to `c_out`.",
+    "The basic block is two 3×3 convolutions with the same width at both ends, so call `conv_params(3, c, c)` twice."
+  ],
+  "runtime": "pyodide"
+}
