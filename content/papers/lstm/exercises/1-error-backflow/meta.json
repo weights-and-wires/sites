@@ -1,0 +1,11 @@
+{
+  "title": "How fast error vanishes, and how a carousel stops it",
+  "goal": "Section 3.1 shows that the error sent back through $q$ steps is a product of factors $f'(\\mathit{net}) \\, w$ (Equation 3.2). Measure that product on a small network.\n\nWrite three functions:\n\n- `rnn_jacobians(W, U, xs, h0)` returns an array of shape `(T, n, n)`. Entry `t - 1` is the Jacobian $\\partial h_t / \\partial h_0$ of the recurrence $h_t = \\tanh(W h_{t-1} + U x_t)$, where `xs` has shape `(T, d_in)`. Use the exact derivative, with the full state $h_0$ as the starting point.\n- `cec_jacobians(n, T)` returns the same quantity, shape `(T, n, n)`, for a bank of `n` constant error carousels (Section 3.2.2): $s_t = s_{t-1}$ with the identity as the activation function and a self-connection of $1.0$. Build it from the per-step factor $f'(\\mathit{net})\\,w$, not by hard-coding the answer.\n- `lag_below(norms, threshold)` returns the smallest lag $q$ (counting from 1) with `norms[q - 1] < threshold`, or `None` if no lag qualifies.\n\nThe test compares your Jacobians with finite differences and checks the norms against the decay Section 3.1.3 predicts.",
+  "hints": [
+    "One step of the Jacobian is $\\operatorname{diag}(1 - h_t^2)\\,W$, because $\\tanh'(a) = 1 - \\tanh(a)^2$ and $h_t = \\tanh(a)$. Use the new $h_t$, not $h_{t-1}$.",
+    "Chain the steps with the newest factor on the left: $J_t = \\text{step}_t \\, J_{t-1}$, starting from the identity. The matrices don't commute.",
+    "For the CEC, $f'(\\mathit{net}) = 1$ and $w = 1$, so each step is the identity matrix.",
+    "`np.linalg.norm(J, 2)` is the spectral norm. A finite difference of $h_T$ with respect to one component of $h_0$ gives one column of $J_T$."
+  ],
+  "runtime": "pyodide"
+}
