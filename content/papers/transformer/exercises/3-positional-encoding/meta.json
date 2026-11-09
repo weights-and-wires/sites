@@ -1,0 +1,10 @@
+{
+  "title": "Sinusoidal positional encoding",
+  "goal": "Implement the fixed encoding from Section 3.5:\n\n$$PE_{(pos,\\,2i)} = \\sin\\!\\left(pos / 10000^{2i/d_{\\text{model}}}\\right), \\qquad PE_{(pos,\\,2i+1)} = \\cos\\!\\left(pos / 10000^{2i/d_{\\text{model}}}\\right)$$\n\nWrite `sinusoidal_pe(n, d)`, which returns an `(n, d)` float array for positions `0` to `n - 1`. `d` is even. Even columns hold sines and odd columns hold cosines, interleaved as the formula shows.",
+  "hints": [
+    "Build `pos` as a column `(n, 1)` and the dimension index `i` as a row `(1, d // 2)`. Broadcasting gives an `(n, d // 2)` array of angles.",
+    "The divisor is `10000 ** (2 * i / d)`, where `i` runs over pairs: `0, 1, ..., d // 2 - 1`.",
+    "Write sines into `pe[:, 0::2]` and cosines into `pe[:, 1::2]`. Don't concatenate the two halves."
+  ],
+  "runtime": "pyodide"
+}

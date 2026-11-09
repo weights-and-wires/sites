@@ -1,0 +1,11 @@
+{
+  "title": "Multi-head attention",
+  "goal": "Implement multi-head self-attention from Section 3.2.2, where $\\operatorname{head}_i = \\operatorname{Attention}(XW_i^Q, XW_i^K, XW_i^V)$ and the output is $\\operatorname{Concat}(\\operatorname{head}_1, \\dots, \\operatorname{head}_h)\\,W^O$.\n\nWrite `multi_head_attention(X, Wq, Wk, Wv, Wo, h, mask=None)`. `X` has shape `(n, d_model)`. Each of `Wq`, `Wk`, `Wv`, and `Wo` has shape `(d_model, d_model)`, and `d_model` is divisible by `h`. Column block `i` of `Wq` is $W_i^Q$, which has shape `(d_model, d_k)` with `d_k = d_model // h`. The function returns an array of shape `(n, d_model)`. The optional boolean `mask` has shape `(n, n)`.\n\nThe starter provides finished `softmax` and `scaled_dot_product_attention` helpers that accept a leading head axis. You write the projection, the split into heads, and the merge.",
+  "hints": [
+    "Project first: `Q = X @ Wq` has shape `(n, d_model)`. The same goes for `K` and `V`.",
+    "Split with `Q.reshape(n, h, d_k)`, then `.transpose(1, 0, 2)` to get `(h, n, d_k)`. Skipping the transpose mixes tokens into heads.",
+    "The helper broadcasts a `(n, n)` mask over the head axis, so pass `mask` through unchanged.",
+    "To merge, transpose the output back to `(n, h, d_v)`, reshape to `(n, h * d_v)`, and multiply by `Wo`."
+  ],
+  "runtime": "pyodide"
+}

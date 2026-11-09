@@ -1,0 +1,10 @@
+{
+  "title": "Causal mask",
+  "goal": "In the decoder, position $i$ can attend only to positions $j \\le i$ (Section 3.1 and Section 3.2.3). Write `causal_mask(n)`, which returns an `(n, n)` boolean array. Entry `[i, j]` is `True` when query `i` may attend to key `j`.\n\nThe starter includes a finished `scaled_dot_product_attention` that takes the mask. Your mask must give the weights in the tiny example from the page: row 0 attends only to itself.",
+  "hints": [
+    "`np.tril` keeps the lower triangle, including the diagonal. `np.triu` keeps the upper triangle.",
+    "Start from `np.ones((n, n), dtype=bool)`. The diagonal must be `True`, or the first query has nothing to attend to.",
+    "Use `True` for \"may attend\". The helper in the starter replaces the `False` entries with `-1e9`."
+  ],
+  "runtime": "pyodide"
+}
