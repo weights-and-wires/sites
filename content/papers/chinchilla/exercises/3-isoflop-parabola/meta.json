@@ -1,0 +1,10 @@
+{
+  "title": "Find the minimum of an IsoFLOP curve",
+  "goal": "Approach 2 (Section 3.2) trains models of several sizes at a fixed budget, fits a parabola to the final loss against $\\log N$, and reads the model size at the vertex. Write `isoflop_minimum(sizes, losses)`, which returns `(n_best, loss_min)`: the model size at the vertex of the parabola fitted to `(log(sizes), losses)`, and the fitted loss there.",
+  "hints": [
+    "`np.polyfit(np.log(sizes), losses, 2)` returns `[c2, c1, c0]` for $c_2 x^2 + c_1 x + c_0$ with $x = \\ln N$.",
+    "The vertex of the parabola is at $x^* = -c_1 / (2 c_2)$. That is a value of $\\ln N$, so apply `np.exp` to get the model size.",
+    "Evaluate the fitted polynomial at $x^*$ for `loss_min`, using `np.polyval`."
+  ],
+  "runtime": "pyodide"
+}
