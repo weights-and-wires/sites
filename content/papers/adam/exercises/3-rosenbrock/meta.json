@@ -1,0 +1,11 @@
+{
+  "title": "Adam against SGD with momentum on Rosenbrock",
+  "goal": "Minimize the Rosenbrock function $f(x, y) = (1 - x)^2 + 100\\,(y - x^2)^2$, whose minimum is $0$ at $(1, 1)$, with two optimizers.\n\nThe starter includes a finished `adam`. Write two functions:\n\n- `rosenbrock_grad(p)` returns the gradient of $f$ at `p = [x, y]` as a NumPy array of shape `(2,)`.\n- `sgd_momentum(grad_fn, x0, steps, lr, mu=0.9)` runs the heavy-ball update $v \\leftarrow \\mu v + g$ and $x \\leftarrow x - \\text{lr}\\cdot v$ for `steps` steps and returns the final point. Start from `v = 0`.\n\nThe tests then repeat the comparison on the page: with the gradient multiplied by 1000, Adam's path stays put and momentum with the same learning rate blows up (Section 2.1).",
+  "hints": [
+    "The partial derivatives are $\\partial f/\\partial x = -2(1 - x) - 400x(y - x^2)$ and $\\partial f/\\partial y = 200(y - x^2)$.",
+    "Check your gradient at $(1, 1)$. It must be exactly `[0, 0]`.",
+    "In the heavy-ball form, `v` accumulates raw gradients and has no `(1 - mu)` factor. The step is `lr * v`, not `lr * g`.",
+    "Copy `x0` into a float array first so you don't modify the caller's array."
+  ],
+  "runtime": "pyodide"
+}

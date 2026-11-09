@@ -1,0 +1,11 @@
+{
+  "title": "Bias correction",
+  "goal": "Section 3 explains why Adam divides $m_t$ and $v_t$ by $1 - \\beta^t$: both start at zero, so early averages are biased toward zero (Equation 4).\n\nWrite `effective_steps(grads, alpha=1e-3, beta1=0.9, beta2=0.999, eps=1e-8, bias_correction=True)`. `grads` is a 1-D sequence of scalar gradients $g_1, \\dots, g_T$. Run Adam on one parameter and return a NumPy array with the effective step $\\Delta_t = \\alpha \\hat m_t / (\\sqrt{\\hat v_t} + \\epsilon)$ at every timestep. With `bias_correction=False`, use $m_t$ and $v_t$ in place of $\\hat m_t$ and $\\hat v_t$. That version is RMSProp with momentum (Section 5).",
+  "hints": [
+    "Keep `m` and `v` as floats that start at 0.0, and loop with `t` starting at 1.",
+    "The corrected moments are `m / (1 - beta1 ** t)` and `v / (1 - beta2 ** t)`. Use `beta1` for `m` and `beta2` for `v`.",
+    "With a constant gradient of 1, the corrected step is exactly `alpha` at every `t`. The uncorrected first step is `alpha * 0.1 / sqrt(0.001)`, about `3.16 * alpha`.",
+    "Apply the correction to both moments or to neither. A version that corrects only one gives steps that are too small or too large."
+  ],
+  "runtime": "pyodide"
+}
