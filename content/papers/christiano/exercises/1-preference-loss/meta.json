@@ -1,0 +1,11 @@
+{
+  "title": "The preference probability and its cross-entropy loss",
+  "goal": "Section 2.2.3 models the human's choice between two trajectory segments from the summed learned reward of each segment (Equation 1), and fits the reward with a cross-entropy loss. Write two functions. The inputs `ret1` and `ret2` are arrays of segment returns $\\sum_t \\hat r(o_t, a_t)$.\n\n- `preference_prob(ret1, ret2, eps=0.0)` returns $\\hat P[\\sigma^1 \\succ \\sigma^2]$. With `eps = 0` it is Equation 1. With `eps > 0` it applies the paper's adjustment from Section 2.2.3: with probability `eps` the human answers uniformly at random, so the probability becomes $(1-\\epsilon)\\hat P + \\epsilon/2$.\n- `preference_loss(ret1, ret2, mu, eps=0.0)` returns the mean over the batch of $-\\big(\\mu(1)\\log \\hat P[\\sigma^1 \\succ \\sigma^2] + \\mu(2)\\log \\hat P[\\sigma^2 \\succ \\sigma^1]\\big)$. The argument `mu` is $\\mu(1)$, the probability mass on segment 1, so $\\mu(2) = 1 - \\mu$. A tie is `mu = 0.5`.\n\nThe paper sums the loss over the database $D$. This exercise takes the mean, which only rescales the gradient.",
+  "hints": [
+    "Equation 1 is a sigmoid of the return difference: $e^a / (e^a + e^b) = 1 / (1 + e^{-(a-b)})$. Only the difference matters.",
+    "Compute $\\log \\sigma(x)$ as `-np.logaddexp(0, -x)`. A gap of 1000 overflows `np.exp` and gives `nan`, but it doesn't overflow `logaddexp`.",
+    "With `eps > 0` the probability stays above `eps / 2`, so you can take its log directly. `P[2 > 1]` is the same function with the returns swapped.",
+    "`mu` can be a probability strictly between 0 and 1. Don't round it to a hard label."
+  ],
+  "runtime": "pyodide"
+}
