@@ -1,0 +1,11 @@
+{
+  "title": "Collapse map and brute-force CTC",
+  "goal": "Section 3.1 defines a many-to-one map $\\mathcal{B}$ from paths to labellings: remove repeated labels, then remove blanks. The probability of a labelling is the sum of the probabilities of its paths (Equations 2 and 3).\n\nIn this exercise the blank is index `0` and the labels are the integers `1, 2, ...`.\n\n- `collapse(path, blank=0)` takes a sequence of integers and returns the labelling $\\mathcal{B}(\\pi)$ as a tuple.\n- `brute_force_ctc(y, label, blank=0)` takes `y`, an array of shape `(T, K)` where `y[t, k]` is $y^t_k$ and every row sums to 1, and a labelling `label` (a tuple of integers). It returns $p(l \\mid x)$ by enumerating all $K^T$ paths.",
+  "hints": [
+    "Merge repeats first and drop blanks second. In `a - a`, the blank separates two `a`s, so the result is `aa`. In `a a`, no blank intervenes, so the result is `a`.",
+    "Track the previous symbol of the path, including when it is a blank. A symbol starts a new label only when it is not a blank and differs from the previous symbol.",
+    "`itertools.product(range(K), repeat=T)` yields every path.",
+    "The product for one path is `np.prod([y[t, k] for t, k in enumerate(path)])` (Equation 2). Add it to the total when `collapse(path) == tuple(label)`."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,12 @@
+{
+  "title": "The CTC forward algorithm",
+  "goal": "Implement the forward recursion of Section 4.1 (Equations 5 to 8) so that $p(l \\mid x)$ costs $O(T \\cdot |l'|)$ instead of $O(K^T)$.\n\nWrite `ctc_forward(y, label, blank=0)`. It takes `y` of shape `(T, K)` (each row sums to 1) and `label`, a tuple of integers that are not the blank. It returns `(alpha, p)`:\n\n- `alpha` has shape `(T, 2*len(label)+1)`. `alpha[t, s]` is $\\alpha_{t+1}(s+1)$ in the paper's 1-based notation: the total probability of the first `s+1` symbols of $l'$ at time `t+1`. $l'$ is the label with a blank at both ends and between every pair of labels.\n- `p` is $p(l \\mid x)$ from Equation 8.\n\nDon't rescale. The inputs are short.",
+  "hints": [
+    "Build `lp = [blank, l1, blank, l2, ..., blank]`. Its length is `S = 2*len(label)+1`.",
+    "Initialize `alpha[0, 0] = y[0, blank]` and `alpha[0, 1] = y[0, lp[1]]` when `S > 1`. Everything else in row 0 is 0.",
+    "For each `t > 0` and `s`, start from `alpha[t-1, s] + alpha[t-1, s-1]` (Equation 7). Add `alpha[t-1, s-2]` only when `lp[s]` is not a blank and `lp[s] != lp[s-2]` (Equation 6). Then multiply by `y[t, lp[s]]`.",
+    "The skip from `s-2` is what lets `a b` follow each other with no blank. It is forbidden when the two labels are equal, because `a a` would then merge into one `a`.",
+    "Equation 8 adds the last two entries of the final row. For the empty label, `l'` is a single blank and `p` is `alpha[-1, 0]`."
+  ],
+  "runtime": "pyodide"
+}
