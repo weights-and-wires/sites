@@ -1,0 +1,10 @@
+{
+  "title": "The SGVB estimator and the lower bound",
+  "goal": "Implement the second SGVB estimator (Section 2.3, Equation 7) for a model where $\\log p_\\theta(x)$ is known exactly: $p(z) = \\mathcal{N}(0, 1)$, $p_\\theta(x|z) = \\mathcal{N}(x; z, 1)$, and one scalar datapoint $x$.\n\nWrite `elbo_estimate(x, mu, logvar, eps)`. Here $q_\\phi(z|x) = \\mathcal{N}(\\mu, \\sigma^2)$ with `logvar` $= \\log\\sigma^2$, and `eps` is a 1-D array of $L$ standard normal samples. Return $-D_{KL}(q\\,\\|\\,p(z))$ in closed form (Appendix B) plus the mean over samples of $\\log p_\\theta(x|z^{(l)})$, with $z^{(l)} = \\mu + \\sigma\\epsilon^{(l)}$. The tests check that the estimate stays below $\\log p_\\theta(x)$ and touches it at the true posterior.",
+  "hints": [
+    "For scalar $\\mu$ and $\\sigma$, Appendix B gives $-D_{KL} = \\frac{1}{2}(1 + \\log\\sigma^2 - \\mu^2 - \\sigma^2)$. That is the term you add, so you need no extra minus sign.",
+    "$\\log\\mathcal{N}(x; z, 1) = -\\frac{1}{2}\\log(2\\pi) - \\frac{1}{2}(x - z)^2$.",
+    "The sum is `kl_term + np.mean(log_lik)`. Do not use the mean for the KL term."
+  ],
+  "runtime": "pyodide"
+}

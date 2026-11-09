@@ -1,0 +1,10 @@
+{
+  "title": "Gaussian KL: closed form against Monte Carlo",
+  "goal": "Appendix B of the paper gives $-D_{KL}(q_\\phi(z)\\,\\|\\,p_\\theta(z)) = \\frac{1}{2}\\sum_{j=1}^{J}\\left(1 + \\log\\sigma_j^2 - \\mu_j^2 - \\sigma_j^2\\right)$ for $q = \\mathcal{N}(\\mu, \\sigma^2 I)$ and $p = \\mathcal{N}(0, I)$.\n\nWrite two functions. `kl_closed_form(mu, logvar)` takes arrays of shape `(batch, J)` and returns the KL for each row, shape `(batch,)`. It takes `logvar` $= \\log \\sigma^2$ instead of $\\sigma$, as most implementations do; the paper writes $\\sigma$. `kl_monte_carlo(mu, logvar, eps)` estimates the same KL as the average of $\\log q(z) - \\log p(z)$ over `eps` of shape `(L, batch, J)`, with $z = \\mu + \\sigma \\odot \\epsilon$.",
+  "hints": [
+    "The closed form is a sum over the last axis. Return the KL, which is the negative of the Appendix B expression.",
+    "`sigma = np.exp(0.5 * logvar)`. Then `np.exp(logvar)` is $\\sigma^2$.",
+    "For the Monte Carlo version, write `log_q` and `log_p` as sums over the last axis of the per-dimension Gaussian log densities, then average `log_q - log_p` over axis 0."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,10 @@
+{
+  "title": "Amortized inference: fit an encoder by SGD",
+  "goal": "In the same model as the previous exercise ($p(z) = \\mathcal{N}(0,1)$, $p_\\theta(x|z) = \\mathcal{N}(x; z, 1)$), use one encoder for all datapoints: $\\mu(x) = w x$ and $\\log\\sigma^2 = c$, so $\\phi = (w, c)$. The true posterior is $\\mathcal{N}(x/2, 1/2)$, so the optimum is $w = 0.5$ and $c = \\log 0.5$.\n\nThe starter has the finished loss `neg_elbo` and the SGD loop `fit`. Write `grad_neg_elbo(w, c, x, eps)`. It returns `(dw, dc)`, the gradients of `neg_elbo(w, c, x, eps)` with `eps` held fixed. Take them through the sample $z = wx + e^{c/2}\\epsilon$, as in Section 2.4. Don't use finite differences.",
+  "hints": [
+    "Split the loss into the KL part and the reconstruction part. The KL part is $\\frac{1}{2}(\\mu^2 + e^c - 1 - c)$ per datapoint, with $\\mu = wx$.",
+    "For the reconstruction part $\\frac{1}{2}(x - z)^2$, the chain rule gives $\\partial/\\partial\\mu = -(x - z)$ and $\\partial/\\partial c = -(x - z)\\,\\epsilon\\,\\frac{1}{2}e^{c/2}$.",
+    "Then $\\partial\\mu/\\partial w = x$. Average over the batch."
+  ],
+  "runtime": "pyodide"
+}
