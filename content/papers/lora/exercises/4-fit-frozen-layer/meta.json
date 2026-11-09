@@ -1,0 +1,11 @@
+{
+  "title": "Fit a frozen layer to a new target",
+  "goal": "A frozen random layer `W0` must learn a new task. The new target is $W^\\star = W_0 + \\Delta^\\star$, where $\\Delta^\\star$ has rank 2. Train only `A` and `B` with plain gradient descent on the mean squared error, and count what you trained.\n\nThe starter includes a finished `lora_forward` and `lora_grads`. Write:\n\n- `trainable_params(d, k, r)` returns the number of weights in `A` and `B` together.\n- `train_lora(X, Y, W0, r, alpha, steps, lr, seed=0)` returns `(A, B, losses)`. Initialize with `A` Gaussian (standard deviation 0.1) and `B` zero. Each step computes the loss $\\frac{1}{2n}\\lVert H - Y\\rVert_F^2$, appends it to `losses`, and updates `A` and `B`. `losses` has `steps + 1` entries: the loss before step 1 through the loss after the last step. Never change `W0`.\n\nThe tests check that rank 2 fits the target, rank 1 can't, and `W0` stays untouched.",
+  "hints": [
+    "The gradient of the loss with respect to `H` is `(H - Y) / n`.",
+    "Compute the loss, then the gradients, then update both `A` and `B` using the gradients from the same forward pass. Update `A` and `B` after you have both gradients.",
+    "`losses[0]` must be the loss of the base model. If it isn't, `B` didn't start at zero.",
+    "`trainable_params` is `r * (d + k)`."
+  ],
+  "runtime": "pyodide"
+}
