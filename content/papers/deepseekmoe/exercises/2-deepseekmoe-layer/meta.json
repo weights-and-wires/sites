@@ -1,0 +1,10 @@
+{
+  "title": "A DeepSeekMoE layer",
+  "goal": "Implement Equations 9-11 of Section 3.2 for a batch of tokens. Write `deepseekmoe_layer(u, centroids, shared, routed, k_active)`.\n\n- `u` has shape `(T, d)`: the hidden states $\\mathbf{u}_t^l$ after attention.\n- `centroids` has shape `(n_routed, d)`: the expert centroids $\\mathbf{e}_i^l$ of the routed experts.\n- `shared` is a list of $K_s$ functions and `routed` is a list of `n_routed` functions. Each maps an array of shape `(n, d)` to `(n, d)`.\n- `k_active` is $mK - K_s$.\n\nThe affinity is $s_{i,t} = \\operatorname{Softmax}_i(\\mathbf{u}_t^\\top \\mathbf{e}_i)$ over the routed experts. The gate $g_{i,t}$ equals $s_{i,t}$ for the `k_active` largest affinities of the token and 0 otherwise. Unlike Mixtral, the paper doesn't renormalize the gates. The output is\n\n$$\\mathbf{h}_t = \\sum_{i \\in \\text{shared}} \\operatorname{FFN}_i(\\mathbf{u}_t) + \\sum_{i \\in \\text{routed}} g_{i,t} \\operatorname{FFN}_i(\\mathbf{u}_t) + \\mathbf{u}_t.$$\n\nReturn `(h, idx)`, where `idx` has shape `(T, k_active)` and lists the selected routed experts of each token from largest to smallest affinity.",
+  "hints": [
+    "Compute `s = softmax(u @ centroids.T)` along the last axis, then `np.argsort(-s, axis=-1)[:, :k_active]` for the selected experts.",
+    "Every shared expert sees every token and has weight 1. Add `f(u)` for each of them.",
+    "For routed expert `i`, find the rows that selected it with `rows, slot = np.where(idx == i)`. Run the expert on `u[rows]` only, and add `s[rows, i][:, None] * out` to `h[rows]`."
+  ],
+  "runtime": "pyodide"
+}
