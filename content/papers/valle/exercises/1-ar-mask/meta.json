@@ -1,0 +1,10 @@
+{
+  "title": "AR and NAR attention masks",
+  "goal": "VALL-E lays out the autoregressive model's input as the phoneme tokens $x$ followed by the acoustic tokens of the first codebook (the enrolled prompt, then the target), and every acoustic token $c_{t,1}$ attends to $(x, c_{\\le t,1})$ (Section 4.2.1, Figure 3). The NAR model lets every token attend to every token (Section 4.2.2).\n\nWrite `ar_mask(n_text, n_audio)` and `nar_mask(n_text, n_audio)`. Each returns a boolean array of shape `(n_text + n_audio, n_text + n_audio)`; entry `[i, j]` is `True` when query `i` may attend to key `j`. In the AR mask, acoustic rows see all text and the acoustic positions up to and including themselves, and text rows never see acoustic positions.",
+  "hints": [
+    "Start from `np.zeros((n, n), dtype=bool)` and fill three blocks: text rows by text columns, audio rows by text columns, and audio rows by audio columns.",
+    "The audio-by-audio block is lower triangular, and the diagonal is `True`: a token may attend to itself.",
+    "The text-by-text block can be all `True` (a prefix-language-model layout) or lower triangular. The tests accept either. Text rows must never see the audio columns."
+  ],
+  "runtime": "pyodide"
+}
