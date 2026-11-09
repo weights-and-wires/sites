@@ -1,0 +1,30 @@
+{{define "page"}}{{with .Paper}}
+<div class="paper-layout">
+<article class="paper">
+  <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Papers</a><span aria-hidden="true">/</span><span>{{.Track}}</span></nav>
+  <header class="paper-header">
+    <span class="kicker">{{.Track}} · {{.Tier}}</span>
+    <h1 class="display">{{.Title}}</h1>
+    <p class="paper-byline">{{.Authors}}{{if .Year}} · {{.Year}}{{end}}{{if .Venue}} · {{.Venue}}{{end}}</p>
+    <div class="lesson-meta">
+      {{if .Arxiv}}<a href="https://arxiv.org/abs/{{.Arxiv}}">arXiv {{.Arxiv}}</a>{{end}}
+      {{if .Hours}}<span>About {{.Hours}} hours</span>{{end}}
+      <span class="chip chip-forest">{{.Tier}}</span>
+      {{if .IsStub}}<span class="chip chip-accent">Page in progress</span>{{end}}
+    </div>
+  </header>
+  {{if .TLDR}}<section class="objectives" aria-labelledby="tldr"><h2 id="tldr">TL;DR</h2><p>{{.TLDR}}</p></section>{{end}}
+{{end}}
+  <section class="before-you-read" aria-labelledby="before">
+    <h2 id="before" class="kicker">Before you read</h2>
+    {{if .Prereqs}}<ul class="prereq-list">{{range .Prereqs}}<li><a href="/{{.ID}}/">{{.Title}}</a><span>{{.Reason}}</span></li>{{end}}</ul>
+    {{else}}<p class="meta">No paper prerequisites. Start here.</p>{{end}}
+  </section>
+  <div class="prose">
+{{.Body}}
+  </div>
+  {{if .Next}}<section class="what-next" aria-labelledby="next"><h2 id="next">What came next</h2><ul>{{range .Next}}<li><a href="/{{.ID}}/">{{.Title}}</a></li>{{end}}</ul></section>{{end}}
+</article>
+{{if .Headings}}<aside class="paper-aside" aria-label="On this page"><p class="toc-title">On this page</p>{{range .Headings}}<a class="toc-link{{if eq .Level 3}} toc-sub{{end}}" href="#{{.ID}}">{{.Text}}</a>{{end}}</aside>{{end}}
+</div>
+{{end}}

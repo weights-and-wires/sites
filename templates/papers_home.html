@@ -1,0 +1,20 @@
+{{define "page"}}
+<section class="hero hero-single">
+  <div>
+    <span class="kicker">Papers · reading paths</span>
+    <h1>Read the papers that <em>built</em> modern AI.</h1>
+    <p class="lede">Each page explains one paper, lists what you need to know first, and gives you small exercises that run in your browser.</p>
+    <div class="hero-meta"><span>{{len .Papers}} {{if eq (len .Papers) 1}}paper{{else}}papers{{end}}</span><span>Pages in progress</span></div>
+  </div>
+</section>
+<div class="callout"><span class="callout-title">In progress</span><p>This site is being built. The paper list and reading paths arrive in later updates. The page that follows shows the layout.</p></div>
+<div class="section-heading"><div><span class="kicker">Papers</span><h2>Available pages</h2></div></div>
+<div class="module-grid">
+{{range .Papers}}<a class="module-card" href="/{{.ID}}/">
+  <div class="module-card-header"><span class="module-number">{{.Track}}</span><span class="module-icon" aria-hidden="true">{{if .Year}}{{.Year}}{{end}}</span></div>
+  <h3>{{.Title}}</h3>
+  <p>{{.TLDR}}</p>
+  <div class="module-card-footer"><span class="module-count">{{.Tier}}{{if .IsStub}} · in progress{{end}}</span><span class="module-arrow" aria-hidden="true">→</span></div>
+</a>{{end}}
+</div>
+{{end}}

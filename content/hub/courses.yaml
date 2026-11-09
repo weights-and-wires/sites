@@ -1,0 +1,19 @@
+# Hub catalogue for courses.ifkash.dev. Task T11 fills in every course.
+title: "Courses for building AI systems from the ground up."
+lede: "Hands-on courses that run from operating systems and CPUs to GPU kernels, inference engines, and the papers behind them."
+courses:
+  - id: ml
+    name: Machine learning
+    url: https://ml.ifkash.dev/
+    blurb: "From fitting a line to mixtures of experts, with an editor and a check runner beside every lesson."
+    lessons: 70
+    unit: lessons
+    stage: ML
+    order: 1
+  - id: papers
+    name: Papers
+    url: https://papers.ifkash.dev/
+    blurb: "One page per paper, with the prerequisites you need first and exercises that run in your browser."
+    unit: papers
+    stage: Papers
+    order: 2
