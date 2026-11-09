@@ -1,0 +1,10 @@
+{
+  "title": "Place kernels on a roofline",
+  "goal": "Use the roofline to place kernels on a machine. Each kernel is a `(name, flops, bytes)` tuple. `peak` is in FLOP/s and `bw` is in bytes/s (use base units here, not GFLOP/s).\n\n- `place(kernels, peak, bw)` returns a list of dicts, one per kernel and in the same order. Each dict has `name`, `intensity` (FLOPs per byte), `regime` (`\"memory\"` or `\"compute\"`), `attainable` (FLOP/s from the roofline), and `time` (seconds).\n- `time` is the lower bound `max(flops / peak, bytes / bw)`. It must agree with `flops / attainable`. The two views of the roofline are the same model.\n- A kernel at exactly the ridge point counts as `\"compute\"`.",
+  "hints": [
+    "A kernel needs at least `flops / peak` seconds to compute and `bytes / bw` seconds to move its data. Whichever is longer is the bound, and it names the regime.",
+    "`attainable = min(peak, bw * intensity)`. Check that `flops / attainable` equals your `time`.",
+    "Keep the input order. Don't sort the kernels."
+  ],
+  "runtime": "pyodide"
+}
