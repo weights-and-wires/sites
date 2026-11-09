@@ -1,0 +1,10 @@
+{
+  "title": "The closed-form optimal policy",
+  "goal": "The KL-constrained reward-maximization problem has a closed-form solution (Section 4, Equation 4):\n\n$$\\pi_r(y \\mid x) = \\frac{1}{Z(x)}\\,\\pi_{\\text{ref}}(y \\mid x)\\exp\\!\\Big(\\frac{1}{\\beta}\\,r(x, y)\\Big), \\qquad Z(x) = \\sum_y \\pi_{\\text{ref}}(y \\mid x)\\exp\\!\\Big(\\frac{1}{\\beta}\\,r(x, y)\\Big)$$\n\nSolving Equation 4 for the reward gives Equation 5, $r(x, y) = \\beta \\log \\frac{\\pi_r(y \\mid x)}{\\pi_{\\text{ref}}(y \\mid x)} + \\beta \\log Z(x)$.\n\nFix one prompt $x$ with a finite set of responses. Write two functions:\n\n- `optimal_policy(ref_probs, r, beta)` returns `(pi, log_Z)`. `ref_probs` and `r` are 1-D arrays over the responses, `pi` is the optimal policy as probabilities, and `log_Z` is $\\log Z(x)$ as a float. The function must not overflow when `r / beta` is large.\n- `implicit_reward(pi, ref_probs, beta)` returns the array $\\beta \\log(\\pi / \\pi_{\\text{ref}})$, which is the paper's implicit reward $\\hat r_\\theta$ without the $\\beta \\log Z$ term.",
+  "hints": [
+    "Work in log space. `log_weights = np.log(ref_probs) + r / beta` is $\\log$ of each term in $Z(x)$, so $\\log Z$ is the log-sum-exp of `log_weights`.",
+    "For a stable log-sum-exp, subtract `m = log_weights.max()`, sum the exponentials, take the log, and add `m` back. Then `pi = np.exp(log_weights - log_Z)`.",
+    "`implicit_reward` doesn't need $Z$. It is `beta * (np.log(pi) - np.log(ref_probs))`."
+  ],
+  "runtime": "pyodide"
+}

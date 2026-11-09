@@ -1,0 +1,10 @@
+{
+  "title": "The DPO gradient on a tabular policy",
+  "goal": "Section 4 gives the gradient of the DPO loss:\n\n$$\\nabla_\\theta \\mathcal{L}_{\\text{DPO}} = -\\beta\\,\\mathbb{E}\\Big[\\sigma\\big(\\hat r_\\theta(x, y_l) - \\hat r_\\theta(x, y_w)\\big)\\big(\\nabla_\\theta \\log \\pi_\\theta(y_w \\mid x) - \\nabla_\\theta \\log \\pi_\\theta(y_l \\mid x)\\big)\\Big]$$\n\nwhere $\\hat r_\\theta(x, y) = \\beta \\log \\frac{\\pi_\\theta(y \\mid x)}{\\pi_{\\text{ref}}(y \\mid x)}$.\n\nThe policy here is a softmax over $K$ responses to one prompt: `theta` holds the $K$ logits and $\\pi_\\theta = \\operatorname{softmax}(\\theta)$. The starter gives you `log_softmax` and a finished `dpo_loss` that you can use to check yourself.\n\nWrite `dpo_grad(theta, ref_logits, pairs, beta)`. `pairs` is a list of `(w, l)` response indices. Return the gradient of the mean DPO loss over the pairs with respect to `theta`, shape `(K,)`, using the formula above and not a numerical derivative.",
+  "hints": [
+    "For a softmax policy, $\\nabla_\\theta \\log \\pi_\\theta(y) = e_y - \\pi_\\theta$, where $e_y$ is the one-hot vector for response $y$.",
+    "The implicit rewards are `beta * (log_softmax(theta) - log_softmax(ref_logits))`. The weight for a pair is `sigmoid(rhat[l] - rhat[w])`, with the loser first.",
+    "Compute one gradient per pair, then average. The `pi` terms cancel in $e_w - \\pi - (e_l - \\pi)$, but write the gradient in full first and simplify later."
+  ],
+  "runtime": "pyodide"
+}
