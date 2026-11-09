@@ -1,0 +1,11 @@
+{
+  "title": "The rectified velocity field without a network",
+  "goal": "The rectified flow follows the velocity field $v^X(z, t) = \\mathbb{E}[X_1 - X_0 \\mid X_t = z]$, the average direction of all the straight lines that pass through $z$ at time $t$ (Section 2.2, Equation 2). On a low-dimensional toy you can estimate it without training a network. Section 2.2, Equation 5, gives a kernel estimator:\n\n$$v^{X,h}(z, t) = \\sum_i \\omega_i\\,\\frac{x_1^{(i)} - z}{1 - t}, \\qquad \\omega_i \\propto \\exp\\!\\Big(-\\frac{\\lVert x_t^{(i)} - z\\rVert^2}{2h^2}\\Big), \\quad x_t^{(i)} = t\\,x_1^{(i)} + (1 - t)\\,x_0^{(i)}$$\n\nwith the weights $\\omega_i$ summing to 1. Each pair $(x_0^{(i)}, x_1^{(i)})$ contributes the direction from $z$ to its own endpoint, divided by the time left. The pair's line passes near $z$ when $z$ is close to $x_t^{(i)}$, so that pair gets most of the weight.\n\nWrite `kernel_velocity(z, t, x0, x1, h)`. It takes `z` of shape `(m, d)`, paired samples `x0` and `x1` of shape `(n, d)`, a float `t` in $[0, 1)$, and a bandwidth `h`. It returns an array of shape `(m, d)`. The paper restricts the sum to the nearest neighbors of $z$ (Section 5.1); sum over all $n$ pairs here.",
+  "hints": [
+    "Compute the kernel centers first: `xt = t * x1 + (1 - t) * x0`, an array of shape `(n, d)`. The kernel measures the distance from `z` to `xt`, not to `x1` or `x0`.",
+    "The squared distances form an `(m, n)` matrix: `((z[:, None, :] - xt[None]) ** 2).sum(-1)`. The weights are a softmax over axis 1 of `-0.5 * d2 / h**2`.",
+    "Subtract the row maximum from the logits before you exponentiate. With a small `h`, `exp` of a large negative number underflows to 0 and the weights become `0 / 0`.",
+    "With one pair and `z` on its line, the answer is `x1 - x0`: the weights are 1 and `(x1 - xt) / (1 - t) = x1 - x0`. Off the line the field points at `x1` and its size grows as `t` approaches 1."
+  ],
+  "runtime": "pyodide"
+}
