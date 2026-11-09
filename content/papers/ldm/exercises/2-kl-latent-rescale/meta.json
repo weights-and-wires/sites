@@ -1,0 +1,10 @@
+{
+  "title": "KL-regularized latent and its rescaling",
+  "goal": "Appendix G describes a KL-regularized autoencoder whose encoder outputs a mean $E_\\mu(x)$ and a variance $E_{\\sigma^2}(x)$. Training the diffusion model needs two extra steps: sample the latent, and rescale it to unit standard deviation using the first batch.\n\nWrite four functions. Latents have shape `(b, c, h, w)`.\n\n- `sample_latent(mu, logvar, eps)` returns $z = E_\\mu + E_\\sigma \\cdot \\varepsilon$, where `logvar` is $\\log E_{\\sigma^2}$.\n- `kl_to_standard_normal(mu, logvar)` returns, for each example in the batch, the KL divergence from $\\mathcal{N}(\\mu, \\sigma^2)$ to $\\mathcal{N}(0, 1)$, summed over `c`, `h`, and `w`. The result has shape `(b,)`.\n- `estimate_scale(z)` returns the scalar $\\hat\\sigma$ of Appendix G: the standard deviation over **all** of `b`, `c`, `h`, `w`, with $\\hat\\mu$ also taken over all four axes.\n- `rescale(z, sigma_hat)` returns $z / \\hat\\sigma$.",
+  "hints": [
+    "$E_\\sigma = \\sqrt{E_{\\sigma^2}} = \\exp(0.5 \\cdot \\text{logvar})$.",
+    "The KL for one component is $\\tfrac12(\\mu^2 + \\sigma^2 - 1 - \\log \\sigma^2)$.",
+    "`np.mean((z - z.mean()) ** 2)` is the pooled variance. Take its square root for $\\hat\\sigma$."
+  ],
+  "runtime": "pyodide"
+}

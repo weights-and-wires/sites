@@ -1,0 +1,10 @@
+{
+  "title": "Cross-attention conditioning",
+  "goal": "Section 3.3 conditions the U-Net with a cross-attention layer: queries come from the U-Net's features $\\phi_i(z_t)$, and keys and values come from the encoded condition $\\tau_\\theta(y)$.\n\nWrite `cross_attention(phi, tau, W_Q, W_K, W_V)`, which returns `(output, weights)`.\n\n- `phi` has shape `(N, d_eps)`: one row per spatial position of the flattened U-Net feature map.\n- `tau` has shape `(M, d_tau)`: one row per condition token.\n- `W_Q` has shape `(d, d_eps)`, and `W_K` and `W_V` have shape `(d, d_tau)`. Use $Q = \\phi W_Q^\\top$ and likewise for $K$ and $V$.\n- `weights` has shape `(N, M)` and each row sums to 1. `output` has shape `(N, d)`.\n\nThe paper prints the shapes of $W_Q$ and $W_V$ the other way round. The shapes above are the only ones that make the products defined.",
+  "hints": [
+    "The scores are `Q @ K.T`, with shape `(N, M)`. Divide by $\\sqrt{d}$, where $d$ is the projection width.",
+    "Each query chooses among condition tokens, so the softmax runs over the last axis, the `M` tokens.",
+    "The output is `weights @ V`. It has one row per image position, never one per token."
+  ],
+  "runtime": "pyodide"
+}
