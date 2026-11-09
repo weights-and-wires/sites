@@ -1,0 +1,12 @@
+{{define "page"}}
+<section class="hero hero-single"><div><span class="kicker">Reading paths</span><h1>Ordered reading lists</h1>
+<p class="lede">Each path takes you from what you already know to a current model, one paper at a time. Your progress is saved in this browser.</p></div></section>
+<div class="module-grid">
+{{range .Extra}}<a class="module-card" href="/paths/{{.ID}}/" data-path-papers="{{range $i, $p := .Papers}}{{if $i}} {{end}}{{$p.ID}}{{end}}">
+  <div class="module-card-header"><span class="module-number">Path</span><span class="module-icon" aria-hidden="true">{{len .Papers}}</span></div>
+  <h3>{{.Title}}</h3>
+  <div class="prose-snippet">{{.Intro}}</div>
+  <div class="module-card-footer"><span class="module-count" data-path-progress>{{len .Papers}} papers</span><span class="module-arrow" aria-hidden="true">→</span></div>
+</a>{{end}}
+</div>
+{{end}}

@@ -1,0 +1,12 @@
+{
+  "title": "A tiny Transformer on modular addition",
+  "goal": "Build one pre-LN Transformer block and train it to predict $(a + b) \\bmod 17$ from the three-token sequence `[a, b, =]`.\n\nThe starter provides the data, the embedding layers, the output head, and the training loop. You write `class Block(nn.Module)`:\n\n- `Block(d_model=64, n_heads=4)` builds one block.\n- `forward(x)` takes a tensor of shape `(batch, seq, d_model)` and returns a tensor of the same shape.\n- Use the pre-LN layout from Section 3.1 with the layer norm moved inside the residual branch: `x = x + Attention(LayerNorm(x))`, then `x = x + FFN(LayerNorm(x))`. The feed-forward inner width is `4 * d_model` with a ReLU, as in Equation 2.\n- Attention is bidirectional. The last token must read both `a` and `b`, so don't add a causal mask.\n\nThe training setup is `AdamW` with learning rate `1e-3` and weight decay `1.0`, full batch, on a random 90/10 split of all 289 pairs for 5,000 steps. The loop evaluates every 100 steps. The tests require a best validation accuracy of at least 0.9.",
+  "hints": [
+    "Write the attention yourself with `nn.Linear(d_model, 3 * d_model)` for Q, K, and V together, split the result into heads with `view` and `transpose`, and finish with `nn.Linear(d_model, d_model)` for $W^O$. You can also use `nn.MultiheadAttention(d_model, n_heads, batch_first=True)`.",
+    "Use `torch.softmax(q @ k.transpose(-2, -1) / d_k ** 0.5, dim=-1) @ v` for each head, where `d_k = d_model // n_heads`.",
+    "Normalize before each sub-layer, not after: `x = x + self.attn(self.ln1(x))`. The test sets every weight to zero and expects the block to return its input.",
+    "Weight decay of 1.0 is large on purpose. The model first memorizes the training pairs, and validation accuracy rises later. Validation accuracy can drop for a few hundred steps and recover. Keep all 5,000 steps."
+  ],
+  "runtime": "torch",
+  "lab": "https://ml.ifkash.dev/lessons/053p-project-train-a-tiny-transformer"
+}

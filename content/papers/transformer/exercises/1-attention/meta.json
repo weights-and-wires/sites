@@ -1,0 +1,11 @@
+{
+  "title": "Stable softmax and scaled dot-product attention",
+  "goal": "Implement Equation 1 from Section 3.2.1: $\\operatorname{Attention}(Q, K, V) = \\operatorname{softmax}(QK^\\top / \\sqrt{d_k})\\,V$.\n\nWrite two functions:\n\n- `softmax(x, axis=-1)` returns a numerically stable softmax of `x` along `axis`. The output has the same shape as `x`.\n- `scaled_dot_product_attention(Q, K, V, mask=None)` returns `(output, weights)`. `Q` has shape `(..., n, d_k)`, `K` has shape `(..., m, d_k)`, and `V` has shape `(..., m, d_v)`. `output` has shape `(..., n, d_v)` and `weights` has shape `(..., n, m)`. The optional boolean `mask` broadcasts to `(..., n, m)`, and `True` means the query may attend to that key.",
+  "hints": [
+    "Subtract the maximum along `axis` (with `keepdims=True`) before you call `np.exp`. The result doesn't change, and `exp(1000)` no longer overflows.",
+    "Use `np.swapaxes(K, -1, -2)` instead of `K.T`, so the same code handles batched and per-head inputs.",
+    "Divide the scores by `np.sqrt(d_k)`, where `d_k = Q.shape[-1]`. The width of `V` plays no part in the scale.",
+    "Replace masked scores with `-1e9` before the softmax. Zero is a valid score, so a zero keeps the key in play."
+  ],
+  "runtime": "pyodide"
+}

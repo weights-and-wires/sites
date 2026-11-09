@@ -1,30 +1,101 @@
-{{define "page"}}{{with .Paper}}
+{{define "page"}}{{with .PaperView}}
 <div class="paper-layout">
 <article class="paper">
   <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Papers</a><span aria-hidden="true">/</span><span>{{.Track}}</span></nav>
   <header class="paper-header">
     <span class="kicker">{{.Track}} · {{.Tier}}</span>
     <h1 class="display">{{.Title}}</h1>
-    <p class="paper-byline">{{.Authors}}{{if .Year}} · {{.Year}}{{end}}{{if .Venue}} · {{.Venue}}{{end}}</p>
+    <p class="paper-byline">{{.Authors}} · {{.Year}}{{if .Venue}} · {{.Venue}}{{end}}</p>
     <div class="lesson-meta">
-      {{if .Arxiv}}<a href="https://arxiv.org/abs/{{.Arxiv}}">arXiv {{.Arxiv}}</a>{{end}}
-      {{if .Hours}}<span>About {{.Hours}} hours</span>{{end}}
+      <a href="{{.Link}}">{{if .Arxiv}}arXiv {{.Arxiv}}{{else}}Read the paper{{end}}</a>
+      <span class="chip track-chip" data-track="{{.Track}}">{{.Track}}</span>
       <span class="chip chip-forest">{{.Tier}}</span>
+      {{if .Hours}}<span>About {{.Hours}} hours</span>{{end}}
       {{if .IsStub}}<span class="chip chip-accent">Page in progress</span>{{end}}
+      <label class="progress-toggle"><input type="checkbox" data-progress-toggle="{{.ID}}"> I've read this</label>
     </div>
   </header>
-  {{if .TLDR}}<section class="objectives" aria-labelledby="tldr"><h2 id="tldr">TL;DR</h2><p>{{.TLDR}}</p></section>{{end}}
-{{end}}
-  <section class="before-you-read" aria-labelledby="before">
-    <h2 id="before" class="kicker">Before you read</h2>
-    {{if .Prereqs}}<ul class="prereq-list">{{range .Prereqs}}<li><a href="/{{.ID}}/">{{.Title}}</a><span>{{.Reason}}</span></li>{{end}}</ul>
-    {{else}}<p class="meta">No paper prerequisites. Start here.</p>{{end}}
+
+  <section class="objectives" aria-labelledby="tldr"><h2 id="tldr">TL;DR</h2><p>{{.Summary}}</p></section>
+
+  <section class="before-you-read" aria-labelledby="before-you-read">
+    <h2 id="before-you-read" class="kicker">Before you read</h2>
+
+    <h3 class="byr-title">Papers you need first</h3>
+    {{if .Prereqs}}<ul class="prereq-list">{{range .Prereqs}}
+      <li data-paper-id="{{.ID}}"><a href="/{{.ID}}/">{{.Title}}</a> <span class="progress-state" aria-live="polite"></span>{{if .Reason}}<span class="prereq-reason">{{.Reason}}</span>{{end}}</li>{{end}}
+    </ul>
+    {{if gt (len .Chain) (len .Prereqs)}}
+    <button class="button chain-button" type="button" data-chain-toggle aria-expanded="false" aria-controls="chain-{{.ID}}" data-closed-label="Show full chain ({{len .Chain}} papers)">Show full chain ({{len .Chain}} papers)</button>
+    <div id="chain-{{.ID}}" class="chain-panel" hidden>
+      <p class="meta">Everything this paper builds on, in reading order. <span data-chain-done></span></p>
+      <ol class="chain-list">{{range .Chain}}<li data-paper-id="{{.ID}}"><a href="/{{.ID}}/">{{.Title}}</a> <span class="meta">{{.Year}}{{if .Stub}} · in progress{{end}}</span> <span class="progress-state"></span></li>{{end}}</ol>
+    </div>{{end}}
+    {{else}}<p class="meta">None. This paper is a starting point.</p>{{end}}
+
+    {{if .Concepts}}<h3 class="byr-title">Concepts you need</h3>
+    <ul class="concept-list">{{range .Concepts}}
+      <li><a href="{{.URL}}">{{.Label}}</a><span class="concept-refresher">{{.Refresher}}</span><span class="concept-lesson meta">Lesson: {{.Lesson}}</span></li>{{end}}
+    </ul>{{end}}
+
+    {{if .SelfCheck}}<h3 class="byr-title">Quick self-check</h3>
+    <ol class="self-check">{{range .SelfCheck}}
+      <li><p>{{.Q}}</p><details><summary>Show answer</summary><p>{{.A}}</p>{{if .SeeURL}}<p class="meta">Missed it? Read <a href="{{.SeeURL}}">{{.SeeText}}</a> first.</p>{{end}}</details></li>{{end}}
+    </ol>{{end}}
   </section>
+
   <div class="prose">
-{{.Body}}
+{{.BodyBefore}}
   </div>
-  {{if .Next}}<section class="what-next" aria-labelledby="next"><h2 id="next">What came next</h2><ul>{{range .Next}}<li><a href="/{{.ID}}/">{{.Title}}</a></li>{{end}}</ul></section>{{end}}
+
+  {{if .Exercises}}
+  <section class="exercises" aria-labelledby="implement-it">
+    <h2 id="implement-it">Implement it</h2>
+    <p>Each exercise runs in your browser. <strong>Run tests</strong> loads Python with NumPy the first time you click it (about 15 MB, cached afterwards). Your code is saved in this browser as you type.</p>
+    {{$paper := .ID}}{{range .Exercises}}
+    <div class="exercise" id="{{.ID}}" data-exercise="{{$paper}}/{{.N}}">
+      <h3>Exercise {{.N}}: {{.Title}}</h3>
+      <div class="prose exercise-goal">{{.GoalHTML}}</div>
+      {{if .Hints}}<div class="hints">{{range $i, $h := .Hints}}<details><summary>Hint {{add $i 1}}</summary><p>{{$h}}</p></details>{{end}}</div>{{end}}
+      <template data-starter>{{.Starter}}</template>
+      {{if not .Torch}}<template data-tests>{{.Tests}}</template>{{end}}
+      <div class="code-block editor-block">
+        <div class="code-toolbar"><span>submission.py</span>
+          {{if not .Torch}}<button type="button" data-run class="run-button">Run tests</button>{{end}}
+          <button type="button" data-reset>Reset</button>
+          {{if not .Torch}}<button type="button" data-show-solution disabled title="Run the tests once to unlock">Show solution</button>{{end}}
+        </div>
+        <div class="editor-host" data-editor><textarea class="editor-fallback" spellcheck="false" aria-label="Code for exercise {{.N}}">{{.Starter}}</textarea></div>
+      </div>
+      {{if .Torch}}<div class="callout callout-note"><span class="callout-title">Runs on your machine</span>
+        <p>This exercise needs PyTorch, which doesn't run in the browser. Download the starter and tests, then run <code>python -m pytest tests.py</code>.{{if .Lab}} The course has a matching lab: <a href="{{.Lab}}">open it</a>.{{end}}</p></div>{{end}}
+      <div class="runner-output" data-output aria-live="polite" hidden></div>
+      <p class="exercise-links"><a href="{{.Zip}}" download>Download starter + tests</a></p>
+      <div class="solution" data-solution hidden>
+        <div class="code-block"><div class="code-toolbar"><span>solution.py</span></div><pre><code>{{.Solution}}</code></pre></div>
+      </div>
+      {{if .Torch}}<details class="solution-details"><summary>Show solution</summary><div class="code-block"><div class="code-toolbar"><span>solution.py</span></div><pre><code>{{.Solution}}</code></pre></div></details>{{end}}
+    </div>{{end}}
+  </section>
+  {{end}}
+
+  {{if .BodyAfter}}<div class="prose">
+{{.BodyAfter}}
+  </div>{{end}}
+
+  {{if .Next}}<section class="what-next" aria-labelledby="what-came-next"><h2 id="what-came-next">What came next</h2>
+    <ul class="next-list">{{range .Next}}<li data-paper-id="{{.ID}}"><a href="/{{.ID}}/">{{.Title}}</a> <span class="meta">{{.Year}}</span>{{if and .Reason (not .Stub)}}<span class="prereq-reason">{{.Reason}}</span>{{end}}</li>{{end}}</ul>
+  </section>{{end}}
+
+  {{if .CourseLinks}}<section class="what-next" aria-labelledby="course-links"><h2 id="course-links">Course links</h2>
+    <ul>{{range .CourseLinks}}<li><a href="{{.URL}}">{{.Title}}</a></li>{{end}}</ul>
+  </section>{{end}}
+
+  {{if .Further}}<div class="prose further">
+{{.Further}}
+  </div>{{end}}
 </article>
-{{if .Headings}}<aside class="paper-aside" aria-label="On this page"><p class="toc-title">On this page</p>{{range .Headings}}<a class="toc-link{{if eq .Level 3}} toc-sub{{end}}" href="#{{.ID}}">{{.Text}}</a>{{end}}</aside>{{end}}
+{{if $.Headings}}<aside class="paper-aside" aria-label="On this page"><p class="toc-title">On this page</p>{{range $.Headings}}<a class="toc-link{{if eq .Level 3}} toc-sub{{end}}" href="#{{.ID}}">{{.Text}}</a>{{end}}</aside>{{end}}
 </div>
-{{end}}
+{{end}}{{end}}
+{{define "scripts"}}{{if .PaperView.Exercises}}<script src="/assets/{{.Assets.EditorJS}}" defer></script>{{end}}{{end}}

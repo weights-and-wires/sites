@@ -1,0 +1,8 @@
+{{define "page"}}{{with .Extra}}
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Papers</a><span aria-hidden="true">/</span><a href="/tracks/">Tracks</a><span aria-hidden="true">/</span><span>{{.Name}}</span></nav>
+<section class="hero hero-single" data-track="{{.ID}}"><div><span class="kicker track-kicker">Track</span><h1>{{.Name}}</h1>
+<p class="lede">{{len .Papers}} papers in reading order. {{.Full}} have full pages; the rest show their prerequisites while the page is written.</p></div></section>
+<ol class="reading-list">
+{{range .Papers}}<li data-paper-id="{{.ID}}"><div><a href="/{{.ID}}/">{{.Title}}</a> <span class="meta">{{.Year}}{{if .Stub}} · in progress{{end}}</span> <span class="progress-state"></span></div><p>{{.Reason}}</p></li>{{end}}
+</ol>
+{{end}}{{end}}

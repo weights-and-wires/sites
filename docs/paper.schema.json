@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://papers.ifkash.dev/schema/paper.json",
+  "title": "Paper page front matter",
+  "type": "object",
+  "required": ["id", "title", "authors", "year", "track", "tier", "status", "summary"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+    "title": {"type": "string"},
+    "authors": {"type": "string"},
+    "year": {"type": "integer"},
+    "venue": {"type": "string"},
+    "arxiv": {"type": ["string", "null"]},
+    "url": {"type": "string", "format": "uri"},
+    "track": {"enum": ["foundations", "architectures", "training-optimization", "generative", "nlp-llm", "vision", "rl", "speech", "gpu-systems", "inference", "scaling-efficiency"]},
+    "tier": {"enum": ["core", "extended"]},
+    "est_hours": {"type": "number"},
+    "status": {"enum": ["stub", "full"]},
+    "summary": {"type": "string"},
+    "related_course": {"type": "string"},
+    "prereqs": {"type": "array", "items": {"type": "object", "required": ["id"], "properties": {"id": {"type": "string"}, "reason": {"type": "string"}}}},
+    "background": {"type": "array", "items": {"type": "string"}},
+    "course_links": {"type": "array", "items": {"type": "object", "required": ["title", "url"], "properties": {"title": {"type": "string"}, "url": {"type": "string", "format": "uri"}}}},
+    "self_check": {"type": "array", "items": {"type": "object", "required": ["q", "a"], "properties": {"q": {"type": "string"}, "a": {"type": "string"}, "see": {"type": "string"}}}}
+  },
+  "additionalProperties": false
+}

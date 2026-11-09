@@ -21,6 +21,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
@@ -51,9 +52,13 @@ var sites = []Site{
 
 // Assets are the fingerprinted file names every page links to.
 type Assets struct {
-	CSS     string
-	ThemeJS string
-	Favicon string
+	CSS      string
+	ThemeJS  string
+	Favicon  string
+	PapersJS string
+	WorkerJS string
+	Harness  string
+	EditorJS string
 }
 
 // Page is the data every template gets.
@@ -65,13 +70,11 @@ type Page struct {
 	Built       string
 	Math        bool
 
-	Paper    content.Paper
-	Prereqs  []PaperLink
-	Next     []PaperLink
-	Body     template.HTML
-	Headings []render.Heading
-	Papers   []content.Paper
-	Hub      HubView
+	PaperView PaperView
+	Headings  []render.Heading
+	Papers    []content.Paper
+	Hub       HubView
+	Extra     any
 }
 
 // HubView is the hub page: the catalogue with live counts and resolved paths.
@@ -105,6 +108,9 @@ type PaperLink struct {
 	ID     string
 	Title  string
 	Reason string
+	Year   int
+	Track  string
+	Stub   bool
 }
 
 type builder struct {
@@ -112,6 +118,8 @@ type builder struct {
 	katex     string
 	built     string
 	offline   bool
+	release   bool
+	math      bool // some paper page has a formula
 }
 
 func main() {
@@ -119,9 +127,10 @@ func main() {
 	out := flag.String("out", "internal/assets/public", "output directory")
 	check := flag.Bool("check", false, "check internal links after the build")
 	offline := flag.Bool("offline", false, "use the lesson counts in courses.yaml instead of asking GitHub")
+	release := flag.Bool("release", false, "fail if Pyodide or the editor bundle is missing")
 	flag.Parse()
 
-	b := &builder{root: *root, out: *out, katex: filepath.Join(*root, "scripts/katex.mjs"), built: time.Now().UTC().Format("2006-01-02"), offline: *offline}
+	b := &builder{root: *root, out: *out, katex: filepath.Join(*root, "scripts/katex.mjs"), built: time.Now().UTC().Format("2006-01-02"), offline: *offline, release: *release}
 	if err := b.run(); err != nil {
 		log.Fatal(err)
 	}
@@ -166,25 +175,17 @@ func (b *builder) run() error {
 	}
 	hubView := b.hubView(hub, paths, len(papers))
 
-	// Pull every formula out first, so KaTeX runs once for the whole build.
-	var formulas []render.Math
-	sources := make([]string, len(papers))
-	for i, p := range papers {
-		sources[i] = render.ExtractMath(p.Body, "papers/"+p.ID, &formulas)
+	concepts, err := content.LoadConcepts(filepath.Join(b.root, "content/papers/concepts.yaml"))
+	if err != nil {
+		return err
 	}
-	rendered, err := render.KaTeX(b.katex, formulas)
+	views, err := b.paperViews(papers, g, concepts)
 	if err != nil {
 		return err
 	}
 
-	byID := map[string]content.Paper{}
-	for _, p := range papers {
-		byID[p.ID] = p
-	}
-	link := func(id, reason string) PaperLink { return PaperLink{ID: id, Title: byID[id].Title, Reason: reason} }
-
 	for _, site := range sites {
-		assets, err := b.writeAssets(site.ID, site.ID == "papers" && len(formulas) > 0)
+		assets, err := b.writeAssets(site.ID, site.ID == "papers" && b.math)
 		if err != nil {
 			return err
 		}
@@ -193,35 +194,35 @@ func (b *builder) run() error {
 		switch site.ID {
 		case "papers":
 			var index []search.Entry
-			for i, p := range papers {
-				body, heads, err := render.Markdown(sources[i])
-				if err != nil {
-					return fmt.Errorf("papers/%s: %w", p.ID, err)
-				}
-				body = render.RestoreMath(body, rendered)
+			for _, v := range views {
 				page := base
-				page.Title = p.Title + " · Papers"
-				page.Description = p.TLDR
-				page.Paper, page.Body, page.Headings = p, template.HTML(body), heads
-				page.Math = strings.Contains(body, `class="katex`)
-				for _, r := range p.Prereqs {
-					page.Prereqs = append(page.Prereqs, link(r.ID, r.Reason))
-				}
-				for _, n := range g.Next(p.ID) {
-					page.Next = append(page.Next, link(n, ""))
-				}
-				if err := b.page(site.ID, p.ID+"/index.html", "paper.html", page); err != nil {
+				page.Title = v.Title + " · Papers"
+				page.Description = v.Summary
+				page.PaperView = v
+				page.Headings = v.Headings
+				page.Math = strings.Contains(string(v.BodyBefore)+string(v.BodyAfter)+string(v.Further), `class="katex`) || len(v.Exercises) > 0
+				if err := b.page(site.ID, v.ID+"/index.html", "paper.html", page); err != nil {
 					return err
 				}
-				index = append(index, search.NewEntry(p.Title, "/"+p.ID+"/", heads, render.PlainText(body)))
+				for _, x := range v.Paper.Exercises {
+					data, err := exerciseZip(v.Paper, x)
+					if err != nil {
+						return err
+					}
+					if err := b.write(site.ID, fmt.Sprintf("%s/exercises/%d.zip", v.ID, x.N), data); err != nil {
+						return err
+					}
+				}
+				index = append(index, search.NewEntry(v.Title, "/"+v.ID+"/", v.Headings, v.Summary+" "+v.Text))
 			}
-			home := base
-			home.Title = "Papers · ifkash.dev"
-			home.Description = "Paper pages with prerequisites and in-browser exercises."
-			home.Papers = papers
-			if err := b.page(site.ID, "index.html", "papers_home.html", home); err != nil {
+			if err := b.copyPyodide(b.release); err != nil {
 				return err
 			}
+			more, err := b.writeSitePages(base, papers, paths, g)
+			if err != nil {
+				return err
+			}
+			index = append(index, more...)
 			data, err := json.Marshal(index)
 			if err != nil {
 				return err
@@ -326,7 +327,31 @@ func (b *builder) writeAssets(site string, math bool) (Assets, error) {
 		ThemeJS: hashed("theme", ".js", theme),
 		Favicon: hashed("favicon", ".svg", favicon),
 	}
-	for name, data := range map[string][]byte{a.CSS: css.Bytes(), a.ThemeJS: theme, a.Favicon: favicon} {
+	files := map[string][]byte{a.CSS: css.Bytes(), a.ThemeJS: theme, a.Favicon: favicon}
+	if site == "papers" {
+		for _, f := range []struct {
+			src, stem, ext string
+			dst            *string
+		}{
+			{"static/papers.js", "papers", ".js", &a.PapersJS},
+			{"static/runner/worker.js", "worker", ".js", &a.WorkerJS},
+			{"static/runner/harness.py", "harness", ".py", &a.Harness},
+		} {
+			data, err := os.ReadFile(filepath.Join(b.root, f.src))
+			if err != nil {
+				return a, err
+			}
+			*f.dst = hashed(f.stem, f.ext, data)
+			files[*f.dst] = data
+		}
+		editor, err := b.bundleEditor()
+		if err != nil {
+			return a, err
+		}
+		a.EditorJS = hashed("editor", ".js", editor)
+		files[a.EditorJS] = editor
+	}
+	for name, data := range files {
 		if err := b.write(site, "assets/"+name, data); err != nil {
 			return a, err
 		}
@@ -337,6 +362,22 @@ func (b *builder) writeAssets(site string, math bool) (Assets, error) {
 		}
 	}
 	return a, nil
+}
+
+// bundleEditor builds the CodeMirror bundle with esbuild (scripts/editor.mjs).
+func (b *builder) bundleEditor() ([]byte, error) {
+	tmp, err := os.MkdirTemp("", "editor")
+	if err != nil {
+		return nil, err
+	}
+	defer os.RemoveAll(tmp)
+	out := filepath.Join(tmp, "editor.js")
+	cmd := exec.Command("node", filepath.Join(b.root, "scripts/editor.mjs"), out)
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return nil, fmt.Errorf("editor bundle (run npm ci): %w", err)
+	}
+	return os.ReadFile(out)
 }
 
 // copyKaTeX ships the KaTeX stylesheet and its woff2 fonts only.
@@ -365,13 +406,24 @@ func (b *builder) copyKaTeX(site string) error {
 	return nil
 }
 
+var funcs = template.FuncMap{
+	"add":       func(a, b int) int { return a + b },
+	"trackName": trackName,
+	"pct": func(a, b int) int {
+		if b == 0 {
+			return 0
+		}
+		return a * 100 / b
+	},
+}
+
 func hashed(stem, ext string, data []byte) string {
 	sum := sha256.Sum256(data)
 	return stem + "." + hex.EncodeToString(sum[:])[:10] + ext
 }
 
 func (b *builder) page(site, path, tmpl string, data Page) error {
-	t, err := template.ParseFiles(filepath.Join(b.root, "templates/base.html"), filepath.Join(b.root, "templates", tmpl))
+	t, err := template.New("base").Funcs(funcs).ParseFiles(filepath.Join(b.root, "templates/base.html"), filepath.Join(b.root, "templates", tmpl))
 	if err != nil {
 		return err
 	}
@@ -397,7 +449,7 @@ func (b *builder) compress() error {
 			return err
 		}
 		switch filepath.Ext(path) {
-		case ".html", ".css", ".js", ".json", ".svg", ".txt":
+		case ".html", ".css", ".js", ".json", ".svg", ".txt", ".py", ".wasm":
 		default:
 			return nil
 		}

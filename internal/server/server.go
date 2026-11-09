@@ -13,6 +13,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -44,6 +45,7 @@ func init() {
 type Handler struct {
 	root  fs.FS
 	hosts map[string]string
+	etags sync.Map
 }
 
 // New returns a Handler. Unknown hosts get a 404.
@@ -136,24 +138,67 @@ func (h *Handler) serveFile(w http.ResponseWriter, r *http.Request, file string,
 		}
 	}
 
-	data, err := fs.ReadFile(h.root, send)
+	f, err := h.root.Open(send)
 	if err != nil {
 		http.Error(w, "read error", http.StatusInternalServerError)
 		return
 	}
-	hdr.Set("Content-Length", strconv.Itoa(len(data)))
+	defer f.Close()
+	st, err := f.Stat()
+	if err != nil {
+		http.Error(w, "read error", http.StatusInternalServerError)
+		return
+	}
+	hdr.Set("Content-Length", strconv.FormatInt(st.Size(), 10))
 	if status == http.StatusOK {
-		etag := `"` + strconv.FormatUint(fnv(data), 16) + `"`
+		etag, err := h.etag(send)
+		if err != nil {
+			http.Error(w, "read error", http.StatusInternalServerError)
+			return
+		}
 		hdr.Set("ETag", etag)
 		if r.Header.Get("If-None-Match") == etag {
+			hdr.Del("Content-Length")
 			w.WriteHeader(http.StatusNotModified)
 			return
 		}
 	}
 	w.WriteHeader(status)
 	if r.Method != http.MethodHead {
-		w.Write(data)
+		// Stream the file: Pyodide's wasm is several MB, and the container
+		// has a 32 MiB memory limit.
+		io.Copy(w, f)
 	}
+}
+
+// etag hashes a file once and caches the result. The files never change
+// while the server runs.
+func (h *Handler) etag(file string) (string, error) {
+	if v, ok := h.etags.Load(file); ok {
+		return v.(string), nil
+	}
+	f, err := h.root.Open(file)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+	hash := uint64(14695981039346656037)
+	buf := make([]byte, 32<<10)
+	for {
+		n, err := f.Read(buf)
+		for _, c := range buf[:n] {
+			hash ^= uint64(c)
+			hash *= 1099511628211
+		}
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			return "", err
+		}
+	}
+	tag := `"` + strconv.FormatUint(hash, 16) + `"`
+	h.etags.Store(file, tag)
+	return tag, nil
 }
 
 func acceptsEncoding(header, token string) bool {
@@ -164,15 +209,6 @@ func acceptsEncoding(header, token string) bool {
 		}
 	}
 	return false
-}
-
-func fnv(b []byte) uint64 {
-	h := uint64(14695981039346656037)
-	for _, c := range b {
-		h ^= uint64(c)
-		h *= 1099511628211
-	}
-	return h
 }
 
 // Server returns an http.Server with conservative timeouts.

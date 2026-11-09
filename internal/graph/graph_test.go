@@ -49,3 +49,30 @@ func TestBuildRejectsFullPaperWithoutExercises(t *testing.T) {
 		t.Fatal("want an error for a full paper with no exercises")
 	}
 }
+
+func TestLayoutPlacesLayersLeftToRight(t *testing.T) {
+	g, err := Build([]content.Paper{p("a"), p("b", "a"), p("c", "b"), p("d", "a")})
+	if err != nil {
+		t.Fatal(err)
+	}
+	lay := g.Layout(100, 30, 80, 20)
+	x := map[string]float64{}
+	for _, n := range lay.Nodes {
+		x[n.ID] = n.X
+	}
+	if !(x["a"] < x["b"] && x["b"] < x["c"] && x["b"] == x["d"]) {
+		t.Errorf("unexpected columns: %v", x)
+	}
+	if len(lay.Edges) != 3 {
+		t.Errorf("want 3 edges, got %d", len(lay.Edges))
+	}
+	// No two nodes in one column overlap.
+	seen := map[[2]float64]bool{}
+	for _, n := range lay.Nodes {
+		k := [2]float64{n.X, n.Y}
+		if seen[k] {
+			t.Errorf("two nodes at %v", k)
+		}
+		seen[k] = true
+	}
+}

@@ -36,11 +36,14 @@ func TestLoadHubSortsAndChecksStages(t *testing.T) {
 
 func TestLoadPapersAndPaths(t *testing.T) {
 	dir := t.TempDir()
-	write(t, filepath.Join(dir, "papers/a/index.md"), "---\nid: a\ntitle: A paper\n---\nBody\n")
-	write(t, filepath.Join(dir, "papers/a/exercises/1-x/meta.json"), "{}")
+	write(t, filepath.Join(dir, "papers/a/index.md"), "---\nid: a\ntitle: A paper\nauthors: X et al.\nyear: 2020\narxiv: \"1\"\ntrack: foundations\ntier: core\nstatus: stub\nsummary: S.\n---\nBody\n")
+	write(t, filepath.Join(dir, "papers/a/exercises/1-x/meta.json"), `{"title": "T", "goal": "G"}`)
+	for _, f := range []string{"starter.py", "tests.py", "solution.py"} {
+		write(t, filepath.Join(dir, "papers/a/exercises/1-x", f), "")
+	}
 	write(t, filepath.Join(dir, "paths/first.md"), "---\ntitle: First path\n---\nSteps\n")
 	papers, err := LoadPapers(filepath.Join(dir, "papers"))
-	if err != nil || len(papers) != 1 || papers[0].Exercises != 1 || papers[0].Body != "Body\n" {
+	if err != nil || len(papers) != 1 || len(papers[0].Exercises) != 1 || papers[0].Body != "Body\n" {
 		t.Fatalf("LoadPapers = %+v, %v", papers, err)
 	}
 	paths, err := LoadPaths(filepath.Join(dir, "paths"))
@@ -49,5 +52,22 @@ func TestLoadPapersAndPaths(t *testing.T) {
 	}
 	if none, err := LoadPaths(filepath.Join(dir, "missing")); err != nil || len(none) != 0 {
 		t.Fatalf("missing dir: %v, %v", none, err)
+	}
+}
+
+func TestLoadPapersRejectsBadFrontMatter(t *testing.T) {
+	dir := t.TempDir()
+	write(t, filepath.Join(dir, "b/index.md"), "---\nid: b\ntitle: B\nauthors: X\nyear: 2020\narxiv: \"1\"\ntrack: nope\ntier: core\nstatus: stub\nsummary: S.\n---\n")
+	if _, err := LoadPapers(dir); err == nil || !strings.Contains(err.Error(), "unknown track") {
+		t.Fatalf("want unknown track error, got %v", err)
+	}
+}
+
+func TestLoadConceptsNeedsURL(t *testing.T) {
+	dir := t.TempDir()
+	f := filepath.Join(dir, "c.yaml")
+	write(t, f, "concepts:\n  x: {label: X, url: 'ftp://x', refresher: R}\n")
+	if _, err := LoadConcepts(f); err == nil {
+		t.Fatal("want an error for a non-https url")
 	}
 }
