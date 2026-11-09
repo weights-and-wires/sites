@@ -1,0 +1,10 @@
+{
+  "title": "Relative position from rotation matrices",
+  "goal": "Check Equation 16 numerically. Write two functions:\n\n- `rotary_matrix(m, d, base=10000.0)` returns the $d \\times d$ block-diagonal matrix $R^d_{\\Theta,m}$ from Equation 15. Block `j` (0-indexed) is $\\begin{bmatrix}\\cos m\\theta_j & -\\sin m\\theta_j \\\\ \\sin m\\theta_j & \\cos m\\theta_j\\end{bmatrix}$ with $\\theta_j = \\text{base}^{-2j/d}$.\n- `rope_score(q, k, m, n, base=10000.0)` returns $q_m^\\top k_n$ for the vectors `q` and `k` placed at positions `m` and `n`. Compute it in the form of Equation 16, $q^\\top R^d_{\\Theta,\\,n-m}\\,k$, so the score uses only the offset `n - m`.\n\nHere `q` and `k` are the vectors $W_q x_m$ and $W_k x_n$, before rotation.",
+  "hints": [
+    "Fill one 2 by 2 block per pair: `R[2*j:2*j+2, 2*j:2*j+2] = [[c, -s], [s, c]]`, where the angle is `m * theta_j`.",
+    "Equation 16 says $(R_m q)^\\top (R_n k) = q^\\top R_m^\\top R_n k = q^\\top R_{n-m} k$. Call `rotary_matrix(n - m, d, base)` once.",
+    "The sign matters. $R_{m-n}$ is the transpose of $R_{n-m}$, so it gives a different score when `q` and `k` differ."
+  ],
+  "runtime": "pyodide"
+}
