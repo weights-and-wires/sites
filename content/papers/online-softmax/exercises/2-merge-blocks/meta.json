@@ -1,0 +1,10 @@
+{
+  "title": "Merge block statistics",
+  "goal": "The operator $\\oplus$ in Equation 4 merges two partial results $[m, d]$ into one. Write `combine(a, b)`, where `a` and `b` are `(m, d)` tuples, and `blocked_softmax(x, block_size)`, which splits `x` into blocks, summarizes each block with the finished `block_stats` helper, merges the summaries with `combine`, and then returns the softmax of the whole vector.\n\nThe last block can be shorter than `block_size`. Your result must match the stable softmax for any block size.",
+  "hints": [
+    "Equation 4: let $m = \\max(m_i, m_j)$. The merged normalizer is $d_i e^{m_i - m} + d_j e^{m_j - m}$. Rescale both sides. One of the two factors is 1, but you don't know which.",
+    "Slice with `x[start:start + block_size]` so the last block keeps its leftover elements. `range(0, len(x), block_size)` gives the start offsets.",
+    "Start the reduction from the first block's summary, then fold in the rest with `combine`. Don't start from `(0.0, 0.0)`: its maximum of 0 is wrong for all-negative data."
+  ],
+  "runtime": "pyodide"
+}
