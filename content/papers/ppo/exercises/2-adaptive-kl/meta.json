@@ -1,0 +1,11 @@
+{
+  "title": "The KL penalty and its adaptive coefficient",
+  "goal": "Section 4 offers an alternative to clipping: penalize the KL divergence and adapt the coefficient $\\beta$ (Equation 8). Write three functions.\n\n- `kl_categorical(p_old, p_new)` takes two arrays of shape `(N, K)`, one categorical distribution per row, and returns the mean over rows of $\\mathrm{KL}[\\pi_{\\theta_{old}}(\\cdot \\mid s_t), \\pi_\\theta(\\cdot \\mid s_t)]$. The old policy comes first, as in the paper.\n- `klpen_objective(logp_new, logp_old, adv, p_old, p_new, beta)` returns $\\hat{\\mathbb{E}}_t[r_t \\hat A_t - \\beta\\,\\mathrm{KL}_t]$ as a scalar (Equation 8).\n- `update_beta(beta, d, d_targ)` applies the rule below Equation 8, where `d` is the measured mean KL after the optimization epochs. If `d < d_targ / 1.5`, halve `beta`. If `d > d_targ * 1.5`, double it. Otherwise, leave it as is.",
+  "hints": [
+    "$\\mathrm{KL}[p, q] = \\sum_k p_k (\\log p_k - \\log q_k)$. The sum runs over actions (the last axis), and then you average over rows.",
+    "The KL is not symmetric. The test uses $p_{old} = [0.5, 0.5]$ and $p_{new} = [0.6, 0.4]$, where the two directions differ in the fourth decimal place.",
+    "A KL below target means the policy moved too little, so the penalty is too strong and `beta` shrinks.",
+    "In `klpen_objective`, the KL term is one scalar for the batch, so `beta * kl` is subtracted once from the mean of `r * adv`."
+  ],
+  "runtime": "pyodide"
+}

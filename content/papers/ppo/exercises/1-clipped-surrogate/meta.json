@@ -1,0 +1,11 @@
+{
+  "title": "The clipped surrogate and its gradient",
+  "goal": "Implement $L^{CLIP}$ from Section 3 (Equation 7) and its gradient.\n\nThe inputs are arrays of length $N$: `logp_new` is $\\log \\pi_\\theta(a_t \\mid s_t)$, `logp_old` is $\\log \\pi_{\\theta_{old}}(a_t \\mid s_t)$, and `adv` is $\\hat A_t$. Write two functions:\n\n- `clipped_surrogate(logp_new, logp_old, adv, eps=0.2)` returns the scalar $\\hat{\\mathbb{E}}_t[\\min(r_t \\hat A_t, \\operatorname{clip}(r_t, 1-\\epsilon, 1+\\epsilon)\\hat A_t)]$, where $r_t = \\exp(\\text{logp\\_new} - \\text{logp\\_old})$.\n- `clip_grad_logp(logp_new, logp_old, adv, eps=0.2)` returns the gradient of that scalar with respect to `logp_new`, an array of length $N$. Don't use autodiff. Write the gradient by hand: where the `min` picks the clipped term, the gradient is 0.\n\nThe tests include the table from the page, a finite-difference check, and the cases where the gradient is zero.",
+  "hints": [
+    "The gradient of $r_t \\hat A_t$ with respect to `logp_new` is $r_t \\hat A_t$, because $\\partial r / \\partial \\log\\pi = r$.",
+    "Compute both terms, `r * adv` and `np.clip(r, 1 - eps, 1 + eps) * adv`. The gradient is nonzero exactly where the first is less than or equal to the second, because that is where `min` picks the unclipped term.",
+    "A positive advantage with $r < 1 - \\epsilon$ still has a gradient, and so does a negative advantage with $r > 1 + \\epsilon$. The `min` keeps the pessimistic term there. Figure 1 shows this.",
+    "Divide the gradient by $N$, because the objective is a mean."
+  ],
+  "runtime": "pyodide"
+}
