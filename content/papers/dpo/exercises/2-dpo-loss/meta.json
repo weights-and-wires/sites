@@ -1,0 +1,10 @@
+{
+  "title": "The DPO loss",
+  "goal": "Implement the DPO loss (Section 4, Equation 7) for a batch of preference pairs:\n\n$$\\mathcal{L}_{\\text{DPO}} = -\\log \\sigma\\!\\Big(\\beta \\log \\frac{\\pi_\\theta(y_w \\mid x)}{\\pi_{\\text{ref}}(y_w \\mid x)} - \\beta \\log \\frac{\\pi_\\theta(y_l \\mid x)}{\\pi_{\\text{ref}}(y_l \\mid x)}\\Big)$$\n\nThe inputs are the sequence log-probabilities `pi_w`, `pi_l`, `ref_w`, and `ref_l`, each an array of shape `(B,)` (one entry per pair), and a float `beta`. Write two functions:\n\n- `reward_margin(pi_w, pi_l, ref_w, ref_l, beta)` returns the array $\\hat r_\\theta(x, y_w) - \\hat r_\\theta(x, y_l)$, where $\\hat r_\\theta = \\beta \\log(\\pi_\\theta / \\pi_{\\text{ref}})$.\n- `dpo_loss(pi_w, pi_l, ref_w, ref_l, beta)` returns the per-pair losses, shape `(B,)`, not their mean. The function must stay finite when the margin is $\\pm 1000$.",
+  "hints": [
+    "The margin is `beta * ((pi_w - ref_w) - (pi_l - ref_l))`. The reference terms enter with the opposite sign of the policy terms.",
+    "$-\\log\\sigma(m) = \\log(1 + e^{-m})$. Written as `np.log(1 + np.exp(-m))`, it overflows for $m = -1000$.",
+    "`np.logaddexp(0.0, -m)` computes $\\log(e^0 + e^{-m})$ without overflow."
+  ],
+  "runtime": "pyodide"
+}
