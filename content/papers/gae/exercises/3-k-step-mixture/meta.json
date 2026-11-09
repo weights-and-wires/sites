@@ -1,0 +1,11 @@
+{
+  "title": "GAE as a mixture of k-step estimators",
+  "goal": "Check the construction behind Equation 16. The paper defines $\\hat A_t^{(k)}$, the $k$-step advantage estimate (Equation 14), and then takes an exponentially weighted average of them.\n\nThe trajectory has $T$ steps and then ends, so $V(s_T) = 0$. `values[t]` is $V(s_t)$ for $t < T$. An estimate that looks past the end of the episode just uses the whole remaining return, so $k$ is capped at $T - t$.\n\n- `k_step_advantage(rewards, values, gamma, t, k)` returns $\\hat A_t^{(k)} = -V(s_t) + r_t + \\gamma r_{t+1} + \\dots + \\gamma^{k-1} r_{t+k-1} + \\gamma^k V(s_{t+k})$ (Equation 14, second form). Write it from this form, not from the sum of $\\delta$ terms.\n- `gae_mixture(rewards, values, gamma, lam)` returns $\\hat A_t^{GAE(\\gamma,\\lambda)}$ for every $t$ as a weighted average of $\\hat A_t^{(1)}, \\dots, \\hat A_t^{(n)}$, where $n = T - t$. The weights are $(1-\\lambda)\\lambda^{k-1}$ for $k < n$, and the final estimate $\\hat A_t^{(n)}$ gets the leftover weight $\\lambda^{n-1}$. The weights sum to 1.\n\nThe result must equal the sum in Equation 16, which the tests compute separately.",
+  "hints": [
+    "In `k_step_advantage`, first set `k = min(k, T - t)`. Then add up `gamma**l * rewards[t + l]` for `l < k`.",
+    "The bootstrap term is `gamma**k * values[t + k]` only when `t + k < T`. At the end of the episode the value is 0.",
+    "For `lam = 1` every regular weight $(1-\\lambda)\\lambda^{k-1}$ is zero. All the weight goes to the final estimate, the full return minus $V(s_t)$. That is why the leftover term $\\lambda^{n-1}$ matters.",
+    "The weights for $k = 1, \\dots, n-1$ plus the leftover weight must add up to 1."
+  ],
+  "runtime": "pyodide"
+}
