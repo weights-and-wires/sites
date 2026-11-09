@@ -1,0 +1,10 @@
+{
+  "title": "Loss scaling",
+  "goal": "Loss scaling (Section 3.2) multiplies the loss by a factor $S$ so that every gradient, which the chain rule scales by the same $S$, lands in the FP16 range. The weight gradients are then unscaled before the update.\n\nWrite two functions:\n\n- `scale_roundtrip(g, scale)` takes an FP32 array `g` of true gradients. It multiplies by `scale` in FP32, stores the result in FP16, and returns the unscaled gradient as an FP32 array (divide by `scale` after you convert back to FP32). Gradients that overflow FP16 come back as `inf`.\n- `choose_scale(max_abs_grad, fp16_max=65504.0)` returns the largest power of two $S$ for which `S * max_abs_grad <= fp16_max`, the rule in Section 3.2.",
+  "hints": [
+    "`g.astype(np.float32) * np.float32(scale)` gives the scaled gradient. Cast it with `.astype(np.float16)`, then back with `.astype(np.float32)`.",
+    "Divide by the scale only after you convert back to FP32. Dividing in FP16 repeats the underflow problem.",
+    "For `choose_scale`, take `np.floor(np.log2(fp16_max / max_abs_grad))` and return `2.0 ** that`. Check the edge case where `S * max_abs_grad` equals `fp16_max` exactly."
+  ],
+  "runtime": "pyodide"
+}

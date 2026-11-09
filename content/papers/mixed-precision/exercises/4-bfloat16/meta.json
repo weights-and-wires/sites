@@ -1,0 +1,10 @@
+{
+  "title": "Simulate bfloat16",
+  "goal": "bfloat16 is a format that appeared after this paper. It keeps the FP32 exponent (8 bits) and cuts the mantissa to 7 bits, so it has FP32's range but less precision than FP16. The upper 16 bits of an FP32 number are a bfloat16 number.\n\nWrite `to_bfloat16(x)`. It takes an FP32 array and returns an FP32 array whose values are the nearest bfloat16 values, with ties rounded to the value whose last mantissa bit is 0 (round to nearest even). Work on the bits: view the array as `uint32`, add a rounding bias, and clear the low 16 bits.\n\nThe tests then compare the range of bfloat16 and FP16, which is why bfloat16 training needs no loss scaling.",
+  "hints": [
+    "`x.view(np.uint32)` reinterprets the bits without a copy. Make `x` a contiguous `float32` array first.",
+    "Truncating (`u & 0xFFFF0000`) rounds toward zero. For round to nearest, add `0x7FFF + ((u >> 16) & 1)` before you mask. The extra term breaks ties toward even.",
+    "Do the integer arithmetic in `np.uint32`. Python integers and `int64` change the overflow behavior."
+  ],
+  "runtime": "pyodide"
+}
