@@ -1,0 +1,11 @@
+{
+  "title": "Sample by integrating the ODE: Euler and midpoint",
+  "goal": "Generate samples from a trained flow by solving the ODE $\\frac{\\mathrm{d}}{\\mathrm{d}t}\\phi_t(x) = v_t(\\phi_t(x))$ with $\\phi_0(x) = x$ (Section 2, Equations 1 and 2) from $t = 0$ (noise) to $t = 1$ (data), as in Section 6.2.\n\nWrite `euler_sample(v, x0, n_steps)` and `midpoint_sample(v, x0, n_steps)`. Both use `n_steps` equal steps of size $h = 1/n$ and take `v(x, t)` with `x` of shape `(n, d)` and `t` a float. Euler does $x \\leftarrow x + h\\,v(x, t)$ with $t$ at the start of the step. The midpoint scheme does $x \\leftarrow x + h\\,v\\big(x + \\tfrac h2 v(x, t),\\ t + \\tfrac h2\\big)$, which costs two evaluations per step. Neither function changes `x0`.\n\nThe starter includes `gaussian_field` and `exact_endpoint` for a target $\\mathcal{N}(m, s^2)$, so you can measure the error of a solver without a network. The tests check the order of each scheme: halving $h$ halves the Euler error and cuts the midpoint error by at least a factor of 4.",
+  "hints": [
+    "Copy `x0` before the loop: `x = x0.copy()`. Then update `x` with `x = x + ...` rather than `x += ...` on a shared array.",
+    "The time at step `k` is `k / n_steps`, not `(k + 1) / n_steps`. Evaluating the field at the end of the step is a different, implicit scheme.",
+    "For the midpoint scheme, compute the half step `x_half = x + 0.5 * h * v(x, t)` first, then evaluate `v(x_half, t + 0.5 * h)`.",
+    "With the field $v_t = t$, one Euler step gives $0$ and one midpoint step gives $0.5$. The exact answer is $0.5$, so midpoint is exact for a field that is linear in $t$."
+  ],
+  "runtime": "pyodide"
+}
