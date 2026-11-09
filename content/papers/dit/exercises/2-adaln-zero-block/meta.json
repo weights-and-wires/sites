@@ -1,0 +1,11 @@
+{
+  "title": "adaLN-Zero block",
+  "goal": "Implement the adaLN-Zero DiT block (Section 3.2, Figure 3). A linear layer regresses six vectors from the conditioning vector $c$ (the sum of the timestep and class embeddings): $\\gamma_1, \\beta_1, \\alpha_1$ for the attention half and $\\gamma_2, \\beta_2, \\alpha_2$ for the MLP half. Each half computes $x \\leftarrow x + \\alpha \\odot F(\\mathrm{LN}(x) \\odot (1 + \\gamma) + \\beta)$.\n\nWrite `modulate(h, shift, scale)` and `dit_block(x, c, W, b, attn, mlp)`. `x` has shape `(T, d)`, `c` has shape `(d,)`, `W` has shape `(d, 6*d)`, and `b` has shape `(6*d,)`. Split `c @ W + b` into six chunks in the order `shift_attn, scale_attn, gate_attn, shift_mlp, scale_mlp, gate_mlp` (this is the order of the authors' released code; the paper doesn't fix it). `LN` has no learned affine part and uses `eps = 1e-6`. The same six vectors apply to every token.\n\nWith `W = 0` and `b = 0`, the block must return `x` exactly.",
+  "hints": [
+    "`layer_norm(x)` normalizes over the last axis. It is finished for you.",
+    "`modulate(h, shift, scale)` is `h * (1 + scale) + shift`. The `1 +` is what makes zero parameters leave the normalized value unchanged.",
+    "`np.split(c @ W + b, 6)` returns the six chunks. Each has shape `(d,)` and broadcasts over the token axis.",
+    "The gate multiplies the sub-layer output before the residual add: `x = x + gate * attn(h)`. Gating the sum `x + attn(h)` is a different function."
+  ],
+  "runtime": "pyodide"
+}
