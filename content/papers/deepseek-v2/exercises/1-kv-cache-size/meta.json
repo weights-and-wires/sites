@@ -1,0 +1,10 @@
+{
+  "title": "KV cache per token",
+  "goal": "Table 1 (Section 2.1.4) lists the KV cache per token, in elements, for each attention mechanism. Write the following functions, where `n_h` is the number of heads, `d_h` the head width, `layers` the layer count, `n_g` the GQA group count, `d_c` the latent width, and `d_hR` the decoupled key width:\n\n- `cache_mha(n_h, d_h, layers)`\n- `cache_gqa(n_g, d_h, layers)`\n- `cache_mla(d_c, d_hR, layers)`\n- `equivalent_gqa_groups(d_c, d_hR, d_h)`, the `n_g` for which GQA caches as many elements as MLA.\n\nThe tests use the DeepSeek-V2 values from Section 3.1.2.",
+  "hints": [
+    "MHA caches a key and a value for every head, so the count has a factor of 2.",
+    "MLA caches the latent $c_t^{KV}$ and the shared decoupled key $k_t^R$ (Section 2.1.3). It caches no values, so there is no factor of 2.",
+    "Set `2 * n_g * d_h` equal to `d_c + d_hR` and solve for `n_g`."
+  ],
+  "runtime": "pyodide"
+}
