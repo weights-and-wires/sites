@@ -1,0 +1,10 @@
+{
+  "title": "Compute savings of a latent",
+  "goal": "Section 3.1 defines the latent as $z \\in \\mathbb{R}^{h \\times w \\times c}$ with $f = H/h = W/w$. Compare the cost of diffusing in pixel space with the cost in latent space.\n\nWrite four functions:\n\n- `latent_shape(H, W, f, c)` returns `(h, w, c)`. Raise `ValueError` when `f` doesn't divide both `H` and `W`.\n- `compression_ratio(H, W, f, c)` returns the number of values in an `H x W x 3` RGB image divided by the number of values in the latent.\n- `position_ratio(H, W, f)` returns how many times fewer spatial positions the latent has. A convolutional layer's cost is proportional to this count.\n- `attention_ratio(H, W, f)` returns how many times fewer entries the latent's `N x N` self-attention matrix has, where `N` is the number of spatial positions.",
+  "hints": [
+    "Use integer division for `h` and `w`, and check the remainder first.",
+    "The image has 3 channels, and the latent has `c`. The value ratio is not `f * f` unless `c` happens to be 3.",
+    "The attention matrix has `N * N` entries, so its ratio is the square of the position ratio."
+  ],
+  "runtime": "pyodide"
+}

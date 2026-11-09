@@ -1,0 +1,11 @@
+{
+  "title": "Reward ensembles and query selection",
+  "goal": "The paper trains an ensemble of reward predictors and asks the human about the pairs on which the predictors disagree most (Section 2.2.3 and Section 2.2.4). It also normalizes the reward before the policy sees it (Section 2.2.1). Here the predictors are linear: member $m$ has weights `ws[m]`, and the arrays `F`, `F1`, `F2` have shape `(n, k, d)` as in the previous exercise.\n\nWrite three functions.\n\n- `normalize_rewards(r)` returns `r` shifted to zero mean and scaled to standard deviation 1 over all entries. A constant input returns zeros.\n- `ensemble_reward(ws, F)` returns an `(n, k)` array. Each member's per-step rewards `F @ w` are normalized independently, and then the members are averaged (Section 2.2.3, first bullet).\n- `select_queries(ws, F1, F2, m)` returns the indices of the `m` candidate pairs whose predicted probability $\\hat P[\\sigma^1 \\succ \\sigma^2]$ has the highest variance across ensemble members, ordered from the highest variance down (Section 2.2.4).",
+  "hints": [
+    "Normalize first and average second. If you average first, a member with large weights dominates the mean.",
+    "The variance is over members, so use `axis=0` of an array of shape `(members, n)`. Variance over pairs gives one number, not one per pair.",
+    "Compute the variance of the probabilities, not of the return differences. A pair whose members all say \"segment 1 wins\" with certainty has no disagreement, even if the raw returns differ a lot.",
+    "`np.argsort(-var)[:m]` sorts from the highest variance."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "VP-SDE marginals and Euler-Maruyama",
+  "goal": "Work with the variance-preserving SDE $\\mathrm{d}x = -\\tfrac12\\beta(t)\\,x\\,\\mathrm{d}t + \\sqrt{\\beta(t)}\\,\\mathrm{d}w$ (Section 3.4, Equation 11) with the paper's linear schedule $\\beta(t) = \\bar\\beta_{\\min} + t(\\bar\\beta_{\\max} - \\bar\\beta_{\\min})$ on $t \\in [0, 1]$ (Appendix B, Equation 32).\n\n`int_beta(t, bmin, bmax)` returns $\\int_0^t \\beta(s)\\,\\mathrm{d}s$.\n\n`vp_kernel(t, bmin, bmax)` returns `(mean_scale, variance)` of the perturbation kernel $p_{0t}(x(t) \\mid x(0)) = \\mathcal{N}(x(0)\\,m(t),\\ \\sigma^2(t))$ (Appendix B, Equation 33), so `mean_scale` is $m(t) = e^{-\\frac12 \\int_0^t \\beta}$ and `variance` is $\\sigma^2(t) = 1 - e^{-\\int_0^t \\beta}$.\n\n`euler_maruyama_vp(x0, t_end, n_steps, rng, bmin, bmax)` simulates the forward SDE from $t = 0$ to `t_end` with `n_steps` steps of size $\\Delta t = t_{\\text{end}} / n_{\\text{steps}}$. Each step is $x \\leftarrow x - \\tfrac12\\beta(t)\\,x\\,\\Delta t + \\sqrt{\\beta(t)\\,\\Delta t}\\;z$ with $z \\sim \\mathcal{N}(0, 1)$, where $t$ is the time at the start of the step. `x0` is an array of starting values; return an array of the same shape.",
+  "hints": [
+    "With $\\beta(s) = a + b s$, the integral is $a t + \\tfrac12 b t^2$. The $\\tfrac12$ on the quadratic term is easy to drop.",
+    "$m(t) = \\exp(-\\tfrac12 \\int_0^t \\beta)$ has the half inside the exponent. The variance is $1 - \\exp(-\\int_0^t \\beta)$ with no half.",
+    "The drift term is multiplied by $\\Delta t$, but the noise term is multiplied by $\\sqrt{\\Delta t}$. Use `rng.standard_normal(x.shape)` for $z$.",
+    "Use the time at the start of each step: `t = k * dt` for `k = 0, ..., n_steps - 1`."
+  ],
+  "runtime": "pyodide"
+}
