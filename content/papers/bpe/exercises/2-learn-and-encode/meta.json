@@ -1,0 +1,11 @@
+{
+  "title": "Learn merges and encode new words",
+  "goal": "Finish the BPE learner and the encoder (Section 3.2). `get_stats` and `merge_vocab` are done for you.\n\n- `learn_bpe(word_freqs, num_merges)` takes a dict that maps a plain word to its count, such as `{\"low\": 5}`. It writes each word as characters plus `</w>`, then repeats up to `num_merges` times: count the pairs, pick the most frequent one, and merge it. Return the list of merged pairs, in order. Break a tie by choosing the lexicographically smallest pair. (The paper's `max` takes the first pair it saw instead. This page needs a rule that doesn't depend on dict order.) Stop early when no pair is left.\n- `encode(word, merges)` splits a word that the learner may never have seen into characters plus `</w>`, then applies the merges in the order that you learned them. Return the list of symbols.\n\nFor the paper's toy dictionary, `encode('lower', merges)` returns `['low', 'er</w>']` (Section 3.2).",
+  "hints": [
+    "To start, build the vocabulary with `{' '.join(word) + ' </w>': freq for ...}`.",
+    "For the lexicographic tie-break, `min(pairs, key=lambda p: (-pairs[p], p))` picks the highest count first and the smallest pair second.",
+    "In `encode`, loop over the merges in the stored order. For each merge, scan the symbol list from left to right and join a neighbouring `(a, b)`. Don't sort the merges, and don't stop after the first merge that applies.",
+    "Merge order is the priority. With the merges `[('a', 'b'), ('b', 'c')]`, the word `abc` becomes `ab c`, because `ab` was learned first."
+  ],
+  "runtime": "pyodide"
+}

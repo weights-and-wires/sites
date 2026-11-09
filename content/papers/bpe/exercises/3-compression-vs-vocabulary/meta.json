@@ -1,0 +1,10 @@
+{
+  "title": "Sequence length against vocabulary size",
+  "goal": "Section 3.1 and Section 4.1 (Table 1) describe a trade-off: more merges mean a larger symbol vocabulary and a shorter sequence. Measure it.\n\n`corpus_stats(word_freqs, merges)` takes a dict that maps each word to its count and a list of merges. It returns the tuple `(n_tokens, vocab_size, ratio)`:\n\n- `n_tokens`: the total number of symbols after you encode every word occurrence. A word with count `f` contributes `f` times the length of its encoding.\n- `vocab_size`: the number of distinct characters in the corpus, plus one for `</w>`, plus the number of merges (Section 3.2: initial vocabulary plus the number of merge operations).\n- `ratio`: the number of symbols with zero merges, divided by `n_tokens`. With zero merges, a word of `k` characters has `k + 1` symbols.\n\n`encode` is done for you.",
+  "hints": [
+    "Weight by the count: `n_tokens += freq * len(encode(word, merges))`.",
+    "The zero-merge length of a word is `len(word) + 1`, because of `</w>`. Sum that times the count to get the numerator of `ratio`.",
+    "The vocabulary doesn't depend on which merges apply to the corpus. It is `len(chars) + 1 + len(merges)`."
+  ],
+  "runtime": "pyodide"
+}
