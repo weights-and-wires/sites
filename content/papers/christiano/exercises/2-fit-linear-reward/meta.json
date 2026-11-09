@@ -1,0 +1,11 @@
+{
+  "title": "Fit a reward from comparisons",
+  "goal": "Fit a linear reward $\\hat r(o, a) = w \\cdot \\phi(o, a)$ to pairwise preferences, the supervised step of Section 2.2.3. The arrays `F1` and `F2` have shape `(n, k, d)`: `n` comparisons, `k` steps per segment, and `d` features per step. The array `mu` has shape `(n,)` and holds $\\mu(1)$ for each pair. A segment's return is the sum of $\\hat r$ over its `k` steps, as in Equation 1.\n\nWrite two functions.\n\n- `loss_grad(w, F1, F2, mu)` returns the gradient with respect to `w` of the mean cross-entropy loss, as an array of shape `(d,)`.\n- `fit_reward(F1, F2, mu, lr=0.5, steps=400)` starts from `w = 0`, takes `steps` full-batch gradient descent steps with `loss_grad`, and returns `w`.\n\nThe test data comes from a hidden true reward. A good fit recovers the direction of the true weights, but the scale of a Bradley-Terry reward isn't pinned down by few labels.",
+  "hints": [
+    "Let $d_i = R_i^1 - R_i^2$ be the return difference for pair $i$. The loss for one pair is $-\\mu\\log\\sigma(d_i) - (1-\\mu)\\log\\sigma(-d_i)$, and its derivative with respect to $d_i$ is $\\sigma(d_i) - \\mu$.",
+    "The return of a segment is linear in $w$: $R = w \\cdot \\sum_t \\phi_t$. So $\\partial d_i / \\partial w = \\sum_t \\phi^1_t - \\sum_t \\phi^2_t$. Sum over the time axis (axis 1) before the dot product.",
+    "The gradient is the mean over pairs of $(\\sigma(d_i) - \\mu_i)\\,(S^1_i - S^2_i)$, where $S$ is the summed feature vector of a segment.",
+    "Check your gradient against finite differences before you test `fit_reward`."
+  ],
+  "runtime": "pyodide"
+}
