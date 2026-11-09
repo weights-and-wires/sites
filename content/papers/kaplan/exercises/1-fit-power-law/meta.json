@@ -1,0 +1,11 @@
+{
+  "title": "Fit a power law in log space",
+  "goal": "Section 3 fits every trend as $L(X) = (X_c / X)^{\\alpha_X}$ (Equations 3.1 to 3.3). Taking logs turns this into a line, $\\ln L = \\alpha \\ln X_c - \\alpha \\ln X$, so an ordinary least-squares line fit recovers both constants.\n\nWrite three functions:\n\n- `fit_power_law(x, y)` returns `(alpha, x_c)`.\n- `predict(alpha, x_c, x)` evaluates $(x_c / x)^{\\alpha}$.\n- `extrapolate(x, y, x_new)` fits the line and returns `(y_pred, sd_log)`. `sd_log` is the one-sigma uncertainty of a new measurement at `x_new`, in log units, so the interval is $y_\\text{pred}\\, e^{\\pm\\,\\text{sd\\_log}}$. With $n$ points, residual variance $s^2 = \\sum r_i^2 / (n - 2)$, and $S_{xx} = \\sum (\\ln x_i - \\overline{\\ln x})^2$, use\n\n$$\n\\text{sd\\_log}^2 = s^2\\left(1 + \\frac{1}{n} + \\frac{(\\ln x_\\text{new} - \\overline{\\ln x})^2}{S_{xx}}\\right).\n$$\n\nThe tests use synthetic losses drawn from the paper's Equation 1.1 constants.",
+  "hints": [
+    "`np.polyfit(np.log(x), np.log(y), 1)` returns `(slope, intercept)`. The slope is $-\\alpha$.",
+    "The intercept is $\\alpha \\ln x_c$, so $x_c = \\exp(\\text{intercept} / \\alpha)$. Forgetting the division by $\\alpha$ gives a scale that is off by many orders of magnitude.",
+    "Compute the residuals in log space: `ly - (slope * lx + intercept)`. Divide their sum of squares by `n - 2`, because the line used two fitted numbers.",
+    "The `1 +` inside the square root is the scatter of one new measurement. Without it you get the uncertainty of the fitted line only."
+  ],
+  "runtime": "pyodide"
+}

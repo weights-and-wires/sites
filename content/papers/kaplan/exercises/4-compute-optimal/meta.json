@@ -1,0 +1,10 @@
+{
+  "title": "The compute-efficient frontier",
+  "goal": "Section 6 turns the fitted laws into a recipe for a fixed compute budget $C_\\text{min}$ measured in PF-days. The starter holds the constants from Equation 1.3, Equation 1.4, and Appendix A. Write:\n\n- `optimal_loss(c)`, $L(C_\\text{min}) = (C_c^\\text{min} / C_\\text{min})^{\\alpha_C^\\text{min}}$ (Equation 1.3).\n- `compute_for_loss(loss)`, the inverse: the compute that reaches a target loss.\n- `optimal_model_size(c)`, $N_\\text{opt} = N_e\\, C_\\text{min}^{0.73}$ (Equation 6.1 and Table 6).\n- `optimal_tokens(c)`, $D_\\text{opt} = D_e\\, C_\\text{min}^{0.27}$ for one epoch (Table 6).\n- `critical_batch_size(loss)`, $B_\\text{crit}(L) = B_* / L^{1/\\alpha_B}$ (Equation 1.4).\n\nThe tests also check that the allocation is consistent with $C = 6NBS$: the exponents $0.73$ and $0.27$ sum to 1, so $6 N D / C_\\text{min}$ is the same at every budget.",
+  "hints": [
+    "`compute_for_loss` solves $L = (C_c / C)^{\\alpha}$ for $C$: raise both sides to the power $-1/\\alpha$, then multiply by $C_c$.",
+    "Every function except `compute_for_loss` is one line. The check that matters is whether it round-trips: `compute_for_loss(optimal_loss(c))` must return `c`.",
+    "`critical_batch_size` takes the loss, not the compute. A lower loss needs a larger batch, so the exponent on `loss` in the denominator is positive."
+  ],
+  "runtime": "pyodide"
+}
