@@ -49,3 +49,7 @@ jobs:
         run: python -m pip install -r scripts/requirements-exercises.txt --extra-index-url https://download.pytorch.org/whl/cpu
       - name: Check every exercise (starter fails, solution passes, both fast)
         run: python scripts/check_exercises.py --require-torch
+      - name: Check course lesson links (skipped without COURSES_READ_TOKEN)
+        env:
+          COURSES_READ_TOKEN: ${{ secrets.COURSES_READ_TOKEN }}
+        run: python scripts/check_course_links.py

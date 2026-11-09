@@ -63,6 +63,10 @@ without exercises, or a broken internal link.
   `scripts/check_exercises.py` runs the same harness
   (`static/runner/harness.py`) in CI: the starter must fail, and the solution
   must pass.
+- `scripts/check_course_links.py` checks that every course lesson URL still
+  exists on the course's default branch. CI runs it only when the
+  `COURSES_READ_TOKEN` secret is set; run it locally after a course renumbers
+  its lessons.
 
 ## Deploy
 
