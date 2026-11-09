@@ -1,0 +1,11 @@
+{
+  "title": "Zero-order-hold discretization",
+  "goal": "Implement Equation 4 from Section 2 for a diagonal $A$ and an input-dependent step size, in the shapes of Algorithm 2 (Section 3.2): $\\bar{A} = \\exp(\\Delta A)$ and $\\bar{B} = (\\Delta A)^{-1}(\\exp(\\Delta A) - I)\\cdot \\Delta B$.\n\nWrite `discretize(delta, A, B)`:\n\n- `delta` has shape `(L, D)`, one step size per time step and channel.\n- `A` has shape `(D, N)`. Each row holds the diagonal of one channel's $N \\times N$ matrix, so every entry is a nonzero negative number.\n- `B` has shape `(L, N)`, one input matrix per time step, shared by all channels.\n- Return `(A_bar, B_bar)`, both with shape `(L, D, N)`.\n\nBecause $A$ is diagonal, Equation 4 is an elementwise formula: $\\bar{A}_{t,d,n} = \\exp(\\Delta_{t,d} A_{d,n})$ and $\\bar{B}_{t,d,n} = \\frac{\\bar{A}_{t,d,n} - 1}{A_{d,n}} B_{t,n}$.",
+  "hints": [
+    "Broadcast with `delta[:, :, None] * A[None, :, :]`. The product has shape `(L, D, N)`.",
+    "In $(\\Delta A)^{-1}(\\exp(\\Delta A) - I)\\cdot \\Delta B$ the two factors of $\\Delta$ cancel. What remains is $(\\bar{A} - 1) / A$ times $B$.",
+    "`np.expm1(x)` computes `exp(x) - 1` without losing precision when `x` is close to 0.",
+    "`B` has no channel axis. Add one with `B[:, None, :]` so it broadcasts against `(L, D, N)`."
+  ],
+  "runtime": "pyodide"
+}

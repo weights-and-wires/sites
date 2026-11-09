@@ -1,0 +1,11 @@
+{
+  "title": "The selective SSM recurrence",
+  "goal": "Implement the time-varying recurrence of Algorithm 2 (Section 3.2) for one sequence, as two functions. At step $t$ the state update is Equation 2a with parameters that change over time, and the output is Equation 2b:\n\n$$h_t = \\bar{A}_t \\odot h_{t-1} + \\bar{B}_t \\odot x_t, \\qquad y_t = \\sum_n C_{t,n}\\, h_{t,n}.$$\n\n- `selective_step(h, x_t, delta_t, A, B_t, C_t)` runs one step and returns `(y_t, h_new)`. `h` has shape `(D, N)`, `x_t` and `delta_t` have shape `(D,)`, `A` has shape `(D, N)`, and `B_t` and `C_t` have shape `(N,)`. `y_t` has shape `(D,)`. This is the inference path: its state doesn't grow.\n- `selective_scan(x, delta, A, B, C)` starts from `h = 0` and runs every step. `x` and `delta` have shape `(L, D)`, `B` and `C` have shape `(L, N)`. It returns `y` with shape `(L, D)`.\n\nThe starter gives you `discretize` from Exercise 1, so you can focus on the recurrence.",
+  "hints": [
+    "Call `discretize(delta_t[None, :], A, B_t[None, :])` and take index 0 of each result. You get `A_bar` and `B_bar` of shape `(D, N)`.",
+    "The input $x_t$ has one value per channel. Multiply `B_bar` by `x_t[:, None]` so the same scalar feeds all $N$ state entries of that channel.",
+    "Compute the output from the new state $h_t$, not from $h_{t-1}$. Contract over the state axis $N$ (the last one): `(h_new * C_t[None, :]).sum(axis=-1)`.",
+    "`selective_scan` is a loop that calls `selective_step` and stacks the outputs. Each $C_t$ comes from row `t` of `C`."
+  ],
+  "runtime": "pyodide"
+}

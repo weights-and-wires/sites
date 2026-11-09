@@ -1,0 +1,11 @@
+{
+  "title": "State size against KV-cache size",
+  "goal": "Section 4.5 attributes Mamba's higher inference throughput to the missing KV cache. Compute the memory for yourself. Write three functions:\n\n- `kv_cache_bytes(n_layers, n_heads, head_dim, seq_len, bytes_per_elem=2)` returns the bytes of a Transformer's key and value cache after `seq_len` tokens, for one sequence. Every layer stores one key vector and one value vector of width `n_heads * head_dim` for every token.\n- `mamba_state_bytes(n_layers, d_model, expand=2, d_state=16, d_conv=4, bytes_per_elem=2)` returns the bytes of the Mamba recurrent state for one sequence. Each layer keeps the SSM state $h$ of shape `(expand * d_model, d_state)` (Section 3.3, with $D$ channels of $N$ entries each) and the last `d_conv - 1` inputs of a causal convolution of width `d_conv`, which has shape `(expand * d_model, d_conv - 1)`. The sequence length doesn't appear.\n- `crossover_length(n_layers, n_heads, head_dim, state_bytes, bytes_per_elem=2)` returns the smallest `seq_len` for which the KV cache is strictly larger than `state_bytes`.",
+  "hints": [
+    "The factor 2 in the KV cache counts the key and the value. Don't forget `bytes_per_elem`.",
+    "The Mamba state has two parts per layer: `d_inner * d_state` entries for $h$ and `d_inner * (d_conv - 1)` for the convolution buffer, where `d_inner = expand * d_model`.",
+    "The cache grows by `kv_cache_bytes(..., seq_len=1)` bytes per token. The cache is no larger than the state for `seq_len` up to `state_bytes // per_token`, so the answer is one more than that.",
+    "Use integer division, not `math.ceil` on a float quotient. When the quotient is exactly an integer, the cache and the state are equal at that length, and \"strictly larger\" needs the next token."
+  ],
+  "runtime": "pyodide"
+}
