@@ -1,0 +1,11 @@
+{
+  "title": "Newton-Schulz orthogonalization",
+  "goal": "Write `newton_schulz(G, steps=5, coeffs=(3.4445, -4.7750, 2.0315), eps=1e-7)`, which approximately replaces the matrix `G = U S V^T` with `U V^T`. Follow the `newtonschulz5` function in the blog post (\"Definition\"): divide `G` by its Frobenius norm plus `eps`, work with the wide orientation so that `A = X X^T` is the small Gram matrix, and run `steps` iterations of `X = a X + (b A + c A A) X` with `A = X X^T`.\n\nThe blog post runs this in bfloat16. Here you work in float64 so that the tests can compare against `np.linalg.svd`. Return an array with the same shape as `G`, and don't modify `G` in place.",
+  "hints": [
+    "Transpose when the matrix is tall (`G.shape[0] > G.shape[1]`), and transpose the result back at the end.",
+    "Write one step as `A = X @ X.T`, then `B = b * A + c * (A @ A)`, then `X = a * X + B @ X`. The order of the coefficients matters: `b` multiplies `A`, and `c` multiplies `A @ A`.",
+    "Normalize with `np.linalg.norm(G)`, which is the Frobenius norm for a 2D array. The singular values of `G` must all lie in $[0, 1]$ before the first step, and the Frobenius norm is at least as large as the spectral norm.",
+    "`X = G / (...)` creates a new array. `X /= ...` on an array you were handed changes the caller's data."
+  ],
+  "runtime": "pyodide"
+}
