@@ -1,0 +1,11 @@
+{
+  "title": "Pair counts and one merge",
+  "goal": "Write the two helpers of Algorithm 1 (Section 3.2). The training vocabulary is a dict that maps a word to its frequency. Each word is a string of space-separated symbols that ends in the end-of-word symbol `</w>`, for example `\"l o w e r </w>\"`.\n\n- `get_stats(vocab)` returns a dict that maps each adjacent symbol pair `(a, b)` to its total count. A word with frequency `f` adds `f` for each occurrence of the pair.\n- `merge_vocab(pair, vocab)` returns a new dict in which every occurrence of the pair, as two whole symbols, is replaced by the joined symbol. Frequencies stay attached to their words.\n\nThe pair `('b', 'c')` must not match inside the symbols `ab` and `c`, which are written `ab c`.",
+  "hints": [
+    "In `get_stats`, split each word on spaces and loop over `range(len(symbols) - 1)`. Add `freq`, not 1.",
+    "A plain `str.replace('b c', 'bc')` also changes `ab c` into `abc`, because `b c` appears inside it. The paper's listing uses a regular expression that requires whitespace or a string edge on both sides of the pair: `(?<!\\S)` before and `(?!\\S)` after.",
+    "Escape the pair text with `re.escape` before you build the pattern, because symbols such as `</w>` contain characters that mean something in a pattern.",
+    "Build a new dict. Don't change the dict that the caller passed in."
+  ],
+  "runtime": "pyodide"
+}
