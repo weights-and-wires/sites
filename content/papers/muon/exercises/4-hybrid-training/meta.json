@@ -1,0 +1,11 @@
+{
+  "title": "Train a small MLP with Muon and AdamW",
+  "goal": "A toy network has three weight matrices: an input matrix `W_in`, a hidden matrix `W_h`, and an output matrix `W_out`. Following the blog post (\"Empirical considerations\"), `W_in` and `W_out` use AdamW and only the hidden matrix `W_h` uses Muon.\n\nWrite `train(use_muon, steps=60, lr_muon=0.02, lr_adam=0.01, mu=0.95)`. Each step computes the loss and gradients with `loss_and_grads`, then updates every parameter. `W_in` and `W_out` always use `adamw_update`. `W_h` uses Muon (Algorithm 2: momentum buffer, `newton_schulz`, step of size `lr_muon`) when `use_muon` is true, and `adamw_update` when it is false.\n\nReturn a dict with `losses` (the loss before each step, a list of `steps` floats) and `deltas` (a dict that maps each parameter name to its change `new - old` after the first step only). The data and the initial weights come from `make_problem()`.\n\nThe starter includes the data, the forward and backward pass, `newton_schulz`, and `adamw_update`.",
+  "hints": [
+    "Keep one momentum buffer for `W_h`, `B = np.zeros_like(W_h)`, and update it every step: `B = mu * B + G`. Keep one state dict per AdamW parameter, such as `states = {name: {} for name in params}`.",
+    "Don't update the dict in place while you still need the old weights for `deltas`. Copy the parameters before the first step.",
+    "On the very first AdamW step the bias-corrected update is $\\hat m / \\sqrt{\\hat v} = \\mathrm{sign}(g)$, so every entry of a first AdamW step has magnitude `lr_adam`.",
+    "Compute all gradients from the weights at the start of the step, then update."
+  ],
+  "runtime": "pyodide"
+}

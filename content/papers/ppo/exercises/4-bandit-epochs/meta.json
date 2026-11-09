@@ -1,0 +1,11 @@
+{
+  "title": "Many epochs on one batch",
+  "goal": "Implement the inner loop of Algorithm 1 (Section 5) for a softmax policy over $K$ arms with no state: collect one batch, then run $K_{epochs}$ epochs of gradient ascent on $L^{CLIP}$ using that same batch. The parameters are the logits `theta`.\n\nWrite `ppo_epochs(theta_old, actions, adv, eps, lr, epochs)`. It returns the new logits and doesn't change `theta_old`. Each epoch is one full-batch gradient step: `theta = theta + lr * grad`. The probability ratio always compares the current policy with the fixed old policy from the start of the call. Passing `eps=None` uses the unclipped objective $L^{CPI}$ (Equation 6).\n\nThe starter gives you `softmax` and the finished `clip_grad_logp`, which returns $\\partial L / \\partial \\log\\pi_\\theta(a_t)$ for each sample (Exercise 1). You write the chain rule from log-probabilities to logits and the loop. For a softmax policy, $\\partial \\log\\pi_\\theta(a) / \\partial\\theta = \\mathrm{onehot}(a) - \\pi_\\theta$.",
+  "hints": [
+    "Compute `logp_old = np.log(softmax(theta_old))[actions]` once, before the loop. If you recompute it each epoch, the ratio is always 1 and clipping never triggers.",
+    "Inside the loop, `g = clip_grad_logp(np.log(pi)[actions], logp_old, adv, eps)` has shape `(N,)`. The logit gradient is `g @ (onehot - pi)`, where `onehot = np.eye(K)[actions]` has shape `(N, K)` and `pi` broadcasts over the rows.",
+    "With one epoch the ratio is exactly 1, so the step equals the vanilla policy gradient step, which is $\\mathrm{lr} \\cdot \\frac1N\\sum_t \\hat A_t(\\mathrm{onehot}(a_t) - \\pi)$.",
+    "Copy `theta_old` into a new float array before the loop."
+  ],
+  "runtime": "pyodide"
+}

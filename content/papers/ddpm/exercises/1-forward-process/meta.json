@@ -1,0 +1,10 @@
+{
+  "title": "Forward process in closed form",
+  "goal": "Implement the variance schedule and the closed-form forward process (Section 2, Equations 2 and 4).\n\n`make_schedule(T, beta_1=1e-4, beta_T=0.02)` returns `betas`, `alphas`, and `alpha_bars` as arrays of length `T`. The betas increase linearly (Section 4), $\\alpha_t = 1 - \\beta_t$, and $\\bar\\alpha_t = \\prod_{s=1}^t \\alpha_s$.\n\n`q_sample(x0, t, eps, alpha_bars)` returns $x_t = \\sqrt{\\bar\\alpha_t}\\,x_0 + \\sqrt{1-\\bar\\alpha_t}\\,\\epsilon$. The timestep `t` follows the paper and starts at 1: `t=1` reads `alpha_bars[0]`. `t` is an integer or an integer array with one entry per row of `x0`.",
+  "hints": [
+    "`np.cumprod(alphas)` computes the running product.",
+    "Array index `t - 1` holds the value for paper timestep `t`. Reading `alpha_bars[t]` is off by one, and at `t = T` it raises an error.",
+    "For a vector `t`, gather with `alpha_bars[t - 1]`, then reshape to `(-1, 1, ...)` so that it broadcasts against `x0` of shape `(batch, dim)`."
+  ],
+  "runtime": "pyodide"
+}

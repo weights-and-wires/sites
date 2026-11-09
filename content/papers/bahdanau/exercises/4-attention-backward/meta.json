@@ -1,0 +1,11 @@
+{
+  "title": "Backpropagate through the soft alignment",
+  "goal": "The paper's alignment is a soft weighting, so the loss gradient flows back through it (Section 3.1). Work out that gradient.\n\nLet $E \\in \\mathbb{R}^{T_y \\times T_x}$ hold the scores $e_{ij}$, let $\\alpha = \\operatorname{softmax}(E)$ along the source axis, and let $C = \\alpha H$ (Equations 5 and 6). You receive $G = \\partial L / \\partial C$ with shape `(Ty, 2n)`.\n\nWrite `attention_backward(alpha, H, G)`, which returns `(dE, dH)`. `dE` has shape `(Ty, Tx)` and is $\\partial L / \\partial e_{ij}$. `dH` has shape `(Tx, 2n)` and is the part of $\\partial L / \\partial H$ that flows through the context vectors.",
+  "hints": [
+    "Since $C = \\alpha H$, the gradient with respect to the weights is `dalpha = G @ H.T`, with shape `(Ty, Tx)`.",
+    "The softmax Jacobian gives, for each row, $\\partial L / \\partial e_{ij} = \\alpha_{ij}(d\\alpha_{ij} - \\sum_k \\alpha_{ik}\\, d\\alpha_{ik})$. The sum runs over the source axis, so use `keepdims=True`.",
+    "Each row of `dE` must sum to 0, because adding a constant to a row of scores changes nothing.",
+    "`dH = alpha.T @ G`."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Bidirectional annotations",
+  "goal": "Build the annotations of Section 3.2. A forward RNN reads $x_1, \\ldots, x_{T_x}$ and a backward RNN reads $x_{T_x}, \\ldots, x_1$. The annotation is $h_j = [\\overrightarrow{h}_j^\\top; \\overleftarrow{h}_j^\\top]^\\top$.\n\nThe paper uses gated units (Appendix A.2.1). Use a plain tanh cell so the code stays short: $h_t = \\tanh(W x_t + U h_{t-1})$, with $h_0 = 0$. The forward and backward RNNs have separate weights.\n\nWrite `annotations(X, Wf, Uf, Wb, Ub)`. `X` has shape `(Tx, m)`. Each `W` has shape `(n, m)` and each `U` has shape `(n, n)`. Return an array of shape `(Tx, 2n)` in which row $j$ holds the forward state at $j$ followed by the backward state at $j$.",
+  "hints": [
+    "The forward pass is a loop over `t` from `0` to `Tx - 1` that carries the previous state.",
+    "The backward pass is the same loop over `t` from `Tx - 1` down to `0`, with the backward weights.",
+    "The backward loop produces its states from the last position to the first. Store each state at index `t`, or reverse the list at the end, so that row $j$ describes position $j$.",
+    "Concatenate along the feature axis: forward first, then backward."
+  ],
+  "runtime": "pyodide"
+}

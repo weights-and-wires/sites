@@ -1,0 +1,11 @@
+{
+  "title": "Tokens per second and entropy-coded bitrate",
+  "goal": "Compute how many tokens per second EnCodec produces and what an entropy coder can save (Sections 3.1, 3.2, and 3.3).\n\n- `tokens_per_second(fs, strides, n_q)` returns tokens per second: latent steps per second, `fs / prod(strides)`, times `n_q`.\n- `bitrate_kbps(fs, strides, n_q, n_codes=1024)` returns the fixed-length bitrate in kbps.\n- `n_q_for_kbps(kbps, fs, strides, n_codes=1024)` returns the number of codebooks that gives exactly that bandwidth, and raises `ValueError` if no whole number of codebooks does.\n- `entropy_kbps(probs, fs, strides)` takes `probs`, an `(n_q, n_codes)` array in which row `q` is the probability distribution of codebook `q`. The language model of Section 3.3 predicts each codebook separately and ignores the dependence between codebooks at one step, so the ideal entropy-coded bitrate is the sum over codebooks of the entropy in bits, times the steps per second. Return it in kbps. Treat `0 * log 0` as 0.",
+  "hints": [
+    "`math.prod(strides)` gives `M`. Steps per second is `fs / M`.",
+    "A codebook with `n_codes` entries costs `log2(n_codes)` bits per step when each code has a fixed length.",
+    "`np.log2(p)` is `-inf` where `p = 0`. Select `p[p > 0]` before you take the logarithm.",
+    "Compare with a tolerance when you test whether `kbps / per_codebook` is a whole number."
+  ],
+  "runtime": "pyodide"
+}

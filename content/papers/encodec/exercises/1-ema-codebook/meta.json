@@ -1,0 +1,11 @@
+{
+  "title": "EMA codebook update with dead-code replacement",
+  "goal": "Implement one training step for a single vector-quantizer codebook as Section 3.2 describes it: nearest-entry assignment, an exponential moving average (EMA) update with decay 0.99, and replacement of unused entries with vectors sampled from the current batch. Then measure how many entries the codebook uses.\n\n- `ema_step(codebook, ema_count, ema_sum, batch, rng, decay=0.99, threshold=0.5, eps=1e-5)` returns `(codebook, ema_count, ema_sum, idx)` without changing its inputs. `idx` holds the index of the nearest entry (squared Euclidean distance) for each row of `batch`.\n  1. `counts[k]` is the number of rows assigned to entry `k`, and `sums[k]` is the sum of those rows.\n  2. `ema_count = decay * ema_count + (1 - decay) * counts`, and `ema_sum = decay * ema_sum + (1 - decay) * sums`.\n  3. Every entry becomes `ema_sum / max(ema_count, eps)`.\n  4. Every entry whose `ema_count` is below `threshold` is dead. Replace each dead entry with a row of `batch` chosen with `rng.integers(len(batch))`, set its `ema_sum` to that row, and set its `ema_count` to 1.\n- `usage(codebook, x)` returns `(n_used, perplexity)`: how many entries are the nearest entry of at least one row of `x`, and `exp(H)` where `H` is the entropy in nats of the assignment frequencies.\n\nThe paper doesn't give the dead-entry threshold or the `eps`; the values above are this page's choice. Initialize `ema_count` to ones and `ema_sum` to a copy of the codebook.",
+  "hints": [
+    "Use `np.add.at(sums, idx, batch)` to add each row into the entry it was assigned to. A plain `sums[idx] += batch` loses rows when an index repeats.",
+    "Do the replacement after the EMA update and the division, and only for entries with `ema_count < threshold`. A replaced entry must also reset its two EMA statistics, or it is replaced again on the next step.",
+    "Distance to every entry: `((x[:, None, :] - codebook[None]) ** 2).sum(-1)`, then `argmin(axis=1)`.",
+    "Perplexity: `p = counts / counts.sum()`, keep `p > 0`, then `np.exp(-(p * np.log(p)).sum())`. A codebook that uses all `K` entries equally has perplexity `K`."
+  ],
+  "runtime": "pyodide"
+}

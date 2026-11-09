@@ -1,0 +1,11 @@
+{
+  "title": "Policy, value, and entropy in one objective",
+  "goal": "When the policy and value function share parameters, Section 5 combines three terms into one objective (Equation 9):\n\n$$L_t^{CLIP+VF+S}(\\theta) = \\hat{\\mathbb{E}}_t\\big[L_t^{CLIP}(\\theta) - c_1 L_t^{VF}(\\theta) + c_2 S[\\pi_\\theta](s_t)\\big]$$\n\nwhere $L_t^{VF} = (V_\\theta(s_t) - V_t^{targ})^2$ and $S$ is the entropy of the policy.\n\nThe inputs are `probs` and `probs_old`, arrays of shape `(N, K)` with one action distribution per row, `actions` (integer array of length $N$), `adv`, `values` ($V_\\theta(s_t)$), and `returns` ($V_t^{targ}$). The starter gives you the finished `clip_term`. Write:\n\n- `entropy(probs)` returns the entropy in nats of each row, an array of length $N$.\n- `ppo_objective(probs, probs_old, actions, adv, values, returns, eps, c1, c2)` returns the scalar of Equation 9. The paper maximizes it.\n- `ppo_loss(...)` takes the same arguments and returns the value to minimize.",
+  "hints": [
+    "Entropy is $-\\sum_k p_k \\log p_k$ over the last axis. For a uniform distribution over $K$ actions it is $\\log K$.",
+    "The ratio is $\\pi_\\theta(a_t \\mid s_t) / \\pi_{\\theta_{old}}(a_t \\mid s_t)$. Pick the chosen action out of each row with `probs[np.arange(N), actions]`.",
+    "The value loss is squared, and it has a minus sign in the objective, because you maximize the objective and want the value error to shrink. The entropy has a plus sign, because you want a high entropy.",
+    "A loss that you minimize is the negative of the objective."
+  ],
+  "runtime": "pyodide"
+}
