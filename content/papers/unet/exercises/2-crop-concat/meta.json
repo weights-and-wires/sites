@@ -1,0 +1,10 @@
+{
+  "title": "Crop and concatenate a skip connection",
+  "goal": "Because the convolutions are unpadded, a feature map from the contracting path is larger than the up-convolution output it joins. The paper crops the copied map and concatenates it with the up-convolution output (Section 2, Figure 1).\n\nWrite `crop_and_concat(skip, up)`. Both arguments are arrays with shape `(channels, height, width)`. Center-crop `skip` to the height and width of `up`, then concatenate along the channel axis with the cropped skip channels first. When the size difference is odd, the extra pixel is removed from the bottom and the right, so the crop starts at `(H - h) // 2`.",
+  "hints": [
+    "`top = (skip.shape[1] - up.shape[1]) // 2` and `left = (skip.shape[2] - up.shape[2]) // 2` give the offsets of the crop.",
+    "Slice with `skip[:, top:top + h, left:left + w]`. Don't slice from 0, because a top-left crop pairs a pixel with the wrong neighbor.",
+    "`np.concatenate([...], axis=0)` stacks channels. Axis 0 is the channel axis here."
+  ],
+  "runtime": "pyodide"
+}
