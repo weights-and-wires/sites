@@ -1,0 +1,10 @@
+{
+  "title": "Where chain of thought starts to help",
+  "goal": "Section 3.2 says that chain-of-thought prompting \"does not positively impact performance for small models, and only yields performance gains when used with models of ∼100B parameters\", and calls it an emergent ability of model scale. Appendix Table 2 has the numbers. Write three functions that turn a row of the table into the claim:\n\n- `gains(standard, cot)` returns `cot - standard` for each model size, as a list. Raise `ValueError` when the lists differ in length.\n- `emergence_index(gain_list, threshold=0.0)` returns the smallest index `i` such that every gain from `i` onward is strictly above `threshold`. It returns `None` when the last gain is not above `threshold`, and for an empty list.\n- `emergence_size(sizes, standard, cot, threshold=0.0)` returns the model size at that index, or `None`.\n\nThe tests use the GSM8K columns for LaMDA, GPT, and PaLM from Table 2, and the PaLM SVAMP column, where the gain changes sign twice.",
+  "hints": [
+    "`emergence_index` is a scan for the start of the final run of gains that are above the threshold.",
+    "Remember the candidate start when you meet a gain above the threshold, and forget it when you meet one that is not.",
+    "A gain equal to the threshold is not above it."
+  ],
+  "runtime": "pyodide"
+}
