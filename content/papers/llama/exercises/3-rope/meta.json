@@ -1,0 +1,10 @@
+{
+  "title": "RoPE on queries and keys",
+  "goal": "LLaMA removes absolute position embeddings and applies rotary embeddings to the queries and keys of every layer (Section 2.2, citing Su et al., 2021). See [RoFormer](/rope/) for the derivation.\n\nWrite `apply_rope(x, positions, base=10000.0)`. `x` has shape `(n, d)` with `d` even, and `positions` has shape `(n,)`. Rotate each adjacent pair `(x[2j], x[2j+1])` of row `i` by the angle $m\\,\\theta_j$ with $m$ = `positions[i]` and $\\theta_j = \\text{base}^{-2j/d}$, counterclockwise:\n\n$$x'_{2j} = x_{2j}\\cos(m\\theta_j) - x_{2j+1}\\sin(m\\theta_j), \\qquad x'_{2j+1} = x_{2j}\\sin(m\\theta_j) + x_{2j+1}\\cos(m\\theta_j)$$\n\nThe paper for LLaMA doesn't spell out the pairing. This exercise uses the RoFormer pairing, adjacent coordinates. Some open-source ports pair coordinate `j` with `j + d/2` instead; see the Pitfalls section.",
+  "hints": [
+    "Build `theta = base ** (-2.0 * np.arange(d // 2) / d)`, then `angles = positions[:, None] * theta[None, :]` with shape `(n, d // 2)`.",
+    "Slice the pairs with `x[:, 0::2]` and `x[:, 1::2]`, and write the results back into an empty array with the same slices.",
+    "A position of 0 must leave the vector unchanged. A rotation never changes the length of a pair."
+  ],
+  "runtime": "pyodide"
+}
