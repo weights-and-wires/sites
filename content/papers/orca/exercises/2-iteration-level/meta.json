@@ -1,0 +1,11 @@
+{
+  "title": "Iteration-level scheduling",
+  "goal": "Write `continuous_batching(arrivals, lengths, max_bs)`, the scheduler loop from Section 3 (S1). Before **every** iteration, the scheduler picks up to `max_bs` requests that have arrived and still need work. It runs one iteration for them, and a request that has finished returns to the client immediately.\n\nUse the same units as exercise 1: integer arrival times, `lengths[i]` iterations per request, one time unit per iteration. Pick requests in first-come-first-served order by arrival time, ties broken by index. This gives the iteration-level FCFS property from Section 4.2.\n\nReturn `(finish, useful)` with the same meaning as in exercise 1. Idle iterations count 0 in `useful`.",
+  "hints": [
+    "Keep a `remaining` list. Each iteration, `ready` is the first `max_bs` requests in arrival order with `arrivals[i] <= t` and `remaining[i] > 0`.",
+    "Set `finish[i] = t + 1` in the same iteration in which `remaining[i]` reaches 0, not at the end of the batch.",
+    "If `ready` is empty, still append 0 to `useful` and advance `t` by one.",
+    "Re-select every iteration. A request that arrives at time `t` can run in iteration `t`."
+  ],
+  "runtime": "pyodide"
+}
