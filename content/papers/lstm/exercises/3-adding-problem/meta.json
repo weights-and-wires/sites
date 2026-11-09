@@ -1,0 +1,11 @@
+{
+  "title": "The adding problem and an idealized carousel",
+  "goal": "Section 5.4.1 defines the adding problem. Each sequence element is a pair $(x_t, m_t)$ of a value and a marker. Write two functions with the paper's definitions:\n\n- `make_adding_sequence(rng, T)` returns `(X, target)`. `rng` is a `numpy.random.Generator`. `X` has shape `(L, 2)`, where `L` is drawn uniformly from `T` to `T + T // 10` inclusive. Column 0 holds values drawn uniformly from $[-1, 1]$. Column 1 holds markers. Mark one of the first 10 pairs with `1.0`. Then mark one of the first `T // 2 - 1` pairs that is still unmarked with `1.0`. The first and last pairs have marker `-1.0` unless the first pair got marked. In the rare case that a marked pair is index 0, set its value to `0.0`. All other markers are `0.0`. `target` is $0.5 + (X_1 + X_2)/4$, where $X_1$ and $X_2$ are the two marked values.\n- `cec_adder(X)` reads `X` one pair at a time and keeps one number `s`, the internal state of a memory cell with the identity as $g$. Each step computes $s \\leftarrow s + y^{in}_t \\, x_t$, where the input gate $y^{in}_t$ is `1.0` when the marker is `1.0` and `0.0` otherwise. It returns $0.5 + s/4$.\n\nThe test checks your adder against the generator's target for every sequence. A trained LSTM has to learn gates that behave like the idealized ones.",
+  "hints": [
+    "`rng.integers(low, high)` excludes `high`, so use `T + T // 10 + 1` as the upper bound for the length.",
+    "Choose the second index from `[j for j in range(T // 2 - 1) if j != first]`, so the two marked pairs differ.",
+    "The input gate must be `1.0` only for marker `1.0`. The markers `-1.0` on the first and last pairs must not open the gate.",
+    "The state must accumulate, `s = s + gate * value`. Assigning `s = gate * value` keeps only the last marked value."
+  ],
+  "runtime": "pyodide"
+}

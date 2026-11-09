@@ -1,0 +1,11 @@
+{
+  "title": "A memory cell with input and output gates",
+  "goal": "Section 4.1 and Appendix A.1.1 define the forward pass of a memory cell. The cell has an internal state $s_{c_j}$, an input gate $y^{in_j}$, and an output gate $y^{out_j}$. The functions $f$, $g$, and $h$ (Equations A.1 to A.3) are finished for you.\n\nWrite two functions:\n\n- `memory_cell_step(z, s_prev, params)` computes, for a bank of $n$ cells with one cell per block: $y^{in} = f(W_{in} z + b_{in})$, $y^{out} = f(W_{out} z + b_{out})$, $s = s_{prev} + y^{in}\\, g(W_c z + b_c)$, and $y^c = y^{out}\\, h(s)$. It returns `(y, s)`. Here `z` joins the current input with the previous cell outputs, and `params` is a dict with `W_c`, `W_in`, `W_out` of shape `(n, d)` and `b_c`, `b_in`, `b_out` of shape `(n,)`.\n- `run_cell(xs, params)` starts from $y = 0$ and $s = 0$, builds $z_t = [x_t, y_{t-1}]$ at every step, and returns `(ys, ss)`, each of shape `(T, n)`.\n\nThe paper indexes the weights by $y_u(t-1)$. Section 5 notes that the experiments feed the current input in the same step, and this exercise follows that convention.",
+  "hints": [
+    "The state update is a sum, $s = s_{prev} + \\ldots$. Nothing multiplies `s_prev`, which is what makes the constant error carousel work.",
+    "The output uses the new state $s$, after the update. The output gate multiplies $h(s)$, not $s$.",
+    "Use `np.concatenate([x, y])` to build `z`, and carry both `y` and `s` from one step to the next.",
+    "Both gates and the cell input read the same `z`, but each has its own weights and bias."
+  ],
+  "runtime": "pyodide"
+}
