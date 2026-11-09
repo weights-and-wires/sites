@@ -1,0 +1,11 @@
+{
+  "title": "Parallel scan for a linear recurrence",
+  "goal": "Section 3.3.2 says the selective recurrence \"can still be parallelized with a work-efficient parallel scan\". Implement the idea in NumPy for the scalar recurrence $h_t = a_t h_{t-1} + b_t$ with $h_0$ taken as 0 before the first step. Here $a_t$ plays the role of $\\bar{A}_t$ and $b_t$ the role of $\\bar{B}_t x_t$.\n\nEach step is the affine map $h \\mapsto a_t h + b_t$, stored as the pair $(a_t, b_t)$. Write two functions:\n\n- `combine(left, right)` takes two pairs, where `left` happens first, and returns the pair for \"left, then right\". The operator is associative but **not** commutative.\n- `parallel_scan(a, b)` takes arrays of shape `(L, ...)` and returns every $h_t$ in $\\lceil \\log_2 L \\rceil$ rounds. Round $k$ combines each position $t \\ge 2^{k}$ with position $t - 2^{k}$, using the values from the start of the round (the Hillis-Steele scan). Each round is a vectorized NumPy operation. The loop is over rounds, not over $L$.",
+  "hints": [
+    "Applying $(a_1, b_1)$ and then $(a_2, b_2)$ gives $h \\mapsto a_2(a_1 h + b_1) + b_2$. The new pair is $(a_2 a_1, a_2 b_1 + b_2)$.",
+    "In a round with offset `d`, position `t >= d` takes `combine((a[t-d], b[t-d]), (a[t], b[t]))`. Positions below `d` are already final.",
+    "Slice, don't loop: `combine((a[:-d], b[:-d]), (a[d:], b[d:]))` handles all positions at once. Build the new arrays with `np.concatenate` so the old values stay intact during the round.",
+    "Keep doubling `d` while `d < L`. Stopping at `L // 2` leaves the last round undone."
+  ],
+  "runtime": "pyodide"
+}
