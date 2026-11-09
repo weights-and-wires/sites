@@ -1,0 +1,10 @@
+{
+  "title": "mu-law encode and decode",
+  "goal": "WaveNet compands each sample with $f(x) = \\operatorname{sign}(x)\\,\\ln(1+\\mu|x|)/\\ln(1+\\mu)$ for $-1 < x < 1$ and $\\mu = 255$, then quantizes to 256 values (Section 2.2). Write:\n\n- `mu_law_encode(x, mu=255)` takes floats in $[-1, 1]$ and returns integers in $0 \\dots \\mu$. Compute $f(x)$, then map $[-1, 1]$ to $[0, \\mu]$ and round to the nearest integer.\n- `mu_law_decode(q, mu=255)` takes integers in $0 \\dots \\mu$ and returns floats, using the exact inverse $x = \\operatorname{sign}(f)\\,((1+\\mu)^{|f|} - 1)/\\mu$.\n\nThe paper doesn't say how to index the 256 bins. This exercise uses `q = floor((f + 1) / 2 * mu + 0.5)`, the convention in common WaveNet code.",
+  "hints": [
+    "`np.log1p(a)` computes `log(1 + a)` accurately for small `a`. `np.expm1` is its inverse.",
+    "Map $f \\in [-1, 1]$ to $[0, \\mu]$ with `(f + 1) / 2 * mu`, and round with `np.floor(... + 0.5)`.",
+    "Decode first maps `q` back to `f = 2 * q / mu - 1`, and then applies the inverse of the compression. Keep `np.sign(f)` and use `np.abs(f)` inside the power."
+  ],
+  "runtime": "pyodide"
+}
