@@ -1,0 +1,11 @@
+{
+  "title": "Column-parallel then row-parallel MLP",
+  "goal": "Simulate the tensor-parallel MLP block of Section 3 on `n` GPUs in NumPy. The single-device block computes $Z = \\operatorname{GeLU}(XA)\\,B$ (Section 3, Equation 1 gives the first part). Megatron-LM splits $A$ by columns (Equation 3) and $B$ by rows, so each GPU computes $\\operatorname{GeLU}(XA_i)B_i$ with no communication, and one all-reduce sums the partial outputs.\n\nWrite three functions:\n\n- `split_columns(A, n)` returns a list of `n` equal column blocks of `A`.\n- `split_rows(B, n)` returns a list of `n` equal row blocks of `B`.\n- `tp_mlp(X, A, B, n, reduce_fn=all_reduce)` returns $Z$. It must call `reduce_fn` exactly once, with the list of per-GPU partial outputs.\n\nThe starter provides `gelu` and a finished `all_reduce(parts)` that sums a list of arrays.",
+  "hints": [
+    "`np.split(A, n, axis=1)` splits by columns and `np.split(B, n, axis=0)` splits by rows.",
+    "GPU `i` computes `gelu(X @ A_i) @ B_i`. The shape of that partial output is the full `(tokens, h)`, not a slice of it.",
+    "Apply `gelu` to each GPU's own columns before any reduction. GeLU is nonlinear, so `gelu(sum)` differs from `sum(gelu)`.",
+    "Call `reduce_fn(partials)` once, at the end, and return its result."
+  ],
+  "runtime": "pyodide"
+}
