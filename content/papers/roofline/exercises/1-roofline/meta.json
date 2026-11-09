@@ -1,0 +1,10 @@
+{
+  "title": "The roofline",
+  "goal": "Implement the model from Section 3 of the paper. Attainable performance is the smaller of the compute roof and the bandwidth roof. Units are GFLOP/s for `peak`, GB/s for `bw`, and FLOPs per byte for `intensity`.\n\n- `attainable(intensity, peak, bw)` returns $\\min(\\text{peak}, \\text{bw} \\times \\text{intensity})$. It must accept a NumPy array of intensities and return an array of the same shape.\n- `ridge_point(peak, bw)` returns the intensity where the two roofs meet.\n- `is_memory_bound(intensity, peak, bw)` returns `True` when the kernel sits on the slanted part of the roof. A kernel exactly at the ridge point is not memory-bound.\n\nThe tests use the Opteron X2 from the page: peak 17.6 GFLOP/s and 15 GB/s.",
+  "hints": [
+    "`np.minimum(a, b)` takes the element-wise minimum and broadcasts a scalar against an array. Python's `min` doesn't work on arrays.",
+    "The ridge point is where `bw * intensity == peak`. Solve for `intensity`.",
+    "Compare the bandwidth roof with the peak: the kernel is memory-bound when `bw * intensity < peak`."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,10 @@
+{
+  "title": "Intensity of matmul, softmax, and LayerNorm",
+  "goal": "The paper counts FLOPs and DRAM bytes for each kernel and divides (Sections 3, 6.3.3, and 7). Do the same for three kernels from a Transformer. Each function returns `(flops, bytes, intensity)`. `b` is the number of bytes per element.\n\nCounting rules (the same as in `scripts/kernel_intensities.py`). Count only compulsory traffic: every input is read once and every output is written once.\n\n- `matmul_intensity(m, k, n, b)`: $C = AB$ with $A$ of shape $m \\times k$ and $B$ of shape $k \\times n$. Count $2mkn$ FLOPs. Traffic is $A$, $B$, and $C$.\n- `softmax_intensity(rows, cols, b)`: 5 FLOPs per element. Traffic is one read and one write of the matrix.\n- `layernorm_intensity(rows, cols, b)`: 8 FLOPs per element. Traffic is one read and one write of the matrix, plus the scale and shift vectors $\\gamma$ and $\\beta$ (each `cols` long).",
+  "hints": [
+    "For matmul the element counts are `m*k`, `k*n`, and `m*n`. A square matmul with `b = 4` has intensity `n / 6`.",
+    "Softmax and LayerNorm do a constant amount of work per element, so their intensity doesn't grow with the matrix size.",
+    "LayerNorm moves `2*rows*cols + 2*cols` elements. For large matrices the two vectors barely matter, but the tests check the exact value."
+  ],
+  "runtime": "pyodide"
+}
