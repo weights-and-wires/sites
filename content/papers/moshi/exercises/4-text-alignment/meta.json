@@ -1,0 +1,11 @@
+{
+  "title": "Inner Monologue text alignment",
+  "goal": "Build Moshi's text stream $W$ from timed words (Section 3.4.4, Equation 5).\n\nWrite `align_text(words, T)`. `words` is a list of `(t, tokens)` pairs in time order. `t` is the 1-based step where the word starts and `tokens` is a list of strings. `T` is the number of steps. Return a list of `T` strings, with index 0 for step 1.\n\n- Start with `\"PAD\"` in every slot.\n- Put the word's tokens in consecutive slots from step `t`, and drop any token that would pass step `T`.\n- Put `\"EPAD\"` in step `t - 1`, unless that slot already holds a text token from the previous word.\n- If `t == 1`, there's no step 0. Put `\"EPAD\"` in step 1 and start the tokens at step 2.\n\nThe page's example gives `['EPAD', 'Hello', ',', 'EPAD', 'I', \"'\", 'm', 'EPAD', 'Moshi', 'PAD', 'PAD', 'PAD']`.",
+  "hints": [
+    "Convert steps to list indices: step `s` is `W[s - 1]`, so the EPAD for a word at step `t` goes to `W[t - 2]`.",
+    "Check `W[t - 2] == \"PAD\"` before you write the EPAD. If it holds a token, leave it alone.",
+    "For `t == 1`, set `W[0] = \"EPAD\"` and then act as if the word started at step 2. Don't write to `W[-1]`: Python lets you, and it lands on the last step.",
+    "Equation 5 as printed writes the tokens at `t + j` for `j` from 1, which puts a gap before the first token. Figure 4 puts the first token right after the EPAD. Follow the figure."
+  ],
+  "runtime": "pyodide"
+}

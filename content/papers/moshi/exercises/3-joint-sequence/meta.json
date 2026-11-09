@@ -1,0 +1,11 @@
+{
+  "title": "The joint sequence",
+  "goal": "Build the target of Equation 6 (Section 3.4.4) and decide which rows Moshi samples at inference.\n\nThe starter gives you `apply_delays`. Write two functions:\n\n- `joint_sequence(W, A, B, tau)` returns an integer array of shape `(K, T)` with $K = 2Q + 1$. `W` has shape `(T,)` and is the text stream. `A` and `B` have shape `(Q, T)` and are the audio codes of Moshi and of the user. Row 0 is `W`. Rows 1 to `Q` are Moshi's audio: the semantic codebook undelayed and the `Q - 1` acoustic codebooks delayed by `tau`. Rows `Q + 1` to `2Q` are the same for the user. Equation 6 doesn't delay the text or the semantic rows.\n- `sampled_rows(Q)` returns the 0-based row indices that Moshi samples at inference: its text row and its own audio rows. The user's rows are fed in from the real audio.",
+  "hints": [
+    "Delay only the acoustic codebooks. Use `apply_delays(A, [0] + [tau] * (Q - 1))`, so the semantic row gets delay 0.",
+    "`np.vstack` stacks rows. The order is text, Moshi audio, user audio.",
+    "Count Moshi's rows from Equation 6: one text row, one semantic row, and `Q - 1` acoustic rows, so `Q + 1` rows in all.",
+    "The paper's inference text lists the indices $2, \\dots, 2 + Q$, which is one too many for Equation 6. Test your answer against the row count in the page."
+  ],
+  "runtime": "pyodide"
+}
