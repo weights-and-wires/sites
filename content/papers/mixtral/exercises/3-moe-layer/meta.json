@@ -1,0 +1,10 @@
+{
+  "title": "Sparse MoE layer",
+  "goal": "Write `moe_forward(x, Wg, experts, k=2)`, the layer output $y = \\sum_i G(x)_i \\cdot E_i(x)$ from Section 2.1, computed sparsely.\n\n- `x` has shape `(T, d)`, one row per token.\n- `Wg` has shape `(d, n)`, the router matrix.\n- `experts` is a list of `n` functions. Each takes an array of shape `(m, d)` and returns an array of shape `(m, d)`.\n\nThe starter gives you `top_k_gate`, which returns the chosen experts and their weights for every token. For each expert, gather the tokens that chose it, call the expert once on only those rows, and add the weighted result into the output rows of those tokens. An expert that no token chose must not receive a call with data, and no expert may see a token that didn't choose it. The tests count the rows each expert receives.",
+  "hints": [
+    "Loop over experts, not over tokens. `rows, slot = np.where(idx == e)` gives the tokens that chose expert `e` and which of their `k` slots it holds.",
+    "`out[rows] += weights[rows, slot][:, None] * experts[e](x[rows])` accumulates the contribution. Each token appears at most once per expert, so there are no repeated rows in the fancy index.",
+    "Skip an expert when `rows` is empty."
+  ],
+  "runtime": "pyodide"
+}
