@@ -1,0 +1,10 @@
+{
+  "title": "Encoder downsampling and receptive field",
+  "goal": "Work out what the feature encoder of Section 2 and Section 4.2 does to the time axis.\n\nWrite two functions:\n\n- `conv_output_length(n, kernels, strides)` returns the number of frames after a stack of unpadded temporal convolutions. One layer maps a length `n` to `(n - k) // s + 1`, and to 0 when `n < k`.\n- `receptive_field(kernels, strides)` returns `(rf, stride)`: the number of input samples that one output frame sees, and the total stride in samples.\n\nWith the paper's kernels `(10, 3, 3, 3, 3, 2, 2)` and strides `(5, 2, 2, 2, 2, 2, 2)`, the results are a total stride of 320 samples and a receptive field of 400 samples.",
+  "hints": [
+    "Apply the one-layer formula once per block, feeding each output length into the next block. A single division by the total stride is not the same thing, because every layer loses `k - s` samples at the edge.",
+    "Track a running `jump`, the distance in input samples between two neighbouring outputs of the layer so far. It starts at 1 and gets multiplied by each stride.",
+    "Each layer adds `(k - 1) * jump` to the receptive field, using the `jump` from before that layer's stride. Start with `rf = 1`."
+  ],
+  "runtime": "pyodide"
+}

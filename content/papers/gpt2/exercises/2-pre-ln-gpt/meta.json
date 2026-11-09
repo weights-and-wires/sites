@@ -1,0 +1,11 @@
+{
+  "title": "A pre-LN decoder-only GPT",
+  "goal": "Section 2.3 lists the changes from the original Transformer: layer normalization moves to the input of each sub-block, and one more layer normalization follows the final block. A modified initialization scales the weights of residual layers by $1/\\sqrt{N}$, where $N$ is the number of residual layers.\n\nThe starter has finished `layer_norm`, `attention` (causal, multi-head), and `ffn`. A block is a dictionary `p` of weights. You write three functions:\n\n- `gpt_block(x, p, n_heads)` takes `x` of shape `(T, d)` and returns the same shape: `x = x + attention(LN1(x))`, then `x = x + ffn(LN2(x))`.\n- `gpt_forward(tokens, params, n_heads)` embeds the tokens as `wte[tokens] + wpe[:T]`, runs every block in `params[\"blocks\"]`, applies the final layer norm (`lnf_g`, `lnf_b`), and returns logits of shape `(T, V)` by multiplying with the transpose of `wte`, so the input embedding and the output projection share one matrix.\n- `residual_scale(n_blocks)` returns the factor $1/\\sqrt{N}$ for a model with `n_blocks` blocks. Each block has two residual layers, one for attention and one for the feed-forward network.",
+  "hints": [
+    "Pre-LN means the residual stream never passes through a layer norm inside a block: `x + sublayer(layer_norm(x))`. The final layer norm is the only one that touches the stream.",
+    "With every weight at zero, both sub-layers output zero, so a pre-LN block returns `x` unchanged. A post-LN block would normalize `x` instead.",
+    "Use `params[\"wte\"][tokens]` for the lookup and `h @ params[\"wte\"].T` for the logits. Positions are `params[\"wpe\"][:T]`.",
+    "`N = 2 * n_blocks`, so the factor is `1 / np.sqrt(2 * n_blocks)`."
+  ],
+  "runtime": "pyodide"
+}

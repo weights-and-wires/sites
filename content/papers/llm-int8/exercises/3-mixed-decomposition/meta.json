@@ -1,0 +1,11 @@
+{
+  "title": "Mixed-precision decomposition",
+  "goal": "Implement Equation 8 of Section 3.2. Split the inner dimension `h` into the outlier set `O` and the rest. Multiply the outlier columns of `X` and the matching rows of `W` in full precision. Multiply the other columns and rows with the vector-wise int8 routine. Add the two results.\n\nWrite `llm_int8_matmul(X, W, alpha=6.0)` with `X` of shape `(s, h)` and `W` of shape `(h, o)`. The starter gives you finished `outlier_dims` and `vectorwise_matmul`.\n\nOn the page's example, the largest error drops from 0.2027 to 0.0016.",
+  "hints": [
+    "Compute `O = outlier_dims(X, alpha)` and `regular = np.setdiff1d(np.arange(h), O)`.",
+    "`X[:, O]` pairs with `W[O, :]`. Pair columns of `X` with rows of `W` that have the same indices.",
+    "Don't pass the outlier columns to the int8 routine. They would stretch every row's scale again, and you would count them twice.",
+    "If every dimension is an outlier, `regular` is empty and the int8 routine has nothing to scale. Skip it."
+  ],
+  "runtime": "pyodide"
+}

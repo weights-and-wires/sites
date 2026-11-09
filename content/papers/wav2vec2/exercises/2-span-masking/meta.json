@@ -1,0 +1,10 @@
+{
+  "title": "Span masking",
+  "goal": "Implement the masking of Section 3.1.\n\nWrite two functions:\n\n- `sample_starts(T, p, rng)` picks `round(p * T)` distinct start indices from `range(T)`, without replacement. `rng` is a `numpy.random.Generator`. Return a sorted integer array.\n- `span_mask(T, starts, M)` returns a boolean array of length `T` that is `True` at every index covered by a span `[s, s + M)` for some start `s`. Spans may overlap, and a span that runs past the end is cut off at `T`.\n\nWith the paper's `p = 0.065` and `M = 10`, about 49% of the time steps end up masked.",
+  "hints": [
+    "`rng.choice(T, size=n, replace=False)` samples without replacement. Sort the result.",
+    "Start from `np.zeros(T, dtype=bool)` and set `mask[s : s + M] = True` for each start. NumPy slices already stop at the end of the array.",
+    "Do not mask `M` steps in total. Every start masks its own `M` steps, so overlapping spans merge and the masked fraction is below `p * M`."
+  ],
+  "runtime": "pyodide"
+}

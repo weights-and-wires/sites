@@ -1,0 +1,11 @@
+{
+  "title": "Vector-wise int8 matrix multiplication",
+  "goal": "Implement the vector-wise quantization of Section 3.1 (Equation 7). Write two functions.\n\n`quantize_rows(A)` returns `(Aq, c)`. Row `i` of `A` is multiplied by `c[i] = 127 / max(abs(A[i]))` and rounded to the nearest integer. `Aq` has dtype `int8`.\n\n`vectorwise_matmul(X, W)` returns a float approximation of `X @ W`. Give each row of `X` its own constant `c_x`, and each column of `W` its own constant `c_w`. Multiply the integer matrices in `int32`, then divide by the outer product `c_x ⊗ c_w`.\n\nThe page's tiny example gives `[[-0.3183, -0.2403], [42.0714, -19.0706]]` for the `X` and `W` in the tests.",
+  "hints": [
+    "The columns of `W` are the rows of `W.T`. Call `quantize_rows(W.T)` and transpose the codes back.",
+    "NumPy multiplies two `int8` arrays in `int8` and wraps around on overflow. Cast both to `np.int32` before the `@`.",
+    "Use `np.rint` for rounding. `astype(np.int8)` alone truncates toward zero.",
+    "The denominator is `np.outer(c_x, c_w)`, which has shape `(s, o)`, the same as the `int32` product."
+  ],
+  "runtime": "pyodide"
+}

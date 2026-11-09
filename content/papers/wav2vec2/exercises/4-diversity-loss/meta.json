@@ -1,0 +1,10 @@
+{
+  "title": "Codebook diversity loss",
+  "goal": "Implement the diversity loss $\\mathcal{L}_d$ of Section 3.2 (Equation 4).\n\nWrite `diversity_loss(logits)`. `logits` has shape `(N, G, V)`: for each of `N` time steps, `G` codebook groups with `V` entries each. Compute the softmax over the `V` axis (no Gumbel noise, no temperature), average it over the `N` steps to get $\\bar p_{g,v}$, and return\n\n$$\\mathcal{L}_d = \\frac{1}{GV} \\sum_{g=1}^{G} \\sum_{v=1}^{V} \\bar p_{g,v} \\log \\bar p_{g,v}$$\n\nIt is the negative entropy of the averaged distribution, summed over groups and divided by `G * V`. Use the natural logarithm.",
+  "hints": [
+    "A stable softmax subtracts the maximum over the last axis first.",
+    "Average the probabilities over axis 0, not the entropies. A codebook that picks one different entry at every step has a uniform average even though each step is certain.",
+    "Entries with $\\bar p = 0$ contribute 0 because $x \\log x \\to 0$. Use `np.where(p > 0, p * np.log(p), 0.0)` or add a tiny constant inside the log."
+  ],
+  "runtime": "pyodide"
+}

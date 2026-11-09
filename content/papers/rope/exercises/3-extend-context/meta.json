@@ -1,0 +1,10 @@
+{
+  "title": "Rescale the angles to extend the context",
+  "goal": "The paper doesn't propose a context-extension method, but the extension methods all change the angles $m\\theta_j$ from Equation 15. Write three functions:\n\n- `rope_angles(positions, d, base=10000.0)` returns an `(n, d // 2)` array whose entry `[t, j]` is `positions[t] * base ** (-2 * j / d)`.\n- `interpolate_positions(positions, train_len, new_len)` returns the positions rescaled by `train_len / new_len`, so the largest new position lands inside the trained range (position interpolation, Chen et al., 2023).\n- `ntk_base(base, d, s)` returns the enlarged base `base * s ** (d / (d - 2))`, where `s = new_len / train_len` (NTK-aware scaling). The result keeps the highest frequency and divides the lowest frequency by `s`.",
+  "hints": [
+    "`np.asarray(positions)[:, None] * theta[None, :]`, with `theta = base ** (-2.0 * np.arange(d // 2) / d)`.",
+    "Position interpolation shrinks positions. The factor is `train_len / new_len`, which is less than 1 when you extend the context.",
+    "For the last pair, $\\theta_{d/2-1} = \\text{base}^{-(d-2)/d}$. Raising the base by $s^{d/(d-2)}$ multiplies that by $s^{-1}$."
+  ],
+  "runtime": "pyodide"
+}

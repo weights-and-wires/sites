@@ -1,0 +1,10 @@
+{
+  "title": "Returns-to-go",
+  "goal": "The paper feeds the model the return-to-go $\\hat{R}_t = \\sum_{t'=t}^{T} r_{t'}$ and not the reward (Section 3, Equation 2). There is no discount. Write `returns_to_go(rewards)`.\n\n`rewards` is an array of shape `(T,)` or `(B, T)`, where the last axis is time. Return a float array of the same shape. Entry `[..., t]` is the sum of `rewards[..., t:]`, so the entry at `t` includes the reward at `t`.\n\nFor `[1, 0, 2, -1]` the result is `[2, 1, 1, -1]`. The input must not change.",
+  "hints": [
+    "A reversed cumulative sum does the work: reverse the time axis, take `np.cumsum`, reverse it back.",
+    "Reverse with `[..., ::-1]` so that the same code handles a batch. `x[::-1]` reverses the first axis, which is the batch axis for a 2-D input.",
+    "Check the last entry by hand: it equals the final reward alone, because nothing comes after it."
+  ],
+  "runtime": "pyodide"
+}

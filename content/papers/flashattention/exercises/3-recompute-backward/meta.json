@@ -1,0 +1,11 @@
+{
+  "title": "Recompute the attention matrix in the backward pass",
+  "goal": "FlashAttention never stores $S$ or $P$ for the backward pass. It stores $O$, $m$, and $\\ell$ and rebuilds each $B_r \\times B_c$ block of $P$ on chip (Section 3.1, Recomputation; Algorithm 4 in Appendix B.4). Write `block_backward(Qi, Kj, Vj, Oi, dOi, mi, li)`, which does lines 11-22 of Algorithm 4 for one block, with $\\tau = 1$ and no mask or dropout.\n\nThe arguments are $Q_i, O_i, dO_i \\in \\mathbb{R}^{B_r \\times d}$, $K_j, V_j \\in \\mathbb{R}^{B_c \\times d}$, and the **final** row statistics $m_i, \\ell_i \\in \\mathbb{R}^{B_r}$ from the forward pass. Return `(dQ_part, dK_part, dV_part)`, this block's additions to $dQ_i$, $dK_j$, and $dV_j$.\n\nThe starter includes the finished loops, `flash_attention_backward`, which call your function and accumulate the parts.\n\nUse $P_{ij} = \\exp(S_{ij} - m_i) / \\ell_i$, $dV_j \\mathrel{+}= P_{ij}^\\top dO_i$, $dP_{ij} = dO_i V_j^\\top$, $D_i = \\operatorname{rowsum}(dO_i \\circ O_i)$ (Appendix B.2, Equation 4), and $dS_{ij} = P_{ij} \\circ (dP_{ij} - D_i)$.",
+  "hints": [
+    "Rebuild the probabilities with the global statistics: `P = np.exp(Qi @ Kj.T - mi[:, None]) / li[:, None]`. Don't normalize by this block's own row sums. The block holds only some of each row's keys.",
+    "`D = (dOi * Oi).sum(axis=1)` has one entry per query row. Subtract it from every column of `dP` with `D[:, None]`.",
+    "`dV_part = P.T @ dOi`, `dQ_part = dS @ Kj`, and `dK_part = dS.T @ Qi`. The shapes are `(Bc, d)`, `(Br, d)`, and `(Bc, d)`.",
+    "The row sums of `dS` over all key blocks are 0, because softmax outputs sum to 1. If your total `dS` rows don't sum to 0, `D` is wrong."
+  ],
+  "runtime": "pyodide"
+}

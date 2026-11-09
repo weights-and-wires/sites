@@ -1,0 +1,11 @@
+{
+  "title": "Grouped-query attention",
+  "goal": "Implement grouped-query attention from Section 2.2. The $H$ query heads split into $G$ groups of $H/G$ heads, and each group shares one key head and one value head. GQA-$H$ is multi-head attention and GQA-1 is multi-query attention.\n\nWrite `gqa_attention(X, Wq, Wk, Wv, Wo, H, G, mask=None)`. `X` has shape `(n, d_model)`. With `d_k = Wq.shape[1] // H`, the shapes are `Wq: (d_model, H * d_k)`, `Wk` and `Wv: (d_model, G * d_k)`, and `Wo: (H * d_k, d_model)`. `G` divides `H`. Query head `i` (0-based) reads group `i // (H // G)`, so neighboring heads share. The optional boolean `mask` has shape `(n, n)`. The function returns shape `(n, d_model)`.\n\nThe starter provides finished `softmax` and `scaled_dot_product_attention` helpers that accept a leading head axis. You write the projections, the split, and the sharing.",
+  "hints": [
+    "Project `Q = X @ Wq`, `K = X @ Wk`, and `V = X @ Wv`. `K` and `V` are narrower than `Q`.",
+    "Reshape `Q` to `(n, H, d_k)` and `K`, `V` to `(n, G, d_k)`, then transpose each to put the head axis first.",
+    "Expand `K` and `V` from `G` heads to `H` heads so that head `i` gets group `i // (H // G)`. `np.repeat(K, H // G, axis=0)` gives `[g0, g0, g1, g1, ...]`. `np.tile` gives `[g0, g1, g0, g1, ...]`, which is a different grouping.",
+    "After the expansion the computation is the multi-head code from the Transformer page: attend, merge the heads, and multiply by `Wo`."
+  ],
+  "runtime": "pyodide"
+}

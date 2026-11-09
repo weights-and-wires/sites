@@ -1,0 +1,11 @@
+{
+  "title": "Build the conditional flow matching loss",
+  "goal": "Implement the optimal-transport (OT) conditional flow matching loss from Section 4.1. Write two functions.\n\n`ot_pair(x0, x1, t, sigma_min)` takes noise `x0` and data `x1`, both of shape `(n, d)`, and times `t` of shape `(n,)`. It returns `(xt, ut)`: the point on the conditional flow, $\\psi_t(x_0) = (1 - (1 - \\sigma_{\\min})\\,t)\\,x_0 + t\\,x_1$ (Equation 22), and its regression target $x_1 - (1 - \\sigma_{\\min})\\,x_0$ (Equation 23).\n\n`cfm_loss(v, x0, x1, t, sigma_min)` returns the Monte Carlo estimate of $\\mathcal{L}_{\\text{CFM}}$ (Equation 23): the mean over the batch of the squared Euclidean norm $\\lVert v_t(x_t) - u_t \\rVert^2$. Here `v(x, t)` takes `x` of shape `(n, d)` and `t` of shape `(n,)` and returns shape `(n, d)`.\n\nThe page's example: with $\\sigma_{\\min} = 0.1$, $x_0 = -1$, $x_1 = 2$, and $t = 0.5$, the point is $x_t = 0.45$ and the target is $2.9$.",
+  "hints": [
+    "`t` has shape `(n,)`. Use `t[:, None]` so it broadcasts against the `(n, d)` arrays.",
+    "The target doesn't depend on `t`. It is a constant velocity for each pair, which is why the OT path is a straight line.",
+    "Square the difference, sum over the last axis (the $d$ coordinates), then average over the batch. Averaging over every entry instead divides by $d$ and gives the wrong value.",
+    "At $t = 0$ the point is $x_0$. At $t = 1$ it is $x_1 + \\sigma_{\\min} x_0$, so the target equals the displacement over one unit of time."
+  ],
+  "runtime": "pyodide"
+}

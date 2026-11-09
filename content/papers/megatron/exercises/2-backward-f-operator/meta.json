@@ -1,0 +1,11 @@
+{
+  "title": "The f operator in the backward pass",
+  "goal": "Section 3 defines two conjugate operators (Figure 3, Code 1). The $f$ operator is the identity in the forward pass and an all-reduce in the backward pass. This exercise shows why.\n\nGPU $i$ holds $A_i$ (a column block of $A$) and $B_i$ (a row block of $B$) and computes $H_i = XA_i$, $Y_i = \\operatorname{GeLU}(H_i)$, and a partial output $Z_i = Y_i B_i$. Given $dZ = \\partial L / \\partial Z$, which every GPU receives, write `tp_mlp_backward(X, A, B, dZ, n)`. It returns `(dX, dA_blocks, dB_blocks)`: the gradient of the input, a list of `n` column blocks of $dA$, and a list of `n` row blocks of $dB$.\n\nThe starter provides `gelu`, its derivative `dgelu`, the splitters, and `all_reduce`. Use `all_reduce` for `dX` and nowhere else.",
+  "hints": [
+    "On GPU `i`: `H = X @ A_i`, `Y = gelu(H)`. Backward: `dY = dZ @ B_i.T`, then `dH = dY * dgelu(H)`.",
+    "Each GPU's weight gradients are local: `dA_i = X.T @ dH` and `dB_i = Y.T @ dZ`. They need no communication.",
+    "Each GPU's local input gradient is `dX_i = dH @ A_i.T`. It only covers the columns that GPU owns, so it is a partial sum.",
+    "Return `all_reduce([dX_0, ..., dX_{n-1}])` as `dX`. This is the $f$ operator's backward all-reduce."
+  ],
+  "runtime": "pyodide"
+}

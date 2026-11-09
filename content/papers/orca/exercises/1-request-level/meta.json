@@ -1,0 +1,11 @@
+{
+  "title": "Request-level batching",
+  "goal": "Simulate the baseline that Section 3 (challenge C1) criticizes. The engine takes up to `max_bs` queued requests, runs the batch until **every** request in it has finished, and returns all results together.\n\nWrite `static_batching(arrivals, lengths, max_bs)`. Request `i` arrives at integer time `arrivals[i]` and needs `lengths[i]` iterations. One iteration takes one time unit. Requests join batches in first-come-first-served order, ties broken by index. When the queue is empty, the engine idles until the next arrival.\n\nReturn `(finish, useful)`. `finish[i]` is the time at which request `i` returns to the client. `useful[t]` is the number of requests that still needed iteration `t` (finished requests that stay in the batch don't count, and idle iterations count 0).",
+  "hints": [
+    "A batch that starts at time `t` runs for `max(lengths[i] for i in batch)` iterations, and every request in it finishes at `t + steps`.",
+    "Fill a batch only with requests where `arrivals[i] <= t`. A request that arrives mid-batch waits for the next batch.",
+    "For iteration `s` of the batch, `useful` gets the count of requests with `lengths[i] > s`.",
+    "If the next request hasn't arrived yet, append zeros to `useful` for each idle iteration and jump `t` forward."
+  ],
+  "runtime": "pyodide"
+}

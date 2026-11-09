@@ -1,0 +1,11 @@
+{
+  "title": "Count communication volume",
+  "goal": "Count what Megatron-LM communicates, using the facts in Section 3 and Section 5.1.\n\nWrite four functions:\n\n- `allreduce_elements_per_layer(b, s, h)` returns the number of elements all-reduced in one transformer layer, forward and backward together. Each all-reduce moves a `b x s x h` tensor, and Figure 4 shows 4 of them per layer.\n- `ring_traffic_per_gpu(elements, t)` returns the number of elements each GPU sends and receives to all-reduce a tensor of `elements` elements over `t` GPUs with a ring all-reduce: $2(t-1)/t$ times the tensor size. The paper doesn't state this factor; it is the standard cost of a bandwidth-optimal ring.\n- `logits_elements(b, s, v, fused)` returns the elements communicated for the output layer. Without fusion, an all-gather moves `b*s*v` elements. With the cross-entropy fused in, only `b*s` elements move.\n- `padded_vocab(v, t)` returns the vocabulary size padded up to a multiple of `128 * t`, as in Section 5.1. The paper pads 50,257 to 51,200 for 8-way parallelism.",
+  "hints": [
+    "One layer has 2 all-reduces in the forward pass and 2 in the backward pass, so the count is `4 * b * s * h`.",
+    "For `t = 1`, nothing moves, and the formula gives 0. For large `t`, the factor approaches 2.",
+    "Use integer arithmetic for `padded_vocab`. Round up: `-(-v // m) * m` with `m = 128 * t`.",
+    "Return an `int` from the element counts so the tests can compare exact values."
+  ],
+  "runtime": "pyodide"
+}

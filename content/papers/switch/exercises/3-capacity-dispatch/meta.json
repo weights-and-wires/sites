@@ -1,0 +1,11 @@
+{
+  "title": "Expert capacity and token dropping",
+  "goal": "TPUs need static tensor shapes, so each expert processes a fixed number of tokens (Section 2.2, Equation 3):\n\n$$\\text{expert capacity} = \\frac{\\text{tokens per batch}}{\\text{number of experts}} \\times \\text{capacity factor}$$\n\nA token routed to a full expert is dropped: the layer skips it, and the residual connection carries its representation to the next layer.\n\nWrite three functions.\n\n- `expert_capacity(T, N, capacity_factor)` returns the integer capacity. The paper doesn't say how to round; use round up (`math.ceil`).\n- `keep_mask(idx, N, capacity)` returns a boolean array of shape `(T,)`. Token $t$ is kept when fewer than `capacity` earlier tokens chose the same expert. Earlier tokens get the slots first, as in the paper's `cumsum` pseudo code (Appendix F, Figure 15).\n- `switch_layer(x, idx, gate, keep, W)` returns the output `x + gate * (x @ W[idx])` for kept tokens, and `x` unchanged for dropped tokens. `W` has shape `(N, d, d)`; the expert is a single linear map, to keep the exercise small.",
+  "hints": [
+    "`math.ceil(T / N * capacity_factor)`. For `T=6`, `N=3`, and `capacity_factor=1.0`, the capacity is 2.",
+    "Capacity counts tokens per expert. A token's position in its expert's queue is the number of earlier tokens with the same `idx`, not the number of earlier tokens overall.",
+    "A simple loop over tokens with a counter per expert is enough at this size.",
+    "For dropped tokens, the layer's contribution is zero, and the output is `x`. Don't return zeros."
+  ],
+  "runtime": "pyodide"
+}

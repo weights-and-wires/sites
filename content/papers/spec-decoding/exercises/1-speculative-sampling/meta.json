@@ -1,0 +1,10 @@
+{
+  "title": "Speculative sampling of one token",
+  "goal": "Implement the single-token rule from Section 2.3. Draw $x \\sim q$. If $q(x) \\le p(x)$, keep it. Otherwise keep it with probability $p(x)/q(x)$. On rejection, draw a replacement from $p'(x) = \\operatorname{norm}(\\max(0, p(x) - q(x)))$.\n\nWrite two functions:\n\n- `residual_distribution(p, q)` returns $p'$ as a NumPy array that sums to 1.\n- `speculative_sample(p, q, rng)` returns `(token, accepted)`. `accepted` is `True` when the draft token $x$ was kept.\n\n`p` and `q` are 1-D probability arrays over the same vocabulary, and `rng` is a `numpy.random.Generator`. The tests draw thousands of samples and run a chi-square test against $p$ (Appendix A.1 proves the output follows $p$). The starter includes `chi_square_stat`.",
+  "hints": [
+    "Accept when `r <= min(1, p[x] / q[x])` for `r = rng.random()`. A token drawn from `q` always has `q[x] > 0`, so the division is safe.",
+    "The residual is `np.maximum(0.0, p - q)`, divided by its sum. That sum equals $1 - \\beta$ (Appendix A.1).",
+    "On rejection, draw the replacement from the residual, not from `p` and not from `q`. Resampling from `p` gives $\\min(p, q) + (1-\\beta)p$, which under-samples tokens where $p > q$."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "The evaluation loop",
+  "goal": "At test time Decision Transformer starts from a target return, acts, and decrements the target by each reward it gets (Section 3, Algorithm 1). It keeps only the last $K$ timesteps as context.\n\nWrite `rollout(policy, env_step, s0, target_return, K, max_steps)`:\n\n- `env_step(s, a)` returns `(next_state, reward, done)`.\n- At every step, call `policy(R_ctx, s_ctx, a_ctx, t_ctx)` with four NumPy arrays. `R_ctx` (returns-to-go), `s_ctx` (states), and `t_ctx` (timesteps) have length $n \\le K$. `a_ctx` has length $n - 1$, because the current action isn't chosen yet. The context holds the last $n$ timesteps. The first timestep is numbered 1, and the numbers keep counting up as the window slides.\n- After each step, the next return-to-go is the old one minus the reward just received: $\\hat{R}_{t+1} = \\hat{R}_t - r_t$.\n- Stop when `done` or after `max_steps` steps.\n\nReturn `(actions, total_reward)`: the list of actions taken and the sum of rewards.",
+  "hints": [
+    "Keep four growing lists: `R`, `s`, `a`, `t`. Before each policy call, take the last `n = min(K, len(R))` entries of `R`, `s`, and `t`.",
+    "The action context is the last `n - 1` actions. `a[-(n - 1):]` is wrong when `n = 1`, because `a[-0:]` returns the whole list. Use a start index of `len(a) - (n - 1)` instead.",
+    "The new return-to-go is `R[-1] - r`, not `target_return - r`.",
+    "Don't renumber timesteps when the window slides. The model has a learned embedding for each absolute step."
+  ],
+  "runtime": "pyodide"
+}
