@@ -1,0 +1,15 @@
+{{define "page"}}{{with .Extra}}
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Papers</a><span aria-hidden="true">/</span><a href="/paths/">Reading paths</a><span aria-hidden="true">/</span><span>{{.Title}}</span></nav>
+<section class="hero hero-single"><div><span class="kicker">Reading path</span><h1>{{.Title}}</h1>
+<div class="lede">{{.Intro}}</div>
+<div class="path-progress" data-path-papers="{{range $i, $p := .Papers}}{{if $i}} {{end}}{{$p.ID}}{{end}}">
+  <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-path-fill style="width:0%"></div></div>
+  <span class="meta" data-path-progress aria-live="polite">0 of {{len .Papers}} read</span>
+</div></div></section>
+<ol class="reading-list path-list">
+{{range $i, $p := .Papers}}<li data-paper-id="{{.ID}}">
+  <label class="path-check"><input type="checkbox" data-mark-done="{{.ID}}"><span class="visually-hidden">Mark {{.Title}} as read</span></label>
+  <div><span class="path-step">{{add $i 1}}</span> <a href="/{{.ID}}/">{{.Title}}</a> <span class="meta">{{.Year}} · {{trackName .Track}}{{if .Stub}} · in progress{{end}}</span><p>{{.Reason}}</p></div>
+</li>{{end}}
+</ol>
+{{end}}{{end}}

@@ -11,6 +11,12 @@
     },
     set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* private mode */ } },
   };
+  function text(tag, cls, value) {
+    const el = document.createElement(tag);
+    if (cls) el.className = cls;
+    el.textContent = value;
+    return el;
+  }
   const doneSet = () => new Set(store.get(KEY, []));
   window.PapersProgress = { doneSet, KEY };
 
@@ -54,6 +60,167 @@
   });
   paintProgress();
 
+
+  // Reading paths: checkboxes that mark a paper read, and progress counts.
+  function paintPaths() {
+    const done = doneSet();
+    document.querySelectorAll("[data-mark-done]").forEach((box) => { box.checked = done.has(box.dataset.markDone); });
+    document.querySelectorAll("[data-path-papers]").forEach((el) => {
+      const ids = el.dataset.pathPapers.split(" ").filter(Boolean);
+      const n = ids.filter((id) => done.has(id)).length;
+      const label = el.querySelector("[data-path-progress]");
+      if (label) label.textContent = n ? `${n} of ${ids.length} read` : `${ids.length} papers`;
+      const fill = el.querySelector("[data-path-fill]");
+      if (fill) fill.style.width = `${Math.round((100 * n) / ids.length)}%`;
+    });
+  }
+  document.querySelectorAll("[data-mark-done]").forEach((box) => {
+    box.addEventListener("change", () => {
+      const done = doneSet();
+      if (box.checked) done.add(box.dataset.markDone); else done.delete(box.dataset.markDone);
+      store.set(KEY, [...done]);
+      paintProgress();
+      paintPaths();
+    });
+  });
+  paintPaths();
+  window.addEventListener("storage", (e) => { if (e.key === KEY) paintPaths(); });
+
+  // The prerequisite graph: highlight ancestors and descendants on hover or
+  // focus, and filter by track and tier.
+  const svg = document.querySelector("[data-graph]");
+  if (svg) {
+    const nodes = [...svg.querySelectorAll(".graph-node")];
+    const edges = [...svg.querySelectorAll(".graph-edges path")];
+    const needs = new Map(nodes.map((n) => [n.dataset.id, n.dataset.needs.split(" ").filter(Boolean)]));
+    const next = new Map(nodes.map((n) => [n.dataset.id, []]));
+    needs.forEach((list, id) => list.forEach((r) => next.get(r).push(id)));
+    const reach = (start, adj) => {
+      const seen = new Set();
+      const stack = [...adj.get(start)];
+      while (stack.length) { const id = stack.pop(); if (!seen.has(id)) { seen.add(id); stack.push(...adj.get(id)); } }
+      return seen;
+    };
+    const clear = () => {
+      svg.classList.remove("is-focused");
+      svg.querySelectorAll(".is-anc, .is-desc, .is-self").forEach((el) => el.classList.remove("is-anc", "is-desc", "is-self"));
+    };
+    const focusNode = (node) => {
+      clear();
+      const id = node.dataset.id;
+      const anc = reach(id, needs);
+      const desc = reach(id, next);
+      svg.classList.add("is-focused");
+      node.classList.add("is-self");
+      nodes.forEach((n) => {
+        if (anc.has(n.dataset.id)) n.classList.add("is-anc");
+        if (desc.has(n.dataset.id)) n.classList.add("is-desc");
+      });
+      edges.forEach((e) => {
+        const f = e.dataset.from, t = e.dataset.to;
+        if ((anc.has(f) || f === id) && (anc.has(t) || t === id)) e.classList.add("is-anc");
+        if ((desc.has(t) || t === id) && (desc.has(f) || f === id)) e.classList.add("is-desc");
+      });
+    };
+    nodes.forEach((n) => {
+      n.addEventListener("mouseenter", () => focusNode(n));
+      n.addEventListener("focus", () => focusNode(n));
+      n.addEventListener("mouseleave", clear);
+      n.addEventListener("blur", clear);
+    });
+    const done = doneSet();
+    nodes.forEach((n) => n.classList.toggle("is-done", done.has(n.dataset.id)));
+    const form = document.querySelector("[data-graph-filters]");
+    form?.addEventListener("change", () => {
+      const tracks = new Set(new FormData(form).getAll("track"));
+      const tiers = new Set(new FormData(form).getAll("tier"));
+      const hidden = new Set();
+      nodes.forEach((n) => {
+        const off = !tracks.has(n.dataset.track) || !tiers.has(n.dataset.tier);
+        n.classList.toggle("is-filtered", off);
+        if (off) { hidden.add(n.dataset.id); n.setAttribute("tabindex", "-1"); } else { n.removeAttribute("tabindex"); }
+      });
+      edges.forEach((e) => e.classList.toggle("is-filtered", hidden.has(e.dataset.from) || hidden.has(e.dataset.to)));
+    });
+  }
+
+  // Search: press / anywhere, or click the search button.
+  const dialog = document.querySelector("[data-search]");
+  if (dialog) {
+    const input = dialog.querySelector("[data-search-input]");
+    const list = dialog.querySelector("[data-search-results]");
+    let index = null;
+    let active = 0;
+    const load = async () => {
+      if (!index) {
+        try { index = await (await fetch("/search.json")).json(); } catch { index = []; }
+      }
+      return index;
+    };
+    const score = (entry, terms) => {
+      let total = 0;
+      for (const t of terms) {
+        const title = entry.title.toLowerCase();
+        const heads = (entry.headings || []).join(" ").toLowerCase();
+        const body = entry.excerpt.toLowerCase();
+        const url = entry.url.toLowerCase();
+        let s = 0;
+        if (title.includes(t)) s += title.startsWith(t) ? 12 : 8;
+        if (url.includes(t)) s += 6;
+        if (heads.includes(t)) s += 3;
+        if (body.includes(t)) s += 1;
+        if (!s) return 0;
+        total += s;
+      }
+      return total;
+    };
+    const render = async () => {
+      const terms = input.value.toLowerCase().split(/\s+/).filter(Boolean);
+      const data = await load();
+      const hits = terms.length
+        ? data.map((e) => [score(e, terms), e]).filter(([s]) => s > 0).sort((a, b) => b[0] - a[0]).slice(0, 12).map(([, e]) => e)
+        : [];
+      active = 0;
+      list.replaceChildren(...hits.map((e, i) => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.className = "search-result";
+        a.href = e.url;
+        a.id = `search-hit-${i}`;
+        a.setAttribute("role", "option");
+        a.setAttribute("aria-selected", String(i === 0));
+        a.append(text("span", "search-result-title", e.title), text("span", "search-result-detail", e.excerpt.slice(0, 140)));
+        li.append(a);
+        return li;
+      }));
+      if (terms.length && !hits.length) list.replaceChildren(text("li", "search-result-detail empty-state", "No matches."));
+    };
+    const open = () => { if (!dialog.open) { dialog.showModal(); input.select(); load(); } };
+    document.querySelector("[data-search-open]")?.addEventListener("click", open);
+    document.addEventListener("keydown", (e) => {
+      const tag = (e.target.tagName || "").toLowerCase();
+      if (e.key === "/" && !dialog.open && !["input", "textarea"].includes(tag) && !e.target.isContentEditable) {
+        e.preventDefault();
+        open();
+      }
+    });
+    input.addEventListener("input", render);
+    input.addEventListener("keydown", (e) => {
+      const links = [...list.querySelectorAll("a")];
+      if (!links.length) return;
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        active = (active + (e.key === "ArrowDown" ? 1 : links.length - 1)) % links.length;
+        links.forEach((l, i) => l.setAttribute("aria-selected", String(i === active)));
+        links[active].scrollIntoView({ block: "nearest" });
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        location.href = links[active].href;
+      }
+    });
+    dialog.addEventListener("click", (e) => { if (e.target === dialog) dialog.close(); });
+  }
+
   // Exercises.
   const blocks = document.querySelectorAll("[data-exercise]");
   if (!blocks.length) return;
@@ -88,12 +255,6 @@
     });
   }
 
-  function text(tag, cls, value) {
-    const el = document.createElement(tag);
-    if (cls) el.className = cls;
-    el.textContent = value;
-    return el;
-  }
 
   blocks.forEach((block) => {
     const key = `papers.code.${block.dataset.exercise}`;

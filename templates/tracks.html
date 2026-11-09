@@ -1,0 +1,10 @@
+{{define "page"}}
+<section class="hero hero-single"><div><span class="kicker">Tracks</span><h1>Papers by topic</h1>
+<p class="lede">Each track lists its papers in reading order: a paper comes after the papers it builds on.</p></div></section>
+<div class="track-grid">
+{{range .Extra}}<section class="track-card" data-track="{{.ID}}" aria-labelledby="t-{{.ID}}">
+  <h2 id="t-{{.ID}}"><a href="/tracks/{{.ID}}/">{{.Name}}</a></h2>
+  <p class="meta">{{len .Papers}} papers · {{.Full}} full pages</p>
+</section>{{end}}
+</div>
+{{end}}

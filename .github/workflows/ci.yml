@@ -1,5 +1,5 @@
-# Checks every pull request: vet, unit tests, a full build with KaTeX, and an
-# internal link check.
+# Checks every pull request: vet, unit tests, a full build (KaTeX, the paper
+# graph, and concept links), an internal link check, and the paper exercises.
 name: ci
 
 on:
@@ -23,9 +23,29 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - uses: actions/cache@v4
+        with:
+          path: .cache/pyodide
+          key: pyodide-${{ hashFiles('scripts/fetch-pyodide.sh') }}
+      - name: Fetch Pyodide
+        run: sh scripts/fetch-pyodide.sh
       - run: go vet ./...
       - run: go test ./...
-      - name: Build both sites and check links
-        run: go run ./cmd/build -check
+      - name: Build both sites, check the graph, KaTeX, and links
+        run: go run ./cmd/build -check -release
       - name: Build the server binary
         run: CGO_ENABLED=0 go build -o /tmp/serve ./cmd/serve
+
+  exercises:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: scripts/requirements-exercises.txt
+      - name: Install NumPy and CPU PyTorch
+        run: python -m pip install -r scripts/requirements-exercises.txt --extra-index-url https://download.pytorch.org/whl/cpu
+      - name: Check every exercise (starter fails, solution passes, both fast)
+        run: python scripts/check_exercises.py --require-torch

@@ -218,13 +218,11 @@ func (b *builder) run() error {
 			if err := b.copyPyodide(b.release); err != nil {
 				return err
 			}
-			home := base
-			home.Title = "Papers · ifkash.dev"
-			home.Description = "Paper pages with prerequisites and in-browser exercises."
-			home.Papers = papers
-			if err := b.page(site.ID, "index.html", "papers_home.html", home); err != nil {
+			more, err := b.writeSitePages(base, papers, paths, g)
+			if err != nil {
 				return err
 			}
+			index = append(index, more...)
 			data, err := json.Marshal(index)
 			if err != nil {
 				return err
@@ -409,7 +407,14 @@ func (b *builder) copyKaTeX(site string) error {
 }
 
 var funcs = template.FuncMap{
-	"add": func(a, b int) int { return a + b },
+	"add":       func(a, b int) int { return a + b },
+	"trackName": trackName,
+	"pct": func(a, b int) int {
+		if b == 0 {
+			return 0
+		}
+		return a * 100 / b
+	},
 }
 
 func hashed(stem, ext string, data []byte) string {

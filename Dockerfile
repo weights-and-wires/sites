@@ -1,8 +1,15 @@
 # Builds papers.ifkash.dev and courses.ifkash.dev into one static Go binary.
-#   1. node: installs KaTeX for build-time math.
-#   2. go: renders the sites (calling Node for KaTeX), then compiles serve
-#      with the sites embedded.
-#   3. scratch: the binary and CA certificates only.
+#   1. node: installs KaTeX and the CodeMirror bundler (esbuild).
+#   2. pyodide: downloads the pinned Pyodide core and NumPy, checking SHA-256.
+#   3. go: renders the sites (calling Node for KaTeX and the editor bundle),
+#      then compiles serve with the sites embedded.
+#   4. scratch: the binary and CA certificates only.
+
+FROM python:3.13-alpine AS pyodide
+RUN apk add --no-cache curl
+WORKDIR /src
+COPY scripts/fetch-pyodide.sh scripts/
+RUN sh scripts/fetch-pyodide.sh
 
 FROM node:22-alpine AS node
 WORKDIR /src
@@ -16,9 +23,10 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY --from=node /src/node_modules ./node_modules
 COPY . .
+COPY --from=pyodide /src/.cache/pyodide ./.cache/pyodide
 ARG GIT_SHA=dev
 ENV CGO_ENABLED=0
-RUN go run ./cmd/build -check \
+RUN go run ./cmd/build -check -release \
  && go test ./... \
  && go build -trimpath -ldflags "-s -w -X main.version=${GIT_SHA}" -o /out/serve ./cmd/serve
 

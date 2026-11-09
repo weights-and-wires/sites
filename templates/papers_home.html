@@ -1,20 +1,30 @@
-{{define "page"}}
+{{define "page"}}{{with .Extra}}
 <section class="hero hero-single">
   <div>
     <span class="kicker">Papers · reading paths</span>
     <h1>Read the papers that <em>built</em> modern AI.</h1>
-    <p class="lede">Each page explains one paper, lists what you need to know first, and gives you small exercises that run in your browser.</p>
-    <div class="hero-meta"><span>{{len .Papers}} {{if eq (len .Papers) 1}}paper{{else}}papers{{end}}</span><span>Pages in progress</span></div>
+    <p class="lede">Each page explains one paper, lists the papers and course lessons you need first, and gives you small exercises that run in your browser.</p>
+    <div class="hero-meta"><span>{{.Total}} papers</span><span>{{.Full}} full pages</span><span>Press <kbd>/</kbd> to search</span></div>
+    <div class="hero-actions"><a class="button button-primary" href="/graph/">Open the prerequisite graph</a><a class="button" href="/paths/">Browse reading paths</a></div>
   </div>
 </section>
-<div class="callout"><span class="callout-title">In progress</span><p>This site is being built. The paper list and reading paths arrive in later updates. The page that follows shows the layout.</p></div>
-<div class="section-heading"><div><span class="kicker">Papers</span><h2>Available pages</h2></div></div>
+
+<div class="section-heading"><div><span class="kicker">Reading paths</span><h2>Start with a path</h2></div><a href="/paths/">All paths</a></div>
 <div class="module-grid">
-{{range .Papers}}<a class="module-card" href="/{{.ID}}/">
-  <div class="module-card-header"><span class="module-number">{{.Track}}</span><span class="module-icon" aria-hidden="true">{{if .Year}}{{.Year}}{{end}}</span></div>
+{{range .Paths}}<a class="module-card" href="/paths/{{.ID}}/" data-path-papers="{{range $i, $p := .Papers}}{{if $i}} {{end}}{{$p.ID}}{{end}}">
+  <div class="module-card-header"><span class="module-number">Path</span><span class="module-icon" aria-hidden="true">{{len .Papers}}</span></div>
   <h3>{{.Title}}</h3>
-  <p>{{.Summary}}</p>
-  <div class="module-card-footer"><span class="module-count">{{.Tier}}{{if .IsStub}} · in progress{{end}}</span><span class="module-arrow" aria-hidden="true">→</span></div>
+  <div class="prose-snippet">{{.Intro}}</div>
+  <div class="module-card-footer"><span class="module-count" data-path-progress>{{len .Papers}} papers</span><span class="module-arrow" aria-hidden="true">→</span></div>
 </a>{{end}}
 </div>
-{{end}}
+
+<div class="section-heading"><div><span class="kicker">Tracks</span><h2>Browse by topic</h2></div><a href="/tracks/">All tracks</a></div>
+<div class="track-grid">
+{{range .Tracks}}<section class="track-card" data-track="{{.ID}}" aria-labelledby="t-{{.ID}}">
+  <h3 id="t-{{.ID}}"><a href="/tracks/{{.ID}}/">{{.Name}}</a></h3>
+  <p class="meta">{{len .Papers}} papers · {{.Full}} full pages</p>
+  <ul>{{range .Papers}}<li data-paper-id="{{.ID}}"><a href="/{{.ID}}/">{{.Title}}</a>{{if .Stub}} <span class="meta">in progress</span>{{end}} <span class="progress-state"></span></li>{{end}}</ul>
+</section>{{end}}
+</div>
+{{end}}{{end}}

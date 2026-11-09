@@ -1,0 +1,25 @@
+{{define "page"}}{{with .Extra}}
+<section class="graph-head">
+  <div><span class="kicker">Prerequisite graph</span><h1 class="display graph-title">What each paper builds on</h1>
+  <p class="lede">Papers on the left come first. An edge runs from a prerequisite to the paper that needs it. Point at or tab to a paper to light up its full chain of prerequisites and everything that builds on it. Press Enter to open it.</p></div>
+  <form class="graph-filters" aria-label="Filter the graph" data-graph-filters>
+    <fieldset><legend class="kicker">Tracks</legend>
+    {{range .Tracks}}<label class="graph-filter" data-track="{{.ID}}"><input type="checkbox" name="track" value="{{.ID}}" checked> <span class="swatch" aria-hidden="true"></span>{{.Name}}</label>{{end}}
+    </fieldset>
+    <fieldset><legend class="kicker">Tier</legend>
+      <label class="graph-filter"><input type="checkbox" name="tier" value="core" checked> Core</label>
+      <label class="graph-filter"><input type="checkbox" name="tier" value="extended" checked> Extended</label>
+    </fieldset>
+  </form>
+</section>
+<div class="graph-scroll">
+<svg class="paper-graph" data-graph viewBox="0 0 {{.Layout.Width}} {{.Layout.Height}}" width="{{.Layout.Width}}" height="{{.Layout.Height}}" role="group" aria-label="Paper prerequisite graph">
+  <g class="graph-edges" aria-hidden="true">{{range .Layout.Edges}}<path d="{{.Path}}" data-from="{{.From}}" data-to="{{.To}}"/>{{end}}</g>
+  <g class="graph-nodes">{{range .Nodes}}<a href="/{{.ID}}/" class="graph-node{{if .Stub}} is-stub{{end}}" data-id="{{.ID}}" data-needs="{{.Needs}}" data-track="{{.Track}}" data-tier="{{.Tier}}" aria-label="{{.Title}} ({{trackName .Track}}, {{.Tier}}{{if .Stub}}, in progress{{end}})">
+    <title>{{.Title}}</title>
+    <rect x="{{.X}}" y="{{.Y}}" width="{{$.Extra.Layout.NodeW}}" height="{{$.Extra.Layout.NodeH}}" rx="5"/>
+    <text x="{{.LabelX}}" y="{{.LabelY}}">{{.ID}}</text></a>{{end}}</g>
+</svg>
+</div>
+<p class="meta graph-legend">Solid boxes are full pages; dashed boxes are pages in progress. Box colour is the track.</p>
+{{end}}{{end}}
