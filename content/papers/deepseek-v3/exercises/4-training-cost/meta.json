@@ -1,0 +1,10 @@
+{
+  "title": "Training cost from GPU hours",
+  "goal": "Table 1 and Section 1 give the training cost of DeepSeek-V3 in thousands of H800 GPU hours: 2664K for pre-training, 119K for context extension, and 5K for post-training. Pre-training takes 180K GPU hours per trillion tokens on a cluster of 2048 GPUs, and the report assumes a rental price of $2 per GPU hour. Write the following functions. Hours are in thousands of GPU hours (`k_hours`) unless a name says otherwise.\n\n- `pretrain_k_hours(k_per_trillion, tokens_trillion)` returns the pre-training hours in thousands.\n- `days_per_trillion(k_per_trillion, gpus)` returns the wall-clock days that one trillion tokens take on `gpus` GPUs.\n- `total_k_hours(stages)` returns the sum of a list of stage hours.\n- `cost_million_usd(k_hours, price)` returns the cost in millions of dollars at `price` dollars per GPU hour.\n- `stage_shares(stages)` returns each stage's fraction of the total hours, as a list.",
+  "hints": [
+    "`180K x 14.8` hours is `180 * 14.8` in thousands.",
+    "Convert thousands of hours to hours first: `k_per_trillion * 1000 / gpus / 24`.",
+    "A thousand GPU hours at $2 each cost $2,000, which is $0.002 million."
+  ],
+  "runtime": "pyodide"
+}

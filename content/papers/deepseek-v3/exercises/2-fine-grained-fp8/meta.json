@@ -1,0 +1,11 @@
+{
+  "title": "Tile-wise and block-wise FP8 scaling",
+  "goal": "One outlier in a tensor forces a single per-tensor scale to push every other value toward zero. DeepSeek-V3 limits the damage with fine-grained scaling (Section 3.3.2, Figure 7a): activations get one scale per $1 \\times N_c$ tile, which means per token per 128 channels, and weights get one scale per $N_c \\times N_c$ block. All tensors use E4M3, whose largest value is 448. The scale of a group is $448 / \\max|x|$ over the group, and the paper computes the maximum online for each tile or block.\n\nThe starter includes `quantize(x)`, which rounds to the nearest E4M3 value and saturates, and `per_tensor_roundtrip(x)`. Write the following functions. A group whose values are all zero gets the scale `1.0`.\n\n- `tile_scales(x, n_c)` takes a 2-D array `x` of shape `(R, C)` with `C` divisible by `n_c`. It returns the scales of the `1 x n_c` tiles as an array of shape `(R, C // n_c)`.\n- `tile_roundtrip(x, n_c)` scales each tile, casts it with `quantize`, divides by the same scale, and returns an array with the shape of `x`.\n- `block_roundtrip(x, n_c)` does the same with `n_c x n_c` blocks. Both `R` and `C` are divisible by `n_c`.",
+  "hints": [
+    "`x.reshape(R, C // n_c, n_c)` puts each tile on the last axis. `np.abs(g).max(axis=2, keepdims=True)` gives one maximum per tile.",
+    "A tile spans several columns of one row. Grouping several rows of one column is the paper's 128x1 backward-pass layout, not this one.",
+    "For blocks, `x.reshape(R // n_c, n_c, C // n_c, n_c)` has the block's two axes at positions 1 and 3.",
+    "Divide by the same scale you multiplied by, per group. Handle an all-zero group by replacing its maximum with 448 so the scale is 1."
+  ],
+  "runtime": "pyodide"
+}
