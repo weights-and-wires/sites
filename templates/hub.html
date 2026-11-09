@@ -1,0 +1,18 @@
+{{define "page"}}{{with .Hub}}
+<section class="hero hero-single">
+  <div>
+    <span class="kicker">Courses · ifkash.dev</span>
+    <h1>{{.Title}}</h1>
+    <p class="lede">{{.Lede}}</p>
+  </div>
+</section>
+<div class="section-heading"><div><span class="kicker">All courses</span><h2>Pick a course</h2></div></div>
+<div class="module-grid">
+{{range .Courses}}<a class="module-card" href="{{.URL}}">
+  <div class="module-card-header"><span class="module-number">{{.Stage}}</span><span class="module-icon" aria-hidden="true">{{.Order}}</span></div>
+  <h3>{{.Name}}</h3>
+  <p>{{.Blurb}}</p>
+  <div class="module-card-footer"><span class="module-count">{{if .Lessons}}{{.Lessons}} {{.Unit}}{{end}}</span><span class="module-arrow" aria-hidden="true">→</span></div>
+</a>{{end}}
+</div>
+{{end}}{{end}}
