@@ -1,0 +1,11 @@
+{
+  "title": "NAR stage inputs and AdaLN",
+  "goal": "To predict the codes of codebook $i$ (with $i \\in [2, 8]$), the NAR model embeds the target codes of codebooks $1, \\dots, i-1$ and sums them per frame (Section 4.2.2, Equations 4 and 5): $\\mathbf{e}_{c_t} = \\sum_{j=1}^{i-1} W_a^j \\odot c_{t,j}$. It embeds the enrolled prompt with all codebooks summed, $\\mathbf{e}_{\\tilde c_t} = \\sum_{j=1}^{8} \\mathbf{e}_{\\tilde c_{t,j}}$. The transformer input is the concatenation $(\\mathbf{e}_x, \\mathbf{e}_{\\tilde c}, \\mathbf{e}_{c_{:,<i}})$.\n\nWrite `nar_input(text_emb, prompt_codes, target_codes, tables, i)` with `tables` of shape `(K, V, d)` (codebook `j` is `tables[j - 1]`) and `i` counted from 1 as in the paper. It returns an array of shape `(n_text + T_prompt + T_target, d)`. Raise `ValueError` unless `2 <= i <= K`. Also write `ada_layer_norm(h, a, b)`, which returns $a \\cdot \\mathrm{LayerNorm}(h) + b$ over the last axis (Section 4.2.2), with $\\epsilon = 10^{-5}$ and no learned scale or shift inside the LayerNorm.",
+  "hints": [
+    "`tables[j][codes[:, j]]` looks up one embedding per frame for codebook `j` (0-based). Sum those over the codebooks you need.",
+    "Paper stage `i` uses 1-based codebooks $1..i-1$, which are 0-based columns `0..i-2`. The prompt always uses every column.",
+    "Concatenate along the time axis in the order text, prompt, target: `np.concatenate([...], axis=0)`.",
+    "LayerNorm subtracts the mean and divides by $\\sqrt{\\mathrm{var} + \\epsilon}$ over the last axis. Scale and shift come after that."
+  ],
+  "runtime": "pyodide"
+}

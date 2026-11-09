@@ -1,0 +1,10 @@
+{
+  "title": "Two-stage decoding: AR first codebook, NAR the rest",
+  "goal": "Inference runs in two stages (Section 4.2, Equation 3). The AR model continues the prompt's first-codebook tokens $\\tilde c_{:,1}$ one token at a time until it emits `<EOS>` (Section 4.3). Then the NAR model is called once per remaining codebook, $j = 2, \\dots, 8$, and each call sees the codes of codebooks $1, \\dots, j-1$ (Equation 2). Each NAR call fills a whole column at once.\n\nWrite `generate(ar_step, nar_step, phonemes, prompt_codes, max_len, eos, K)`. `ar_step(phonemes, tokens)` returns the next first-codebook token given the prompt tokens plus everything generated so far. `nar_step(phonemes, prompt_codes, prev_codes, j)` takes `prev_codes` of shape `(T, j - 1)` and returns an integer array of length `T` for codebook `j` (1-based). Return the generated codes as an integer array of shape `(T, K)`. The prompt tokens and the `<EOS>` token are not part of the output. Stop after `max_len` generated tokens if `<EOS>` never comes.",
+  "hints": [
+    "Keep one list `seq` that starts as `list(prompt_codes[:, 0])`, and keep a separate count of generated tokens.",
+    "Check for `eos` before you append the token. `<EOS>` is a stop signal, not a code.",
+    "Allocate `codes = np.zeros((T, K), dtype=int)`, put the AR tokens in column 0, and in a loop over `j` pass `codes[:, :j - 1]` to `nar_step`."
+  ],
+  "runtime": "pyodide"
+}

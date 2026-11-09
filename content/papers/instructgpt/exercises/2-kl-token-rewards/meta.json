@@ -1,0 +1,10 @@
+{
+  "title": "Per-token reward with a KL penalty against the SFT policy",
+  "goal": "In the RL step the environment is a bandit: the policy writes a whole response, the reward model scores it once, and the episode ends. The paper adds \"a per-token KL penalty from the SFT model at each token to mitigate over-optimization of the reward model\" (Section 3.5, Equation 2).\n\nWrite `token_rewards(logp_rl, logp_sft, rm_score, beta)`. The arrays `logp_rl` and `logp_sft` have shape `(T,)` and hold $\\log\\pi^{RL}_\\phi(y_t \\mid x, y_{<t})$ and $\\log\\pi^{SFT}(y_t \\mid x, y_{<t})$ for the $T$ sampled tokens of one response. The float `rm_score` is $r_\\theta(x, y)$. Return an array of shape `(T,)` with the reward for each token: $-\\beta(\\log\\pi^{RL} - \\log\\pi^{SFT})$ at every token, plus `rm_score` at the final token only.\n\nThe reward model's scalar is paid once, at the end. Don't change the input arrays.",
+  "hints": [
+    "The penalty uses the log of the ratio, so it is a difference of the two log-probabilities. Don't divide the probabilities and don't exponentiate.",
+    "A sampled-token log ratio can be negative. That is fine, and it makes the penalty a bonus on that token.",
+    "`rm_score` goes on `r[-1]` only. Put the penalty in a new array first (`-beta * (logp_rl - logp_sft)` creates one) so you don't write into the caller's arrays."
+  ],
+  "runtime": "pyodide"
+}
