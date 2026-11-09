@@ -1,0 +1,10 @@
+{
+  "title": "Source reversal and the minimal time lag",
+  "goal": "Section 3.3 explains why reversing the source helps. Write the two functions below.\n\n- `reverse_source(tokens)` returns the source tokens in reverse order and leaves the input list unchanged. The target is never reversed.\n- `alignment_lags(n, reverse)` returns an integer array of length `n`. The model reads the source ($n$ tokens) and then the target ($n$ tokens). Source token $j$ and target token $j$ are translations of each other. Entry `j` is the distance between their positions in the concatenated sequence `source + target`, where a distance of 1 means adjacent tokens. Set `reverse=True` to reverse the source first.\n\nYour result must show the two facts from Section 3.3: the average lag is the same either way, but the minimal lag drops.",
+  "hints": [
+    "Concatenate `reverse_source(src)` (or `src`) with the target, then compare the index of source token $j$ with the index of target token $j$.",
+    "Without reversal, source token $j$ sits at index $j$ and target token $j$ at index $n + j$, so the lag is $n$ for every pair.",
+    "With reversal, source token $j$ sits at index $n - 1 - j$. Write the lag for $j = 0$ and check that it is 1."
+  ],
+  "runtime": "pyodide"
+}
