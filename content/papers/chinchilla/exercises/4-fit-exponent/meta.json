@@ -1,0 +1,10 @@
+{
+  "title": "Estimate the scaling exponent and grow a model",
+  "goal": "Table 2 reports the exponents $a$ and $b$ in $N_{opt} \\propto C^a$ and $D_{opt} \\propto C^b$. Write two functions.\n\n`fit_exponent(c, y)` returns the exponent $p$ of the power law $y \\propto C^p$, using a least-squares line through $(\\ln C, \\ln y)$.\n\n`grow(n0, d0, k, a)` takes a model with $N_0$ parameters and $D_0$ tokens, spends $k$ times as much compute, and returns `(n1, d1)`: parameters scale by $k^a$ and tokens scale by $k^{1-a}$, so that $6 N_1 D_1 = k \\cdot 6 N_0 D_0$.",
+  "hints": [
+    "`np.polyfit(np.log(c), np.log(y), 1)[0]` is the slope. It is the exponent itself, with no sign change.",
+    "The two exponents add to 1 because compute is $6ND$. Give the tokens the leftover: `1 - a`.",
+    "A check: Kaplan's $a = 0.73$ and Hoffmann's $a = 0.5$ give very different $D_1$ for the same $k$."
+  ],
+  "runtime": "pyodide"
+}
