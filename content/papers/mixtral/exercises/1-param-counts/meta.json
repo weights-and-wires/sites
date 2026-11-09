@@ -1,0 +1,10 @@
+{
+  "title": "Active and total parameters",
+  "goal": "Mixtral keeps all 8 experts in memory but runs two per token (Section 2.1). Write `count_params(cfg)`, which returns a dict with the integer keys `total` and `active`.\n\n`cfg` has the keys of the paper's Table 1: `dim`, `n_layers`, `head_dim`, `hidden_dim`, `n_heads`, `n_kv_heads`, `vocab_size`, `num_experts`, and `top_k_experts`.\n\nCount these weights and nothing else:\n\n- Attention per layer: $W_q$ and $W_o$ map between `dim` and `n_heads * head_dim`, and $W_k$ and $W_v$ map `dim` to `n_kv_heads * head_dim`.\n- One expert is a SwiGLU block with three `dim` by `hidden_dim` matrices.\n- The router $W_g$ has shape `(dim, num_experts)`. A dense model (`num_experts == 1`) has no router.\n- Two RMSNorm gains of size `dim` per layer, and one final gain.\n- An input embedding and a separate output matrix, each `vocab_size * dim`.\n\n`total` counts every expert. `active` counts only `top_k_experts` of them. Everything else counts in both.",
+  "hints": [
+    "Group the weights into per-layer parts (attention, `num_experts` experts, router, norms) and parts that don't repeat per layer (the two embedding matrices and the final gain).",
+    "Grouped-query attention shrinks only $W_k$ and $W_v$. $W_q$ and $W_o$ keep the full `n_heads * head_dim` width.",
+    "`active` differs from `total` only in the expert term: `top_k_experts` in place of `num_experts`."
+  ],
+  "runtime": "pyodide"
+}

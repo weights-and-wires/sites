@@ -1,0 +1,11 @@
+{
+  "title": "Language consistency and rejection sampling",
+  "goal": "Two pieces of the multi-stage recipe (Section 3.2.1, Equation 7; Appendix B.3.3). First, the language-consistency reward is the share of target-language words in the chain of thought: $\\text{Reward}_{language} = \\text{Num}(\\text{Words}_{target}) / \\text{Num}(\\text{Words})$. Second, rejection sampling keeps only sampled responses that are correct and readable.\n\nThe paper doesn't say how it classifies a word, so this exercise uses a toy rule. Split the text on whitespace and ignore tokens that contain no letter (such as `15` or `+`). A remaining token is a target-language word when every letter in it is ASCII.\n\nWrite:\n\n- `language_reward(cot)` returns the share of target-language words among the counted words, and `0.0` when there are none.\n- `keep_response(text, gold, max_paragraph_words=60)` returns `True` when the response has the right format (the starter's `split_response` returns `None` otherwise), its answer is correct, `language_reward` of the thinking is exactly `1.0`, the thinking has no ``` code fence, and no paragraph of the thinking (blocks separated by a blank line) has more than `max_paragraph_words` words. These are the filters named in Appendix B.3.3: correct answers, no mixed languages, no long paragraphs, no code blocks.\n- `rejection_sample(responses, gold, k)` returns the first `k` responses that `keep_response` accepts, in their original order.",
+  "hints": [
+    "A token counts only if `any(c.isalpha() for c in token)`. A token is target-language when `all(c.isascii() for c in token if c.isalpha())`.",
+    "`language_reward(\"7 + 8\")` is `0.0`, not a division error.",
+    "Split paragraphs with `think.split(\"\\n\\n\")` and count `len(p.split())` for each.",
+    "`rejection_sample` must stop at `k`. Asking for more keepers than exist returns what it found."
+  ],
+  "runtime": "pyodide"
+}

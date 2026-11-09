@@ -1,0 +1,11 @@
+{
+  "title": "Acoustic delay and latency",
+  "goal": "Implement the delay pattern of Equation 4 (Section 3.4.2) and the latency arithmetic of Section 5.3.\n\nWrite three functions. `codes` is an integer array of shape `(Q, T)` with entries in $1, \\dots, N$. The value `0` is the initial token.\n\n- `apply_delays(codes, delays)` returns an array of the same shape in which row `q` is shifted right by `delays[q]` steps. The first `delays[q]` entries of that row are `0`, and the entries that would run past the end are dropped.\n- `undo_delays(V, delays)` takes the output of `apply_delays` and returns the aligned codes for the steps that every row has. Its shape is `(Q, T - max(delays))`.\n- `latency_ms(delays, frame_ms=80)` returns the theoretical latency in milliseconds. A delay pattern with maximum delay $d$ needs $d + 1$ frames before the last codebook of the first frame exists.\n\nThe page shows `[0, 1, 1, ...]` giving 160 ms and `[0, 1, 2, ..., 7]` giving 640 ms.",
+  "hints": [
+    "For one row, `out[q, d:] = codes[q, :T - d]` shifts right and leaves zeros in front.",
+    "`np.roll` wraps the end of the row back to the front. The front must be `0`, not the last codes.",
+    "To undo the delay, take `V[q, d : d + T']` from each row, where `T' = T - max(delays)`.",
+    "The latency counts the maximum delay plus the base frame, so all zeros gives one frame, which is 80 ms."
+  ],
+  "runtime": "pyodide"
+}

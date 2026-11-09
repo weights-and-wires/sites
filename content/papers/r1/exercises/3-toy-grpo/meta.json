@@ -1,0 +1,11 @@
+{
+  "title": "A toy GRPO loop with a verifier reward",
+  "goal": "Train a tiny policy with the group-relative update of Section 2.1 (Equations 1 and 3) and the rule-based reward of Section 2.2 (Equation 4).\n\nThe policy is a softmax over six behaviors for the question \"$a + b$\". Behavior 0 writes the tags and the right answer. Behaviors 1 to 4 write the tags and an answer that is off by $+1$, $-1$, $+10$, or $-10$. Behavior 5 skips the tags. Rule rewards are 2, 1, and 0 respectively.\n\nThe starter gives you the generator, the verifier, and the training loop. Write `grpo_step(logits, behaviors, rewards, lr)`. For one group of $G$ sampled behaviors $b_1, \\dots, b_G$ with rewards $r_i$:\n\n1. $A_i = (r_i - \\text{mean}(r)) / (\\text{std}(r) + 10^{-6})$ with the population standard deviation (Equation 3).\n2. Ascend $J = \\frac{1}{G}\\sum_i A_i \\log \\pi(b_i)$, with $\\pi = \\text{softmax}(\\text{logits})$. Its gradient with respect to the logits is $\\frac{1}{G}\\sum_i A_i\\,(e_{b_i} - \\pi)$.\n3. Return `logits + lr * gradient` as a new array.\n\nThere is no KL term and no clip, because every group is used for one update and the ratio is 1. The $10^{-6}$ is this page's guard, not the paper's.",
+  "hints": [
+    "`e_b - pi` is `-pi` with a 1 added at index `b`. Build it with `g = -p.copy(); g[b] += 1`.",
+    "`np.std` defaults to the population standard deviation (`ddof=0`), which is what Equation 3 needs here.",
+    "If every reward in the group is equal, all advantages are 0, so the logits don't move. The `1e-6` keeps the division finite.",
+    "The entries of `e_b - pi` sum to 0, so the sum of the logits never changes."
+  ],
+  "runtime": "pyodide"
+}

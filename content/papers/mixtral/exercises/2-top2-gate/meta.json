@@ -1,0 +1,10 @@
+{
+  "title": "Top-2 gate",
+  "goal": "Mixtral's gate is $G(x) = \\operatorname{Softmax}(\\operatorname{TopK}(x \\cdot W_g))$ with $K = 2$ (Section 2.1). Write `top_k_gate(logits, k=2)`.\n\n- `logits` has shape `(T, n)`: one row of router logits per token.\n- Return `idx` with shape `(T, k)`, the indices of the `k` largest logits in each row, ordered from largest to smallest, and `weights` with shape `(T, k)`, the gate values $G(x)_i$ of those experts.\n\nThe weights are the softmax of only the `k` selected logits, so each row sums to 1. Equivalently, they are the full softmax restricted to the selected experts and renormalized.",
+  "hints": [
+    "`np.argsort(-logits, axis=-1)[:, :k]` gives the indices of the largest logits. `np.take_along_axis` reads values at those indices.",
+    "Take the softmax over the `k` selected logits, along the last axis. Don't compute the softmax over all `n` experts and then keep two entries.",
+    "Subtract each row's maximum before `np.exp`, so that logits of 1000 don't overflow."
+  ],
+  "runtime": "pyodide"
+}
