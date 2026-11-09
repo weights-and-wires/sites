@@ -1,0 +1,10 @@
+{
+  "title": "Loss as a function of N and D",
+  "goal": "Equation 1.5 (Section 4.1, Equation 4.1) combines the two single-variable laws into one surface:\n\n$$\nL(N, D) = \\left[\\left(\\frac{N_c}{N}\\right)^{\\alpha_N / \\alpha_D} + \\frac{D_c}{D}\\right]^{\\alpha_D}.\n$$\n\nThe starter fixes the constants from Table 2. Write:\n\n- `loss_nd(n, d, ...)`, Equation 1.5, for scalars or NumPy arrays.\n- `loss_n_only(n, ...)`, Equation 3.1, the loss with unlimited data.\n- `overfit_penalty(n, d)`, $\\delta L = L(N, D) / L(N, \\infty) - 1$ (Equation 4.2).\n- `min_tokens(n)`, the data rule $D \\gtrsim 5 \\times 10^3\\, N^{0.74}$ (Equation 4.4).\n\nThe tests check the two limits that motivated the form of the equation (Section 4.1): $D \\to \\infty$ gives $L(N)$ and $N \\to \\infty$ gives $L(D)$.",
+  "hints": [
+    "The inner term is a sum of two pieces. The first, $(N_c/N)^{\\alpha_N/\\alpha_D}$, has the exponent ratio, and the whole bracket is raised to $\\alpha_D$, not $\\alpha_N$.",
+    "If a limit test fails, check which exponent is outside the bracket. With $D \\to \\infty$ the second term vanishes and the bracket's power must collapse to $(N_c/N)^{\\alpha_N}$.",
+    "`overfit_penalty` divides by $L(N, \\infty)$. Don't subtract: Equation 4.2 is a ratio minus one."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Block allocator and block table",
+  "goal": "Write the two pieces of vLLM's KV cache manager from Section 4.2 and Section 4.3 (Figure 6): a `BlockAllocator` for physical blocks, and a `BlockTable` that maps one sequence's logical blocks to them.\n\n`BlockAllocator(num_blocks, order=None)` keeps a free list. `allocate()` takes the block at the front of the list, sets its reference count to 1, and raises `MemoryError` when no block is free. `free(block)` lowers the reference count, and when it reaches 0 the block goes to the back of the free list. Freeing a block that isn't allocated raises `ValueError`. `incref(block)` raises the count, `ref_count(block)` reads it (0 when the block is free), and `num_free` is the length of the free list. The optional `order` sets the initial free list.\n\n`BlockTable(allocator, block_size)` holds `blocks`, the physical block IDs in logical order, and `num_tokens`. `append_token()` stores one more token and returns `(physical_block, offset)`. It allocates a new block only when the last one is full, never ahead of time. `translate(pos)` returns the same pair for the token at position `pos` and raises `IndexError` when `pos` is out of range. `wasted_slots` is the number of allocated but unfilled slots. `release()` frees every block.",
+  "hints": [
+    "A token at position `pos` lives in logical block `pos // block_size` at offset `pos % block_size`.",
+    "Allocate a block when `num_tokens % block_size == 0` before you write the token, not after. That way 8 tokens with `block_size` 4 use exactly 2 blocks.",
+    "In `free`, check the reference count after you lower it. Append the block to the free list only when the count is 0, and delete its entry so `ref_count` reads 0.",
+    "`wasted_slots` is `len(blocks) * block_size - num_tokens`. The paper says all the waste of a sequence stays inside its last block (Section 4.3)."
+  ],
+  "runtime": "pyodide"
+}

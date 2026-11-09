@@ -1,0 +1,11 @@
+{
+  "title": "Round-to-nearest on a per-row grid",
+  "goal": "Build the baseline that GPTQ is compared against: round-to-nearest (RTN) on a uniform, per-row, asymmetric min-max grid (Section 5, Setup and Baselines).\n\nWrite two functions. `make_grid(W, bits)` returns `(scale, zero, maxq)`. For each row, the grid spans the row's minimum to its maximum, extended to include 0, with `maxq = 2**bits - 1` steps: `scale = (hi - lo) / maxq` and `zero = round(-lo / scale)`. `quant(w, scale, zero, maxq)` rounds to the nearest grid point and returns the dequantized value `scale * (q - zero)`, where `q = clip(round(w / scale) + zero, 0, maxq)`. Use `np.rint` for rounding. The functions broadcast, so `quant(W, scale[:, None], zero[:, None], maxq)` quantizes a whole matrix.\n\nOn the page, the weight 0.37 on the grid `scale=0.25, zero=0` quantizes to 0.25.",
+  "hints": [
+    "`lo = np.minimum(W.min(axis=1), 0.0)` and `hi = np.maximum(W.max(axis=1), 0.0)`. Including 0 means the grid can represent an exact zero.",
+    "The zero point is an integer code, so round it: `zero = np.rint(-lo / scale)`.",
+    "The codes run from 0 to `maxq` inclusive. Clip after adding the zero point, not before.",
+    "Dequantize with `scale * (q - zero)`. The result is a float array of the same shape as the input."
+  ],
+  "runtime": "pyodide"
+}

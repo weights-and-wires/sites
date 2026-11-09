@@ -1,0 +1,10 @@
+{
+  "title": "Per-GPU memory for each ZeRO stage",
+  "goal": "Implement the memory formulas from Figure 1 and Section 5. Use $\\Psi$ for the parameter count, $K$ for the optimizer-state bytes per parameter, and $N_d$ for the number of data-parallel workers.\n\nWrite two functions:\n\n- `model_state_bytes(psi, nd, stage, K=12)` returns the bytes of model states on one GPU. `stage` is 0 for plain data parallelism, or 1, 2, 3 for $P_{os}$, $P_{os+g}$, $P_{os+g+p}$. The fp16 parameters take $2\\Psi$ bytes, the fp16 gradients take $2\\Psi$, and the optimizer state takes $K\\Psi$.\n- `max_params(mem_bytes, nd, stage, K=12)` returns the largest $\\Psi$ whose model states fit in `mem_bytes`. This reproduces the model sizes in Section 5.4.\n\nIgnore activations and buffers.",
+  "hints": [
+    "Each stage divides one more term by $N_d$, cumulatively: stage 1 divides the optimizer state, stage 2 also the gradients, and stage 3 also the parameters.",
+    "Stage 0 gives $2\\Psi + 2\\Psi + K\\Psi = 16\\Psi$ for $K = 12$. Stage 1 gives $4\\Psi + K\\Psi / N_d$.",
+    "The memory is linear in $\\Psi$, so `max_params` is `mem_bytes` divided by the bytes per parameter. Call `model_state_bytes(1.0, ...)` for that coefficient."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "GPTQ with a Cholesky factor",
+  "goal": "Implement Algorithm 1 of the paper with a single block. Quantize the columns of `W` from left to right. After quantizing column `j`, spread its error over the columns `j` to the end with the row `j` of the upper Cholesky factor `U` of the inverse Hessian (Section 4, Step 3).\n\nWrite `gptq_quantize(W, X, bits)` with `W` of shape `(d_row, d_col)` and `X` of shape `(d_col, m)`. The starter gives you `make_grid`, `quant`, and `inverse_factor`. For each column `j`:\n\n1. `Q[:, j] = quant(W[:, j], ...)`, using the grid that `make_grid` computed from the original `W`.\n2. `err = (W[:, j] - Q[:, j]) / U[j, j]`.\n3. `W[:, j:] -= outer(err, U[j, j:])`.\n\nOn the page's synthetic layer at 3 bits, the layer error of Equation 1 is 0.0052 of `||WX||^2` for GPTQ and 0.0302 for round-to-nearest.",
+  "hints": [
+    "Compute the grid and `U` once, before the loop. Don't recompute `H^-1` per column.",
+    "Quantize from the current `W`, the one that earlier columns have already updated, not from the original weights.",
+    "`np.outer(err, U[j, j:])` has shape `(d_row, d_col - j)`. It updates column `j` itself too, which turns `W[:, j]` into `Q[:, j]`.",
+    "Work on a copy of `W`, because the update writes into it."
+  ],
+  "runtime": "pyodide"
+}

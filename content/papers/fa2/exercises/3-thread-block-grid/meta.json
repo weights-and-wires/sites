@@ -1,0 +1,10 @@
+{
+  "title": "Count thread blocks and SM utilization",
+  "goal": "FlashAttention launches one thread block per (batch, head) pair. FlashAttention-2 also parallelizes over the sequence length (Section 3.2): in the forward pass each thread block takes one row block of $Q$, and in the backward pass each takes one column block of $K$ and $V$. Write the following functions:\n\n- `forward_grid(batch, heads, N, Br, parallel_seq)` returns the number of thread blocks. With `parallel_seq=False` that is `batch * heads`. With `True` it is multiplied by $T_r = \\lceil N / B_r \\rceil$.\n- `backward_grid(batch, heads, N, Bc)` returns `batch * heads * ceil(N / Bc)`.\n- `waves(blocks, sms=108)` returns the number of rounds when each streaming multiprocessor (SM) holds one block at a time. The A100 has 108 SMs (Section 2.1).\n- `sm_utilization(blocks, sms=108)` returns the fraction of SM-time that holds a block across all waves, which is `blocks / (waves * sms)`.\n\nThis is a simplification. A real SM can hold several blocks at once, and the paper uses 80 or more blocks as a rule of thumb for an efficient schedule (Section 3.2).",
+  "hints": [
+    "The only difference between the two forward grids is a factor of `math.ceil(N / Br)`.",
+    "`waves` is `math.ceil(blocks / sms)`.",
+    "Utilization is at most 1. With 109 blocks the second wave holds 1 block on 108 SMs, so the value is `109 / 216`."
+  ],
+  "runtime": "pyodide"
+}

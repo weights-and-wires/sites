@@ -1,0 +1,11 @@
+{
+  "title": "Temperature fallback for long-form decoding",
+  "goal": "For long audio, Whisper decodes each 30 s window with beam search. It starts at temperature 0 and raises the temperature by 0.2, up to 1.0, when the average log probability of the generated tokens is lower than $-1$ or the text has a gzip compression rate higher than 2.4 (Section 4.5). The released code measures the ratio with `zlib` on the UTF-8 bytes.\n\nWrite four functions:\n\n- `compression_ratio(text)` returns `len(bytes) / len(zlib.compress(bytes))` for the UTF-8 bytes of `text`.\n- `needs_fallback(text, avg_logprob, ratio_threshold=2.4, logprob_threshold=-1.0)` returns `True` when either test fails. A value exactly at a threshold passes.\n- `temperature_schedule(start=0.0, step=0.2, stop=1.0)` returns the list `[0.0, 0.2, 0.4, 0.6, 0.8, 1.0]` with clean floats.\n- `decode_with_fallback(decode, temperatures)` calls `decode(t)`, which returns `(text, avg_logprob)`, for each temperature in order and returns `(text, avg_logprob, t)` for the first result that doesn't need a fallback. When every temperature fails, return the last result.",
+  "hints": [
+    "Compute the byte length from `text.encode(\"utf-8\")`. For Korean text, `len(text)` and the byte length differ a lot.",
+    "Use strict comparisons: fall back when `ratio > ratio_threshold` or `avg_logprob < logprob_threshold`.",
+    "Build the schedule from an integer count, `round(start + i * step, 10)`. Repeated `+ 0.2` and `np.arange` both misbehave near the stop value.",
+    "Keep the last result in a variable, so the loop can return it when no temperature passes."
+  ],
+  "runtime": "pyodide"
+}

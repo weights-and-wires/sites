@@ -1,0 +1,11 @@
+{
+  "title": "Packing documents into sequences",
+  "goal": "Appendix B says GPT-3 trains on sequences of the full $n_{\\text{ctx}} = 2048$ tokens, \"packing multiple documents into a single sequence\", with an end-of-text token between documents and no special attention mask. Write three functions on integer token lists:\n\n- `pack_documents(docs, n_ctx, eot)` appends `eot` after every document, joins them into one stream, cuts the stream into consecutive pieces of `n_ctx` tokens, and drops a final piece that is shorter than `n_ctx`. It returns an integer array of shape `(n_sequences, n_ctx)`. The paper doesn't describe the boundary cases, so these are this exercise's choices.\n- `document_ids(seq, eot)` returns an integer array that labels each position with the index of its document within the sequence. An `eot` token belongs to the document it ends, so the label changes on the position after it.\n- `cross_document_pairs(seq, eot)` counts the pairs $(i, j)$ with $j \\le i$ where the query position $i$ and the key position $j$ lie in different documents. A causal mask with no document mask lets the model attend to all of them.",
+  "hints": [
+    "Build one flat list first: for each document, extend it with the document tokens, then `eot`. Slice that list at a multiple of `n_ctx`.",
+    "`np.cumsum(seq == eot)` counts end-of-text tokens up to and including each position. Shift it right by one to count only the earlier ones.",
+    "For each query $i$, the keys $j \\le i$ in a different document are those with `ids[j] != ids[i]`.",
+    "Return `np.zeros((0, n_ctx), dtype=int)` when no full sequence fits."
+  ],
+  "runtime": "pyodide"
+}

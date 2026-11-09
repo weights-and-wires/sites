@@ -1,0 +1,10 @@
+{
+  "title": "Timestamp tokens",
+  "goal": "In timestamp mode, the decoder predicts time as tokens. Times are relative to the 30 s window and quantized to 20 ms, the native resolution of the encoder (Section 2.3). The start time comes before each caption's text, and the end time comes after it. The sequence ends with `<|endoftranscript|>`.\n\nWrite two functions:\n\n- `timestamp_token(seconds)` rounds `seconds` to the nearest multiple of 0.02 and returns a string such as `<|2.40|>`, with exactly two decimals.\n- `build_target(segments, timestamps)` takes `segments`, a list of `(start, end, tokens)`, and returns the target tokens. When `timestamps` is `True`, wrap each segment's text tokens in its start and end tokens. When it is `False`, return only the text tokens. Always end with `<|endoftranscript|>`.",
+  "hints": [
+    "Work in whole steps of 20 ms: `k = round(seconds / 0.02)`, then format `k * 0.02` with `:.2f`.",
+    "Don't truncate with `int`. A time of 0.039 s is 1.95 steps and belongs to step 2, which is `<|0.04|>`.",
+    "Spread the text tokens into the output with `+`, and don't mutate the input lists."
+  ],
+  "runtime": "pyodide"
+}

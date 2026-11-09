@@ -1,0 +1,10 @@
+{
+  "title": "Measure how straight a flow is",
+  "goal": "The paper calls a flow straight when every path is a line at constant speed, $Z_t = t Z_1 + (1 - t) Z_0$, and measures how far a process is from that with (Section 2.2, Equation 3):\n\n$$S(Z) = \\int_0^1 \\mathbb{E}\\Big[\\big\\lVert (Z_1 - Z_0) - \\dot Z_t \\big\\rVert^2\\Big]\\,\\mathrm{d}t$$\n\n$S(Z) = 0$ means exactly straight. The measure compares the velocity $\\dot Z_t$ at every moment with the chord $Z_1 - Z_0$, so it penalizes a path that bends and also one that moves along its chord at a changing speed.\n\nWrite `straightness(path)`. The input has shape `(T + 1, n, d)`: `n` trajectories of dimension `d`, sampled at the times $t_k = k/T$. Approximate $\\dot Z_t$ on step $k$ by the finite difference $(Z_{k+1} - Z_k)/h$ with $h = 1/T$, and approximate the integral by $h \\sum_k$. Average over the `n` trajectories, and sum the squared norm over the `d` coordinates. Return a float.",
+  "hints": [
+    "The chord is `path[-1] - path[0]`, shape `(n, d)`. The per-step velocity is `(path[1:] - path[:-1]) / h`, shape `(T, n, d)`. Broadcast the chord over the time axis with `chord[None]`.",
+    "Square the norm: sum `diff ** 2` over the last axis. Then average over the trajectory axis (axis 1) and multiply the sum over steps by `h`.",
+    "Check yourself on $Z_t = t^2 \\Delta$. The velocity is $2t\\Delta$, so $S = \\lVert\\Delta\\rVert^2 \\int_0^1 (1 - 2t)^2\\,\\mathrm{d}t = \\lVert\\Delta\\rVert^2 / 3$. The path is a straight line, but $S > 0$ because the speed isn't constant."
+  ],
+  "runtime": "pyodide"
+}

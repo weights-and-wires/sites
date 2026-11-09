@@ -1,0 +1,11 @@
+{
+  "title": "Count Gflops",
+  "goal": "The paper measures model complexity in forward-pass Gflops, not parameters (Section 2, \"Architecture complexity\", and Section 5). Write `dit_gflops(N, d, p, I=32, C=4)`, which returns the forward-pass cost in Gflops (one multiply-add counts as one flop, and `1 Gflop = 1e9`) of a DiT-style model with `N` blocks and hidden size `d` on an `I x I x C` latent with patch size `p`.\n\nCount these parts, with `T = (I/p)^2` tokens:\n\n- Patchify: a linear map from `p*p*C` to `d` for every token.\n- Each block: the four attention projections, the `QK^T` and `AV` products, the MLP (`d -> 4d -> d`), and the adaLN-Zero layer `Linear(d, 6d)` applied to one conditioning vector.\n- Final layer: an adaLN layer `Linear(d, 2d)` on one vector, then a linear decoder from `d` to `p*p*2*C` for every token.\n\nIgnore biases, normalization, softmax, and the timestep and class embedding MLPs. The result must match Table 4 within 1%: for example, DiT-S/4 is 1.41 and DiT-XL/2 is 118.64.",
+  "hints": [
+    "Attention projections cost `4 * T * d * d`, because Q, K, V, and the output each map `T` tokens through a `d x d` matrix.",
+    "`QK^T` costs `T * T * d` and `AV` costs another `T * T * d`, summed over heads. The number of heads does not change the total.",
+    "The MLP costs `T * d * 4d + T * 4d * d = 8 * T * d * d`.",
+    "The adaLN-Zero layer sees one conditioning vector, not `T` tokens, so it costs `d * 6d`, with no factor of `T`."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Error compensation (Equation 2)",
+  "goal": "Implement the weight update of Equation 2. A row `w` of weights has the layer Hessian `H = 2 X X^T`. When you round `w[q]` to the value `wq_hat`, the optimal change of all weights is `delta = -(w[q] - wq_hat) / Hinv[q, q] * Hinv[:, q]`, where `Hinv` is the inverse of `H`.\n\nWrite `compensate(w, Hinv, q, wq_hat)`. It returns a new vector in which `w[q]` equals `wq_hat` and every other weight carries its share of the correction. Don't change `w` in place.\n\nOn the page, `w = [0.37, -0.82, 0.55, 0.14]` with `q = 0` and `wq_hat = 0.25` gives `[0.25, -0.7817, 0.5613, 0.1278]`.",
+  "hints": [
+    "Equation 2 is `delta = -(w[q] - wq_hat) / Hinv[q, q] * Hinv[:, q]`. The column `Hinv[:, q]` has one entry per weight.",
+    "Check the entry `delta[q]`: it is `-(w[q] - wq_hat)`, so `w[q] + delta[q]` is exactly `wq_hat`.",
+    "`Hinv` is symmetric, so row `q` and column `q` are equal. Use either one.",
+    "Return `w + delta`. Allocating a new array keeps the input unchanged."
+  ],
+  "runtime": "pyodide"
+}
