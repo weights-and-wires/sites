@@ -27,7 +27,7 @@
 <section aria-labelledby="all-courses">
   <div class="section-heading"><div><span class="kicker">All courses</span><h2 id="all-courses">Pick a course</h2></div><p>Counts come from each course's content at build time.</p></div>
   <div class="module-grid">
-  {{range .Courses}}<article class="module-card hub-card">
+  {{range .Courses}}<article class="module-card hub-card"{{with .ProgressURL}} data-progress-url="{{.}}"{{end}}>
     <div class="module-card-header"><span class="module-number">{{.Number}} · {{.StageLabel}}</span><span class="module-icon" aria-hidden="true">{{.Mark}}</span></div>
     <h3><a href="{{.URL}}">{{.Name}}</a></h3>
     <p>{{.Blurb}}</p>
@@ -35,8 +35,11 @@
     {{if eq .ID "papers"}}<div class="path-links"><span class="kicker">Reading paths</span>
       {{if .Paths}}<ul>{{range .Paths}}<li><a href="https://papers.ifkash.dev/paths/{{.ID}}/">{{.Title}}</a></li>{{end}}</ul>{{else}}<p class="meta">Five reading paths are in progress.</p>{{end}}
     </div>{{else if .Paths}}<div class="path-links"><span class="kicker">Read alongside</span><ul>{{range .Paths}}<li><a href="https://papers.ifkash.dev/paths/{{.ID}}/">{{.Title}}</a></li>{{end}}</ul></div>{{end}}
-    <div class="module-card-footer"><span class="module-count">{{if .Count}}{{.Count}} {{.Unit}}{{end}}</span><span class="module-arrow" aria-hidden="true">→</span></div>
+    {{if .ProgressURL}}<div class="hub-progress" data-progress-out aria-live="polite"></div>
+    {{end}}<div class="module-card-footer"><span class="module-count">{{if .Count}}{{.Count}} {{.Unit}}{{end}}</span><span class="module-arrow" aria-hidden="true">→</span></div>
   </article>{{end}}
   </div>
 </section>
 {{end}}{{end}}
+
+{{define "scripts"}}{{if .Assets.HubJS}}<script src="/assets/{{.Assets.HubJS}}" defer></script>{{end}}{{end}}

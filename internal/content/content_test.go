@@ -71,3 +71,26 @@ func TestLoadConceptsNeedsURL(t *testing.T) {
 		t.Fatal("want an error for a non-https url")
 	}
 }
+
+func TestHubProgressURL(t *testing.T) {
+	dir := t.TempDir()
+	f := filepath.Join(dir, "courses.yaml")
+	write(t, f, "stages: [{id: a, label: A}]\ncourses:\n- {id: on, name: On, url: https://on.example.com/, stage: a, progress: true}\n- {id: off, name: Off, url: https://off.example.com/, stage: a}\n")
+	h, err := LoadHub(f)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, c := range h.Courses {
+		got := c.ProgressURL()
+		if c.ID == "on" && got != "https://on.example.com/api/progress/summary" {
+			t.Errorf("ProgressURL() = %q", got)
+		}
+		if c.ID == "off" && got != "" {
+			t.Errorf("course without progress has URL %q", got)
+		}
+	}
+	write(t, f, "stages: [{id: a, label: A}]\ncourses:\n- {id: x, name: X, url: http://x.example.com/, stage: a, progress: true}\n")
+	if _, err := LoadHub(f); err == nil || !strings.Contains(err.Error(), "https://") {
+		t.Errorf("want https error, got %v", err)
+	}
+}

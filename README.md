@@ -16,6 +16,18 @@ site to `internal/assets/public/`. `cmd/serve` embeds that directory and serves
 it, picking the site by the `Host` header. The container image is `FROM
 scratch` with the one binary.
 
+## Course progress on the hub
+
+A course card on the hub shows the signed-in reader's progress when its entry
+in `content/hub/courses.yaml` sets `progress: true`. The build renders
+`data-progress-url` on that card, and `static/hub.js` fetches
+`/api/progress/summary` from the course host with the session cookie. If the
+request fails, the card stays unchanged.
+
+To add a course, set `progress: true` in `courses.yaml`, and add the course's
+origin to `connect-src` in the `CSP` constant in `internal/server/server.go`.
+`TestCSPCoversProgressCourses` fails when the two lists differ.
+
 ## Build and run locally
 
 1. Install the build dependencies, and download the pinned Pyodide that the

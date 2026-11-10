@@ -5,7 +5,10 @@
 # files in that repo's content tree through the GitHub API (with
 # COURSES_READ_TOKEN for private repos) and falls back to `lessons` when the
 # API can't be reached. `paths` lists papers.ifkash.dev reading-path IDs; the
-# hub shows only the paths that exist in content/paths/.
+# hub shows only the paths that exist in content/paths/. `progress: true` marks
+# a course whose app serves GET /api/progress/summary; the hub then fetches the
+# reader's progress from the browser. The server's CSP (connect-src in
+# internal/server/server.go) must list the course's origin.
 title: "Learn how AI systems work, from the <em>silicon</em> up."
 lede: "Hands-on courses that run from operating systems and CPUs to GPU kernels, inference engines, reinforcement learning, and speech, with a paper library alongside. Every lesson ends in code you write and checks that grade it."
 
@@ -73,6 +76,7 @@ courses:
     tracks: [ml, python]
     repo: weights-and-wires/ml
     glob: "content/lessons/*.md"
+    progress: true
     paths: [transformer-to-modern-llm]
   - id: gpu
     mark: GPU
@@ -86,6 +90,7 @@ courses:
     tracks: [gpu, cuda, triton]
     repo: kashifulhaque/learn-gpu
     glob: "content/chapters/*.md"
+    progress: true
     paths: [path-to-flashattention]
   - id: tpu
     mark: TPU
@@ -109,6 +114,7 @@ courses:
     tracks: [inference, gpu]
     repo: kashifulhaque/learn-inference
     glob: "content/chapters/*.md"
+    progress: true
     paths: [serving-an-llm-fast]
   - id: rl
     mark: RL
@@ -122,6 +128,7 @@ courses:
     tracks: [rl, post-training]
     repo: weights-and-wires/rl
     glob: "content/lessons/*.md"
+    progress: true
     paths: [rl-to-rlhf-to-reasoning]
   - id: speech
     mark: SP
@@ -135,6 +142,7 @@ courses:
     tracks: [speech, audio]
     repo: weights-and-wires/speech
     glob: "content/lessons/*.md"
+    progress: true
     paths: [speech-ctc-to-speech-llms]
   - id: papers
     mark: PDF

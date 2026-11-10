@@ -198,6 +198,10 @@
   .hub-card h3 a::after { content: ""; position: absolute; inset: 0; border-radius: 7px; }
   .hub-card h3 a:focus-visible { outline: none; }
   .hub-card:has(h3 a:focus-visible) { outline: 3px solid var(--accent-ink); outline-offset: 3px; }
+  .hub-progress { display: grid; gap: 6px; margin: -4px 0 18px; font-size: 13px; }
+  .hub-progress:empty { display: none; }
+  .hub-progress-count { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--forest); }
+  .hub-progress-last { color: var(--muted); overflow-wrap: anywhere; }
   .track-list { display: flex; flex-wrap: wrap; gap: 6px; margin: -6px 0 18px; padding: 0; list-style: none; }
   .path-links { position: relative; z-index: 1; margin: -4px 0 18px; }
   .path-links ul { margin: 6px 0 0; padding-left: 16px; font-size: 13px; }

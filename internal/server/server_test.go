@@ -6,6 +6,8 @@ import (
 	"strings"
 	"testing"
 	"testing/fstest"
+
+	"github.com/weights-and-wires/sites/internal/content"
 )
 
 func testHandler() *Handler {
@@ -127,5 +129,42 @@ func TestRejectsPost(t *testing.T) {
 	testHandler().ServeHTTP(rec, req)
 	if rec.Code != http.StatusMethodNotAllowed {
 		t.Errorf("POST = %d", rec.Code)
+	}
+}
+
+func TestCSPCoversProgressCourses(t *testing.T) {
+	hub, err := content.LoadHub("../../content/hub/courses.yaml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var connect string
+	for _, d := range strings.Split(CSP, ";") {
+		if d = strings.TrimSpace(d); strings.HasPrefix(d, "connect-src ") {
+			connect = d
+		}
+	}
+	want := map[string]bool{}
+	for _, c := range hub.Courses {
+		if c.ProgressURL() != "" {
+			want[strings.TrimRight(c.URL, "/")] = true
+		}
+	}
+	if len(want) != 5 {
+		t.Errorf("progress courses = %d, want 5", len(want))
+	}
+	got := strings.Fields(strings.TrimPrefix(connect, "connect-src "))
+	if len(got) != 1+len(want) || got[0] != "'self'" {
+		t.Errorf("connect-src = %q, want 'self' plus %d origins", connect, len(want))
+	}
+	for _, g := range got[1:] {
+		if !want[g] {
+			t.Errorf("connect-src lists %s, which is not a progress course", g)
+		}
+	}
+	h := get(t, "courses.ifkash.dev", "/", nil).Header().Get("Content-Security-Policy")
+	for o := range want {
+		if !strings.Contains(h, o) {
+			t.Errorf("served CSP lacks %s", o)
+		}
 	}
 }

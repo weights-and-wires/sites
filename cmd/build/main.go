@@ -56,6 +56,7 @@ type Assets struct {
 	ThemeJS  string
 	Favicon  string
 	PapersJS string
+	HubJS    string
 	WorkerJS string
 	Harness  string
 	EditorJS string
@@ -328,6 +329,14 @@ func (b *builder) writeAssets(site string, math bool) (Assets, error) {
 		Favicon: hashed("favicon", ".svg", favicon),
 	}
 	files := map[string][]byte{a.CSS: css.Bytes(), a.ThemeJS: theme, a.Favicon: favicon}
+	if site == "courses" {
+		data, err := os.ReadFile(filepath.Join(b.root, "static/hub.js"))
+		if err != nil {
+			return a, err
+		}
+		a.HubJS = hashed("hub", ".js", data)
+		files[a.HubJS] = data
+	}
 	if site == "papers" {
 		for _, f := range []struct {
 			src, stem, ext string
