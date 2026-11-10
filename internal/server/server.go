@@ -17,10 +17,15 @@ import (
 	"time"
 )
 
-// CSP allows only same-origin resources. 'wasm-unsafe-eval' lets the papers
-// site run Pyodide.
+// CSP allows only same-origin resources, with two exceptions. 'wasm-unsafe-eval'
+// lets the papers site run Pyodide. connect-src also lists the course hosts that
+// serve /api/progress/summary, so the hub page can fetch a reader's progress
+// from them. Keep that list in step with the courses that set `progress: true`
+// in content/hub/courses.yaml; TestCSPCoversProgressCourses checks it.
 const CSP = "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; " +
-	"style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; " +
+	"style-src 'self' 'unsafe-inline'; img-src 'self' data:; " +
+	"connect-src 'self' https://ml.ifkash.dev https://rl.ifkash.dev https://speech.ifkash.dev " +
+	"https://gpu.ifkash.dev https://qwen.ifkash.dev; " +
 	"font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'"
 
 // hashed matches fingerprinted asset names such as site.3f2a9c1b.css.

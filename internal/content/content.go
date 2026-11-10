@@ -236,11 +236,23 @@ type Course struct {
 	Tracks   []string `yaml:"tracks"`
 	Stage    string   `yaml:"stage"`
 	Order    int      `yaml:"order"`
-	Progress string   `yaml:"progress"`
+	Progress bool     `yaml:"progress"`
 	Repo     string   `yaml:"repo"`
 	Glob     string   `yaml:"glob"`
 	Paths    []string `yaml:"paths"`
 }
+
+// ProgressURL returns the course's progress summary endpoint, or "" when the
+// course hasn't opted in with `progress: true`.
+func (c Course) ProgressURL() string {
+	if !c.Progress {
+		return ""
+	}
+	return strings.TrimRight(c.URL, "/") + ProgressPath
+}
+
+// ProgressPath is the path of the progress summary endpoint on a course host.
+const ProgressPath = "/api/progress/summary"
 
 // Path is a reading path, read from content/paths/<id>.md.
 type Path struct {
@@ -306,6 +318,9 @@ func LoadHub(path string) (Hub, error) {
 		}
 		if seen[c.ID] {
 			return h, fmt.Errorf("%s: duplicate course id %q", path, c.ID)
+		}
+		if c.Progress && !strings.HasPrefix(c.URL, "https://") {
+			return h, fmt.Errorf("%s: course %q sets progress, so its url must start with https://", path, c.ID)
 		}
 		seen[c.ID] = true
 	}
