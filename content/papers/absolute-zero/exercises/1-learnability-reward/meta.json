@@ -1,0 +1,10 @@
+{
+  "title": "Learnability reward",
+  "goal": "The proposer earns a reward for tasks that are neither too easy nor too hard for the solver (Section 3.1, Equation 4). The solver attempts a task $n$ times and earns a binary reward $r_{solve}$ on each attempt. With $\\bar r_{solve}$ as the mean of those rewards, the proposer reward is $0$ if $\\bar r_{solve} = 0$ and $1 - \\bar r_{solve}$ otherwise.\n\nWrite `learnability_reward(solver_rewards)`. It takes a 1-D sequence of $n$ solver rewards and returns a float. A task that the solver always solves must also get $0$.",
+  "hints": [
+    "Convert the input with `np.asarray(solver_rewards, dtype=float)` and take the mean.",
+    "Check the mean for exactly $0$ first and return `0.0`.",
+    "For every other mean, return `1.0 - mean`. A mean of $1$ then gives $0$ without a separate case."
+  ],
+  "runtime": "pyodide"
+}

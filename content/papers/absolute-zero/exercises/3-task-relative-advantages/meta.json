@@ -1,0 +1,10 @@
+{
+  "title": "Task-relative advantages",
+  "goal": "Task-Relative REINFORCE++ (Section 3.3.5, Equation 8) keeps one baseline for each pair of task type and role. With task type in {induction, deduction, abduction} and role in {propose, solve}, that gives six baselines. Each reward is normalized as $A = (r - \\mu_{task,role}) / \\sigma_{task,role}$ using the mean and standard deviation of its own pair.\n\nWrite `task_relative_advantages(rewards, tasks, roles, eps=1e-6)`. The three arguments are equal-length sequences. Use the population standard deviation and add `eps` to it. Return a float array in the input order.",
+  "hints": [
+    "Zip `tasks` and `roles` into keys and loop over `set(keys)`.",
+    "For each key, build a boolean mask with the same length as `rewards`.",
+    "Assign `out[mask] = (rewards[mask] - mean) / (std + eps)`, where `mean` and `std` come from `rewards[mask]` only."
+  ],
+  "runtime": "pyodide"
+}
