@@ -1,0 +1,12 @@
+{
+  "title": "Compatible weights are the natural gradient",
+  "goal": "Check Theorem 1 numerically. In Section 3.1, the compatible function approximator is $f^\\pi(s, a; w) = w^\\top \\psi^\\pi(s, a)$ with $\\psi^\\pi = \\nabla_\\theta \\log \\pi(a; s, \\theta)$, and $w$ minimizes the squared error $\\epsilon(w, \\pi) = \\sum_{s,a} \\rho^\\pi(s)\\,\\pi(a; s, \\theta)\\,(f^\\pi(s, a; w) - Q^\\pi(s, a))^2$. Theorem 1 says that $w = F(\\theta)^{-1}\\nabla\\eta(\\theta)$.\n\nWrite `compatible_weights(phi, theta, rho, Q)`. The arrays have shapes `phi: (S, K, d)`, `theta: (d,)`, `rho: (S,)`, and `Q: (S, K)`. Return the weighted least-squares solution `w` as a `(d,)` array. Fit with the policy's own score features, not the raw features $\\phi$.\n\nThe helpers `probs` and `scores` (the $\\psi$ features) are given. The tests compare your answer with $F^{-1}\\nabla\\eta$, which they compute on their own.",
+  "hints": [
+    "Flatten the states and actions into one axis of length $S K$. The design matrix `X` is `scores(phi, theta).reshape(S * K, d)` and the target `y` is `Q.reshape(S * K)`.",
+    "The weight of row $(s, a)$ is $\\rho(s)\\,\\pi(a; s)$. Compute it with `rho[:, None] * probs(phi, theta)` and flatten it the same way as `X`.",
+    "Weighted least squares equals ordinary least squares after you multiply each row of `X` and each entry of `y` by the square root of its weight.",
+    "Solve it with `np.linalg.lstsq(X * sw[:, None], y * sw, rcond=None)`, which returns a tuple. The first entry is `w`.",
+    "Two checks from the page: adding a constant to all of $Q(s, \\cdot)$ in one state leaves `w` unchanged, and an unweighted fit gives a different answer."
+  ],
+  "runtime": "pyodide"
+}
