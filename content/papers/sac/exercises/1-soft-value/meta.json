@@ -1,0 +1,10 @@
+{
+  "title": "Soft value and the Boltzmann policy",
+  "goal": "Compute the soft state value of one state with a small discrete action set, in the form of the paper's Equation 3 with an explicit temperature $\\alpha$. The paper sets $\\alpha = 1$ and folds it into the reward scale. Write two functions. Each takes `q`, a NumPy array of shape `(A,)` that holds $Q(s, a)$ for every action, and a float `alpha`:\n\n- `boltzmann_policy(q, alpha=1.0)` returns the policy $\\pi(a \\mid s) \\propto \\exp(Q(s, a) / \\alpha)$ as an array of shape `(A,)` that sums to 1. This is the policy that Equation 4 selects when the policy class has no restriction.\n- `soft_value(q, alpha=1.0)` returns the closed form $V(s) = \\alpha \\log \\sum_a \\exp(Q(s, a) / \\alpha)$.\n\nFor `q = [1, 2, 3]` and `alpha = 1`, the page example gives $\\pi = (0.0900, 0.2447, 0.6652)$ and $V = 3.4076$. Both functions must stay finite when `q` holds values near 1000.",
+  "hints": [
+    "A softmax is unchanged when you subtract the same number from every logit. Subtract `np.max(q / alpha)` before you call `np.exp`.",
+    "For the value, write $\\alpha \\log \\sum_a \\exp(Q/\\alpha) = \\alpha\\,(m + \\log \\sum_a \\exp(Q/\\alpha - m))$, where $m = \\max_a Q/\\alpha$. Add the shift back after the log.",
+    "Check yourself with Equation 3. For the policy that `boltzmann_policy` returns, $\\sum_a \\pi_a (Q_a - \\alpha \\log \\pi_a)$ equals `soft_value`."
+  ],
+  "runtime": "pyodide"
+}

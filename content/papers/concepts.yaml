@@ -810,13 +810,13 @@ concepts:
     refresher: "Limit a quantity, such as a probability ratio or gradient norm, to a fixed range to prevent huge updates."
   entropy-regularization:
     label: "entropy regularization"
-    url: "https://rl.ifkash.dev/lessons/038-maximum-entropy-rl"
+    url: "https://rl.ifkash.dev/lessons/041-maximum-entropy-rl"
     lesson: "Maximum-entropy reinforcement learning"
     anchor_match: exact
     refresher: "Add a bonus for policy entropy to the objective to keep the policy exploring."
   reparameterization-trick:
     label: "reparameterization trick"
-    url: "https://rl.ifkash.dev/lessons/039-soft-actor-critic"
+    url: "https://rl.ifkash.dev/lessons/042-soft-actor-critic"
     lesson: "Soft actor-critic"
     anchor_match: exact
     refresher: "Write a random sample as a deterministic function of parameters and independent noise so gradients can pass through it."

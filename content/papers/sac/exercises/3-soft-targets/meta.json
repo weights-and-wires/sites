@@ -1,0 +1,11 @@
+{
+  "title": "Soft value and Q targets with twin critics",
+  "goal": "Write the three scalar pieces of one SAC update on a minibatch of $N$ transitions, as the paper's ICML version defines them (Section 4.2, Equations 5 to 8). All inputs are NumPy arrays of shape `(N,)`.\n\n- `v_target(q1, q2, logp)` returns $\\min(Q_{\\theta_1}, Q_{\\theta_2})(s_i, a_i) - \\log \\pi_\\phi(a_i \\mid s_i)$, where $a_i$ was sampled from the current policy. This is the value inside the square in Equation 5, with the minimum of the two critics from Section 4.2.\n- `q_target(r, v_next, done, gamma)` returns $\\hat Q = r_i + \\gamma\\,(1 - d_i)\\,V_{\\bar\\psi}(s_{i+1})$, where `v_next` holds the target value network at the next state (Equation 8). Equation 8 has no terminal mask. This page adds it, as the DDPG page does.\n- `half_mse(pred, target)` returns $\\frac{1}{N} \\sum_i \\frac12 (pred_i - target_i)^2$, the form of Equations 5 and 7.\n\nThe page example has `q1 = [1.0, 0.5, 2.0]`, `q2 = [0.8, 0.9, 1.5]`, `logp = [-1.2, -0.3, -0.5]`, giving the value target `[2.0, 0.8, 2.0]`. For `r = [1, 0, 2]`, `v_next = [3, 2, 1]`, `done = [0, 0, 1]`, and `gamma = 0.99`, the Q target is `[3.97, 1.98, 2.0]`.",
+  "hints": [
+    "Use `np.minimum` for the element-wise minimum of the two critics. Don't average them and don't take the maximum.",
+    "$-\\log \\pi$ is the entropy bonus. A sample with a low probability, so a very negative `logp`, raises the value target.",
+    "Multiply the bootstrap term by `(1.0 - done)`. A terminal row then gets the reward alone.",
+    "The targets are constants in the update. You compute values, not gradients."
+  ],
+  "runtime": "pyodide"
+}
