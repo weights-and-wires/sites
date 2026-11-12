@@ -16,7 +16,7 @@ prereqs: []
 background: [kl-divergence, gaussian-distributions, elbo, expectation]
 course_links:
   - title: "Autoencoders and variational autoencoders"
-    url: "https://ml.ifkash.dev/lessons/083-autoencoders-and-vaes"
+    url: "https://ml.ifkash.dev/lessons/084-autoencoders-and-vaes"
 self_check:
   - q: 'For $q = \mathcal{N}(\mu, \sigma^2)$ and $p = \mathcal{N}(0, 1)$ in one dimension, compute $D_{KL}(q \,\|\, p)$ for $\mu = 1$ and $\sigma = 1$. What does the result say about the two terms of the closed form?'
     a: 'The result is $\frac{1}{2}\mu^2 = 0.5$. With $\sigma = 1$ the variance part $\frac{1}{2}(\sigma^2 - 1 - \log\sigma^2)$ is exactly 0, so only the mean offset from the prior contributes.'

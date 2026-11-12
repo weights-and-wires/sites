@@ -84,13 +84,13 @@ concepts:
     refresher: "A matrix-multiplication-only iteration that pushes a matrix's singular values toward one, approximating its orthogonal factor."
   low-rank-factorization:
     label: "low-rank factorization"
-    url: "https://ml.ifkash.dev/lessons/077-fine-tuning-and-lora"
+    url: "https://ml.ifkash.dev/lessons/078-fine-tuning-and-lora"
     lesson: "Fine-tuning on a budget with LoRA"
     anchor_match: exact
     refresher: "Approximate a large matrix as the product of two thin matrices, which cuts parameters and compute."
   fine-tuning:
     label: "fine-tuning"
-    url: "https://ml.ifkash.dev/lessons/077-fine-tuning-and-lora"
+    url: "https://ml.ifkash.dev/lessons/078-fine-tuning-and-lora"
     lesson: "Fine-tuning on a budget with LoRA"
     anchor_match: exact
     refresher: "Continue training a pretrained model on a smaller task-specific dataset to adapt its behavior."
@@ -306,19 +306,19 @@ concepts:
     refresher: "Sequence models that carry a fixed-size hidden state updated by a linear recurrence over the input."
   top-k-routing:
     label: "top-k routing"
-    url: "https://ml.ifkash.dev/lessons/081-mixtures-of-experts"
+    url: "https://ml.ifkash.dev/lessons/082-mixtures-of-experts"
     lesson: "Mixtures of experts: routing, the router's gradient, and balance"
     anchor_match: exact
     refresher: "A router scores all experts and sends each token only to the k experts with the highest scores."
   load-balancing:
     label: "load balancing"
-    url: "https://ml.ifkash.dev/lessons/081-mixtures-of-experts"
+    url: "https://ml.ifkash.dev/lessons/082-mixtures-of-experts"
     lesson: "Mixtures of experts: routing, the router's gradient, and balance"
     anchor_match: exact
     refresher: "Encourage a router to spread tokens evenly across experts so none is overloaded or unused."
   top-2-routing:
     label: "top-2 routing"
-    url: "https://ml.ifkash.dev/lessons/081-mixtures-of-experts"
+    url: "https://ml.ifkash.dev/lessons/082-mixtures-of-experts"
     lesson: "Mixtures of experts: routing, the router's gradient, and balance"
     anchor_match: exact
     refresher: "Send each token to its two highest-scoring experts and mix their outputs by normalized router weights."
@@ -330,13 +330,13 @@ concepts:
     refresher: "Total parameters count every expert, while active parameters count only those used for a given token."
   expert-specialization:
     label: "expert specialization"
-    url: "https://ml.ifkash.dev/lessons/081-mixtures-of-experts"
+    url: "https://ml.ifkash.dev/lessons/082-mixtures-of-experts"
     lesson: "Mixtures of experts: routing, the router's gradient, and balance"
     anchor_match: close
     refresher: "Experts in a mixture-of-experts layer learn to handle distinct kinds of inputs instead of duplicating one another."
   low-rank-projection:
     label: "low-rank projection"
-    url: "https://ml.ifkash.dev/lessons/077-fine-tuning-and-lora"
+    url: "https://ml.ifkash.dev/lessons/078-fine-tuning-and-lora"
     lesson: "Fine-tuning on a budget with LoRA"
     anchor_match: close
     refresher: "Map a vector through a narrow bottleneck dimension to represent it with fewer numbers."
@@ -384,7 +384,7 @@ concepts:
     refresher: "A contrastive loss that scores the true pair against negatives with a softmax over similarities."
   kl-divergence:
     label: "KL divergence"
-    url: "https://ml.ifkash.dev/lessons/083-autoencoders-and-vaes"
+    url: "https://ml.ifkash.dev/lessons/084-autoencoders-and-vaes"
     lesson: "Autoencoders and variational autoencoders"
     anchor_match: exact
     refresher: "A non-negative, asymmetric measure of how much one probability distribution differs from another."
@@ -396,7 +396,7 @@ concepts:
     refresher: "The bell-shaped distribution defined by a mean and a variance, or a mean vector and covariance matrix."
   elbo:
     label: "ELBO"
-    url: "https://ml.ifkash.dev/lessons/083-autoencoders-and-vaes"
+    url: "https://ml.ifkash.dev/lessons/084-autoencoders-and-vaes"
     lesson: "Autoencoders and variational autoencoders"
     anchor_match: exact
     refresher: "A tractable lower bound on log-likelihood, equal to reconstruction quality minus a KL term to the prior."
@@ -450,7 +450,7 @@ concepts:
     refresher: "A partial differential equation describing how the probability density of an SDE's state evolves over time."
   autoencoders:
     label: "autoencoders"
-    url: "https://ml.ifkash.dev/lessons/083-autoencoders-and-vaes"
+    url: "https://ml.ifkash.dev/lessons/084-autoencoders-and-vaes"
     lesson: "Autoencoders and variational autoencoders"
     anchor_match: exact
     refresher: "A network that compresses an input to a small code and reconstructs it from that code."

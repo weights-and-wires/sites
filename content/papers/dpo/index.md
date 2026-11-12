@@ -20,7 +20,7 @@ course_links:
   - title: "Direct preference optimization"
     url: "https://rl.ifkash.dev/lessons/070-direct-preference-optimization"
   - title: "PPO and DPO: two ways to reach the leashed optimum"
-    url: "https://ml.ifkash.dev/lessons/080-ppo-and-dpo"
+    url: "https://ml.ifkash.dev/lessons/081-ppo-and-dpo"
 self_check:
   - q: 'Which stages of the InstructGPT pipeline does DPO keep, and which does it replace? What plays the role of the reward model?'
     a: 'DPO keeps supervised fine-tuning, because $\pi_{\text{ref}}$ is the SFT model, and it keeps the preference data. It replaces the separate reward model and the PPO stage with one classification loss. The policy itself is the reward model: the implicit reward is $\hat r_\theta(x, y) = \beta \log \frac{\pi_\theta(y \mid x)}{\pi_{\text{ref}}(y \mid x)}$.'

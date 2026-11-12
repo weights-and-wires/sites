@@ -8,5 +8,5 @@
     "Weight decay of 1.0 is large on purpose. The model first memorizes the training pairs, and validation accuracy rises later. Validation accuracy can drop for a few hundred steps and recover. Keep all 5,000 steps."
   ],
   "runtime": "torch",
-  "lab": "https://ml.ifkash.dev/lessons/053p-project-train-a-tiny-transformer"
+  "lab": "https://ml.ifkash.dev/lessons/070p-project-train-a-tiny-transformer"
 }
