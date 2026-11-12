@@ -95,7 +95,7 @@
 {{.Further}}
   </div>{{end}}
 </article>
-{{if $.Headings}}<aside class="paper-aside" aria-label="On this page"><p class="toc-title">On this page</p>{{range $.Headings}}<a class="toc-link{{if eq .Level 3}} toc-sub{{end}}" href="#{{.ID}}">{{.Text}}</a>{{end}}</aside>{{end}}
+{{if $.Headings}}<aside class="paper-aside" aria-label="On this page"><p class="toc-label">On this page</p>{{range $.Headings}}<a class="toc-link{{if eq .Level 3}} toc-sub{{end}}" href="#{{.ID}}">{{.Text}}</a>{{end}}</aside>{{end}}
 </div>
 {{end}}{{end}}
 {{define "scripts"}}{{if .PaperView.Exercises}}<script src="/assets/{{.Assets.EditorJS}}" defer></script>{{end}}{{end}}
