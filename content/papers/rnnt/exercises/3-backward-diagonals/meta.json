@@ -1,0 +1,12 @@
+{
+  "title": "Backward variables and the diagonal identity",
+  "goal": "Implement the backward variables of Section 2.4 (Equation 18) and check the identity of Section 2.5 (Equation 19): summed along any anti-diagonal $t + u = n$ of the lattice, $\\alpha(t, u)\\,\\beta(t, u)$ equals $\\Pr(y \\mid x)$.\n\n`emit` has shape `(T, U)` and `null` has shape `(T, U+1)`, as in exercise 2. The starter already contains `forward`.\n\nWrite two functions:\n\n- `backward(emit, null)` returns `beta` of shape `(T, U+1)`. `beta[t, u]` is $\\beta(t+1, u)$ from Equation 18, with $\\beta(T, U) = \\varnothing(T, U)$.\n- `diagonal_sums(alpha, beta)` returns an array of length `T + U`. Entry `n - 1` is $\\sum_{t + u = n} \\alpha(t, u)\\,\\beta(t, u)$ for $n = 1, \\dots, T + U$, with the paper's 1-based $t \\in 1..T$ and $u \\in 0..U$. In 0-based array indexes, the node `[t0, u]` lies on diagonal `n = t0 + 1 + u`.",
+  "hints": [
+    "Equation 18 in 0-based indexes: `beta[t, u] = beta[t+1, u] * null[t, u] + beta[t, u+1] * emit[t, u]`. Skip a term when its index runs past the lattice.",
+    "Fill from the far corner back: `t` from `T-1` down to 0, `u` from `U` down to 0. Set `beta[T-1, U] = null[T-1, U]` first.",
+    "A sanity check: `beta[0, 0]` is the probability of the whole sequence, so it must equal `Pr(y|x)` from `forward`.",
+    "`alpha * beta` is an element-wise product of two `(T, U+1)` arrays. Then add the entries `[t0, u]` whose `t0 + 1 + u == n`.",
+    "Allocate `np.zeros(T + U)`, then loop over every node and add `alpha[t0, u] * beta[t0, u]` into entry `t0 + u`. (That is `n - 1`, because `n = t0 + 1 + u`.)"
+  ],
+  "runtime": "pyodide"
+}
