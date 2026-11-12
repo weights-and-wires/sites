@@ -176,7 +176,7 @@ $$
 
 The tree-wide minimum and maximum in Equation 5 are taken over these $Q$ values. The expansion step stores $r_l$ and $s^l$ from the dynamics function in the edge's tables, so later simulations look them up instead of calling $g$ again.
 
-The sum in Equation 3 starts at $r_{k+1}$, so as printed, $G^k$ doesn't include the reward $r_k$ on the edge itself. This page follows the printed form. The official pseudocode isn't in the PDF, and this page doesn't check how it places that reward.
+The sum in Equation 3 starts at $r_{k+1}$, so as printed, $G^k$ doesn't include the reward $r_k$ on the edge itself. This page follows the printed form. The official pseudocode (in the arXiv ancillary files) stores the same quantity in each node and adds the edge's reward back when it scores a child, as $r_k + \gamma G^k$. A search that stores $G^k$ and scores children with it alone never counts the reward of the edge it is choosing.
 
 **Tiny example, computed by `scripts/backup_example.py`.** Take $\gamma = 0.9$, rewards $r_1 = 1$, $r_2 = 0$, $r_3 = 2$ along a path of three edges, and a leaf value $v^3 = 5$. Then $G^3 = 5$, $G^2 = r_3 + 0.9 \cdot 5 = 6.5$, and $G^1 = r_2 + 0.9\, r_3 + 0.81 \cdot 5 = 5.85$. The edges start with $(N, Q) = (4, 3)$, $(1, 6)$, and $(0, 0)$. After the update they hold $(5, 3.57)$, $(2, 6.25)$, and $(1, 5)$. The script also checks that $G^k = r_{k+1} + \gamma\, G^{k+1}$, which is how an implementation computes it in one backward pass.
 
