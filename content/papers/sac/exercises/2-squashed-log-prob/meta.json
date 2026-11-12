@@ -1,0 +1,11 @@
+{
+  "title": "Tanh-squashed Gaussian log-probability",
+  "goal": "SAC samples $u \\sim \\mathcal{N}(\\mu, \\sigma^2)$ and sends $a = \\tanh(u)$ to the environment. The policy's log-density at $a$ needs the change-of-variables term from Appendix C (Equations 20 and 21). Write\n\n`squashed_log_prob(u, mu, std)`\n\nwhere `u`, `mu`, and `std` are NumPy arrays that broadcast together and have shape `(D,)` or `(B, D)`. The function returns $\\log \\pi(a \\mid s) = \\sum_i \\big[\\log \\mathcal{N}(u_i; \\mu_i, \\sigma_i) - \\log(1 - \\tanh^2 u_i)\\big]$, summed over the last axis, so the result has shape `()` or `(B,)`.\n\nFor `u = [0.5]`, `mu = [0]`, and `std = [1]`, the page example gives $-0.8037$. The function must stay finite when $|u|$ is 25, where $1 - \\tanh^2 u$ rounds to 0 in float64.",
+  "hints": [
+    "The Gaussian part is $-\\tfrac12 ((u - \\mu)/\\sigma)^2 - \\log \\sigma - \\tfrac12 \\log 2\\pi$ for each dimension.",
+    "You subtract the correction $\\log(1 - \\tanh^2 u)$, because Equation 20 divides by the Jacobian determinant. A density that ignored the correction would integrate to less than 1 over $(-1, 1)$.",
+    "Use the identity $\\log(1 - \\tanh^2 u) = 2\\,(\\log 2 - u - \\mathrm{softplus}(-2u))$ with $\\mathrm{softplus}(x) = \\log(1 + e^x)$, which `np.logaddexp(0, x)` computes without overflow.",
+    "Sum over `axis=-1` only, so a batch of shape `(B, D)` gives `B` values."
+  ],
+  "runtime": "pyodide"
+}

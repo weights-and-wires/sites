@@ -1,0 +1,11 @@
+{
+  "title": "Reparameterized and score-function gradients",
+  "goal": "At one state, the policy is $a \\sim \\mathcal{N}(\\mu, \\sigma^2)$ and the critic is a function `q(a)` with derivative `dq(a)`. You want the gradient of $\\mathbb{E}[Q(a)]$ with respect to $\\mu$ and $\\sigma$. Section 4.2 says the reparameterization trick (Equation 11) gives a lower-variance estimator than the likelihood-ratio one. Write both, for a batch of noise draws `eps` of shape `(B,)`:\n\n- `reparam_grad(mu, sigma, eps, dq)` returns the pair `(d_mu, d_sigma)` for $a_i = \\mu + \\sigma \\epsilon_i$: the batch means of $Q'(a_i)$ and $Q'(a_i)\\,\\epsilon_i$.\n- `score_grad(mu, sigma, eps, q)` returns the same pair from the score function: the batch means of $Q(a_i)\\,\\partial_\\mu \\log \\mathcal{N}(a_i; \\mu, \\sigma)$ and $Q(a_i)\\,\\partial_\\sigma \\log \\mathcal{N}(a_i; \\mu, \\sigma)$.\n\nFor $Q(a) = -(a-2)^2$, $\\mathbb{E}[Q] = -(\\mu - 2)^2 - \\sigma^2$, so the exact gradient is $(-2(\\mu - 2),\\ -2\\sigma)$. At $\\mu = 0.5$, $\\sigma = 1$ that is $(3, -2)$.",
+  "hints": [
+    "For the reparameterized estimator, $a = \\mu + \\sigma\\epsilon$ gives $\\partial a / \\partial \\mu = 1$ and $\\partial a / \\partial \\sigma = \\epsilon$. Apply the chain rule through $Q$.",
+    "The Gaussian log-density has $\\partial_\\mu \\log \\mathcal{N} = (a - \\mu)/\\sigma^2$ and $\\partial_\\sigma \\log \\mathcal{N} = (a - \\mu)^2/\\sigma^3 - 1/\\sigma$. Write them with $\\epsilon$: $(a - \\mu)/\\sigma = \\epsilon$.",
+    "The score estimator uses the value $Q(a_i)$, not its derivative. Compute `a = mu + sigma * eps` once and reuse it.",
+    "Both functions return a tuple of two floats."
+  ],
+  "runtime": "pyodide"
+}
