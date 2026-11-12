@@ -1,0 +1,11 @@
+{
+  "title": "Pack a sentence pair and embed it",
+  "goal": "Build BERT's input for a sentence pair (Section 3, Figure 2).\n\nWrite two functions:\n\n- `pack_pair(a, b, cls_id, sep_id)` takes two lists of token ids and returns `(ids, segment_ids)`. The packed sequence is `[CLS] a [SEP] b [SEP]`. Segment id 0 covers `[CLS]`, all of `a`, and the first `[SEP]`. Segment id 1 covers all of `b` and the last `[SEP]`.\n- `embed_inputs(ids, segment_ids, tok_table, seg_table, pos_table)` returns the sum of the token embedding, the segment embedding, and the position embedding for each position, with shape `(T, d)`. Position `i` uses row `i` of `pos_table`.",
+  "hints": [
+    "`ids = [cls_id] + list(a) + [sep_id] + list(b) + [sep_id]`.",
+    "`segment_ids = [0] * (len(a) + 2) + [1] * (len(b) + 1)`.",
+    "`tok_table[ids]` and `seg_table[segment_ids]` use fancy indexing and give `(T, d)` arrays.",
+    "The position embedding doesn't depend on the token. Use `pos_table[:T]`, or `pos_table[np.arange(T)]`."
+  ],
+  "runtime": "pyodide"
+}

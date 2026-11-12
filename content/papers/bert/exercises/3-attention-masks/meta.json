@@ -1,0 +1,11 @@
+{
+  "title": "Bidirectional and causal attention",
+  "goal": "BERT and GPT use the same self-attention layer. They differ in the mask (Section 3 and Figure 3).\n\nWrite `attention(x, Wq, Wk, Wv, causal=False)` for one head. `x` has shape `(T, d_model)` and the weights have shape `(d_model, d)`. Compute `scores = Q K^T / sqrt(d)`. When `causal` is true, position `i` can read only positions `j <= i`. Otherwise every position reads every position. Return `(out, weights)`, where `weights` has shape `(T, T)` and each row sums to 1.",
+  "hints": [
+    "Compute `Q = x @ Wq`, `K = x @ Wk`, `V = x @ Wv`. Divide the scores by `np.sqrt(d)`, where `d` is the width of `Q`.",
+    "Build the mask with `np.tril(np.ones((T, T)))`. Put a large negative number such as `-1e9` where the mask is 0, before the softmax.",
+    "Subtract the row maximum before you exponentiate, then divide by the row sum.",
+    "Zeroing the weights after the softmax leaves rows that don't sum to 1. Mask the scores instead."
+  ],
+  "runtime": "pyodide"
+}

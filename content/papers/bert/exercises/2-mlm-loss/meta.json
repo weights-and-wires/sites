@@ -1,0 +1,11 @@
+{
+  "title": "Loss on masked positions only",
+  "goal": "Implement the masked-LM loss from Section 3.1. BERT predicts the original token only at the selected positions, so only those positions contribute to the loss.\n\nWrite `masked_lm_loss(logits, labels, ignore_index=-100)`. `logits` has shape `(T, V)` and `labels` has shape `(T,)`. Return the mean cross-entropy (in nats) over the positions where `labels != ignore_index`, as a float. Return `0.0` when no position is selected.\n\nThe function must be numerically stable: logits of 1000 must not give `nan` or `inf`.",
+  "hints": [
+    "Compute the log-softmax over the vocabulary axis (the last one). Subtract `logits.max(axis=-1, keepdims=True)` first.",
+    "Build the boolean array `sel = labels != ignore_index`. Only `logits[sel]` and `labels[sel]` matter.",
+    "The negative log-probability of the label at row `i` is `-log_probs[i, labels[i]]`. Index with `np.arange(len(rows))`.",
+    "Divide by the number of selected positions, not by `T`. Handle `sel.sum() == 0` before you divide."
+  ],
+  "runtime": "pyodide"
+}
