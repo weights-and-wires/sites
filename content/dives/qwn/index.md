@@ -17,7 +17,7 @@ prereqs:
 background: [softmax, sft, kl-penalty, group-relative-baselines, optimizer-state-memory]
 course_links:
   - {title: "RL lesson 71: group-relative policy optimization", url: "https://rl.ifkash.dev/lessons/071-group-relative-policy-optimization"}
-  - {title: "ML lesson 77: fine-tuning and LoRA", url: "https://ml.ifkash.dev/lessons/077-fine-tuning-and-lora"}
+  - {title: "ML lesson 77: fine-tuning and LoRA", url: "https://ml.ifkash.dev/lessons/078-fine-tuning-and-lora"}
 ---
 
 ## The problem

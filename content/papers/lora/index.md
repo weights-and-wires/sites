@@ -18,7 +18,7 @@ prereqs:
 background: [low-rank-factorization, fine-tuning, matrix-rank]
 course_links:
   - title: "Fine-tuning on a budget with LoRA"
-    url: "https://ml.ifkash.dev/lessons/077-fine-tuning-and-lora"
+    url: "https://ml.ifkash.dev/lessons/078-fine-tuning-and-lora"
 self_check:
   - q: 'A GPT-3 attention projection $W_q$ is $12288 \times 12288$. How many weights do $B \in \mathbb{R}^{d \times r}$ and $A \in \mathbb{R}^{r \times k}$ hold for $r = 4$, and how does that compare with the full matrix?'
     a: 'They hold $4 \cdot (12288 + 12288) = 98{,}304$ weights, against $12288^2 = 150{,}994{,}944$ in the full matrix. That is 1,536 times fewer.'

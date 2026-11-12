@@ -20,7 +20,7 @@ prereqs:
 background: [multi-token-prediction, load-balancing]
 course_links:
   - title: "Mixtures of experts: routing, the router's gradient, and balance"
-    url: "https://ml.ifkash.dev/lessons/081-mixtures-of-experts"
+    url: "https://ml.ifkash.dev/lessons/082-mixtures-of-experts"
   - title: "Reasoning with verifiable rewards"
     url: "https://rl.ifkash.dev/lessons/073-reasoning-with-verifiable-rewards"
 self_check:
