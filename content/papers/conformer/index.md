@@ -17,6 +17,8 @@ prereqs:
     reason: "The Conformer block keeps multi-head self-attention from the Transformer and adds a relative positional encoding to it."
   - id: ctc
     reason: "The paper trains a transducer, which inherits the blank symbol and the many-paths-one-label alignment idea from CTC."
+  - id: rnnt
+    reason: "The paper's models are transducers: a Conformer encoder feeds the RNN-T joint network and a single-layer LSTM prediction network."
 background: [depthwise-convolution, relative-position]
 course_links:
   - title: "Conformers and SpecAugment"
