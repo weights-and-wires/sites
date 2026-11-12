@@ -1,0 +1,12 @@
+{
+  "title": "The compute-optimal bit width",
+  "goal": "Section 4.3 spends a budget $C = \\tfrac{6}{16} N D P$ on parameters, tokens, and bits (Section 4.3.2). With uniform precision, the loss is $A\\left[N(1 - e^{-P/\\bar\\gamma})^3\\right]^{-\\alpha} + B D^{-\\beta} + E$ (Equation 5), with $\\beta = \\alpha$. Write `best_bits(c, bits, gamma_bar)`, which returns `(p, loss)`: for every `p` in `bits`, set the tokens from the budget, take the lowest loss over a grid of model sizes, and return the `p` with the lowest loss and that loss. Then write `p_star(gamma_bar)`, which returns the compute-optimal precision $P^* = x^* \\bar\\gamma$, where $x^*$ is the positive root of $e^x - 1 = 3x$. The constants `A`, `B`, `E`, and `ALPHA` are defined in the starter.",
+  "hints": [
+    "In `best_bits`, use `n = np.logspace(6, 13, 4000)` as the grid of model sizes. For each `p`, the tokens are `d = c / (6 / 16 * n * p)`.",
+    "The loss for one `p` is `A * (n * (1 - np.exp(-p / gamma_bar)) ** 3) ** -ALPHA + B * d ** -ALPHA + E`. Take `loss.min()` over the grid, and keep the `p` with the smallest result.",
+    "A quick check: with `gamma_bar = 1.9475` and `bits = range(2, 17)`, the best width is 4 at every budget. The best width doesn't depend on `c`.",
+    "For `p_star`, bisect $g(x) = e^x - 1 - 3x$ on $[1, 10]$. It is negative at 1 and positive at 10. Don't start at 0, where $g$ is also 0.",
+    "Multiply the root by `gamma_bar`. A check: the root is 1.9038, so `p_star(1.0)` returns 1.9038."
+  ],
+  "runtime": "pyodide"
+}

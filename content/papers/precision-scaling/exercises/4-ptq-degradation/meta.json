@@ -1,0 +1,11 @@
+{
+  "title": "Post-training quantization and the critical dataset size",
+  "goal": "Section 3.1 models the loss that post-training quantization (PTQ) adds as $\\delta_{\\text{PTQ}} = C_T \\, D^{\\gamma_D} N^{-\\gamma_N} e^{-P_{\\text{post}}/\\gamma_{\\text{post}}}$ (Equation 2). Write `delta_ptq(n, d, p_post)`, which returns it. The constants of Appendix K, Table 2 are defined in the starter. Then write `d_crit(n, p_post)`, which returns the token count $D_{\\text{crit}}$ where $B D^{-\\beta} + \\delta_{\\text{PTQ}}$ stops falling, so that more pretraining data raises the loss of the quantized model (Appendix E.1, Equations 12 and 13).",
+  "hints": [
+    "`delta_ptq` is one line. The exponents differ: $D$ gets $\\gamma_D = 0.5068$ and $N$ gets $\\gamma_N = 0.3439$. Check: for $N = 30$M, $D = 26$B, and 4 bits, the result is about 0.0349.",
+    "To find $D_{\\text{crit}}$, set the derivative of $B D^{-\\beta} + \\delta_{\\text{PTQ}}$ with respect to $D$ to zero: $\\beta B D^{-\\beta - 1} = \\gamma_D C_T N^{-\\gamma_N} e^{-P_{\\text{post}}/\\gamma_{\\text{post}}} D^{\\gamma_D - 1}$.",
+    "Collect the powers of $D$ on one side. They combine to $D^{\\gamma_D + \\beta}$, which gives $D_{\\text{crit}} = \\left(\\dfrac{\\beta B N^{\\gamma_N} e^{P_{\\text{post}}/\\gamma_{\\text{post}}}}{\\gamma_D C_T}\\right)^{1/(\\gamma_D + \\beta)}$. Note the sign: the exponential in the numerator grows with `p_post`.",
+    "A check: $D_{\\text{crit}}$ for $N = 30$M at 5 bits is about $4.79 \\times 10^{11}$ tokens, and one more bit multiplies it by about 5.4."
+  ],
+  "runtime": "pyodide"
+}

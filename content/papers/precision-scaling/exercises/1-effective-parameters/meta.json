@@ -1,0 +1,11 @@
+{
+  "title": "Effective parameters and the precision-aware loss",
+  "goal": "Section 4.2 models training in low precision as a smaller model. Each of the weights, the activations, and the KV cache contributes a factor $1 - e^{-P/\\gamma}$ to $N_{\\text{eff}}$ (Equation 4), and Section 4.1 puts $N_{\\text{eff}}$ into the Chinchilla loss. The constants of Appendix K, Table 2 are defined in the starter. Write `eff_factor(p, gamma, offset=0.0)`, which returns $1 - e^{-p/\\gamma + \\text{offset}}$. Write `n_eff(n, p_w, p_a, p_kv, offsets=False)`, which returns $N$ times the product of the three factors, using `OFFSET` when `offsets=True` and zero otherwise. Write `loss_hat(n, d, p_w, p_a, p_kv, offsets=False)`, which returns $A N_{\\text{eff}}^{-\\alpha} + B D^{-\\beta} + E$ with $\\beta = \\alpha$.",
+  "hints": [
+    "`eff_factor` is one line: `1.0 - np.exp(-p / gamma + offset)`. Convert `p` with `np.asarray(p, dtype=float)` so that it accepts lists.",
+    "`n_eff` multiplies three factors, and each factor uses its own entry of `GAMMA` and `OFFSET`. The keys are `\"w\"`, `\"a\"`, and `\"kv\"`. Don't use one shared gamma.",
+    "When `offsets` is `False`, pass an offset of 0 to every factor. A quick check: with all three precisions at 4 bits and no offsets, $N_{\\text{eff}} / N$ is about 0.639.",
+    "`loss_hat` is the Chinchilla form with `n_eff(...)` in place of `n`. The data term uses the same exponent `ALPHA`, because the paper ties $\\alpha = \\beta$ (Appendix K)."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Recover gamma from losses",
+  "goal": "Appendix M shows how to read $N_{\\text{eff}}$ from measured losses. The loss gap between a run at weight precision $P_w$ and a full-precision run at the same $(N, D)$ is $A\\left[N_{\\text{eff}}^{-\\alpha} - N^{-\\alpha}\\right]$, because the $B$, $D$, and $E$ terms cancel. Write `n_eff_fraction(loss, loss_inf, n)`, which solves that gap for $f = N_{\\text{eff}} / N$ (Equation 30). The constants `A` and `ALPHA` are defined in the starter. Then write `fit_gamma(ps, fracs)`, which fits $f(P) = 1 - e^{-P/\\gamma}$ and returns `gamma`. The tests build synthetic losses from a known $\\gamma$, so a correct fit recovers it.",
+  "hints": [
+    "Solve the gap for $N_{\\text{eff}}$: $N_{\\text{eff}}^{-\\alpha} = (L_P - L_\\infty)/A + N^{-\\alpha}$. Raise both sides to $-1/\\alpha$, then divide by $N$.",
+    "At full precision the loss gap is 0, and the formula must return exactly 1. Use that as a check.",
+    "Take logs of $f = 1 - e^{-P/\\gamma}$. Then $\\ln(1 - f) = -P/\\gamma$, which is a line through the origin with slope $-1/\\gamma$.",
+    "The least-squares slope of a line through the origin is $\\sum P y / \\sum P^2$ with $y = \\ln(1 - f)$. Then $\\gamma = -1 / \\text{slope}$."
+  ],
+  "runtime": "pyodide"
+}
