@@ -12,7 +12,9 @@ est_hours: 6
 status: full
 summary: "TRPO updates a policy by maximizing a surrogate objective that is accurate near the current policy, and it limits how far the new policy can move by bounding the average KL divergence between the two. The theory shows that penalizing the maximum KL divergence guarantees that the true return never decreases, but the penalty size it prescribes gives tiny steps, so the practical algorithm uses a hard constraint instead. Each update solves the constrained problem approximately with a natural gradient direction from conjugate gradient, a step length set by the constraint, and a backtracking line search."
 related_course: "rl: policy gradients"
-prereqs: []
+prereqs:
+  - id: npg
+    reason: "TRPO's step is a natural gradient step with a KL budget, so you need the Fisher matrix, the natural gradient, and why it ignores how the policy is parameterized."
 background: [policy-gradient-theorem, kl-divergence, conjugate-gradient]
 course_links:
   - title: "Natural gradients and trust regions"

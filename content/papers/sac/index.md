@@ -15,6 +15,8 @@ related_course: "rl: continuous control"
 prereqs:
   - id: ddpg
     reason: "SAC keeps DDPG's replay buffer, slow target network, and actor that is trained by differentiating the critic through the action, and then replaces the deterministic actor with a stochastic one."
+  - id: td3
+    reason: "SAC takes the minimum of two Q-functions, the clipped double-Q idea from TD3, to curb overestimation, although it applies the minimum in its value and policy updates rather than in the critic target."
 background: [entropy-regularization, reparameterization-trick]
 course_links:
   - title: "Maximum-entropy reinforcement learning"
