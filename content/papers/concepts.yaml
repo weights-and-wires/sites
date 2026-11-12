@@ -126,7 +126,7 @@ concepts:
     refresher: "Train a sequence model by feeding it the true previous tokens instead of its own predictions."
   beam-search:
     label: "beam search"
-    url: "https://speech.ifkash.dev/lessons/030-decoding-ctc"
+    url: "https://speech.ifkash.dev/lessons/031-decoding-ctc"
     lesson: "Decoding CTC"
     anchor_match: exact
     refresher: "Decode by keeping the k highest-scoring partial sequences at each step instead of only the single best."
@@ -954,13 +954,13 @@ concepts:
     refresher: "Process supervision scores each reasoning step, while outcome supervision scores only the final answer."
   best-of-n:
     label: "best-of-n"
-    url: "https://rl.ifkash.dev/lessons/058-process-rewards-and-search"
+    url: "https://rl.ifkash.dev/lessons/074-process-rewards-and-search"
     lesson: "Process rewards and test-time search"
     anchor_match: exact
     refresher: "Sample n responses and keep the one a scorer rates highest."
   compute-optimal-allocation:
     label: "compute-optimal allocation"
-    url: "https://rl.ifkash.dev/lessons/058-process-rewards-and-search"
+    url: "https://rl.ifkash.dev/lessons/074-process-rewards-and-search"
     lesson: "Process rewards and test-time search"
     anchor_match: close
     refresher: "Split a fixed inference compute budget between samples and search to get the best accuracy."

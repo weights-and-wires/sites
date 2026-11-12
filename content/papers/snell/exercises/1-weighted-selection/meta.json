@@ -1,0 +1,12 @@
+{
+  "title": "Step-wise scores and weighted best-of-N",
+  "goal": "Section 5.1 scores a solution in two stages. Step-wise aggregation turns one solution's per-step PRM scores into a single score, and the paper uses the PRM's prediction at the last step. Inter-answer aggregation then picks a final answer from several scored solutions, and the paper uses best-of-N weighted: it adds up the scores of all solutions that share a final answer and picks the answer with the largest total.\n\nWrite two functions:\n\n- `step_score(step_scores, how=\"last\")` returns one float from a list of per-step scores. `how` is `\"last\"` (the final step's score), `\"min\"` (the smallest score), or `\"prod\"` (the product of all scores). Any other value raises `ValueError`.\n- `select_answer(answers, scores, method)` returns the chosen final answer. `answers[i]` is the final answer of solution `i` and `scores[i]` is its score. `method` is `\"best_of_n\"` (the answer of the single highest-scoring solution), `\"majority\"` (the answer with the most solutions, ignoring scores), or `\"weighted\"` (the answer with the largest total score). Among tied choices, the answer that appears first in `answers` wins. Any other method raises `ValueError`.\n\nThe tests use the two problems from the page's `scripts/weighted_selection.py`.",
+  "hints": [
+    "For `step_score`, handle each value of `how` with its own branch, and raise `ValueError` in the final `else`. `float(np.prod(step_scores))` gives the product.",
+    "For `best_of_n`, return `answers[i]` where `i` is the index of the largest score. `np.argmax` returns the first index on a tie.",
+    "For `majority`, count answers in a dictionary. A dictionary keeps insertion order, so scan it in order and replace the best only on a strictly larger count.",
+    "For `weighted`, use the same scan, but add each `scores[i]` to the total of `answers[i]` instead of adding 1.",
+    "Return the answer, not its index and not its total."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "The FLOPs-matched exchange rate",
+  "goal": "Section 7 compares a small model with extra test-time compute against a model $M$ times larger. Pretraining costs $X = 6 N D_{\\text{pretrain}}$ FLOPs and inference costs $Y = 2 N D_{\\text{inference}}$ FLOPs, where $N$ is the parameter count. A model $M$ times larger multiplies both terms by $M$. The small model can match the larger model's total $M(X + Y)$ by multiplying its own inference compute by a factor that depends on $R = D_{\\text{inference}} / D_{\\text{pretrain}}$.\n\nWrite three functions:\n\n- `pretrain_flops(n_params, d_tokens)` returns $6 N D$.\n- `inference_flops(n_params, d_tokens)` returns $2 N D$.\n- `matched_multiplier(m, r)` returns the factor by which the small model's inference compute must grow to match a model `m` times larger, given the ratio `r`. Derive it from the definitions: the small model keeps its pretraining cost $X$, so its inference budget must grow from $Y$ to $M(X + Y) - X$.\n\nThe tests compare your closed form against the definitions with concrete token counts.",
+  "hints": [
+    "`pretrain_flops(n, d)` is `6 * n * d` and `inference_flops(n, d)` is `2 * n * d`.",
+    "The matched inference budget is $Y' = M(X + Y) - X$. The multiplier is $Y' / Y = M + (M - 1) X / Y$.",
+    "With $X = 6 N D_{\\text{pretrain}}$ and $Y = 2 N D_{\\text{inference}}$, the ratio $X / Y$ is $3 D_{\\text{pretrain}} / D_{\\text{inference}} = 3 / R$.",
+    "So the multiplier is `m + 3 * (m - 1) / r`. Check it with $M = 2$ and $R = 1$: the result is 5."
+  ],
+  "runtime": "pyodide"
+}

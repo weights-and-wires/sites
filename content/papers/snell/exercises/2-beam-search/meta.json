@@ -1,0 +1,12 @@
+{
+  "title": "Beam search against a PRM",
+  "goal": "Section 5.2 describes beam search over a PRM's per-step scores with a number of beams $N$ and a beam width $M$. It samples $N$ first steps. Then each round it scores every prefix, keeps the top $N/M$, and samples $M$ next steps from each kept prefix, which gives $N$ prefixes again. After the last round it returns the final $N$ candidates.\n\nWrite `beam_search(expand, score, n_beams, beam_width, n_steps)`.\n\n- `expand(prefix, m)` returns a list of `m` new prefixes, each one step longer than `prefix`. A prefix is a tuple. Call `expand((), n_beams)` to get the first steps.\n- `score(prefix)` returns the PRM score of a prefix as a float.\n- Run `n_steps` rounds in total. Round 1 scores the `n_beams` first steps. Rounds 2 to `n_steps` each keep the top `n_beams // beam_width` prefixes, then expand each one with `beam_width` children and score the result.\n- Return the final `n_beams` prefixes sorted by score, best first. Tied prefixes keep the order they had before sorting.\n\nThe tests use the tree from the page's `scripts/beam_toy.py`.",
+  "hints": [
+    "Start with `beams = expand((), n_beams)`. Then loop `n_steps - 1` times.",
+    "To rank, use `sorted(beams, key=lambda p: -score(p))`. Python's `sorted` is stable, so ties keep their order.",
+    "Inside the loop, keep `ranked[: n_beams // beam_width]`, then build the new beam list with one `expand(prefix, beam_width)` call per kept prefix.",
+    "After the loop, return the final beams sorted by score. With `n_steps = 1` the loop never runs, and you return the sorted first steps.",
+    "Don't call `expand` for prefixes that were dropped. The tests count the calls."
+  ],
+  "runtime": "pyodide"
+}

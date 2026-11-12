@@ -1,0 +1,12 @@
+{
+  "title": "Difficulty bins and a compute-optimal strategy",
+  "goal": "Section 3.2 approximates the compute-optimal strategy of Equation 1 by binning questions into five levels of difficulty, using quantiles of the base model's estimated pass@1, and then picking the best strategy in each bin independently. Bin 0 here is the easiest bin (the highest pass@1).\n\nWrite two functions:\n\n- `difficulty_bins(pass1, n_bins=5)` takes an array of estimated pass@1 values, one per question, and returns an integer array of bin indices from 0 (easiest) to `n_bins - 1` (hardest). Rank the questions from highest to lowest pass@1, breaking ties by the lower question index first. The question with rank `r` (starting at 0) among `n` questions goes in bin `(r * n_bins) // n`.\n- `compute_optimal(bins, outcomes, n_bins=5)` takes the bin array and a dict that maps a strategy name to an array of 0/1 outcomes, one per question. It returns `(choices, accuracy)`. `choices` is a list with the best strategy name for each bin, judged by the mean outcome of the questions in that bin. Among strategies with the same bin mean, the one that comes first in the dict wins. `accuracy` is the fraction of all questions answered correctly when each question uses its bin's chosen strategy.\n\nThe tests use small cases that you can check by hand.",
+  "hints": [
+    "Rank questions with `order = np.argsort(-pass1, kind=\"stable\")`. `order[r]` is the index of the question with rank `r`.",
+    "Make an empty integer array `bins`, then assign `bins[order] = (np.arange(n) * n_bins) // n`.",
+    "In `compute_optimal`, loop over the bins. For each bin, take `mask = bins == b` and compute `np.mean(outcomes[name][mask])` for every strategy.",
+    "Pick the best name with a strict `>` comparison as you scan the dict in order, so the first strategy wins a tie.",
+    "For the accuracy, add up the chosen strategy's outcomes over every bin's questions, then divide by the number of questions. Don't average the bin means: bins can have different sizes."
+  ],
+  "runtime": "pyodide"
+}
