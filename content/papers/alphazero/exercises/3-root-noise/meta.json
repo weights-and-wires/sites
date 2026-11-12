@@ -1,0 +1,11 @@
+{
+  "title": "Dirichlet noise at the root",
+  "goal": "Self-play must keep trying moves that the network dislikes, or it never learns that they are good. The paper adds Dirichlet noise to the prior at the root of every search: $P(s, a) = (1 - \\varepsilon)\\,p_a + \\varepsilon\\,\\eta_a$ with $\\eta \\sim \\text{Dir}(\\alpha)$, $\\varepsilon = 0.25$, and $\\alpha = 0.3, 0.15, 0.03$ for chess, shogi, and Go (Methods, \"Configuration\").\n\nWrite `add_root_noise(p, legal, eps, alpha, rng)` for a game where only some moves are legal.\n\n- Draw $\\eta$ over the legal moves only, with exactly one call `rng.dirichlet(np.full(m, alpha))`, where `m` is the number of legal moves. Illegal moves get noise 0.\n- Return `(1 - eps) * p + eps * eta` as a new array of shape `(K,)`. Don't modify `p` or `legal`.",
+  "hints": [
+    "Count the legal moves with `m = int(legal.sum())`. Then `noise = rng.dirichlet(np.full(m, alpha))` has shape `(m,)` and sums to 1.",
+    "Make `eta = np.zeros_like(p)` and write the draw into `eta[legal]`. Illegal moves stay 0, so the sum of the result stays 1 when `p` sums to 1.",
+    "The mix puts weight `1 - eps` on the network prior and `eps` on the noise. A swap of the two weights fails the tests.",
+    "A small `alpha` gives spiky noise: one or two moves get most of $\\eta$. A large `alpha` gives nearly uniform noise."
+  ],
+  "runtime": "pyodide"
+}

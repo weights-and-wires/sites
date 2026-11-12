@@ -834,13 +834,13 @@ concepts:
     refresher: "Train a policy to imitate expert actions with a classification or regression loss."
   self-play:
     label: "self-play"
-    url: "https://rl.ifkash.dev/lessons/048-multi-agent-and-self-play"
+    url: "https://rl.ifkash.dev/lessons/061-multi-agent-and-self-play"
     lesson: "Many agents and self-play"
     anchor_match: exact
     refresher: "An agent improves by playing against copies or past versions of itself."
   puct:
     label: "PUCT"
-    url: "https://rl.ifkash.dev/lessons/041-world-models-and-muzero"
+    url: "https://rl.ifkash.dev/lessons/044-world-models-and-muzero"
     lesson: "World models and MuZero"
     anchor_match: exact
     refresher: "A tree-search selection rule that adds a prior-weighted exploration bonus to each action's average value."
@@ -852,7 +852,7 @@ concepts:
     refresher: "Learn a model of environment dynamics and use it to plan or generate training data."
   latent-dynamics:
     label: "latent dynamics"
-    url: "https://rl.ifkash.dev/lessons/041-world-models-and-muzero"
+    url: "https://rl.ifkash.dev/lessons/044-world-models-and-muzero"
     lesson: "World models and MuZero"
     anchor_match: exact
     refresher: "A learned model that predicts how a compressed hidden state changes after an action."

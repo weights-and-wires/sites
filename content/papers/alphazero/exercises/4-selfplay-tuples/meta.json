@@ -1,0 +1,11 @@
+{
+  "title": "Self-play tuples",
+  "goal": "Self-play is where AlphaZero's training data comes from. Each move contributes one tuple $(s_t, \\pi_t, z_t)$, where $\\pi_t$ is the search policy at $s_t$ and $z_t$ is the final outcome seen from the player who moves at $s_t$ (Equation 1).\n\nIn Nim, a pile of $n$ stones is shared by two players. Each turn takes 1, 2, or 3 stones, and the player who takes the last stone wins. Action index `a` means \"take `a + 1` stones\". The starter gives you `search` (PUCT counts at a root) and `visits_to_policy`.\n\nWrite `self_play_game(n_start, prior_fn, value_fn, n_sims, rng, tau_moves)`.\n\n1. At the current pile `n`, get the visit counts `N = search(n, prior_fn, value_fn, n_sims)`.\n2. Play the first `tau_moves` moves by sampling `a = rng.choice(3, p=visits_to_policy(N, 1.0))`. Play every later move greedily with `np.argmax(N)`.\n3. Record `(n, visits_to_policy(N, 1.0))` before you move. The stored $\\pi$ uses $\\tau = 1$ on every move, including greedy ones.\n4. When the pile is empty, return `[(n, pi, z), ...]`. The mover of the last tuple took the last stone and has $z = +1$. The tuple before it has $z = -1$, and the signs alternate back to the start.",
+  "hints": [
+    "Keep `history = []` and a loop `while n > 0:`. Inside, call `search`, build `target = visits_to_policy(N, 1.0)`, pick `a`, append `(n, target)`, and set `n -= a + 1`.",
+    "Choose the move with `if len(history) < tau_moves:` (sample with `rng.choice(K, p=target)`) and `else:` (`int(np.argmax(N))`). Check the length before you append.",
+    "After the loop, the history has `T = len(history)` entries. Entry `i` has $z = +1$ when `(T - 1 - i)` is even, and $z = -1$ otherwise.",
+    "The outcome is not a property of the stored $\\pi$ or of the move. Don't compute $z$ from the search values. It follows from who took the last stone."
+  ],
+  "runtime": "pyodide"
+}
