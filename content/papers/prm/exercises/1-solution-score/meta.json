@@ -1,0 +1,11 @@
+{
+  "title": "Solution score from step scores",
+  "goal": "A PRM gives each step three label probabilities. The paper turns them into one score per solution so that it can rank solutions (Section 2.6 and Appendix F.2). Write two functions:\n\n- `step_scores(p_pos, p_neu, neutral=\"positive\")` takes the per-step probabilities of the positive and neutral labels (two sequences of the same length) and returns a float array with one score per step. With `neutral=\"positive\"` the score is `p_pos + p_neu`. With `neutral=\"negative\"` it is `p_pos`. Any other value raises `ValueError`.\n- `solution_score(p_pos, p_neu, neutral=\"positive\", reduction=\"product\")` returns a Python float. With `reduction=\"product\"` it is the product of the step scores, the paper's choice. With `reduction=\"min\"` it is the smallest step score. Any other `reduction`, or a solution with no steps, raises `ValueError`.",
+  "hints": [
+    "Convert the inputs with `np.asarray(..., dtype=float)` first, so lists and arrays both work.",
+    "The probability that every step is correct is the product of the step probabilities. A solution with 10 steps at 0.98 scores $0.98^{10} \\approx 0.817$ under the product and $0.98$ under the minimum.",
+    "`np.prod` and `np.min` fail on or misbehave with empty input, so check `scores.size` before you reduce and raise `ValueError`.",
+    "Wrap the result in `float(...)` so that the caller gets a Python float and not a NumPy scalar."
+  ],
+  "runtime": "pyodide"
+}

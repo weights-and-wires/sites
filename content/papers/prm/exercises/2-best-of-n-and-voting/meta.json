@@ -1,0 +1,11 @@
+{
+  "title": "Best-of-N, majority voting, and weighted voting",
+  "goal": "The paper evaluates a reward model by best-of-$N$ search: sample $N$ solutions, keep the one the reward model ranks highest, and grade its final answer (Section 2.1). Majority voting is the baseline, and the paper also tried reward-model-weighted voting (Section 3). Write three functions:\n\n- `best_of_n(scores)` returns the index of the highest score in a list of floats. The first index wins a tie.\n- `majority_vote(answers)` returns the answer that occurs most often in a list of hashable answers. Among answers with the same count, the one that appears first in the list wins.\n- `weighted_vote(answers, scores)` returns the answer whose scores add up to the largest total. Among answers with the same total, the one that appears first wins.\n\nThe tests use the five-candidate example from the page, where the ORM and majority voting pick the wrong answer and the PRM picks the right one.",
+  "hints": [
+    "For `best_of_n`, keep the index of the best score so far and replace it only when a score is strictly greater. That rule keeps the first index on a tie.",
+    "`collections.Counter(answers).most_common(1)` returns the first-seen answer among tied counts, because `Counter` keeps insertion order.",
+    "For `weighted_vote`, add each score to a dictionary entry for its answer. A dictionary keeps insertion order, so scan it in order and replace the best only on a strictly larger total.",
+    "Do not use `max(answers)`. Answers are labels and have no order that matters here."
+  ],
+  "runtime": "pyodide"
+}
