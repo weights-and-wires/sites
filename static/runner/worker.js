@@ -1,9 +1,13 @@
 // Runs exercise tests in Pyodide, off the main thread. The page creates this
 // worker on the first "Run tests" click, so Pyodide downloads only then.
 //
-// Messages in:  {id, harnessURL, submission, tests}
+// Messages in:  {id, harnessURL, submission, tests} to run an exercise's tests,
+//               or {id, harnessURL, code} to run a deep-dive cell.
 // Messages out: {id, type: "status", text} while loading,
-//               {id, type: "result", results, stdout} or {id, type: "error", text}
+//               {id, type: "result", results, stdout} for tests,
+//               {id, type: "output", stdout, result} for a cell, where result
+//               is the JSON of the cell's global `result`, or null,
+//               or {id, type: "error", text}
 let pyodide = null;
 let booting = null;
 
@@ -20,13 +24,41 @@ async function boot(harnessURL, say) {
   return py;
 }
 
+// runCell runs code in a fresh namespace and returns what it printed, with a
+// traceback when it raises, plus its global `result` as JSON.
+function runCell(py, code) {
+  let stdout = "";
+  py.setStdout({ batched: (s) => { stdout += s + "\n"; } });
+  py.setStderr({ batched: (s) => { stdout += s + "\n"; } });
+  py.globals.set("__cell_code", code);
+  const json = py.runPython(`
+import json, traceback
+__ns = {"__name__": "__main__"}
+try:
+    exec(compile(__cell_code, "cell.py", "exec"), __ns)
+except Exception:
+    traceback.print_exc()
+__r = __ns.get("result")
+try:
+    __out = json.dumps(__r, default=lambda o: o.tolist() if hasattr(o, "tolist") else str(o))
+except Exception:
+    __out = "null"
+__out`);
+  return { stdout: stdout.slice(0, 20000), result: JSON.parse(json) };
+}
+
 self.onmessage = async (event) => {
-  const { id, harnessURL, submission, tests } = event.data;
+  const { id, harnessURL, submission, tests, code } = event.data;
   const say = (text) => self.postMessage({ id, type: "status", text });
   try {
     if (!pyodide) {
       booting = booting || boot(harnessURL, say);
       pyodide = await booting;
+    }
+    if (typeof code === "string") {
+      say("Running…");
+      self.postMessage({ id, type: "output", ...runCell(pyodide, code) });
+      return;
     }
     say("Running tests…");
     pyodide.FS.writeFile("/work/submission.py", submission);

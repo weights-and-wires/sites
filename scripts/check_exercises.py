@@ -16,7 +16,12 @@ PyTorch exercises are skipped when torch isn't installed, unless you pass
 Usage:
     python3 scripts/check_exercises.py [PATH ...] [--require-torch]
 
-PATH is a paper folder, an exercise folder, or content/papers (the default).
+PATH is a paper folder, an exercise folder, a dive folder, or content/papers
+and content/dives (the default).
+
+It also runs every deep-dive cell (content/dives/<id>/cells/*.py): each must
+import only modules the browser runner has, exit without an error, and finish
+within 5 seconds.
 """
 
 import argparse
@@ -49,6 +54,38 @@ def exercise_dirs(paths):
             yield p
         else:
             yield from sorted(d.parent for d in p.rglob("exercises/*/meta.json"))
+
+
+def cell_files(paths):
+    for p in paths:
+        p = pathlib.Path(p).resolve()
+        if p.suffix == ".py" and p.parent.name == "cells":
+            yield p
+        else:
+            yield from sorted(p.rglob("cells/*.py"))
+
+
+def check_cell(cell):
+    name = f"{cell.parent.parent.name}/cells/{cell.name}"
+    bad = imports(cell.read_text()) - PYODIDE_OK
+    if bad:
+        return name, "fail", ["-", f"imports {sorted(bad)}, which the browser runner can't load"]
+    limit = LIMITS["pyodide"]
+    with tempfile.TemporaryDirectory() as tmp:
+        start = time.monotonic()
+        try:
+            proc = subprocess.run(
+                [sys.executable, "-I", str(cell)], cwd=tmp, capture_output=True, text=True, timeout=limit + 30
+            )
+        except subprocess.TimeoutExpired:
+            return name, "fail", ["-", "timed out"]
+        elapsed = time.monotonic() - start
+    problems = []
+    if proc.returncode != 0:
+        problems.append("the cell raised: " + (proc.stderr or proc.stdout).strip()[-800:])
+    if elapsed > limit:
+        problems.append(f"the cell took {elapsed:.1f} s; the limit is {limit:.0f} s")
+    return name, "fail" if problems else "ok", [f"{elapsed:.2f} s"] + problems
 
 
 def imports(src):
@@ -123,12 +160,15 @@ def check(ex, require_torch):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("paths", nargs="*", default=[str(ROOT / "content/papers")])
+    ap.add_argument("paths", nargs="*", default=[str(ROOT / "content/papers"), str(ROOT / "content/dives")])
     ap.add_argument("--require-torch", action="store_true")
     args = ap.parse_args()
     counts = {"ok": 0, "fail": 0, "skip": 0}
-    for ex in exercise_dirs(args.paths):
-        name, status, detail = check(ex, args.require_torch)
+    paths = [p for p in args.paths if pathlib.Path(p).exists()]
+    jobs = [lambda ex=ex: check(ex, args.require_torch) for ex in exercise_dirs(paths)]
+    jobs += [lambda c=c: check_cell(c) for c in cell_files(paths)]
+    for job in jobs:
+        name, status, detail = job()
         counts[status] += 1
         print(f"{status.upper():4} {name}: {detail[0]}")
         for d in detail[1:]:

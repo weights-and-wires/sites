@@ -1,0 +1,18 @@
+{{define "page"}}
+<section class="hero hero-single">
+  <div>
+    <span class="kicker">Papers · deep dives</span>
+    <h1>Deep dives into <em>posts</em> worth rebuilding.</h1>
+    <p class="lede">Each dive takes one technical blog post, explains the problem it solves from first principles, and rebuilds the core idea as widgets you can drag and Python you can run in your browser.</p>
+    <div class="hero-meta"><span>{{len .Extra}} dives</span><span>Press <kbd>/</kbd> to search</span></div>
+  </div>
+</section>
+{{if .Extra}}<div class="module-grid dive-grid">
+{{range .Extra}}<a class="module-card" href="/dives/{{.ID}}/">
+  <div class="module-card-header"><span class="module-number">{{if .Source.Site}}{{.Source.Site}}{{else}}{{.Source.Author}}{{end}}{{if .Source.Date}} · {{.Source.Date}}{{end}}</span><span class="module-icon" aria-hidden="true">DD</span></div>
+  <h3>{{.Title}}</h3>
+  <p>{{.Summary}}</p>
+  <div class="module-card-footer"><span class="module-count">{{if .Minutes}}About {{.Minutes}} minutes{{else}}Deep dive{{end}}</span><span class="module-arrow" aria-hidden="true">→</span></div>
+</a>{{end}}
+</div>{{else}}<p class="meta">The first dives are being written.</p>{{end}}
+{{end}}

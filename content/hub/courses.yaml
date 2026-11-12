@@ -159,3 +159,12 @@ courses:
       - rl-to-rlhf-to-reasoning
       - speech-ctc-to-speech-llms
       - serving-an-llm-fast
+  - id: dives
+    mark: DD
+    name: Deep dives
+    url: https://papers.ifkash.dev/dives/
+    blurb: "Interactive walkthroughs of technical blog posts: the problem each one solves, the mechanism step by step, and a small version you can run and change in your browser."
+    unit: dives
+    stage: papers
+    order: 11
+    tracks: [reading, interactive]

@@ -22,7 +22,7 @@ func renderHub(t *testing.T) (string, Assets) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	page := Page{Site: sites[1], Assets: assets, Title: "Courses", Built: "test", Hub: b.hubView(hub, nil, 0)}
+	page := Page{Site: sites[1], Assets: assets, Title: "Courses", Built: "test", Hub: b.hubView(hub, nil, 0, 0)}
 	if err := b.page("courses", "index.html", "hub.html", page); err != nil {
 		t.Fatal(err)
 	}

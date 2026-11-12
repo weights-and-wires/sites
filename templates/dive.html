@@ -1,0 +1,47 @@
+{{define "head"}}{{with .Dive}}{{if .CSS}}<link rel="stylesheet" href="/assets/{{.CSS}}">{{end}}{{end}}{{end}}
+{{define "page"}}{{with .Dive}}
+<div class="paper-layout">
+<article class="paper dive" data-dive="{{.ID}}">
+  <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Papers</a><span aria-hidden="true">/</span><a href="/dives/">Deep dives</a></nav>
+  <header class="paper-header">
+    <span class="kicker">Deep dive{{if .Source.Site}} · {{.Source.Site}}{{end}}</span>
+    <h1 class="display">{{.Title}}</h1>
+    <p class="dive-source">A walkthrough of <a href="{{.Source.URL}}">{{.Source.Title}}</a> by {{.Source.Author}}{{if .Source.Date}} ({{.Source.Date}}){{end}}. Read the original post too: this page rebuilds its ideas in small, interactive pieces.</p>
+    <div class="lesson-meta">
+      <a href="{{.Source.URL}}">Read the original post</a>
+      {{range .Topics}}<span class="chip">{{.}}</span>{{end}}
+      {{if .Minutes}}<span>About {{.Minutes}} minutes</span>{{end}}
+    </div>
+  </header>
+
+  <section class="objectives" aria-labelledby="tldr"><h2 id="tldr">TL;DR</h2><p>{{.Summary}}</p></section>
+
+  {{if or .Prereqs .Concepts .CourseLinks}}<section class="before-you-read" aria-labelledby="before-you-read">
+    <h2 id="before-you-read" class="kicker">Before you read</h2>
+    {{if .Prereqs}}<h3 class="byr-title">Papers that help</h3>
+    <ul class="prereq-list">{{range .Prereqs}}
+      <li data-paper-id="{{.ID}}"><a href="/{{.ID}}/">{{.Title}}</a> <span class="progress-state" aria-live="polite"></span>{{if .Reason}}<span class="prereq-reason">{{.Reason}}</span>{{end}}</li>{{end}}
+    </ul>{{end}}
+    {{if .Concepts}}<h3 class="byr-title">Concepts you need</h3>
+    <ul class="concept-list">{{range .Concepts}}
+      <li><a href="{{.URL}}">{{.Label}}</a><span class="concept-refresher">{{.Refresher}}</span><span class="concept-lesson meta">Lesson: {{.Lesson}}</span></li>{{end}}
+    </ul>{{end}}
+    {{if .CourseLinks}}<h3 class="byr-title">Course lessons</h3>
+    <ul class="concept-list">{{range .CourseLinks}}<li><a href="{{.URL}}">{{.Title}}</a></li>{{end}}</ul>{{end}}
+  </section>{{end}}
+
+  {{if .HasCells}}<p class="callout callout-note dive-cells-note"><span class="callout-title">Runnable code</span> The Python cells on this page run in your browser. The first <strong>Run</strong> loads Python with NumPy (about 15 MB, cached afterwards). Edits are saved in this browser.</p>{{end}}
+
+  <div class="prose">
+{{.Body}}
+  </div>
+
+  {{if .Further}}<div class="prose further">
+{{.Further}}
+  </div>{{end}}
+  <p class="meta dive-credit">Based on <a href="{{.Source.URL}}">{{.Source.Title}}</a> by {{.Source.Author}}. The explanations, figures, and code on this page are our own reconstruction; any mistakes are ours.</p>
+</article>
+{{if $.Headings}}<aside class="paper-aside" aria-label="On this page"><p class="toc-label">On this page</p>{{range $.Headings}}<a class="toc-link{{if eq .Level 3}} toc-sub{{end}}" href="#{{.ID}}">{{.Text}}</a>{{end}}</aside>{{end}}
+</div>
+{{end}}{{end}}
+{{define "scripts"}}{{with .Dive}}{{if .HasCells}}<script src="/assets/{{$.Assets.EditorJS}}" defer></script>{{end}}<script src="/assets/{{$.Assets.DivesJS}}" defer></script>{{if .JS}}<script src="/assets/{{.JS}}" defer></script>{{end}}{{end}}{{end}}

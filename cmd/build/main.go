@@ -60,6 +60,7 @@ type Assets struct {
 	WorkerJS string
 	Harness  string
 	EditorJS string
+	DivesJS  string
 }
 
 // Page is the data every template gets.
@@ -72,6 +73,7 @@ type Page struct {
 	Math        bool
 
 	PaperView PaperView
+	Dive      *DiveView
 	Headings  []render.Heading
 	Papers    []content.Paper
 	Hub       HubView
@@ -174,13 +176,21 @@ func (b *builder) run() error {
 	if err != nil {
 		return err
 	}
-	hubView := b.hubView(hub, paths, len(papers))
+	dives, err := content.LoadDives(filepath.Join(b.root, "content/dives"))
+	if err != nil {
+		return err
+	}
+	hubView := b.hubView(hub, paths, len(papers), len(dives))
 
 	concepts, err := content.LoadConcepts(filepath.Join(b.root, "content/papers/concepts.yaml"))
 	if err != nil {
 		return err
 	}
 	views, err := b.paperViews(papers, g, concepts)
+	if err != nil {
+		return err
+	}
+	diveViews, err := b.diveViews(dives, papers, concepts)
 	if err != nil {
 		return err
 	}
@@ -224,6 +234,11 @@ func (b *builder) run() error {
 				return err
 			}
 			index = append(index, more...)
+			more, err = b.writeDives(base, diveViews)
+			if err != nil {
+				return err
+			}
+			index = append(index, more...)
 			data, err := json.Marshal(index)
 			if err != nil {
 				return err
@@ -251,7 +266,7 @@ func (b *builder) run() error {
 
 // hubView fills in lesson counts and reading paths. A course whose count
 // can't be fetched keeps the count from courses.yaml.
-func (b *builder) hubView(hub content.Hub, paths []content.Path, papers int) HubView {
+func (b *builder) hubView(hub content.Hub, paths []content.Path, papers, dives int) HubView {
 	token := os.Getenv("COURSES_READ_TOKEN")
 	if token == "" {
 		token = os.Getenv("GITHUB_TOKEN")
@@ -272,6 +287,8 @@ func (b *builder) hubView(hub content.Hub, paths []content.Path, papers int) Hub
 		switch {
 		case c.ID == "papers":
 			cv.Count, cv.Live = papers, true
+		case c.ID == "dives":
+			cv.Count, cv.Live = dives, true
 		case c.Repo != "" && c.Glob != "" && !b.offline:
 			n, err := counts.Count(context.Background(), client, c.Repo, c.Glob, token)
 			if err != nil {
@@ -285,7 +302,7 @@ func (b *builder) hubView(hub content.Hub, paths []content.Path, papers int) Hub
 				cv.Paths = append(cv.Paths, p)
 			}
 		}
-		if c.Unit != "papers" {
+		if c.Stage != "papers" {
 			v.TotalLessons += cv.Count
 		}
 		v.Courses = append(v.Courses, cv)
@@ -343,6 +360,7 @@ func (b *builder) writeAssets(site string, math bool) (Assets, error) {
 			dst            *string
 		}{
 			{"static/papers.js", "papers", ".js", &a.PapersJS},
+			{"static/dives.js", "dives", ".js", &a.DivesJS},
 			{"static/runner/worker.js", "worker", ".js", &a.WorkerJS},
 			{"static/runner/harness.py", "harness", ".py", &a.Harness},
 		} {

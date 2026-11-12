@@ -221,14 +221,17 @@
     dialog.addEventListener("click", (e) => { if (e.target === dialog) dialog.close(); });
   }
 
-  // Exercises.
+  // Exercises and deep-dive cells share one Pyodide worker.
   const blocks = document.querySelectorAll("[data-exercise]");
-  if (!blocks.length) return;
+  const cells = document.querySelectorAll("[data-cell]");
+  if (!blocks.length && !cells.length) return;
   const page = document.body.dataset;
   let worker = null;
   let seq = 0;
 
-  function runInWorker(submission, tests, onStatus) {
+  // runInWorker sends msg (tests, or a cell's code) to the worker and resolves
+  // with its reply, or with an error after TIMEOUT_MS.
+  function runInWorker(msg, onStatus) {
     return new Promise((resolve) => {
       if (!worker) worker = new Worker(page.workerUrl);
       const id = ++seq;
@@ -251,15 +254,13 @@
         worker = null;
         resolve({ type: "error", text: e.message || "The runner failed to start." });
       }, { once: true });
-      w.postMessage({ id, harnessURL: page.harnessUrl, submission, tests });
+      w.postMessage({ id, harnessURL: page.harnessUrl, ...msg });
     });
   }
 
-
-  blocks.forEach((block) => {
-    const key = `papers.code.${block.dataset.exercise}`;
-    const starter = block.querySelector("template[data-starter]").content.textContent;
-    const tests = block.querySelector("template[data-tests]")?.content.textContent || "";
+  // mountEditor puts the code editor (or the plain textarea fallback) in a
+  // block and keeps its text in localStorage under key.
+  function mountEditor(block, key, label) {
     const host = block.querySelector("[data-editor]");
     const fallback = host.querySelector("textarea");
     const saved = store.get(key, null);
@@ -271,13 +272,44 @@
     if (window.PapersEditor) {
       const doc = fallback.value;
       host.textContent = "";
-      editor = window.PapersEditor.mount(host, doc, {
-        label: `Code for ${block.querySelector("h3").textContent}`,
-        onChange: (v) => store.set(key, v),
-      });
+      editor = window.PapersEditor.mount(host, doc, { label, onChange: (v) => store.set(key, v) });
     } else {
       fallback.addEventListener("input", () => store.set(key, fallback.value));
     }
+    return editor;
+  }
+
+  cells.forEach((cell) => {
+    const key = `dives.code.${cell.dataset.cell}`;
+    const original = cell.querySelector("template[data-code]").content.textContent;
+    const editor = mountEditor(cell, key, `Python cell ${cell.dataset.cell}`);
+    const out = cell.querySelector("[data-output]");
+    const run = cell.querySelector("[data-run]");
+    cell.querySelector("[data-reset]")?.addEventListener("click", () => {
+      if (confirm("Replace your code with the original?")) { editor.set(original); store.set(key, original); }
+    });
+    run.addEventListener("click", async () => {
+      run.disabled = true;
+      out.hidden = false;
+      out.replaceChildren(text("p", "runner-status", "Starting…"));
+      const res = await runInWorker({ code: editor.get() }, (s) => { out.firstChild.textContent = s; });
+      run.disabled = false;
+      out.replaceChildren();
+      if (res.type === "error") {
+        out.append(text("p", "runner-error", res.text));
+        return;
+      }
+      out.append(text("pre", "runner-stdout", res.stdout.trim() || "(no output)"));
+      // A dive's widgets listen for this to draw what the cell computed.
+      cell.dispatchEvent(new CustomEvent("cell:result", { bubbles: true, detail: { name: cell.dataset.cell, result: res.result, stdout: res.stdout } }));
+    });
+  });
+
+  blocks.forEach((block) => {
+    const key = `papers.code.${block.dataset.exercise}`;
+    const starter = block.querySelector("template[data-starter]").content.textContent;
+    const tests = block.querySelector("template[data-tests]")?.content.textContent || "";
+    const editor = mountEditor(block, key, `Code for ${block.querySelector("h3").textContent}`);
 
     const out = block.querySelector("[data-output]");
     const run = block.querySelector("[data-run]");
@@ -297,7 +329,7 @@
       run.disabled = true;
       out.hidden = false;
       out.replaceChildren(text("p", "runner-status", "Starting…"));
-      const res = await runInWorker(editor.get(), tests, (s) => { out.firstChild.textContent = s; });
+      const res = await runInWorker({ submission: editor.get(), tests }, (s) => { out.firstChild.textContent = s; });
       run.disabled = false;
       if (solBtn) solBtn.disabled = false;
       out.replaceChildren();

@@ -58,6 +58,14 @@ origin to `connect-src` in the `CSP` constant in `internal/server/server.go`.
 To check everything that CI checks, run `go vet ./...`, `go test ./...`,
 `python3 scripts/check_exercises.py`, and `docker build -t sites:dev .`.
 
+## Deep dives
+
+Each deep dive lives in `content/dives/<id>/` and renders at
+`papers.ifkash.dev/dives/<id>/`. A dive teaches one external post with widgets
+(`dive.js`, built on `static/dives.js`) and editable Python cells
+(`cells/*.py`) that run in the same Pyodide worker as the exercises. To write
+one, follow [`docs/DIVES.md`](docs/DIVES.md).
+
 ## Papers
 
 Each paper lives in `content/papers/<id>/`. To write or edit a page, follow

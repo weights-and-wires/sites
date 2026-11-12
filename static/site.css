@@ -129,7 +129,11 @@
     .brand-mark { width: 32px; height: 32px; }
     .brand-name { font-size: 19px; }
     .brand-subtitle { display: none; }
-    .topbar-nav a { padding: 7px 8px; }
+    .topbar-nav a { flex: none; padding: 7px 8px; }
+    /* Six links don't fit a phone: the nav scrolls sideways instead of
+       widening the page. */
+    .topbar-nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+    .topbar-nav::-webkit-scrollbar { display: none; }
     main { padding: 28px 16px 44px; }
     .site-footer { padding: 18px 16px 24px; }
   }
@@ -384,5 +388,34 @@
 
   @media (max-width: 900px) {
     .graph-head { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  /* Deep dives: widgets that dive.js builds with static/dives.js. */
+  .dive-source { color: var(--muted); font-size: 15px; margin-bottom: 18px; }
+  .dive-credit { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .dive-cells-note { margin: 0 0 24px; }
+  .widget { margin: 28px 0; padding: 16px 18px 14px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+  .widget-title { margin: 0 0 4px; font-family: var(--sans); font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-ink); }
+  .widget-caption { margin: 8px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+  .widget-controls { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; margin: 10px 0 12px; }
+  .widget-control { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink); }
+  .widget-control label { white-space: nowrap; }
+  .widget-slider input[type="range"] { width: 150px; accent-color: var(--forest); }
+  .widget-toggle input { accent-color: var(--forest); }
+  .widget-select select { padding: 4px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--paper); color: var(--ink); font: inherit; }
+  .widget-value { min-width: 3.5em; font-family: var(--mono); font-size: 13px; color: var(--forest); }
+  .widget-button { padding: 5px 12px; font-size: 14px; }
+  .widget-canvas { display: block; width: 100%; touch-action: none; }
+  .widget-readout { margin: 8px 0 0; font-family: var(--mono); font-size: 13px; line-height: 1.6; color: var(--ink); white-space: pre-wrap; }
+  .widget svg { display: block; width: 100%; height: auto; }
+  .py-cell { margin: 18px 0 24px; }
+  .py-cell .runner-stdout { margin: 0; background: transparent; padding: 0; color: var(--ink); }
+
+  @media (max-width: 620px) {
+    .widget { padding: 14px 12px 12px; margin-left: -4px; margin-right: -4px; }
+    .widget-controls { gap: 8px 14px; }
+    .widget-control { flex-wrap: wrap; }
+    .widget-slider input[type="range"] { width: 100%; min-width: 120px; flex: 1; }
+    .widget-slider { width: 100%; }
   }
 }

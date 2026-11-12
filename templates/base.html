@@ -11,6 +11,7 @@
 <script src="/assets/{{.Assets.ThemeJS}}"></script>
 <link rel="stylesheet" href="/assets/{{.Assets.CSS}}">
 {{if .Math}}<link rel="stylesheet" href="/assets/katex/katex.min.css">{{end}}
+{{block "head" .}}{{end}}
 </head>
 <body class="site-{{.Site.ID}}"{{if .Assets.WorkerJS}} data-worker-url="/assets/{{.Assets.WorkerJS}}" data-harness-url="/assets/{{.Assets.Harness}}"{{end}}>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -22,7 +23,7 @@
   <nav class="topbar-nav" aria-label="Sites">
     <a href="https://courses.ifkash.dev/"{{if eq .Site.ID "courses"}} aria-current="page"{{end}}>Courses</a>
     <a href="https://papers.ifkash.dev/"{{if eq .Site.ID "papers"}} aria-current="page"{{end}}>Papers</a>
-    {{if eq .Site.ID "papers"}}<a href="/graph/">Graph</a><a href="/paths/">Paths</a><a href="/tracks/">Tracks</a>{{end}}
+    {{if eq .Site.ID "papers"}}<a href="/graph/">Graph</a><a href="/paths/">Paths</a><a href="/tracks/">Tracks</a><a href="/dives/">Deep dives</a>{{end}}
   </nav>
   {{if eq .Site.ID "papers"}}<button class="icon-button search-button" type="button" data-search-open aria-label="Search papers (press /)" aria-keyshortcuts="/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>{{end}}
   <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
