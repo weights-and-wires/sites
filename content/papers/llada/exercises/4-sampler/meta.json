@@ -1,0 +1,12 @@
+{
+  "title": "The full sampler",
+  "goal": "Implement the reverse process of Section 2.4 on top of the two remasking steps. `lowconf_step` and `random_step` from the previous exercise are finished for you.\n\n`generate(predict, length, steps, mask_id, remask=\"low_confidence\", rng=None)` starts from a sequence of `length` masks. `predict(x)` returns logits of shape `(length, V)` for the current sequence `x`. At step $k = 1, \\dots, N$ with $N$ = `steps`, call `predict` once, then apply one remasking step so that `length * k // steps` positions are unmasked afterward. This is $n_{un} = \\lfloor L(1 - s) \\rfloor$ at $s = 1 - k/N$, in integer arithmetic. Use `lowconf_step` for `\"low_confidence\"` and `random_step` for `\"random\"`, and raise `ValueError` for anything else. Return the final sequence.\n\nThe tests use a toy model with a fixed table of confidences, so you can compare the two strategies on the same model.",
+  "hints": [
+    "Start with `x = np.full(length, mask_id)` and loop `for k in range(1, steps + 1)`.",
+    "Compute `n_un = length * k // steps` with integers. A float $1 - s$ can round just below an integer and drop one token.",
+    "Call `predict(x)` on the current sequence at every step, including steps after the first. The logits on a partly unmasked sequence differ from those on a fully masked one.",
+    "Pass `rng` through to `random_step` only. The low-confidence strategy is deterministic.",
+    "At the last step `n_un` equals `length`, so no position stays masked."
+  ],
+  "runtime": "pyodide"
+}

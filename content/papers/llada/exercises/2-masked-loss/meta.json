@@ -1,0 +1,12 @@
+{
+  "title": "Masked cross-entropy with the 1/t weight",
+  "goal": "Implement the pre-training loss of Equation 3 for one sequence and one value of $t$.\n\n`masked_cross_entropy(logits, x0, masked, t)` takes `logits` of shape `(L, V)`, the original tokens `x0` of shape `(L,)`, a boolean `masked` of shape `(L,)` that is `True` where the token became $M$, and a float `t` in $(0, 1]$. It returns\n\n$$\\frac{1}{t} \\sum_{i:\\, x_t^i = M} -\\log p_\\theta(x_0^i \\mid x_t)$$\n\nas a Python float. The sum runs over masked positions only, so unmasked logits and labels must not change the result. Use a numerically stable log-softmax. Don't divide by $L$; Equation 3 doesn't.",
+  "hints": [
+    "Subtract the row maximum from the logits before `exp`. Then `log_probs = z - np.log(np.exp(z).sum(axis=-1, keepdims=True))` stays finite for large logits.",
+    "Pick the log-probability of the true token at each position with `log_probs[np.arange(L), x0]`. Negate it to get the per-position cost.",
+    "Select the masked positions with the boolean `masked` before you sum. Positions that stayed visible add nothing.",
+    "Divide the sum by `t` at the end. Multiplying by `t` instead shrinks the loss at small $t$, the opposite of Equation 3.",
+    "Check by hand: probabilities 0.5 and 0.25 at two masked positions with $t = 0.5$ give $2(\\ln 2 + \\ln 4) = 4.1589$."
+  ],
+  "runtime": "pyodide"
+}

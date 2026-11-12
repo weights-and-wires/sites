@@ -1,0 +1,12 @@
+{
+  "title": "One remasking step",
+  "goal": "Implement one reverse step of the sampler in Section 2.4 with the two remasking strategies, Algorithm 5 and Algorithm 4.\n\nBoth functions get the current sequence `x_t` (an int array where `mask_id` marks $M$), the model's `logits` of shape `(L, V)` on that sequence, and `n_un`, the number of unmasked positions the sequence must have after the step. `softmax` is finished for you.\n\n`lowconf_step(x_t, logits, mask_id, n_un)` predicts every masked position greedily and scores each prediction by its softmax probability. Positions that are already unmasked score infinity. It keeps the `n_un` highest-scoring positions and remasks the rest. Break ties toward the lower index. It returns a new array.\n\n`random_step(x_t, logits, mask_id, n_un, rng)` fills exactly `n_un` minus the number of already unmasked positions, chosen uniformly with `rng.permutation(masked_idx)`, using the greedy prediction. It returns a new array. This fixed-count rule is the expectation-matching version of Algorithm 4, which remasks each token with probability $s/t$.\n\nAssume `n_un` is at least the number of positions already unmasked.",
+  "hints": [
+    "The confidence of the prediction at a position is `softmax(logits).max(axis=-1)`. Do not use the raw maximum logit, because a flat distribution can have a large logit and a low probability.",
+    "Overwrite the confidence of positions that are not masked with `np.inf`. Then a visible token is always among the kept ones, whatever the model says there.",
+    "`np.argsort(-conf, kind=\"stable\")[:n_un]` lists the most confident positions first and breaks ties by index.",
+    "Build the output from `np.full(L, mask_id)` and fill only the kept positions. Fill them from `np.where(masked, pred, x_t)`, so a kept visible token keeps its value.",
+    "For the random step, take `np.flatnonzero(x_t == mask_id)`, permute it, and fill the first `n_un - (L - number_masked)` entries."
+  ],
+  "runtime": "pyodide"
+}

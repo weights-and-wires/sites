@@ -1,0 +1,11 @@
+{
+  "title": "Forward masking",
+  "goal": "Implement the forward process of Section 2.1 for a batch of token sequences.\n\n`forward_mask(x0, t, rng, mask_id)` takes an integer array `x0` of any shape, a ratio `t` in $[0, 1]$, a NumPy `Generator` `rng`, and the id of the mask token $M$. It returns a pair `(x_t, masked)`. In `x_t`, every token of `x0` is replaced by `mask_id` with probability $t$, independently of every other token, and kept with probability $1 - t$. `masked` is the boolean array that marks the replaced positions. At $t = 0$ nothing changes, and at $t = 1$ the whole sequence is $M$. Don't modify `x0` in place.",
+  "hints": [
+    "Draw one uniform number per token with `rng.random(np.shape(x0))`. Compare it with `t` to decide which tokens become $M$.",
+    "A token is masked when its uniform draw is below `t`. Using `1 - t` flips the rate, which tests at $t = 0.2$ and $t = 0.8$ catch.",
+    "Draw the whole array at once. A single row of draws reused for every row gives every sequence the same mask.",
+    "`np.where(masked, mask_id, x0)` builds a new array and leaves `x0` unchanged."
+  ],
+  "runtime": "pyodide"
+}
