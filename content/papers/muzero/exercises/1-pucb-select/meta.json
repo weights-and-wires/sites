@@ -1,0 +1,12 @@
+{
+  "title": "pUCT with min-max normalized Q",
+  "goal": "Write the selection rule of MuZero's tree search (Appendix B, Equations 2 and 5). A node has $K$ edges with mean values $Q(s,a)$ (any scale), visit counts $N(s,a)$, and priors $P(s,a)$. The tree-wide minimum and maximum of $Q$ are `lo` and `hi`. The score of edge $a$ is\n\n$$\\bar Q(s,a) + P(s,a)\\,\\frac{\\sqrt{\\sum_b N(s,b)}}{1 + N(s,a)}\\left(c_1 + \\log\\frac{\\sum_b N(s,b) + c_2 + 1}{c_2}\\right), \\qquad \\bar Q = \\frac{Q - \\text{lo}}{\\text{hi} - \\text{lo}}.$$\n\n- `minmax_normalize(Q, lo, hi)` returns $\\bar Q$ as a float array. When `hi <= lo` it returns zeros. (The paper doesn't say what to do for a flat range. This is the exercise's choice.)\n- `puct_scores(Q, N, P, lo, hi, c1=1.25, c2=19652.0)` returns the $K$ scores. The defaults are the paper's constants.\n- `select_action(Q, N, P, lo, hi, legal=None, c1=1.25, c2=19652.0)` returns the index of the highest score. If `legal` (a boolean array) is given, an edge where it is `False` never wins. Ties go to the lowest index.\n\nOn the page, $Q = [2, 5, 0]$, $N = [10, 2, 0]$, $P = [0.6, 0.3, 0.1]$, `lo = 0`, and `hi = 10` give scores `[0.4363, 0.9332, 0.4332]`, so the search picks edge 1.",
+  "hints": [
+    "In `minmax_normalize`, convert `Q` with `np.asarray(Q, dtype=float)`. Return `np.zeros_like(Q)` when `hi <= lo`, and `(Q - lo) / (hi - lo)` otherwise.",
+    "Compute `total = N.sum()` once. The square root and the log term use the sum over all edges, so every edge shares them.",
+    "The factor is `c1 + np.log((total + c2 + 1.0) / c2)`. With $c_2 = 19652$ it stays close to $c_1$ for hundreds of visits, so test it with a small `c2`.",
+    "The bonus is `P * np.sqrt(total) / (1.0 + N) * factor`. Add it to the normalized Q. The bonus does not depend on `lo` or `hi`.",
+    "For `legal`, set the score of each illegal edge to `-np.inf` before `np.argmax`."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,10 @@
+{
+  "title": "n-step value targets",
+  "goal": "Write the value target that MuZero uses for Atari (Section 3, the formula for $z_t$; Appendix G sets $n = 10$). The target sums $n$ discounted rewards and then bootstraps from the search value $\\nu$ of the state $n$ steps ahead:\n\n$$z_t = u_{t+1} + \\gamma u_{t+2} + \\dots + \\gamma^{n-1} u_{t+n} + \\gamma^{n} \\nu_{t+n}.$$\n\nThe exercise stores rewards in a 0-indexed list `u` where `u[t]` is the paper's $u_{t+1}$, the reward that follows step $t$. The list `v` holds $\\nu_t$ for the same steps. Then $z_t = \\sum_{k=0}^{n-1} \\gamma^k\\,\\texttt{u[t+k]} + \\gamma^n\\,\\texttt{v[t+n]}$.\n\n- `nstep_target(u, v, t, n, gamma)` returns $z_t$ as a float. The episode has `len(u)` reward steps. Stop summing at the end of the episode, and add the bootstrap term only when `t + n < len(u)`. (The paper treats terminal states as absorbing with value 0. This is the exercise's way to say the same thing.)\n- `nstep_targets(u, v, n, gamma)` returns the array of $z_t$ for every $t$.\n\nOn the page, `u = [1, 0, 2, 0, 1]`, `v = [5, 4, 3, 2, 1]`, $n = 2$, and $\\gamma = 0.5$ give $z = [1.75, 1.5, 2.25, 0.5, 1.0]$.",
+  "hints": [
+    "Let `end = min(t + n, len(u))`. The reward sum runs over `k` from 0 to `end - t - 1`, and each term is `gamma ** k * u[t + k]`.",
+    "Add `gamma ** n * v[t + n]` only inside `if t + n < len(u):`. Past the end of the episode there is nothing to bootstrap from.",
+    "For `nstep_targets`, call `nstep_target` for every `t` and return `np.array(...)`."
+  ],
+  "runtime": "pyodide"
+}
