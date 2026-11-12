@@ -1,0 +1,12 @@
+{
+  "title": "The REINFORCE estimator against the exact gradient",
+  "goal": "Estimate the policy gradient from sampled trajectories with the score-function (REINFORCE) estimator that follows Theorem 1 (Section 1), and compare it with the exact gradient.\n\nThe policy is a tabular softmax with logits `theta` of shape `(S, A)`. `states`, `actions`, and `rewards` are arrays of shape `(N, H)`: `N` episodes of `H` steps, where `rewards[i, t]` is the reward after taking `actions[i, t]` in `states[i, t]`. Write one function:\n\n- `reinforce_gradient(states, actions, rewards, theta, gamma)` returns an array of shape `(S, A)`: the average over episodes of $\\sum_{t} \\gamma^t\\, G_t\\, \\nabla_\\theta \\log \\pi(a_t \\mid s_t)$, where $G_t = \\sum_{k \\ge 0} \\gamma^k r_{t+k}$ is the discounted reward-to-go within the episode.\n\nThe paper's REINFORCE update is $\\Delta\\theta_t \\propto \\frac{\\partial \\pi(s_t, a_t)}{\\partial \\theta}\\frac{1}{\\pi(s_t, a_t)} R_t$. In the start-state formulation, the weight $d^\\pi$ contains a factor $\\gamma^t$ for step $t$, which the estimator must include to be unbiased for $\\partial J / \\partial \\theta$. The tests include a trajectory computed by hand and a comparison with the exact gradient from 5000 sampled episodes.",
+  "hints": [
+    "For a tabular softmax, $\\nabla_\\theta \\log \\pi(a \\mid s)$ is an array of shape `(S, A)` that is zero outside row `s`. In row `s` it is `onehot(a) - pi[s]`.",
+    "Compute the reward-to-go backward in time: `G[:, H-1] = r[:, H-1]`, then `G[:, t] = r[:, t] + gamma * G[:, t+1]`.",
+    "Each step contributes `gamma**t * G[i, t] * (onehot(a) - pi[s])` to row `s` of the result. Add the contributions for all steps and episodes, then divide by `N`.",
+    "A Python loop over episodes is too slow for 5000 episodes. Loop over the `H` time steps and use `np.add.at(grad, (s, a), coef)` for the one-hot part, with `s`, `a`, and `coef` as arrays over episodes. A second `np.add.at` per action column handles the `pi[s]` part.",
+    "If your estimate is far from the exact gradient on the sampled test, check the factor $\\gamma^t$. Leaving it out changes the answer by a large amount, not a small one."
+  ],
+  "runtime": "pyodide"
+}

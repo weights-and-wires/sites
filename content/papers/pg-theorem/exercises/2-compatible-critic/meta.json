@@ -1,0 +1,12 @@
+{
+  "title": "A compatible critic with Theorem 2",
+  "goal": "Build the compatible features for a linear softmax policy, fit the critic $f_w$ by weighted least squares, and show that the gradient computed with $f_w$ equals the true gradient (Theorem 2, Equations 3 to 5).\n\nThe policy is $\\pi(s, a) \\propto \\exp(\\theta^\\top \\phi_{sa})$ (Section 3). `phi` has shape `(S, A, k)`, `pi` has shape `(S, A)`, `d` has shape `(S,)` and holds $d^\\pi(s)$, and `q` has shape `(S, A)` and holds $Q^\\pi$.\n\nWrite three functions:\n\n- `compatible_features(phi, pi)` returns `psi` with shape `(S, A, k)`, where $\\psi_{sa} = \\phi_{sa} - \\sum_b \\pi(s, b)\\phi_{sb}$. This is $\\nabla_\\theta \\log \\pi(s, a)$, and the critic is $f_w(s, a) = w^\\top \\psi_{sa}$.\n- `fit_compatible_critic(psi, pi, d, q)` returns `w` with shape `(k,)`: the weighted least-squares fit that makes Equation 3 hold, with weight $d^\\pi(s)\\pi(s, a)$ on each pair.\n- `policy_gradient_with_critic(psi, pi, d, w)` returns the gradient in Equation 5, $\\sum_s d^\\pi(s) \\sum_a \\frac{\\partial \\pi(s,a)}{\\partial \\theta} f_w(s, a)$, as an array of length `k`.\n\nThe tests include the page's one-parameter example and a case with more state-action pairs than parameters, so $f_w$ can't equal $Q^\\pi$ and the gradient is still exact.",
+  "hints": [
+    "$\\sum_b \\pi(s, b)\\phi_{sb}$ is a mean over actions for each state. `np.einsum(\"sb,sbk->sk\", pi, phi)` computes it, and you subtract it from every action's feature with `[:, None, :]`.",
+    "For this policy, $\\partial \\pi(s, a) / \\partial \\theta = \\pi(s, a)\\,\\psi_{sa}$, which is Equation 4 rewritten.",
+    "Equation 3 with $\\partial f_w / \\partial w = \\psi_{sa}$ reads $\\sum_{s,a} d(s)\\pi(s,a)\\,\\psi_{sa}\\,(Q(s,a) - \\psi_{sa}^\\top w) = 0$. These are the normal equations $A w = b$ with $A = \\sum d\\pi\\,\\psi\\psi^\\top$ and $b = \\sum d\\pi\\,\\psi\\, Q$.",
+    "Build $A$ with `np.einsum(\"sa,sak,sal->kl\", d[:, None] * pi, psi, psi)` and $b$ with `np.einsum(\"sa,sak,sa->k\", d[:, None] * pi, psi, q)`, then call `np.linalg.solve`.",
+    "The gradient is $\\sum_{s,a} d(s)\\pi(s,a)\\,\\psi_{sa}\\,f_w(s,a)$. If it doesn't match the true gradient, check that you used the same weights in the fit and in the sum."
+  ],
+  "runtime": "pyodide"
+}
