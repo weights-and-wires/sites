@@ -1,0 +1,11 @@
+{
+  "title": "Lightning indexer scores",
+  "goal": "Implement the index score of Equation 1 (Section 2.1) for every query-key pair at once. Use `index_scores(Q, w, K)`, where `Q` has shape `(L, H, d)` (the vectors $q^I_{t,j}$), `w` has shape `(L, H)` (the weights $w^I_{t,j}$), and `K` has shape `(L, d)` (the vectors $k^I_s$). Return an `(L, L)` array with $I_{t,s} = \\sum_j w_{t,j}\\,\\mathrm{ReLU}(q_{t,j} \\cdot k_s)$ for $s \\le t$ and `-np.inf` for $s > t$, because a query can't select a later token.",
+  "hints": [
+    "For one head, `Q[:, j] @ K.T` has shape `(L, L)`. An `einsum` such as `\"tjd,sd->tjs\"` computes all heads at once.",
+    "Apply `np.maximum(x, 0)` to each dot product before you weight it. ReLU acts per head, not on the sum.",
+    "Weight head `j` of row `t` by `w[t, j]`, then sum over `j`: `np.einsum(\"tj,tjs->ts\", w, relu_dots)`.",
+    "Build the causal mask with `np.tril(np.ones((L, L), dtype=bool))` and fill the rest with `-np.inf`."
+  ],
+  "runtime": "pyodide"
+}

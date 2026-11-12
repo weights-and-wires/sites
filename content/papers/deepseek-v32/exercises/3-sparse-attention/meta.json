@@ -1,0 +1,11 @@
+{
+  "title": "Attention over the selected keys",
+  "goal": "Implement Equation 2 in the MQA mode of MLA (Section 2.1). Use `dsa_attention(Q, K, V, I, k)`. `Q` has shape `(L, H, d)`, one query vector per head. `K` has shape `(L, d)` and `V` has shape `(L, d_v)`; every head shares them, as one latent entry serves every head in MQA mode. `I` is the `(L, L)` index-score array with `-np.inf` for $s > t$. Return an `(L, H, d_v)` array. For each query `t` and head `h`, take a softmax of $q_{t,h} \\cdot K_s / \\sqrt{d}$ over only the `k` keys with the largest `I[t]` (all `t + 1` keys when `t + 1 < k`), and average `V` with those weights. The starter gives you `topk_mask`.",
+  "hints": [
+    "Compute `logits = np.einsum(\"thd,sd->hts\", Q, K) / np.sqrt(d)`. The shape is `(H, L, L)`.",
+    "Fill the logits with `-np.inf` where `mask[t, s]` is `False`. Use `np.where(mask[None], logits, -np.inf)`.",
+    "Subtract the row maximum before `np.exp`. At least one entry per row is finite, so the sum is never 0.",
+    "The output for head `h` is `weights[h] @ V`. Stack the heads on axis 1: `np.einsum(\"hts,sv->thv\", weights, V)`."
+  ],
+  "runtime": "pyodide"
+}
