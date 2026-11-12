@@ -1,0 +1,10 @@
+{
+  "title": "Critic target and loss",
+  "goal": "Write the two pieces of Algorithm 1 that train the critic. For a minibatch of $N$ transitions $(s_i, a_i, r_i, s_{i+1})$:\n\n- `ddpg_targets(r, s_next, done, gamma, actor_target, critic_target)` returns $y_i = r_i + \\gamma\\, Q'(s_{i+1}, \\mu'(s_{i+1}))$, and $y_i = r_i$ when `done[i]` is 1. `r` and `done` have shape `(N,)`. `actor_target(S)` maps a batch of states to a batch of actions, and `critic_target(S, A)` maps a batch of states and actions to a vector of shape `(N,)`.\n- `critic_loss(q, y)` returns $\\frac{1}{N}\\sum_i (y_i - q_i)^2$, where `q` holds $Q(s_i, a_i)$ and has shape `(N,)`.\n\nThe example on the page gives targets `[0.9, -0.125, 2.0]` and a loss of `0.26354`. Algorithm 1 doesn't show terminal states. The mask is the standard addition that the DQN page also uses.",
+  "hints": [
+    "Call `actor_target(s_next)` first, then pass its output to `critic_target`. Don't take a maximum over actions: the actor already chooses the action.",
+    "Multiply the bootstrap term by `(1.0 - done)`, so that a terminal row gets $y_i = r_i$ whatever the target networks return for it.",
+    "The targets are constants in the critic update. You don't need a gradient here, only the values."
+  ],
+  "runtime": "pyodide"
+}

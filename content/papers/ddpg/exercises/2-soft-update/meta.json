@@ -1,0 +1,10 @@
+{
+  "title": "Soft target update",
+  "goal": "Write the target-network update of Section 3, $\\theta' \\leftarrow \\tau\\theta + (1-\\tau)\\theta'$.\n\n- `soft_update(target, source, tau)` takes two dicts that map parameter names to NumPy arrays with the same keys and shapes. It returns a new dict with $\\tau\\,\\text{source} + (1-\\tau)\\,\\text{target}$ for every key. It doesn't modify either input.\n- `updates_to_shrink(tau, frac)` returns the smallest integer $n$ such that $(1-\\tau)^n \\le$ `frac`: the number of updates until the gap between a target and a frozen source falls to a fraction `frac` of its starting size.\n\nThe page shows that $\\tau = 0.001$ needs 693 updates to halve the gap.",
+  "hints": [
+    "Use a dict comprehension over `target`: `{k: tau * source[k] + (1.0 - tau) * target[k] for k in target}`. The arithmetic creates new arrays, so the inputs stay unchanged.",
+    "Take logarithms: $(1-\\tau)^n \\le f$ means $n \\ge \\ln f / \\ln(1-\\tau)$. Both logarithms are negative, so the ratio is positive.",
+    "Round up with `math.ceil`. The smallest integer that satisfies the inequality is the ceiling."
+  ],
+  "runtime": "pyodide"
+}

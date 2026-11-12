@@ -1,0 +1,10 @@
+{
+  "title": "Ornstein-Uhlenbeck noise",
+  "goal": "Write the exploration noise process of Section 7 as a class.\n\n- `OUNoise(dim, theta=0.15, sigma=0.2, mu=0.0, dt=1.0, rng=None)` keeps a state vector `x` of shape `(dim,)`, initialized to `mu`. If `rng` is `None`, create `np.random.default_rng()`.\n- `reset()` sets `x` back to `mu`.\n- `sample()` applies one Euler step, $x \\leftarrow x + \\theta(\\mu - x)\\,dt + \\sigma\\sqrt{dt}\\,\\varepsilon$ with $\\varepsilon \\sim \\mathcal{N}(0, I)$ from `rng.standard_normal(dim)`. It returns a copy of the new state.\n\nThe paper gives $\\theta = 0.15$ and $\\sigma = 0.2$ but not the discretization. With $dt = 1$, the noise has a lag-1 correlation of 0.85 and a stationary standard deviation of about 0.38.",
+  "hints": [
+    "Store the state as `self.x = np.full(dim, mu, dtype=float)`. `reset` assigns the same thing again.",
+    "Draw the noise with `self.rng.standard_normal(self.dim)`. Scale it by `sigma * np.sqrt(dt)`, not by `sigma * dt`.",
+    "Return `self.x.copy()`. If you return `self.x`, every earlier sample changes when you take the next step."
+  ],
+  "runtime": "pyodide"
+}

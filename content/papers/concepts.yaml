@@ -756,13 +756,13 @@ concepts:
     refresher: "Pick the best-known action most of the time and a random action with small probability epsilon."
   deterministic-policy-gradient:
     label: "deterministic policy gradient"
-    url: "https://rl.ifkash.dev/lessons/037-deterministic-policy-gradients"
+    url: "https://rl.ifkash.dev/lessons/040-deterministic-policy-gradients"
     lesson: "Deterministic policy gradients: DDPG and TD3"
     anchor_match: exact
     refresher: "A policy outputs a single action, and its gradient flows through the critic's action-value with respect to the action."
   ornstein-uhlenbeck-noise:
     label: "Ornstein-Uhlenbeck noise"
-    url: "https://rl.ifkash.dev/lessons/037-deterministic-policy-gradients"
+    url: "https://rl.ifkash.dev/lessons/040-deterministic-policy-gradients"
     lesson: "Deterministic policy gradients: DDPG and TD3"
     anchor_match: exact
     refresher: "Time-correlated noise that drifts back toward a mean, once used to add exploration to continuous actions."
