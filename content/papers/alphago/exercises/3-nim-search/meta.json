@@ -1,0 +1,11 @@
+{
+  "title": "A small search on Nim",
+  "goal": "Put selection, expansion, evaluation, and backup together on a game small enough to check by hand. In Nim, a pile of $n$ stones is shared by two players. Each turn a player takes 1, 2, or 3 stones, and the player who takes the last stone wins. Action index `a` means \"take `a + 1` stones\". The player to move at $n$ stones wins exactly when $n \\bmod 4 \\neq 0$.\n\nWrite `mcts(n_root, prior_fn, value_fn, n_sims, c_puct)`. It runs `n_sims` simulations from `n_root` and returns the root visit counts $N(\\text{root}, a)$ as a float array of length 3. The starter gives you `new_node` and `select`. In each simulation:\n\n1. **Selection.** From the root, while the state has stones and is already in the tree, pick an action with `select`, record `(state, action)`, and move to `state - (action + 1)`.\n2. **Expansion and evaluation.** If the state is 0, the player to move has lost, so the leaf value is $-1$. Otherwise add `new_node(state, prior_fn)` to the tree and use `value_fn(state)`, which is from the view of the player to move.\n3. **Backup.** Walk the path from the leaf upward. The edge into the leaf gets $-v$, the edge before it gets $+v$, and so on. Each edge adds 1 to `N` and the signed value to `W`.\n\nThis uses no rollouts, which is $\\lambda = 0$. The tree is keyed by the stone count, so two move orders that reach the same count share statistics.",
+  "hints": [
+    "Keep `tree = {n_root: new_node(n_root, prior_fn)}` and loop `for _ in range(n_sims)`. Inside, start with `s = n_root` and `path = []`.",
+    "The selection loop is `while s > 0 and s in tree:`. After it ends, either `s == 0` (terminal, `v = -1.0`) or `s` is a stone count that isn't in the tree yet (add it and set `v = value_fn(s)`).",
+    "Backup: `for state, a in reversed(path): v = -v; tree[state]['N'][a] += 1; tree[state]['W'][a] += v`. Flipping `v` before the update gives the edge into the leaf the value $-v_{\\text{leaf}}$.",
+    "Return `tree[n_root]['N']`. The visit counts add up to `n_sims`."
+  ],
+  "runtime": "pyodide"
+}

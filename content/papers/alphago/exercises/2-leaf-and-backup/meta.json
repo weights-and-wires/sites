@@ -1,0 +1,10 @@
+{
+  "title": "Leaf evaluation and backup",
+  "goal": "Write the three small pieces that turn a leaf into updated edge statistics.\n\n- `leaf_value(v, z, lam)` returns $V(s_L) = (1-\\lambda)\\, v_\\theta(s_L) + \\lambda\\, z_L$ (main text, \"Searching with policy and value networks\"). With $v = 0.3$, $z = -1$, and $\\lambda = 0.5$ it returns $-0.35$.\n- `backup(N, W, path, v_leaf)` updates the 1-D float arrays `N` and `W` in place. `path` is the list of edge indices from the root to the leaf, and `v_leaf` is the leaf value from the view of the player to move at the leaf. The edge into the leaf was chosen by the opponent, so it gets $-v_{\\text{leaf}}$, the edge before it gets $+v_{\\text{leaf}}$, and the signs keep alternating up to the root. Every edge on the path also adds 1 to `N`. (The paper doesn't spell out the sign convention. This one is mine, for a two-player zero-sum game.)\n- `mixed_q(Wv, Nv, Wr, Nr, lam)` returns the combined mean $Q = (1-\\lambda)\\, W_v/N_v + \\lambda\\, W_r/N_r$ (Methods, \"Search algorithm\"). Treat a term whose count is 0 as 0.\n\nOn the page, three backups of leaf values $0.4, -0.2, 0.6$ through a two-edge path leave `N = [3, 3]` and `W = [0.8, -0.8]`, so $Q = [0.2667, -0.2667]$.",
+  "hints": [
+    "In `backup`, walk `reversed(path)`. Start with `sign = -1.0`, add `sign * v_leaf` to `W[e]`, add 1 to `N[e]`, then set `sign = -sign`.",
+    "Use `N[e] += 1` and `W[e] += ...` on the arrays you receive. If you build new arrays, the caller's `N` and `W` don't change and the tests fail.",
+    "For `mixed_q`, write a helper that returns `W / N` when `N > 0` and `0.0` otherwise. Call it once for the value network and once for the rollouts."
+  ],
+  "runtime": "pyodide"
+}
