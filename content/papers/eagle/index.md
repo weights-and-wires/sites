@@ -123,7 +123,7 @@ $$
 
 Candidate $r$ is accepted with probability $\min(1, p^{(r)}(x)/q(x))$. If all $k$ are rejected, the token comes from $p^{(k+1)}$. The output is exactly $p$, by induction on $k$: each round delivers the mass $\min(p^{(r)}, q)$ and leaves the remaining mass for the next round, in the same way as in the one-candidate proof of the `spec-decoding` page.
 
-This page's argument assumes i.i.d. draws from $q$. I could not check the paper's pseudocode closely enough to say whether it handles a without-replacement tree in the same way. In greedy mode, the paper takes the top-$k$ tokens and verification is an argmax check, which needs no residuals.
+This page's argument assumes i.i.d. draws from $q$. The paper's pseudocode does not make clear whether a without-replacement tree is handled the same way. In greedy mode, the paper takes the top-$k$ tokens and verification is an argmax check, which needs no residuals.
 
 **Tiny example, computed by `scripts/multi_candidate.py`.** Use $p = [0.5, 0.4, 0.1]$ and $q = [0.2, 0.3, 0.5]$ from the `spec-decoding` page.
 
