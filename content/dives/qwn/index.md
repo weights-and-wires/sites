@@ -40,7 +40,7 @@ The post counts an answer as usable when it passes three checks:
 - It answers the prompt.
 - It reads as normal English.
 
-An LLM judge scores the last two checks, coherence and responds, each from 1 to 5. An answer needs at least 4 on both. The judge is not told about the "e" rule, and it does not penalize wrong facts. The headline metric is the usable rate over 200 answers: 50 validation prompts with 4 answers each.
+An LLM judge, GPT-6 Luna, scores the last two checks, coherence and responds, each from 1 to 5. An answer needs at least 4 on both. The judge is not told about the "e" rule, and it does not penalize wrong facts. The headline metric is the usable rate over 200 answers: 50 validation prompts with 4 answers each.
 
 ## Key ideas
 
