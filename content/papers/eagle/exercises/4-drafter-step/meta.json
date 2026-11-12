@@ -1,0 +1,11 @@
+{
+  "title": "A feature-level drafter step",
+  "goal": "Build one step of EAGLE's draft model on toy dimensions (Section 3.1 and Section 3.2).\n\nThe target gives you features `F` of shape `(n, d)`, where `F[i]` is the second-to-top-layer feature at position `i`. The token at position `i` is `tokens[i]`. `E` is the frozen embedding table of shape `(V, d)`.\n\nThe draft model predicts the feature at position `i + 1` from the feature at position `i` and the token at position `i + 1`. That token is the \"advanced\" token sequence: it is one step ahead of the features.\n\nWrite three functions:\n\n- `drafter_input(F, tokens, E)` returns an array of shape `(n - 1, 2 * d)`. Row `i` is the concatenation of `F[i]` and `E[tokens[i + 1]]`, in that order.\n- `drafter_step(F, tokens, E, W, b)` returns `drafter_input(...) @ W + b`, with `W` of shape `(2 * d, d)`. This is the fully connected layer that fuses the two inputs. The decoder layer is left out here.\n- `smooth_l1(pred, target, beta=1.0)` returns the mean over all elements of `0.5 * x**2 / beta` where `|x| < beta`, and `|x| - 0.5 * beta` otherwise, with `x = pred - target`. The paper trains the regression loss with Smooth L1.",
+  "hints": [
+    "`tokens[1:]` are the advanced tokens and `F[:-1]` are the features they pair with. Both have `n - 1` rows.",
+    "Use `np.concatenate([F[:-1], E[tokens[1:]]], axis=1)`. Feature first, then the token embedding. The tests use different `W` blocks for the two halves, so the order matters.",
+    "For Smooth L1, `np.where(abs_x < beta, 0.5 * x**2 / beta, abs_x - 0.5 * beta)`, then `.mean()`.",
+    "Check the two branches by hand: `x = 0.5` gives 0.125 and `x = 3` gives 2.5 at `beta = 1`."
+  ],
+  "runtime": "pyodide"
+}

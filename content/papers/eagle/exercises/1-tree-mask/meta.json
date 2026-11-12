@@ -1,0 +1,11 @@
+{
+  "title": "Tree attention mask and position ids",
+  "goal": "Build the inputs that let the target model verify a whole draft tree in one pass (Section 3.1 and Section 3.3).\n\nA draft tree is a list `parents`. Node `i` has parent `parents[i]`, and `parents[i] == -1` means the node is a child of the last context token. Parents always come before their children (`parents[i] < i`). The context holds `ctx_len` tokens at positions `0, ..., ctx_len - 1`.\n\nWrite two functions:\n\n- `tree_mask(parents, ctx_len)` returns a boolean array of shape `(n, ctx_len + n)`. Row `i` is the query for draft node `i`. The first `ctx_len` columns are context keys, and the last `n` columns are tree keys. `mask[i, j]` is `True` when node `i` may attend to key `j`: every context token, node `i` itself, and every ancestor of node `i`, and nothing else.\n- `position_ids(parents, ctx_len)` returns an int array of shape `(n,)`. A node's position is the position it would have if its root-to-node path were a plain chain after the context, so the first draft token sits at `ctx_len`.",
+  "hints": [
+    "Compute the depth of each node first. A root has depth 1, and any other node has the depth of its parent plus 1. Because `parents[i] < i`, one pass from left to right works.",
+    "The position id of a node is `ctx_len + depth - 1`. Siblings share a position. That is correct: they are alternatives for the same slot.",
+    "For the mask, start with the context columns set to `True`. For each node, set its own tree column, then walk up with `j = parents[j]` until `j == -1` and set each ancestor's column.",
+    "A node must not see its siblings or its cousins. If two branches see each other, the verification of one branch depends on a token that is not in its prefix."
+  ],
+  "runtime": "pyodide"
+}
