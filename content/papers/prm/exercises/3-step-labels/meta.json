@@ -1,0 +1,11 @@
+{
+  "title": "Process labels and outcome labels",
+  "goal": "Process supervision labels each step, but only up to the first incorrect step (Section 2.6). Outcome supervision gives one label for the final answer (Section 2.5). Appendix H builds synthetic labels from the large PRM by calling a step incorrect when its negative probability is above 20%. Write three functions:\n\n- `process_labels(step_ok)` takes a list of booleans, one per step, and returns a list of `1` (correct) and `0` (incorrect) that stops right after the first incorrect step. With no incorrect step it returns a label for every step.\n- `outcome_labels(n_steps, final_correct)` returns a list of `n_steps` copies of `1` if `final_correct` is true and `0` otherwise. This is the target the ORM uses at every position.\n- `synthetic_step_ok(p_neg, threshold=0.2)` takes the PRM's probability of the negative label for each step and returns a list of booleans. A step is incorrect only when `p_neg` is strictly greater than `threshold`.",
+  "hints": [
+    "In `process_labels`, append the label first and `break` after you append a `0`. The incorrect step itself keeps its label.",
+    "A solution can reach the right answer through a wrong step, so the outcome label can be `1` even when `process_labels` ends in `0`. That is a false positive of outcome supervision (Section 4).",
+    "In `synthetic_step_ok`, a step with `p_neg` exactly equal to the threshold is still correct. Use `<=` for correct, which is the same as `>` for incorrect.",
+    "The page example `[0.05, 0.10, 0.20, 0.25, 0.01]` gives `[True, True, True, False, True]`."
+  ],
+  "runtime": "pyodide"
+}

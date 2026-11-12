@@ -1,0 +1,11 @@
+{
+  "title": "Simulate best-of-N and majority voting",
+  "goal": "Figure 3 of the paper plots the share of problems solved against $N$, the number of sampled solutions. You can reproduce the shape of that plot with a model. Each sampled solution is correct with probability $p$. A scorer rates a solution with `sep * correct + sigma * noise`, where `noise` is drawn from $N(0, 1)$. A larger `sigma` models a worse reward model. Write two functions. Both take a `numpy.random.Generator` named `rng`:\n\n- `best_of_n_accuracy(n, p, sep, sigma, trials, rng)` simulates `trials` problems with `n` sampled solutions each, keeps the highest-scored solution, and returns the fraction of trials in which it is correct.\n- `majority_vote_accuracy(n, p, n_wrong, trials, rng)` simulates the same sampling without a scorer. A wrong solution carries one of `n_wrong` equally likely wrong answers. Return the fraction of trials in which the correct answer gets the most votes. A tie goes to the answer that appears first.\n\nBoth return a Python float. The tests compare your results with exact probabilities, so use `trials` independent trials.",
+  "hints": [
+    "Draw all the trials at once. `correct = rng.random((trials, n)) < p` is a boolean matrix with one row per trial.",
+    "Build the scores as `sep * correct + sigma * rng.standard_normal((trials, n))`, take `scores.argmax(axis=1)`, and read the pick with `correct[np.arange(trials), pick]`.",
+    "A perfect scorer (`sigma = 0`, `sep > 0`) picks a correct solution whenever one exists, so its accuracy is $1 - (1 - p)^n$. A scorer with `sep = 0` is random, and its accuracy is $p$ for every $n$.",
+    "For voting, label the correct answer `0` and a wrong answer `1 + rng.integers(0, n_wrong)`. For each row, `Counter(row).most_common(1)[0][0]` gives the winner, and `Counter` keeps first-seen order among ties."
+  ],
+  "runtime": "pyodide"
+}
