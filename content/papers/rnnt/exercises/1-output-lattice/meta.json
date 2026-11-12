@@ -1,0 +1,13 @@
+{
+  "title": "The output distribution on the lattice",
+  "goal": "Implement Section 2.3 (Equations 12 to 15). Given transcription vectors $f_t$ and prediction vectors $g_u$, build the probability of every symbol at every node $(t, u)$ of the lattice, then keep the two numbers the lattice needs: $y(t, u)$ and $\\varnothing(t, u)$.\n\nWrite `output_lattice(f, g, y)`.\n\n- `f` has shape `(T, K+1)`. Row `t` is $f_{t+1}$.\n- `g` has shape `(U+1, K+1)`. Row `u` is $g_u$ for the prefix $y_{1:u}$.\n- Column 0 is the null symbol $\\varnothing$. Columns `1..K` are the labels.\n- `y` is a tuple of `U` labels (integers in `1..K`).\n\nReturn `(emit, null)`:\n\n- `emit` has shape `(T, U)`. `emit[t, u]` is $y(t+1, u)$, the probability of the next label $y_{u+1}$ at node $(t+1, u)$ (Equation 14).\n- `null` has shape `(T, U+1)`. `null[t, u]` is $\\varnothing(t+1, u)$ (Equation 15).\n\nThe vectors are logits, so $h(k,t,u) = \\exp(f_t^k + g_u^k)$ (Equation 12) and the softmax runs over $k$ (Equation 13). The logits can be large, so the function must not overflow.",
+  "hints": [
+    "Add the two tables with broadcasting: `logits = f[:, None, :] + g[None, :, :]`. The result has shape `(T, U+1, K+1)`.",
+    "Subtract the maximum over the last axis before you call `np.exp`. The softmax is unchanged, and large logits no longer overflow.",
+    "Divide by the sum over the last axis (`axis=-1`, `keepdims=True`). Every node `(t, u)` then sums to 1 across all `K+1` symbols.",
+    "`null` is column 0 of the probabilities: `probs[:, :, 0]`.",
+    "`emit[t, u]` picks column `y[u]` at node `(t, u)`. Use `y[u]`, not `y[u + 1]`, because the tuple is 0-based. There is no `emit` for `u = U`, because no label is left to emit.",
+    "When `U = 0`, return an `emit` of shape `(T, 0)`."
+  ],
+  "runtime": "pyodide"
+}

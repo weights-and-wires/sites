@@ -1,0 +1,12 @@
+{
+  "title": "Greedy decoding with a prediction network",
+  "goal": "Decode with the transducer one frame at a time (Section 2.6 describes the exact beam search; this exercise is its width-one, argmax cousin).\n\nWrite `greedy_decode(joint, T, max_symbols=3)`.\n\n- `joint(t, prefix)` returns a NumPy vector of probabilities $\\Pr(k \\mid t, u)$ over `K+1` symbols, where `t` is the 0-based frame and `prefix` is the tuple of labels emitted so far. Index 0 is the null symbol.\n- For each frame `t = 0, ..., T-1`, repeat: ask `joint(t, prefix)` and take the argmax. If it is the null, move to the next frame. Otherwise append the label to the output and ask again at the same frame. Stop a frame after it has emitted `max_symbols` labels, and move on.\n- Return the output as a tuple of labels.\n\nThe prefix is what makes this different from CTC's best path: the same frame can give a different answer after a label is emitted.",
+  "hints": [
+    "Keep `out = []`. Pass `tuple(out)` to `joint`, so the callee can't change your list and can use the tuple as a dictionary key.",
+    "Use an outer loop over `t` and an inner loop `for _ in range(max_symbols)`. Inside it, `k = int(np.argmax(joint(t, tuple(out))))`.",
+    "If `k == 0`, `break` out of the inner loop. That moves to the next frame. Otherwise `out.append(k)` and keep looping.",
+    "When the inner loop ends because it used `max_symbols` iterations, the frame is over even though no null was chosen. A plain `for` loop does that for free.",
+    "Ask for the probabilities again after every emitted label. Calling `joint` once per frame ignores the prediction network."
+  ],
+  "runtime": "pyodide"
+}

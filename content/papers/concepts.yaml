@@ -990,13 +990,13 @@ concepts:
     refresher: "Normalize recurrent-network activations using batch statistics, which needs care across time steps."
   joint-networks:
     label: "joint networks"
-    url: "https://speech.ifkash.dev/lessons/033-transducers"
+    url: "https://speech.ifkash.dev/lessons/034-transducers"
     lesson: "Transducers"
     anchor_match: exact
     refresher: "In a transducer, a small network combines encoder and prediction-network outputs into token probabilities."
   lattice:
     label: "lattice"
-    url: "https://speech.ifkash.dev/lessons/033-transducers"
+    url: "https://speech.ifkash.dev/lessons/034-transducers"
     lesson: "Transducers"
     anchor_match: exact
     refresher: "A graph of the possible alignments between input frames and output tokens, over which probabilities are summed."

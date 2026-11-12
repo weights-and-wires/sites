@@ -1,0 +1,13 @@
+{
+  "title": "The forward recursion and a brute-force check",
+  "goal": "Implement Section 2.4 (Equations 16 and 17) and check it against a sum over every alignment.\n\nYou get the lattice probabilities from exercise 1: `emit` of shape `(T, U)` where `emit[t, u]` is $y(t+1, u)$, and `null` of shape `(T, U+1)` where `null[t, u]` is $\\varnothing(t+1, u)$.\n\nWrite two functions:\n\n- `forward(emit, null)` returns `(alpha, prob)`. `alpha` has shape `(T, U+1)`, and `alpha[t, u]` is $\\alpha(t+1, u)$ from Equation 16 with $\\alpha(1, 0) = 1$. `prob` is $\\Pr(y \\mid x) = \\alpha(T, U)\\,\\varnothing(T, U)$ (Equation 17).\n- `brute_force(emit, null)` returns `(prob, n)`. It walks every alignment, multiplies the probabilities of its arrows, and sums them. `n` is the number of alignments. Each alignment is a path from node $(1, 0)$ to node $(T, U)$ followed by the final null at $(T, U)$.\n\nThe two probabilities must agree. Brute force is only for tiny cases: the number of alignments is $\\binom{T+U-1}{U}$.",
+  "hints": [
+    "In 0-based indexes, Equation 16 reads `alpha[t, u] = alpha[t-1, u] * null[t-1, u] + alpha[t, u-1] * emit[t, u-1]`. The first term is a null arrow from the left. The second term is a label arrow from below. Skip a term when its index would be negative.",
+    "Start with `alpha[0, 0] = 1`. Fill row by row (`t` outer, `u` inner), so both predecessors exist when you need them.",
+    "The last factor of Equation 17 is `null[T-1, U]`. A path leaves the lattice through that arrow, so omit it and the probability is too large.",
+    "For brute force, an alignment has `T + U` arrows. The last one is always the null at `(T, U)`. The first `T + U - 1` arrows hold `U` label arrows and `T - 1` null arrows. Use `itertools.combinations(range(T + U - 1), U)` to choose which positions are label arrows.",
+    "Walk each choice with a node `(t, u)` that starts at `(0, 0)`. A label arrow multiplies by `emit[t, u]` and increments `u`. A null arrow multiplies by `null[t, u]` and increments `t`.",
+    "Count `n` as the number of choices you enumerated. It must equal `math.comb(T + U - 1, U)`."
+  ],
+  "runtime": "pyodide"
+}
