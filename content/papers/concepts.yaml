@@ -1122,13 +1122,13 @@ concepts:
     refresher: "Process input in small chunks as it arrives, with bounded delay, instead of waiting for the whole utterance."
   infilling:
     label: "infilling"
-    url: "https://speech.ifkash.dev/lessons/058-flow-matching-for-speech"
+    url: "https://speech.ifkash.dev/lessons/068-flow-matching-for-speech"
     lesson: "Flow matching for speech"
     anchor_match: exact
     refresher: "Generate missing or masked parts of a signal conditioned on the surrounding context."
   mel-spectrograms:
     label: "mel spectrograms"
-    url: "https://speech.ifkash.dev/lessons/012-log-mel-spectrograms"
+    url: "https://speech.ifkash.dev/lessons/013-log-mel-spectrograms"
     lesson: "Log-mel spectrograms"
     anchor_match: exact
     refresher: "A spectrogram whose frequency axis follows the mel scale, which matches how people perceive pitch."
