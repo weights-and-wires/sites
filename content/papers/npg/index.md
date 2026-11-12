@@ -12,7 +12,9 @@ est_hours: 4
 status: full
 summary: "The ordinary policy gradient is the steepest ascent direction only when you measure step length in raw parameter units, so its steps change with the units of the parameters and with how often each state is visited. This paper measures step length with the Fisher information matrix of the policy, which gives the natural gradient: the gradient multiplied by the inverse Fisher matrix. With a compatible function approximator, the natural gradient is exactly the weight vector of the least-squares fit to the action values, so a large natural step moves toward the greedy action of that fit, as in one step of policy iteration."
 related_course: "rl: policy gradients"
-prereqs: []
+prereqs:
+  - id: pg-theorem
+    reason: "The natural gradient rescales the policy gradient of Equation 1, so you need the form sum rho * grad pi * Q and the compatible features that make a learned critic safe to use."
 background: [policy-gradient-theorem, fisher-information, kl-divergence, softmax, least-squares]
 course_links:
   - title: "Natural gradients and trust regions"
@@ -127,7 +129,7 @@ $$
 \psi^\pi(s, a) = \nabla_\theta\log\pi(a; s, \theta), \qquad f^\pi(s, a; w) = w^\top\psi^\pi(s, a)
 $$
 
-Let $w$ minimize the squared error $\epsilon(w, \pi) = \sum_{s,a}\rho(s)\,\pi(a; s,\theta)\,\big(f^\pi(s, a; w) - Q^\pi(s, a)\big)^2$. The approximator is compatible with the policy in the sense of Sutton et al. (2000), the policy gradient theorem paper: using $f^\pi$ in place of $Q^\pi$ in Equation 1 still gives the exact gradient.
+Let $w$ minimize the squared error $\epsilon(w, \pi) = \sum_{s,a}\rho(s)\,\pi(a; s,\theta)\,\big(f^\pi(s, a; w) - Q^\pi(s, a)\big)^2$. The approximator is compatible with the policy in the sense of [Sutton et al. (2000)](/pg-theorem/), the policy gradient theorem paper: using $f^\pi$ in place of $Q^\pi$ in Equation 1 still gives the exact gradient.
 
 **Theorem 1** (Section 3.1). If $w$ minimizes $\epsilon(w, \pi_\theta)$, then $w = \tilde\nabla\eta(\theta)$. The proof is short. Setting $\partial\epsilon/\partial w = 0$ gives $\sum \rho\,\pi\,\psi\,(\psi^\top w - Q) = 0$. Because $\nabla\pi = \pi\psi$, the term $\sum\rho\,\pi\,\psi\,Q$ is $\nabla\eta$, and $\sum\rho\,\pi\,\psi\psi^\top = F$, so $Fw = \nabla\eta$.
 
@@ -192,7 +194,7 @@ At $\alpha = 1000$, the natural step puts probability 1 on action 2 in every sta
 ## Further reading
 
 - [Trust Region Policy Optimization](/trpo/), by Schulman et al., turns this direction into a step with a KL budget, conjugate gradient solves, and a line search.
-- Sutton, McAllester, Singh, and Mansour, "Policy gradient methods for reinforcement learning with function approximation" (NIPS 2000), gives the policy gradient theorem and the compatible function approximation that this paper builds on.
+- [Policy Gradient Methods for Reinforcement Learning with Function Approximation](/pg-theorem/), by Sutton, McAllester, Singh, and Mansour (NIPS 2000), gives the policy gradient theorem and the compatible function approximation that this paper builds on.
 - Amari, "Natural gradient works efficiently in learning" (Neural Computation, 1998), is the source of the natural gradient that the paper cites.
 - [Approximately Optimal Approximate Reinforcement Learning](https://people.eecs.berkeley.edu/~pabbeel/cs287-fa09/readings/KakadeLangford-icml2002.pdf), by Kakade and Langford, is the companion paper on conservative policy iteration.
 - [Spinning Up: Trust Region Policy Optimization](https://spinningup.openai.com/en/latest/algorithms/trpo.html), by OpenAI, derives the natural gradient step and ships a reference implementation.
