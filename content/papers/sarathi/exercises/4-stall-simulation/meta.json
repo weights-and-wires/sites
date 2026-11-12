@@ -1,0 +1,12 @@
+{
+  "title": "Stalls: prefill-first against stall-free",
+  "goal": "Compare max time between tokens (TBT) for the two policies on a toy trace (Section 3.2, Figure 7).\n\nWrite `simulate(policy, d, steps, prompt, arrive, budget, iter_time)`. `d` requests are decoding, and each needs `steps` more tokens. One prompt of `prompt` tokens waits from iteration `arrive` on. Assume `arrive <= steps`. `iter_time(n)` gives the milliseconds for an iteration with `n` tokens.\n\nEach iteration emits one token for each decoding request that is in its batch. The two policies differ when the prompt waits:\n\n- `\"prefill_first\"` runs the whole prompt alone, so the decodes get no token in that iteration.\n- `\"stall_free\"` runs every decode plus a chunk of `max(0, budget - active decodes)` prompt tokens, capped at what remains.\n\nThe prompt emits its first token when its last chunk finishes. Run until all decodes have finished and the prompt is done. Return `(max_tbt, ttft)`. `max_tbt` is the largest gap between consecutive token times of any one decode request. `ttft` is the time from the start of iteration `arrive` to the prompt's first token.",
+  "hints": [
+    "Keep a clock `t`, an iteration counter `it`, `left[i]` tokens per decode, and a list of token times per decode.",
+    "The prompt is waiting when `it >= arrive` and tokens remain. Save `t` the first time that holds, because the TTFT starts there.",
+    "For `prefill_first` with a waiting prompt, `n = remaining`, no decode emits, and the whole prompt finishes.",
+    "For `stall_free`, `chunk = min(remaining, max(0, budget - len(active)))` and `n = len(active) + chunk`. Decodes emit a token at the end of the iteration.",
+    "Add `iter_time(n)` to `t`, then record `t` for each decode that ran. The gaps are consecutive differences in each request's list."
+  ],
+  "runtime": "pyodide"
+}
