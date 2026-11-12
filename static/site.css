@@ -414,8 +414,11 @@
   @media (max-width: 620px) {
     .widget { padding: 14px 12px 12px; margin-left: -4px; margin-right: -4px; }
     .widget-controls { gap: 8px 14px; }
-    .widget-control { flex-wrap: wrap; }
-    .widget-slider input[type="range"] { width: 100%; min-width: 120px; flex: 1; }
-    .widget-slider { width: 100%; }
+    /* One row per slider: the label wraps inside its column, so the value
+       never drops to a line of its own. */
+    .widget-slider { display: grid; grid-template-columns: minmax(0, 40%) minmax(0, 1fr) auto; gap: 10px; width: 100%; }
+    .widget-slider label { white-space: normal; }
+    .widget-slider input[type="range"] { width: 100%; min-width: 0; }
+    .widget-value { min-width: 0; text-align: right; }
   }
 }
