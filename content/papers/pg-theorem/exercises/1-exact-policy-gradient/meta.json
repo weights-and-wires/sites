@@ -1,0 +1,12 @@
+{
+  "title": "The exact policy gradient from Theorem 1",
+  "goal": "Compute the policy gradient of a tabular softmax policy with Theorem 1 (Equation 2), then check it against finite differences of the objective.\n\nThe MDP has $S$ states and $A$ actions. `P` has shape `(S, A, S)` with `P[s, a, s2]` $= \\Pr(s_{t+1} = s_2 \\mid s_t = s, a_t = a)$. `R` has shape `(S, A)` and holds the expected reward $\\mathcal{R}_s^a$. `pi` has shape `(S, A)` and each row sums to 1. This is the start-state formulation of Section 1: the objective is $J = V^\\pi(s_0)$ with discount `gamma`.\n\nWrite three functions:\n\n- `discounted_state_weights(P, pi, gamma, s0)` returns $d^\\pi(s) = \\sum_{t \\ge 0} \\gamma^t \\Pr(s_t = s \\mid s_0, \\pi)$ as an array of length `S`. The paper doesn't normalize it, so it sums to $1/(1-\\gamma)$.\n- `action_values(P, R, pi, gamma)` returns $Q^\\pi$ as an array of shape `(S, A)`.\n- `policy_gradient(P, R, theta, gamma, s0)` returns an array of shape `(S, A)`: $\\partial J / \\partial \\theta_{s,b}$ for the policy $\\pi(s, a) = \\exp\\theta_{s,a} / \\sum_b \\exp\\theta_{s,b}$.\n\nUse linear solves, not simulation. The tests check the page's two-state example by hand, the identities for $d^\\pi$ and $Q^\\pi$, and the gradient against finite differences on random MDPs.",
+  "hints": [
+    "$d^\\pi$ satisfies $d = e_{s_0} + \\gamma\\, (P^\\pi)^\\top d$, where $P^\\pi[s, s'] = \\sum_a \\pi(s, a) P[s, a, s']$. Solve $(I - \\gamma (P^\\pi)^\\top) d = e_{s_0}$ with `np.linalg.solve`.",
+    "$V^\\pi$ solves $(I - \\gamma P^\\pi) V = r^\\pi$ with $r^\\pi[s] = \\sum_a \\pi(s, a) R[s, a]$. Then $Q^\\pi(s, a) = R[s, a] + \\gamma \\sum_{s'} P[s, a, s'] V(s')$.",
+    "For a softmax policy, $\\partial \\pi(s, a) / \\partial \\theta_{s,b} = \\pi(s, a)(\\mathbb{1}[a = b] - \\pi(s, b))$, and logits of other states don't affect $\\pi(s, \\cdot)$.",
+    "Put that into Theorem 1: $\\partial J / \\partial \\theta_{s,b} = d^\\pi(s) \\sum_a \\pi(s, a)(\\mathbb{1}[a = b] - \\pi(s, b)) Q^\\pi(s, a) = d^\\pi(s)\\, \\pi(s, b)\\,(Q^\\pi(s, b) - V^\\pi(s))$. Here $V^\\pi(s) = \\sum_a \\pi(s, a) Q^\\pi(s, a)$.",
+    "Don't differentiate $d^\\pi$. That is the point of the theorem. If your answer is off by a constant factor on some states, check that you weight each state by $d^\\pi(s)$ and not by 1."
+  ],
+  "runtime": "pyodide"
+}
