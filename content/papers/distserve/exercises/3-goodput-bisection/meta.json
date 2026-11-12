@@ -1,0 +1,12 @@
+{
+  "title": "SLO attainment and goodput",
+  "goal": "The paper defines goodput as the maximum request rate whose SLO attainment, the share of requests that meet both latency targets, stays at or above a goal such as 90% (Section 1, Section 4.1). Algorithm 1 finds that rate by binary search over simulation runs.\n\nWrite two functions:\n\n- `slo_attainment(ttft, tpot, ttft_slo, tpot_slo)` takes two equal-length lists of per-request latencies in seconds and returns the fraction of requests with `ttft <= ttft_slo` and `tpot <= tpot_slo`.\n- `max_goodput(attainment_at, target=0.9, lo=0.0, hi=100.0, iters=40)` takes a function `attainment_at(rate)` that does not increase with the rate. It returns the largest rate in `[lo, hi]` for which `attainment_at(rate) >= target`, found by `iters` rounds of bisection. Assume `attainment_at(lo)` meets the target. Return a rate that meets the target, not one that just misses it.",
+  "hints": [
+    "A request counts only when both latencies are within their targets. Compare with `<=`, so a request that exactly meets the SLO counts.",
+    "Divide the count of good requests by the total number of requests.",
+    "Keep two numbers: `lo` always meets the target, and `hi` is the upper end of the search. Each round, test `mid = (lo + hi) / 2`.",
+    "If `attainment_at(mid) >= target`, set `lo = mid`. Otherwise set `hi = mid`.",
+    "Return `lo` after the loop."
+  ],
+  "runtime": "pyodide"
+}

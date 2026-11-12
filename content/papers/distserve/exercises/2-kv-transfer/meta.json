@@ -1,0 +1,12 @@
+{
+  "title": "KV cache transfer",
+  "goal": "A prefill instance sends each request's KV cache to a decoding instance (Section 3.3, \"Communication overhead\"). Write three functions:\n\n- `kv_bytes_per_token(layers, kv_heads, head_dim, bytes_per_value=2)` returns the bytes of KV cache that one token needs. Each layer stores one key vector and one value vector of `kv_heads * head_dim` values.\n- `transfer_seconds(n_bytes, bandwidth_gbit)` returns the seconds to move `n_bytes` over a link of `bandwidth_gbit` gigabits per second. Use $10^9$ bits for a gigabit.\n- `min_bandwidth_gbit(n_bytes, rate)` returns the gigabits per second that the link needs to carry `rate` requests per second of `n_bytes` each.",
+  "hints": [
+    "Count the factor of 2 for keys and values: `2 * layers * kv_heads * head_dim * bytes_per_value`.",
+    "A link rate is in bits per second, and the cache is in bytes. Multiply the bytes by 8.",
+    "`transfer_seconds` is `n_bytes * 8 / (bandwidth_gbit * 1e9)`.",
+    "`min_bandwidth_gbit` is the bytes per second, `n_bytes * rate`, converted to gigabits per second.",
+    "Check against the paper: OPT-66B has 64 layers and 72 heads of size 128. A 512-token request needs about 1.2 GB, and 10 requests per second need about 97 Gbit/s."
+  ],
+  "runtime": "pyodide"
+}
