@@ -1,0 +1,11 @@
+{
+  "title": "Welch's t statistic and degrees of freedom",
+  "goal": "The Significance section compares two sets of final returns with a two-sample t-test. When the two algorithms have different variances, the unpooled version (Welch's) is the safer choice. Write one function.\n\n- `welch_t(a, b)` takes two 1-D arrays of returns, which can have different lengths, and returns `(t, df)`. With $v_a = s_a^2 / n_a$ and $v_b = s_b^2 / n_b$, where $s^2$ is the sample variance with `ddof=1`:\n\n$$t = \\frac{\\bar a - \\bar b}{\\sqrt{v_a + v_b}}, \\qquad \\mathrm{df} = \\frac{(v_a + v_b)^2}{v_a^2/(n_a - 1) + v_b^2/(n_b - 1)}$$\n\nThe second formula is the Welch-Satterthwaite approximation. Note that this page's formulas are the textbook ones. The paper says \"2-sample t-test\" and doesn't give the formula.",
+  "hints": [
+    "Use `a.var(ddof=1)` for the sample variance. With `ddof=0` the statistic is too large.",
+    "Compute `va = a.var(ddof=1) / len(a)` and `vb` the same way. Then `t = (a.mean() - b.mean()) / np.sqrt(va + vb)`.",
+    "For the degrees of freedom, the numerator is `(va + vb) ** 2`. The denominator has one term per group: `va**2 / (len(a) - 1)` plus the same for `b`.",
+    "Return `(t, df)` as floats. The sign of `t` follows `a.mean() - b.mean()`."
+  ],
+  "runtime": "pyodide"
+}

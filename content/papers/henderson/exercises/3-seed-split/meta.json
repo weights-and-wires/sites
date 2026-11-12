@@ -1,0 +1,11 @@
+{
+  "title": "Two groups of seeds, one algorithm",
+  "goal": "The Random Seeds and Trials section runs 10 seeds of the same algorithm, splits them into two sets of 5, and finds that the two averages look statistically different. The page measures how often that happens. Write two functions that take `runs`, an array of shape `(E, 2n)`: `E` independent experiments, each with `2n` final returns from the same algorithm. In each row, the first `n` entries are group A and the last `n` are group B.\n\n- `band_gap_rate(runs)` returns the fraction of experiments where the two groups' mean $\\pm$ 1 standard error bands do **not** overlap, that is $|\\bar a - \\bar b| > \\mathrm{se}_a + \\mathrm{se}_b$, with $\\mathrm{se} = s / \\sqrt{n}$ and `ddof=1`.\n- `welch_gap_rate(runs, crit)` returns the fraction of experiments where Welch's $|t|$ is greater than `crit`.\n\nThe starter gives you `welch_t_rows(a, b)`, which returns one Welch t statistic per row of two `(E, n)` matrices.",
+  "hints": [
+    "Find `n` with `runs.shape[1] // 2`. Then `a = runs[:, :n]` and `b = runs[:, n:]`. The paper splits the 10 seeds into two sets, not by even and odd columns.",
+    "For the band rule, compute `a.mean(axis=1)` and `a.std(axis=1, ddof=1) / np.sqrt(n)`, and the same for `b`.",
+    "`np.mean(condition)` over a boolean array is the fraction of `True` values. Return it as a float.",
+    "For the Welch rule, call `welch_t_rows(a, b)` and compare its absolute value to `crit`. Both tails count."
+  ],
+  "runtime": "pyodide"
+}
