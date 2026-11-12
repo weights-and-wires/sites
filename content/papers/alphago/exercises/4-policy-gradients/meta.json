@@ -1,0 +1,10 @@
+{
+  "title": "Policy gradients for the SL and RL networks",
+  "goal": "Write the two update directions that train AlphaGo's policy networks, for a softmax policy $p(a \\mid s) = \\operatorname{softmax}(\\text{logits})_a$. Both return the gradient with respect to the **logits**, which the network then backpropagates.\n\n- `sl_grad(logits, a)` is the gradient of $\\log p_\\sigma(a \\mid s)$ for the human move $a$ (\"Supervised learning of policy networks\"). Stochastic gradient ascent follows this direction.\n- `rl_grad(logits, a, z, baseline=0.0)` is the gradient of $(z - b)\\, \\log p_\\rho(a \\mid s)$ for the move $a$ that the policy played, the outcome $z \\in \\{+1, -1\\}$ from the mover's view, and a baseline $b$ (\"Reinforcement learning of policy networks\" and Methods).\n\nThe gradient of $\\log \\operatorname{softmax}(x)_a$ with respect to $x$ is $e_a - \\operatorname{softmax}(x)$, where $e_a$ is the one-hot vector for $a$. For `logits = [0, 0, 0]` and `a = 1`, `sl_grad` returns `[-1/3, 2/3, -1/3]`.",
+  "hints": [
+    "Subtract `logits.max()` before `np.exp` so large logits don't overflow. The softmax value doesn't change.",
+    "Build the one-hot vector with `e = np.zeros_like(p); e[a] = 1.0`. Then `sl_grad` is `e - p`.",
+    "`rl_grad` is `(z - baseline) * sl_grad(logits, a)`. A win ($z = +1$) raises the probability of the played move, and a loss lowers it."
+  ],
+  "runtime": "pyodide"
+}

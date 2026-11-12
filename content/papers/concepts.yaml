@@ -828,7 +828,7 @@ concepts:
     refresher: "Grow a search tree by repeatedly selecting, expanding, simulating, and backing up results, favoring promising moves."
   supervised-policy-learning:
     label: "supervised policy learning"
-    url: "https://rl.ifkash.dev/lessons/043-imitation-learning"
+    url: "https://rl.ifkash.dev/lessons/051-imitation-learning"
     lesson: "Imitation learning"
     anchor_match: close
     refresher: "Train a policy to imitate expert actions with a classification or regression loss."

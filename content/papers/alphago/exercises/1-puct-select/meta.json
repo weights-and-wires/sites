@@ -1,0 +1,10 @@
+{
+  "title": "PUCT selection with a prior",
+  "goal": "Write the selection rule that AlphaGo uses inside the tree (Methods, \"Search algorithm\"). At a node with $K$ moves, edge $a$ stores a mean value $Q(s,a)$, a visit count $N(s,a)$, and a prior $P(s,a)$. The score is\n\n$$Q(s,a) + c_{\\text{puct}}\\, P(s,a)\\, \\frac{\\sqrt{\\sum_b N(s,b)}}{1 + N(s,a)}.$$\n\n- `puct_scores(Q, N, P, c_puct)` returns the array of $K$ scores.\n- `select_action(Q, N, P, c_puct, legal)` returns the index of the highest score among the moves where the boolean array `legal` is `True`. It never returns an illegal move, and it breaks ties toward the lowest index.\n\nOn the page, $Q = [0.2, 0.5, 0]$, $N = [10, 2, 0]$, $P = [0.6, 0.3, 0.1]$, and $c_{\\text{puct}} = 5$ give scores `[1.1448, 2.2321, 1.7321]`, so the search picks move 1.",
+  "hints": [
+    "Compute the total once: `total = N.sum()`. The square root is of the sum over all moves, so every move shares the same $\\sqrt{\\sum_b N(s,b)}$.",
+    "The bonus is `c_puct * P * np.sqrt(total) / (1.0 + N)`. The `1 +` keeps an unvisited move from dividing by zero.",
+    "For the mask, set the score of each illegal move to `-np.inf` before `np.argmax`. Then an illegal move can't win, even when its prior or value is large."
+  ],
+  "runtime": "pyodide"
+}
