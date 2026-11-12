@@ -1,0 +1,12 @@
+{
+  "title": "Roofline cost of an iteration",
+  "goal": "Section 3.1 models an iteration's time as $T = \\max(T_{math}, T_{mem})$. For the linear layers, a pass over $n$ tokens does $2 \\cdot P \\cdot n$ FLOPs for $P$ parameters and reads the $P \\cdot b$ bytes of weights once, where $b$ is `bytes_per_param`. Ignore activations and attention.\n\nWrite three functions:\n\n- `arithmetic_intensity(n_tokens, bytes_per_param=2)` returns FLOPs per byte.\n- `iteration_time(n_tokens, n_params, peak_flops, bandwidth, bytes_per_param=2)` returns `(seconds, bound)`. `bound` is `\"memory\"` when $T_{mem} > T_{math}$ and `\"compute\"` otherwise.\n- `token_budget(slo, n_params, peak_flops, bandwidth, bytes_per_param=2)` returns the largest integer $n$ whose iteration time is at most `slo` seconds, or `0` if even one token takes longer.",
+  "hints": [
+    "FLOPs are `2 * n_params * n_tokens`. Bytes are `n_params * bytes_per_param`. The intensity is their ratio, so `n_params` cancels.",
+    "`t_math = flops / peak_flops` and `t_mem = bytes / bandwidth`. The weights are read once per iteration, so `t_mem` doesn't depend on `n_tokens`.",
+    "Return `max(t_math, t_mem)` and the string for whichever term is larger.",
+    "For the budget, solve `2 * n_params * n / peak_flops <= slo` for `n`. Add a tiny epsilon such as `1e-9` before you floor, so a float like 499.99999999 doesn't lose a token.",
+    "If `slo` is below the memory time, no batch size fits. Return 0."
+  ],
+  "runtime": "pyodide"
+}

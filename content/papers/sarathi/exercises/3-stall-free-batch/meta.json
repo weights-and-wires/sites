@@ -1,0 +1,11 @@
+{
+  "title": "Build a stall-free batch",
+  "goal": "Implement the batch construction of Algorithm 3 (Section 4.2, lines 6 to 20) for one iteration.\n\nWrite `stall_free_batch(n_decodes, waiting, budget)`. `n_decodes` is the number of running requests that each contribute one decode token. `waiting` lists the unprocessed prompt tokens of each request with prefill work, in priority order: partly processed prefills first, then new requests in arrival order. `budget` is the token budget $\\tau$.\n\nReturn a list `chunks` with one entry per element of `waiting`. `chunks[i]` is the number of prompt tokens of request `i` to run in this iteration. Decodes always run, even when they alone exceed the budget. The chunks use only what the decodes leave, and an earlier request takes tokens before a later one.",
+  "hints": [
+    "Start with `left = budget - n_decodes`. If the decodes already use the whole budget, `left` is 0 or negative, so clamp it at 0.",
+    "Walk through `waiting` in order. For each, `c = min(remaining, left)`, then `left -= c`.",
+    "Append `c` even when it is 0, so the result lines up with `waiting`.",
+    "Don't reorder `waiting`. Shortest-first would let a short prompt jump ahead of a partly processed one."
+  ],
+  "runtime": "pyodide"
+}

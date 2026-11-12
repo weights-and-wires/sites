@@ -1,0 +1,11 @@
+{
+  "title": "Chunk the prompt",
+  "goal": "Chunked prefill splits a prompt into pieces that fit a token budget (Section 4.1, Algorithm 3 lines 11 and 15). Every chunk after the first attends to the keys and values of all earlier chunks, so the engine reads them again (Section 4.3).\n\nWrite two functions:\n\n- `chunk_sizes(prompt_len, budget)` returns the list of chunk sizes. Every chunk is `budget` tokens except possibly the last, which holds the rest. The sizes sum to `prompt_len`, and none is 0.\n- `kv_tokens_reread(chunks)` returns the total number of earlier-chunk KV tokens that all chunks read. The first chunk reads none. Chunk $i$ reads the $\\sum_{j<i} c_j$ tokens before it.",
+  "hints": [
+    "Loop while tokens remain: append `min(budget, remaining)` and subtract it.",
+    "Don't append a chunk of 0. A prompt of exactly `budget` tokens gives one chunk.",
+    "For the re-reads, the prefix sum before chunk `i` is `sum(chunks[:i])`.",
+    "Check against the paper's wording: with $N$ chunks of equal size $c$, the first chunk's KV is read $N-1$ times and so on, so the total is $c\\,N(N-1)/2$."
+  ],
+  "runtime": "pyodide"
+}
