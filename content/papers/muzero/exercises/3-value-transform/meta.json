@@ -1,0 +1,11 @@
+{
+  "title": "Value transform and categorical support",
+  "goal": "Write the pieces that MuZero uses to predict rewards and values of any scale in Atari (Appendix F). Raw values are squashed by the invertible transform\n\n$$h(x) = \\operatorname{sign}(x)\\left(\\sqrt{|x| + 1} - 1\\right) + \\epsilon x, \\qquad \\epsilon = 0.001,$$\n\nand then encoded over a support of integers $-300, \\dots, 300$ (601 entries) as the linear combination of the two adjacent integers. A target of 3.7 gets weight 0.3 on 3 and 0.7 on 4.\n\n- `h(x)` returns $h(x)$ for a scalar or an array.\n- `h_inv(y)` returns the exact inverse. The paper doesn't print it. Solve $y = w - 1 + \\epsilon(w^2 - 1)$ for $w = \\sqrt{|x| + 1}$ and you get a quadratic in $w$.\n- `phi(x, lo=-300, hi=300)` returns a length `hi - lo + 1` vector with the two weights. Clip `x` into `[lo, hi]` first.\n- `to_target(x, lo=-300, hi=300)` returns `phi(h(x), lo, hi)`.\n- `from_logits(logits, lo=-300)` applies a softmax to the logits, takes the expected support value, and then inverts $h$. It returns a float.\n\nOn the page, $h(3.7) = 1.1716$ and `phi(3.7, 0, 5)` is `[0, 0, 0, 0.3, 0.7, 0]`.",
+  "hints": [
+    "`h`: `np.sign(x) * (np.sqrt(np.abs(x) + 1) - 1) + EPS * x`. The linear term is outside the `sign` factor.",
+    "For `h_inv`, use $w = \\dfrac{\\sqrt{1 + 4\\epsilon(|y| + 1 + \\epsilon)} - 1}{2\\epsilon}$ and return $\\operatorname{sign}(y)\\,(w^2 - 1)$.",
+    "For `phi`, let `low = floor(x)` and `frac = x - low`. Put `1 - frac` at index `low - lo` and `frac` at index `low + 1 - lo`. When `frac` is 0, skip the second write so `x = hi` stays in range.",
+    "For `from_logits`, subtract `logits.max()` before `np.exp`. Build the support as `lo + np.arange(len(logits))`, take `p @ support`, and only then call `h_inv`."
+  ],
+  "runtime": "pyodide"
+}

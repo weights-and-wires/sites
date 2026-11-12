@@ -846,7 +846,7 @@ concepts:
     refresher: "A tree-search selection rule that adds a prior-weighted exploration bonus to each action's average value."
   model-based-rl:
     label: "model-based RL"
-    url: "https://rl.ifkash.dev/lessons/040-model-based-rl"
+    url: "https://rl.ifkash.dev/lessons/043-model-based-rl"
     lesson: "Learning a model and planning with it"
     anchor_match: exact
     refresher: "Learn a model of environment dynamics and use it to plan or generate training data."

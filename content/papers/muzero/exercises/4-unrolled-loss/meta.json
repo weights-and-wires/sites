@@ -1,0 +1,12 @@
+{
+  "title": "Unrolled loss over K steps",
+  "goal": "Unroll a tiny linear MuZero model for $K$ steps and compute the loss of Equation 1 (Section 3) without the L2 term. The model has the following parts, all stored in the dict `params`:\n\n- Representation: $s_0 = H\\,o$, with matrix `H`.\n- Dynamics: $(r_k, s_k) = g(s_{k-1}, a_k)$. Stack $s_{k-1}$ and the one-hot vector of $a_k$, multiply by `G`, and read the output as $[r_k,\\ s_k]$. The first entry is the reward and the rest is the next state.\n- Prediction: $p_k = \\operatorname{softmax}(W_p s_k)$ and $v_k = w_v^\\top s_k$.\n\nThe functions are:\n\n- `unroll(params, obs, actions)` returns `(rewards, policies, values)`. `rewards` has $K$ floats for steps $1..K$, and `policies` and `values` have $K + 1$ entries for steps $0..K$. Use `actions[k-1]` at step $k$.\n- `unrolled_loss(params, obs, actions, pi, z, u)` returns $\\sum_{k=0}^{K} \\bigl[ (u_k - r_k)^2 + (z_k - v_k)^2 - \\pi_k^\\top \\log p_k \\bigr]$ as a float. There is no reward term at $k = 0$, because the model predicts no reward for the root. `pi[k]` and `z[k]` have $K + 1$ entries, and `u[k]` is used for $k \\ge 1$. (Squared errors are the board-game form of the paper. Atari replaces them with categorical cross-entropy, as in Exercise 3. The paper's Appendix G also scales each head's loss by $1/K$. This exercise doesn't.)\n\nOn the page, the tiny model in `scripts/unroll_example.py` has rewards `[1, 2]` and values `[3, 4, 6]` after the actions `[0, 1]`.",
+  "hints": [
+    "Start with `s = H @ obs`. Collect `softmax(Wp @ s)` and `float(wv @ s)` for step 0 before the loop.",
+    "In the loop over `actions`, build `np.concatenate([s, np.eye(A)[a]])` with `A = Wp.shape[0]`. Multiply by `G`. Then `reward = out[0]` and `s = out[1:]`.",
+    "After each dynamics step, append the policy and value of the new `s`. The `k`-th action is `actions[k - 1]`.",
+    "In `unrolled_loss`, loop `k` from 0 to `len(actions)`. Add `(u[k] - rewards[k - 1]) ** 2` only for `k >= 1`.",
+    "The policy term is `-(pi[k] @ np.log(policies[k]))`. Use the whole vector `pi[k]`, and not just its argmax."
+  ],
+  "runtime": "pyodide"
+}
