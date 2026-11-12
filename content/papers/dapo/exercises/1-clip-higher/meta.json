@@ -1,0 +1,11 @@
+{
+  "title": "Clip-Higher",
+  "goal": "Implement the asymmetric clipped surrogate of Equation 10 (Section 3.1), with $\\varepsilon_{low} = 0.2$ and $\\varepsilon_{high} = 0.28$.\n\nWrite two functions:\n\n- `clipped_terms(ratio, adv, eps_low=0.2, eps_high=0.28)` returns, for every token, $\\min\\big(r\\hat A,\\ \\operatorname{clip}(r, 1 - \\varepsilon_{low}, 1 + \\varepsilon_{high})\\hat A\\big)$. The arguments `ratio` and `adv` are NumPy arrays of the same shape, and the result has that shape too.\n- `prob_ceiling(p_old, eps_high=0.28)` returns the largest probability that a token with $\\hat A > 0$ can reach before its gradient is clipped away: $\\pi_{old}(1 + \\varepsilon_{high})$, capped at 1 because a probability can't exceed 1.",
+  "hints": [
+    "Compute `clipped = np.clip(ratio, 1 - eps_low, 1 + eps_high)`, then take `np.minimum(ratio * adv, clipped * adv)`.",
+    "Use `np.minimum`, not `np.min`. `np.min` reduces over an axis, and you need an element-wise comparison.",
+    "For a negative advantage, multiplying by `adv` flips the order, so the `min` picks the more negative of the two products. Check this by hand with `ratio = 0.5` and `adv = -1`: the products are `-0.5` and `-0.8`.",
+    "`prob_ceiling` is one line: `np.minimum(1.0, p_old * (1 + eps_high))`. The paper's examples are `0.01 -> 0.0128` and `0.9 -> 1.152`, which the cap reduces to 1."
+  ],
+  "runtime": "pyodide"
+}

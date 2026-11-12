@@ -1,0 +1,11 @@
+{
+  "title": "Dynamic sampling",
+  "goal": "Implement the group filter of Equation 11 and the batch-filling loop of Algorithm 1 (Section 3.2). Rewards follow Equation 7: $+1$ for a correct output and $-1$ for any other.\n\nWrite three functions:\n\n- `group_advantages(rewards)` returns the advantage of every output in one group, $(R_i - \\operatorname{mean}) / \\operatorname{std}$ with the population standard deviation (`np.std`). When the standard deviation is 0, it returns an array of zeros and no `nan`.\n- `keep_group(rewards)` returns `True` when the group has at least one correct and at least one incorrect output, that is, $0 < |\\{o_i : \\text{correct}\\}| < G$.\n- `fill_batch(groups, batch_size)` takes an iterator of reward lists, one per sampled prompt. It reads groups one at a time, keeps those that pass `keep_group`, and stops as soon as it has `batch_size` kept groups. It returns `(kept, drawn)`: the list of kept groups (as given) and the number of groups it read, including the discarded ones. If the iterator runs out first, it returns what it has.",
+  "hints": [
+    "`group_advantages`: convert to a float array, compute `std = r.std()`, and return `np.zeros_like(r)` when `std == 0`.",
+    "`keep_group`: count the rewards equal to 1 with `np.sum(r == 1)`, and check `0 < count < len(r)`.",
+    "`fill_batch`: loop with `for g in groups`, add one to `drawn` at the top of the loop body, append `g` when it passes the filter, and `break` the moment `len(kept) == batch_size`. Don't read more groups than you need.",
+    "A group such as `[1, -1, -1, -1]` has advantages `[1.7321, -0.5774, -0.5774, -0.5774]`, and a uniform group has all zeros."
+  ],
+  "runtime": "pyodide"
+}
