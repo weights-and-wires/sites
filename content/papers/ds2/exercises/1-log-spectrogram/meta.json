@@ -1,0 +1,12 @@
+{
+  "title": "Log power spectrogram",
+  "goal": "DS2 feeds the network a spectrogram of power-normalized audio (Section 3.1). Build the feature yourself.\n\nWrite `log_power_spectrogram(x, sr, win_ms=20, hop_ms=10, eps=1e-10)`. `x` is a 1-D waveform and `sr` is the sample rate in Hz. Convert the window and hop to samples with `int(round(sr * ms / 1000))`. Cut `x` into frames of `win` samples that start every `hop` samples, with no padding, so there are `1 + (len(x) - win) // hop` frames. Multiply each frame by a symmetric Hann window (`np.hanning(win)`), take the real FFT of exactly `win` points, square the magnitude, add `eps`, and take the natural log.\n\nReturn an array of shape `(n_frames, win // 2 + 1)`. Row $k$ is frame $k$ and column $b$ is the frequency $b \\cdot sr / win$ Hz.",
+  "hints": [
+    "For 16 kHz audio, 20 ms is 320 samples and 10 ms is 160 samples. One second of audio gives `1 + (16000 - 320) // 160 = 99` frames.",
+    "Build the frames with a list comprehension: `x[i * hop : i * hop + win]` for `i` in `range(n_frames)`. Stack them into an `(n_frames, win)` array.",
+    "Use `np.fft.rfft(frames * window, axis=1)`. The `axis=1` argument transforms each frame, not each frequency bin.",
+    "`np.abs(spec) ** 2` is the power. Add `eps` before the log so that silence gives `log(eps)` and not `-inf`.",
+    "Check your work with a 1000 Hz sine at 16 kHz. The bin spacing is 16000 / 320 = 50 Hz, so every frame peaks in bin 20."
+  ],
+  "runtime": "pyodide"
+}
