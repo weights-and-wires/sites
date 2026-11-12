@@ -1,0 +1,10 @@
+{
+  "title": "Composite reward with a format penalty",
+  "goal": "The paper wraps the role reward in a penalty for wrong answers and formatting errors (Section 3.1, Equation 6). A response that is correctly formatted and passes earns $r_{role}$. A response that is well formatted but fails earns $-0.5$. A response with a formatting error earns $-1$.\n\nWrite `composite_reward(r_role, well_formed, passed)` and return a float. For the solver, `passed` means that the answer is correct. For the proposer, `passed` means that the task is valid. This page reads Equation 6 that way. The paper's exact wording for the middle case is not checked here.",
+  "hints": [
+    "Test `well_formed` first. A formatting error gives $-1$ whatever `passed` is.",
+    "Next, if `passed` is true, return `float(r_role)`. Do not return `1.0`, because the proposer's reward is a fraction.",
+    "Otherwise return $-0.5$."
+  ],
+  "runtime": "pyodide"
+}

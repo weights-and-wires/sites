@@ -1,0 +1,10 @@
+{
+  "title": "Check a deduction, abduction, or induction answer",
+  "goal": "Each task is a triplet $(p, i, o)$ with $o = p(i)$ (Section 3.2). The solver answers in one of three ways, and the environment checks it by running code.\n\n- **Deduction:** given $p$ and $i$, predict $o$. The answer is correct if it equals $o$.\n- **Abduction:** given $p$ and $o$, find an input. The answer is correct if $p(\\text{answer}) = o$. The program need not be one-to-one, so an input other than the original can be correct.\n- **Induction:** given some input-output pairs, write a program. The answer is a source string, and it is correct if it reproduces every pair in `task_input`, a list of `(x, y)` held-out pairs.\n\nWrite `check_answer(kind, program_src, task_input, task_output, answer)`. The starter provides `run_program(src, x)`, which returns `f(x)` for a source string that defines `f`. Return a bool. An answer that raises an error is incorrect.",
+  "hints": [
+    "Deduction does not run any code: compare `answer == task_output`.",
+    "For abduction, return `run_program(program_src, answer) == task_output` inside `try`, and return `False` on any exception.",
+    "For induction, `answer` is source code. Check `all(run_program(answer, x) == y for x, y in task_input)` inside `try`."
+  ],
+  "runtime": "pyodide"
+}
