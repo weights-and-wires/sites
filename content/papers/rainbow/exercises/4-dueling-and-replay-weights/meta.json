@@ -1,0 +1,11 @@
+{
+  "title": "The dueling distribution and replay weights",
+  "goal": "Write three functions for the network head and the replay buffer.\n\n- `dueling_distribution(v, adv)` returns the distributional dueling head of Section 3. `v` has shape `(N,)`, one value per atom. `adv` has shape `(A, N)`, one advantage per action and atom. For each atom, aggregate `v + adv - mean over actions of adv`, then apply a softmax over the atoms of each action. Return `(A, N)` probabilities whose rows sum to 1.\n- `replay_probabilities(priorities, omega)` returns $P(i) = p_i^{\\omega} / \\sum_k p_k^{\\omega}$ for proportional prioritization (Section 2).\n- `importance_weights(probs, beta)` returns $w_i = (N P(i))^{-\\beta}$ divided by its maximum, so the largest weight is 1. (Prioritized experience replay by Schaul et al. defines these; Rainbow anneals $\\beta$ from 0.4 to 1.)\n\nThe page gives priorities `[0.04, 0.25, 1.0, 0.16]` with $\\omega = 0.5$: probabilities `[0.0952, 0.2381, 0.4762, 0.1905]`, and with $\\beta = 1$ weights `[1, 0.4, 0.2, 0.5]`.",
+  "hints": [
+    "The mean runs over the action axis only: `adv.mean(axis=0, keepdims=True)`. Averaging over atoms looks similar and gives the wrong logits.",
+    "Subtract each row's maximum before `np.exp` so that large logits cannot overflow. The softmax axis is the atom axis, `axis=1`.",
+    "`replay_probabilities` is `p**omega` divided by its sum. With `omega = 0`, every item gets the same probability.",
+    "In `importance_weights`, compute `(len(probs) * probs) ** (-beta)` and then divide by the maximum. The rarest item gets the largest weight."
+  ],
+  "runtime": "pyodide"
+}

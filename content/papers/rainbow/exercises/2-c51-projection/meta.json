@@ -1,0 +1,11 @@
+{
+  "title": "Project a return distribution onto the atoms",
+  "goal": "Write `project_distribution(p, r, gamma_n, z)`, the projection $\\Phi_z$ in Equation 3 (Section 2). The next-state distribution `p` puts mass `p[j]` on the fixed atom `z[j]`. `z` is an evenly spaced, increasing array of $N$ atoms.\n\nShift and scale every atom to $\\mathcal{T}z_j = r + \\gamma_n z_j$, clip it to $[z_0, z_{N-1}]$, and split its mass between the two neighbouring atoms in proportion to proximity. An atom that lands exactly on a grid point keeps all its mass there. Return the projected probabilities `m`, an array of shape `(N,)` that sums to 1.\n\nPass `gamma_n = 0` for a terminal transition: every atom collapses onto the reward. On the page, `p = [0.1, 0.2, 0.4, 0.2, 0.1]` on `z = [-2, -1, 0, 1, 2]` with `r = 0.5` and `gamma_n = 0.9` gives `[0.03, 0.15, 0.32, 0.32, 0.18]`.",
+  "hints": [
+    "With $\\Delta z = z_1 - z_0$, the fractional index of the shifted atom is `b = (Tz - z[0]) / dz`. Then `lo = floor(b)` and `hi = ceil(b)`.",
+    "The lower neighbour gets `p[j] * (hi - b)` and the upper one gets `p[j] * (b - lo)`. Closer means more mass.",
+    "When `lo == hi`, both formulas give zero. Add the whole `p[j]` to that one atom instead.",
+    "Clip `Tz` to the support before you compute `b`. Use `np.add.at` or a plain loop, because several atoms can land on the same neighbour."
+  ],
+  "runtime": "pyodide"
+}

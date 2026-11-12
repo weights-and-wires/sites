@@ -1,0 +1,11 @@
+{
+  "title": "The Rainbow target and its priority",
+  "goal": "Combine three of the paper's pieces in one target (Section 3). A starter helper `project_distribution(p, r, gamma_n, z)` already implements the projection $\\Phi_z$ from the previous exercise. Write two functions.\n\n- `rainbow_target(p_online, p_target, z, rewards, done, gamma)` returns `(m, a_star)`. `p_online` and `p_target` have shape `(A, N)`: the distributions at $S_{t+n}$ that the online and target networks give for each action. `rewards` is the list of $m \\le n$ rewards in the window, and `done` says that the episode ended on the last one. Pick $a^*_{t+n}$ as the argmax of the mean $z^\\top p$ under the **online** network, take that action's distribution from the **target** network, and project it with the $m$-step return and the discount $\\gamma^m$. A finished window gets discount 0. Return the projected target `m` of shape `(N,)` and the integer `a_star`.\n- `kl_priority(m, p_pred, omega)` returns $D_{\\mathrm{KL}}(m \\,\\|\\, p_{pred})^{\\omega}$, the priority of Section 3. Treat $0 \\log 0$ as 0.\n\nOn the page, the 3-step window `[1, 0, 0]` with $\\gamma = 0.9$ picks action 0 and gives `[0, 0.1374, 0.3813, 0.3084, 0.1729]`.",
+  "hints": [
+    "`p_online @ z` gives the mean return of every action at once, a vector of length $A$. Take `int(np.argmax(...))` of that.",
+    "Index the **target** distributions with that action: `p_target[a_star]`. Using the target network's own argmax is plain C51 and not the Rainbow target.",
+    "The return is `sum(gamma**k * r)`. The discount for the projection is `gamma**len(rewards)`, or 0 when `done` is true.",
+    "For the KL divergence, sum only where `m > 0`: `np.sum(m[mask] * np.log(m[mask] / p_pred[mask]))`. Then raise the sum to `omega`."
+  ],
+  "runtime": "pyodide"
+}
