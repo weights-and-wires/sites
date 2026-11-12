@@ -1,0 +1,12 @@
+{
+  "title": "InfoNCE with in-batch and hard negatives",
+  "goal": "Implement the loss of Equations 2 and 3 (Section 3.2) at the paper's temperature $\\tau = 0.02$. The matching score is $\\phi(q, d) = \\exp(\\cos(h_q, h_d) / \\tau)$, and the loss for one query is $-\\log$ of the positive's share of the sum over the positive and all negatives.\n\nWrite `info_nce(q, d_pos, d_hard=None, tau=0.02)`:\n\n- `q` and `d_pos` have shape `(B, d)`. Row `i` of `d_pos` is the positive for query `i`. The rows aren't normalized.\n- `d_hard` is `None` or an array of shape `(B, d)` with one hard negative per query.\n- For query `i`, the candidates are every row of `d_pos` (the positive is `d_pos[i]`, the other `B - 1` rows are in-batch negatives) followed by every row of `d_hard`, including the hard negatives that belong to other queries. This is a common implementation choice. Equation 2 only says that $N$ is the set of all negatives.\n- Return the mean loss over the batch as a float.",
+  "hints": [
+    "Normalize `q`, `d_pos`, and `d_hard` to unit length first, so a dot product is a cosine.",
+    "Stack the candidates with `np.concatenate([d_pos, d_hard])`, shape `(2B, d)`. Then `scores = (q_n @ cand_n.T) / tau` has shape `(B, 2B)`, and the positive for row `i` is column `i`.",
+    "If `d_hard` is `None`, the candidates are only `d_pos`.",
+    "Compute the log of the softmax denominator with the maximum subtracted: `m + log(sum(exp(scores - m)))`. With a small `tau`, `exp(scores)` can overflow.",
+    "Check yourself: one query, positive cosine 0.80, one hard negative with cosine 0.78, and no other candidates gives $\\ln(1 + e^{-1}) \\approx 0.3133$."
+  ],
+  "runtime": "pyodide"
+}

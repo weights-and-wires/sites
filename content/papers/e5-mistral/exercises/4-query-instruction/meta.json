@@ -1,0 +1,10 @@
+{
+  "title": "Instruction on the query side only",
+  "goal": "Build the model inputs of Section 3.2 and Equation 1. Write three functions:\n\n- `format_query(task, query)` returns the string `\"Instruct: {task}\\nQuery: {query}\"`, with a real newline character between the two lines.\n- `build_inputs(task, queries, docs)` returns `(query_texts, doc_texts)`. Every query gets the instruction. Documents don't, so the document index can be built once and reused for any task. Return new lists and leave the inputs unchanged.\n- `add_eos(token_ids, eos_id)` returns a new list that is `token_ids` with `eos_id` appended. It must not modify `token_ids`. The pooled vector in Exercise 1 is read at this token.",
+  "hints": [
+    "Use an f-string: `f\"Instruct: {task}\\nQuery: {query}\"`.",
+    "Documents keep their text exactly, so `doc_texts` is `list(docs)`.",
+    "`token_ids + [eos_id]` builds a new list. `token_ids.append(eos_id)` changes the caller's list."
+  ],
+  "runtime": "pyodide"
+}

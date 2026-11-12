@@ -1,0 +1,12 @@
+{
+  "title": "Last-token pooling with a padding mask",
+  "goal": "E5-Mistral embeds a text as the last-layer hidden vector at the final real token, the appended `[EOS]` (Section 3.2). A batch pads shorter texts, and the padding can sit on the right or on the left, so position `-1` isn't always the `[EOS]` token.\n\nWrite two functions:\n\n- `last_token_pool(hidden, attention_mask)` takes `hidden` of shape `(B, T, d)` and an integer `attention_mask` of shape `(B, T)` (1 for a real token, 0 for padding). It returns an array of shape `(B, d)` that holds, for each row, the hidden vector at the last position where the mask is 1. It must work for right padding, left padding, and no padding.\n- `embed(hidden, attention_mask)` returns the pooled vectors scaled to unit L2 length, shape `(B, d)`.",
+  "hints": [
+    "A causal model lets position $t$ attend only to positions up to $t$, so the last real token is the only position that has read the whole text.",
+    "With right padding the last real index is `mask.sum(axis=1) - 1`. With left padding it is `T - 1`. Find one rule that covers both.",
+    "Reverse each row with `mask[:, ::-1]`. `np.argmax` returns the first 1 in the reversed row, so the last real index is `T - 1 - np.argmax(mask[:, ::-1], axis=1)`.",
+    "Pick the rows with fancy indexing: `hidden[np.arange(B), idx]`.",
+    "For `embed`, divide each pooled row by its norm, `np.linalg.norm(x, axis=1, keepdims=True)`."
+  ],
+  "runtime": "pyodide"
+}

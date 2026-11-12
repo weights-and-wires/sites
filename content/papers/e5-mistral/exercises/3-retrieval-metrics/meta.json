@@ -1,0 +1,12 @@
+{
+  "title": "Recall@k and nDCG@k",
+  "goal": "MTEB reports retrieval quality as nDCG@10 (Section 4.2, Table 3). Implement two metrics for one query with binary relevance.\n\nWrite two functions. `ranked` is a list of document IDs, best first. `relevant` is a set of relevant IDs. `k` is a positive integer.\n\n- `recall_at_k(ranked, relevant, k)` returns the fraction of the relevant documents that appear in the top `k` of `ranked`.\n- `ndcg_at_k(ranked, relevant, k)` returns $\\mathrm{DCG@}k / \\mathrm{IDCG@}k$ with $\\mathrm{DCG@}k = \\sum_{i=1}^{k} \\mathrm{rel}_i / \\log_2(i + 1)$, where $i$ is the 1-based rank and $\\mathrm{rel}_i$ is 1 for a relevant document and 0 otherwise. The ideal ranking puts the relevant documents first, so $\\mathrm{IDCG@}k$ uses $\\min(k, |\\text{relevant}|)$ ones.\n\nBoth return `0.0` when `relevant` is empty.",
+  "hints": [
+    "Take the top `k` with `ranked[:k]`. A list shorter than `k` is fine.",
+    "Recall divides by the number of relevant documents, not by `k`.",
+    "Rank 1 has discount $1 / \\log_2 2 = 1$, rank 2 has $1 / \\log_2 3$. With a 0-based index `j`, the denominator is `math.log2(j + 2)`.",
+    "The ideal DCG sums the same discount over the first `min(k, len(relevant))` ranks.",
+    "Check yourself: ranking `[d3, d1, d7, d2]` with relevant `{d1, d2}` gives recall@3 = 0.5 and nDCG@3 = 0.6309 / 1.6309 = 0.3869."
+  ],
+  "runtime": "pyodide"
+}
