@@ -176,7 +176,7 @@ Our toy doesn't model the post's reason for the schedule. The post says single a
 - **A tested latency penalty.** The penalty equation is "one possible functional form." The post says the form used for DeepSeek-V4.1-Flash wasn't shared, and it doesn't report a comparison between penalties and deadlines.
 - **Proof that communication helps.** The post says communication volume "alone does not establish its usefulness."
 - **Results independent of the lab.** The benchmarks include internal ones, and the post states that the model is still in training. The full paper is promised later.
-- **How the result scales.** The "village problem" is the gap between the at most 9 agents in training and the hundreds or thousands in deployment. The post says it doesn't know what generalizes.
+- **How the result scales.** The post puts it as training collectives in villages and deploying them in cities: the gap between the at most 9 agents in training and the hundreds or thousands in deployment. The post says it doesn't know what generalizes.
 - **Shared environments.** In the current recipe, rollouts are isolated. The post lists as open how to reward a rollout for a public good that only helps later episodes.
 - **Our toy.** Team size is one number in our model. The real setting has a CEO, specialists, and a message board. Don't read the toy's team sizes as predictions about Avalon-M1.
 
