@@ -1,0 +1,6 @@
+.qwn-table { display: grid; gap: 4px; width: 100%; }
+.qwn-row { display: grid; grid-template-columns: 3rem 1fr 1fr; gap: 8px; align-items: center; }
+.qwn-head { font-size: 0.8rem; color: var(--muted); }
+.qwn-row select { min-width: 0; }
+.qwn-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.85rem; margin: 6px 0; }
+.qwn-chip i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 2px; }
