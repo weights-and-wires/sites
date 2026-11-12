@@ -70,7 +70,7 @@ $$
 T = \max(T_{math},\, T_{mem})
 $$
 
-(Section 3.1). The operation is *memory-bound* when $T_{math} < T_{mem}$. *Arithmetic intensity* is math operations per byte fetched. The best point is where the intensity equals the device's FLOPs-to-bandwidth ratio (Section 3.1). For a pass of $n$ tokens through the linear layers, $2Pn$ FLOPs run over $Pb$ weight bytes, where $b$ is bytes per parameter, so the intensity is $2n/b$ and does not depend on $P$. The ridge sits at $n^* = (\text{peak}/\text{bandwidth}) \cdot b / 2$ tokens. This is my derivation, not a formula in the paper. Figure 5 plots the same trend for LLaMA2-70B on four A100s, and Figure 6 shows the time staying flat up to a threshold and growing linearly after it (Takeaway-2).
+(Section 3.1). The operation is *memory-bound* when $T_{math} < T_{mem}$. *Arithmetic intensity* is math operations per byte fetched. The best point is where the intensity equals the device's FLOPs-to-bandwidth ratio (Section 3.1). For a pass of $n$ tokens through the linear layers, $2Pn$ FLOPs run over $Pb$ weight bytes, where $b$ is bytes per parameter, so the intensity is $2n/b$ and does not depend on $P$. The ridge sits at $n^* = (\text{peak}/\text{bandwidth}) \cdot b / 2$ tokens. This page derives it; it is not a formula in the paper. Figure 5 plots the same trend for LLaMA2-70B on four A100s, and Figure 6 shows the time staying flat up to a threshold and growing linearly after it (Takeaway-2).
 
 **Tiny example, computed by `scripts/roofline_cost.py`.**
 
