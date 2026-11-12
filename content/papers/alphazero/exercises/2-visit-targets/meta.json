@@ -1,0 +1,11 @@
+{
+  "title": "Visit counts to a policy target",
+  "goal": "Search ends with root visit counts $N(s_{\\text{root}}, a)$, and the move probabilities $\\pi$ that the paper trains on come from them: $\\pi_a \\propto N(s, a)^{1/\\tau}$. At $\\tau = 1$ the target is the visit share. As $\\tau \\to 0$ it becomes greedy.\n\nWrite `visits_to_policy(N, tau)`. It returns a float array that sums to 1.\n\n- Moves with 0 visits get probability 0.\n- `tau == 0` is the greedy limit: put equal mass on every move that has the maximum count.\n- Small `tau` (for example 0.001) must give finite numbers, so don't compute `N ** (1 / tau)` directly.",
+  "hints": [
+    "Convert `N` with `np.asarray(N, dtype=float)`. Handle `tau == 0` first: `best = N == N.max()`, then return `best / best.sum()`.",
+    "For other `tau`, work with logits: `np.log(N) / tau`. The log of 0 is `-inf`, which becomes a weight of 0 after `exp`. Wrap the log in `np.errstate(divide=\"ignore\")` to silence the warning.",
+    "Subtract the maximum logit before `np.exp`. This is the same trick as a stable softmax, and it is why `tau = 0.001` doesn't overflow.",
+    "Divide by the sum at the end. This is a softmax over $\\log N / \\tau$."
+  ],
+  "runtime": "pyodide"
+}

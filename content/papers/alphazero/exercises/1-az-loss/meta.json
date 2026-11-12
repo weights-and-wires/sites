@@ -1,0 +1,11 @@
+{
+  "title": "The AlphaZero loss",
+  "goal": "Implement Equation 1 of the paper, $l = (z - v)^2 - \\pi^\\top \\log p + c\\,\\lVert\\theta\\rVert^2$, and its gradient.\n\nWrite two functions:\n\n- `az_loss(logits, v, pi, z, theta, c)` returns the loss as a float. Here `p` is the softmax of `logits`, `pi` is the search target (it sums to 1), `z` is the game outcome, and `theta` is an array that holds every weight.\n- `az_grads(logits, v, pi, z, theta, c)` returns the tuple `(d_logits, d_v, d_theta)`. The page derives the first two: $\\partial l / \\partial \\text{logits} = p - \\pi$ and $\\partial l / \\partial v = -2(z - v)$.\n\nThe tests include a case where one move has probability 0 after underflow, so compute $\\log p$ in a stable way.",
+  "hints": [
+    "Compute `log_p = x - (m + log(sum(exp(x - m))))` with `m = x.max()`. Then $\\log p$ never takes the log of 0, and `pi * log_p` is 0 wherever `pi` is 0.",
+    "The three terms are `(z - v) ** 2`, `-np.sum(pi * log_p)`, and `c * np.sum(theta ** 2)`.",
+    "For the gradient of the softmax cross-entropy with respect to the logits, the result is `p - pi` when `pi` sums to 1. Get `p` with `np.exp(log_p)`.",
+    "The L2 term has gradient `2 * c * theta`. The value term has gradient `-2 * (z - v)` with respect to `v`."
+  ],
+  "runtime": "pyodide"
+}
