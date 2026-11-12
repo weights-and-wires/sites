@@ -1,0 +1,12 @@
+{
+  "title": "The 15% masking rule",
+  "goal": "Implement the masked-LM corruption from Section 3.1 and Appendix A.1.\n\nWrite `mask_tokens(ids, vocab_size, mask_id, rng, mlm_prob=0.15, n_special=4)`. `ids` is a 1-D integer array and `rng` is a `np.random.Generator`. Token ids below `n_special` are special tokens, such as `[PAD]`, `[CLS]`, `[SEP]`, and `[MASK]`, and are never selected.\n\nEach other position is selected with probability `mlm_prob`. Each selected position then gets one of three treatments: 80% of the time it becomes `mask_id`, 10% of the time it becomes a random regular token (an id in `n_special` to `vocab_size - 1`), and 10% of the time it stays the same.\n\nReturn `(inputs, labels)`. `inputs` is the corrupted copy. `labels` holds the original id at every selected position and `-100` everywhere else. The function must not modify `ids`.",
+  "hints": [
+    "Draw `selected = (rng.random(n) < mlm_prob) & (ids >= n_special)`. The second condition keeps special tokens out.",
+    "Draw one more uniform number `u` per position. Positions with `u < 0.8` get `[MASK]`, positions with `0.8 <= u < 0.9` get a random token, and the rest stay. Apply each rule only where `selected` is true.",
+    "The three outcomes are a split of the selected positions, not three separate 15% draws. Use one `u` and compare it with 0.8 and 0.9.",
+    "Draw the random replacement ids with `rng.integers(n_special, vocab_size, n)`, then copy them in at the right positions.",
+    "Build `inputs = ids.copy()` and `labels = np.where(selected, ids, -100)`."
+  ],
+  "runtime": "pyodide"
+}

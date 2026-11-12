@@ -90,7 +90,7 @@ concepts:
     refresher: "Approximate a large matrix as the product of two thin matrices, which cuts parameters and compute."
   fine-tuning:
     label: "fine-tuning"
-    url: "https://ml.ifkash.dev/lessons/057-fine-tuning-and-lora"
+    url: "https://ml.ifkash.dev/lessons/077-fine-tuning-and-lora"
     lesson: "Fine-tuning on a budget with LoRA"
     anchor_match: exact
     refresher: "Continue training a pretrained model on a smaller task-specific dataset to adapt its behavior."
@@ -198,9 +198,9 @@ concepts:
     refresher: "The exponential of the average negative log-likelihood per token; lower means the model is less surprised."
   masked-language-modeling:
     label: "masked language modeling"
-    url: "https://ml.ifkash.dev/lessons/052-next-token-loss-and-safe-steps"
-    lesson: "Training a language model: next-token loss, schedules, and clipping"
-    anchor_match: close
+    url: "https://ml.ifkash.dev/lessons/065-encoders-and-cross-attention"
+    lesson: "Encoders, decoders, and cross-attention"
+    anchor_match: exact
     refresher: "Hide some tokens in the input and train the model to predict them using context from both sides."
   complex-numbers-and-rotations:
     label: "complex numbers and rotations"
