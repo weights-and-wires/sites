@@ -1144,3 +1144,15 @@ concepts:
     lesson: "Natural gradients and trust regions"
     anchor_match: exact
     refresher: "The matrix F = E[grad log p * grad log p^T] of a probability model. It measures how fast the distribution changes when the parameters move, and it equals the Hessian of the KL divergence at the current parameters."
+  bootstrap-confidence-interval:
+    label: "bootstrap confidence interval"
+    url: "https://rl.ifkash.dev/lessons/059-evaluating-rl"
+    lesson: "Evaluating RL honestly"
+    anchor_match: exact
+    refresher: "Resample your measurements with replacement many times, take the statistic of each resample, and read an interval from the spread of those statistics."
+  statistical-significance:
+    label: "statistical significance"
+    url: "https://rl.ifkash.dev/lessons/059-evaluating-rl"
+    lesson: "Evaluating RL honestly"
+    anchor_match: close
+    refresher: "A test that asks how often a gap as large as the one you measured would appear if both samples came from the same distribution."

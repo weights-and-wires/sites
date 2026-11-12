@@ -1,0 +1,11 @@
+{
+  "title": "Percentile bootstrap interval for the mean return",
+  "goal": "The Confidence Bounds section reports a bootstrap mean and 95% confidence bounds for the final return over a few seeds. Write one function.\n\n- `bootstrap_ci(x, idx, alpha=0.05)` takes `x`, a 1-D array of final returns (one per seed), and `idx`, an integer array of shape `(B, n)` where each row lists the indices of one bootstrap resample. It returns the tuple `(lo, hi)`: the `alpha/2` and `1 - alpha/2` percentiles of the `B` resample means.\n\nThe caller supplies `idx`, so the result is deterministic. Use `np.percentile` with its default linear interpolation.",
+  "hints": [
+    "`x[idx]` has shape `(B, n)`. Row `b` is the `b`-th resample.",
+    "Average each row, which means `axis=1`. You now have `B` resample means.",
+    "The interval comes from the percentiles of those `B` means, not from the percentiles of `x`.",
+    "`np.percentile(means, [100 * alpha / 2, 100 * (1 - alpha / 2)])` returns the two ends. Return them as `(lo, hi)`."
+  ],
+  "runtime": "pyodide"
+}

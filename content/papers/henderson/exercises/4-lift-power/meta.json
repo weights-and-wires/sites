@@ -1,0 +1,11 @@
+{
+  "title": "Bootstrap power analysis with a uniform lift",
+  "goal": "The Power Analysis section asks whether you ran enough trials. Take your sample of final returns, scale a copy by a lift such as 1.25, bootstrap both, and count the resamples where the lifted copy tests as different. A low share means you need more seeds. Write one function.\n\n- `lift_power(x, lift, idx_a, idx_b, crit)` takes the sample `x` (shape `(n,)`), a scalar `lift`, two integer index arrays `idx_a` and `idx_b` of shape `(B, m)` (the resamples), and a critical value `crit`. Group A is `x[idx_a]`. Group B is `lift * x[idx_b]`. It returns the fraction of the `B` row pairs where Welch's $|t|$ is greater than `crit`.\n\nThe starter gives you `welch_t_rows(a, b)`. The width `m` of the index arrays can be bigger than `n`. That is how you ask what would happen with more seeds.",
+  "hints": [
+    "`a = x[idx_a]` and `b = lift * x[idx_b]` both have shape `(B, m)`.",
+    "Use two different index arrays. If both groups used `idx_a`, then with `lift = 1` the two groups would be identical.",
+    "`welch_t_rows(a, b)` gives one t statistic per resample pair. Test `np.abs(...) > crit`, because a lift below 1 makes `t` positive.",
+    "Return `float(np.mean(...))` of the boolean array."
+  ],
+  "runtime": "pyodide"
+}
