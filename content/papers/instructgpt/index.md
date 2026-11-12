@@ -22,9 +22,9 @@ prereqs:
 background: [kl-penalty, sft, reward-model]
 course_links:
   - title: "RLHF with PPO"
-    url: "https://rl.ifkash.dev/lessons/053-rlhf-with-ppo"
+    url: "https://rl.ifkash.dev/lessons/069-rlhf-with-ppo"
   - title: "Supervised fine-tuning and the post-training pipeline"
-    url: "https://rl.ifkash.dev/lessons/049-sft-and-the-post-training-pipeline"
+    url: "https://rl.ifkash.dev/lessons/065-sft-and-the-post-training-pipeline"
 self_check:
   - q: 'A reward model scores a labeler-preferred response at $r_w = 2$ and the rejected one at $r_l = 1$. What does Equation 1 give as the loss for this pair, and what is the loss if you add $100$ to both scores?'
     a: 'The loss is $-\log\sigma(2 - 1) = \log(1 + e^{-1}) \approx 0.3133$. Adding $100$ to both scores changes nothing, because only the difference enters the sigmoid. The paper uses this fact when it adds a bias to the reward model so that labeler demonstrations score $0$ on average before RL (Section 3.5).'

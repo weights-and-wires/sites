@@ -22,7 +22,7 @@ prereqs:
 background: [log-mel-features, multitask-token-format]
 course_links:
   - title: "Whisper and large-scale recognition"
-    url: "https://speech.ifkash.dev/lessons/037-whisper"
+    url: "https://speech.ifkash.dev/lessons/041-whisper"
 self_check:
   - q: 'The multilingual Whisper models refit the BPE vocabulary but keep its size. What goes wrong if you reuse the English-only GPT-2 vocabulary for Korean text?'
     a: 'The GPT-2 merges were learned on English, so Korean text falls apart into many short pieces (often single bytes). Sequences get longer, the decoder runs more steps, and each token carries less information. Refitting the merges on multilingual text fixes this, and keeping the size fixed leaves the embedding table and softmax cost unchanged (Section 2.2).'

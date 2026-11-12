@@ -20,7 +20,7 @@ prereqs:
 background: [group-relative-baselines, outcome-rewards]
 course_links:
   - title: "Group-relative policy optimization"
-    url: "https://rl.ifkash.dev/lessons/055-group-relative-policy-optimization"
+    url: "https://rl.ifkash.dev/lessons/071-group-relative-policy-optimization"
 self_check:
   - q: 'Four sampled outputs for one question earn rewards $[1, 0, 0, 0]$. What are the advantages under GRPO outcome supervision (use the population standard deviation), and what do they sum to?'
     a: 'The mean is $0.25$ and the standard deviation is $\sqrt{0.25 \cdot 0.75} \approx 0.4330$. The correct output gets $0.75 / 0.4330 \approx 1.7321$ and each wrong output gets $-0.25 / 0.4330 \approx -0.5774$. The advantages sum to 0, because the baseline is the group mean.'

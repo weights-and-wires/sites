@@ -18,7 +18,7 @@ prereqs:
 background: [power-laws, log-log-regression]
 course_links:
   - title: "Scaling laws and the compute budget"
-    url: "https://ml.ifkash.dev/lessons/055-scaling-laws"
+    url: "https://ml.ifkash.dev/lessons/073-scaling-laws"
 self_check:
   - q: 'A language model has a mean next-token cross-entropy of $3.0$ nats on a test set. What perplexity is that, and which unit does the Kaplan paper report its loss in?'
     a: 'The perplexity is $e^{3.0} \approx 20.1$. The paper reports the cross-entropy loss in nats, averaged over the tokens of a 1024-token context (Section 1.3 and Section 2).'
@@ -233,4 +233,4 @@ The paper says these values are "highly uncertain", by an order of magnitude eit
 - [An Empirical Model of Large-Batch Training](https://arxiv.org/abs/1812.06162), by McCandlish et al., defines the critical batch size and the gradient noise scale that Section 5.1 builds on.
 - [Training Compute-Optimal Large Language Models](https://arxiv.org/abs/2203.15556), by Hoffmann et al., re-measures the optimal split between parameters and tokens. Read it alongside Section 6.
 - [Deep Learning Scaling is Predictable, Empirically](https://arxiv.org/abs/1712.00409), by Hestness et al., is the earlier study of power-law learning curves that the paper cites in Section 7.
-- [Scaling laws and the compute budget](https://ml.ifkash.dev/lessons/055-scaling-laws) is the course lesson that walks through the same fits.
+- [Scaling laws and the compute budget](https://ml.ifkash.dev/lessons/073-scaling-laws) is the course lesson that walks through the same fits.

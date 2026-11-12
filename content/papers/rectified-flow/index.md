@@ -18,9 +18,9 @@ prereqs:
 background: [optimal-transport-intuition]
 course_links:
   - title: "Straighter paths and better solvers"
-    url: "https://speech.ifkash.dev/lessons/057-straighter-paths-and-better-solvers"
+    url: "https://speech.ifkash.dev/lessons/067-straighter-paths-and-better-solvers"
   - title: "Flow matching"
-    url: "https://speech.ifkash.dev/lessons/056-flow-matching"
+    url: "https://speech.ifkash.dev/lessons/066-flow-matching"
 self_check:
   - q: 'A training pair has $x_0 = -1$ and $x_1 = 3$. At $t = 0.25$, what is the point $X_t$ where the network is evaluated, what is its regression target, and what loss does a network that outputs $1$ there incur?'
     a: 'The point is $X_t = 0.25 \cdot 3 + 0.75 \cdot (-1) = 0$. The target is $X_1 - X_0 = 4$, the same at every $t$ on this line. An output of $1$ gives a squared error of $(1 - 4)^2 = 9$ (Section 2.1, Equation 1).'

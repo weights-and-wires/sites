@@ -20,7 +20,7 @@ prereqs:
 background: [in-context-prompting, autoregressive-and-non-autoregressive-decoding]
 course_links:
   - title: "Codec language models"
-    url: "https://speech.ifkash.dev/lessons/051-codec-language-models"
+    url: "https://speech.ifkash.dev/lessons/061-codec-language-models"
 self_check:
   - q: 'EnCodec at 6 kbps turns a 10-second, 24 kHz clip into a grid of codes. What are its dimensions, and why does VALL-E treat the first column differently from the other seven?'
     a: 'The grid is $750 \times 8$, because $24000 / 320 = 75$ frames per second and there are 8 codebooks. Residual quantization makes column 1 carry the coarse content, including most of the speaker identity, and each later column encodes the residual left by the earlier ones. VALL-E generates column 1 with an autoregressive model and columns 2 to 8 with a non-autoregressive model (Section 4.2).'

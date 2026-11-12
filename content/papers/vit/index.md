@@ -18,9 +18,9 @@ prereqs:
 background: [patch-embedding, image-classification]
 course_links:
   - title: "Scaled attention, many heads, and the causal mask"
-    url: "https://ml.ifkash.dev/lessons/047-scaled-attention-and-heads"
+    url: "https://ml.ifkash.dev/lessons/059-scaled-attention-and-heads"
   - title: "Convolution: slide a filter, count the weights, count the view"
-    url: "https://ml.ifkash.dev/lessons/038-convolution-and-receptive-field"
+    url: "https://ml.ifkash.dev/lessons/046-convolution-and-receptive-field"
 self_check:
   - q: 'A $224 \times 224$ RGB image is cut into $16 \times 16$ patches. How many patches $N$ are there, how many numbers does each flattened patch hold, and how long is the Transformer input sequence once a class token is added?'
     a: '$N = 224 \cdot 224 / 16^2 = 196$ patches. Each holds $16 \cdot 16 \cdot 3 = 768$ numbers. The class token makes the sequence length $N + 1 = 197$.'

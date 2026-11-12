@@ -16,9 +16,9 @@ prereqs: []
 background: [backprop, mean-and-variance, batch-statistics]
 course_links:
   - title: "Normalisation layers: batch norm, layer norm, and their gradients"
-    url: "https://ml.ifkash.dev/lessons/033-normalisation-layers"
+    url: "https://ml.ifkash.dev/lessons/040-normalisation-layers"
   - title: "The transformer block: SwiGLU, residuals, and layer norm"
-    url: "https://ml.ifkash.dev/lessons/050-the-transformer-block"
+    url: "https://ml.ifkash.dev/lessons/063-the-transformer-block"
 self_check:
   - q: 'A batch holds 2 examples with 4 features each. For batch normalization and for layer normalization, over which numbers is the mean of the first example''s first feature computed?'
     a: 'Batch normalization averages that feature over the batch: 2 numbers, one from each example (Equation 2). Layer normalization averages the first example over its 4 features (Equation 3), so the second example never enters the calculation.'

@@ -20,9 +20,9 @@ prereqs:
 background: [gaussian-noise, markov-chains, kl-divergence]
 course_links:
   - title: "Diffusion from scratch"
-    url: "https://speech.ifkash.dev/lessons/052-diffusion-from-scratch"
+    url: "https://speech.ifkash.dev/lessons/062-diffusion-from-scratch"
   - title: "Sampling faster: DDIM and the probability-flow ODE"
-    url: "https://speech.ifkash.dev/lessons/053-fast-samplers"
+    url: "https://speech.ifkash.dev/lessons/063-fast-samplers"
 self_check:
   - q: 'Two Gaussians over the same variable have means $\mu_1 = 0$ and $\mu_2 = 1$ and the same variance $\sigma^2 = 0.5$. What is $D_{KL}(\mathcal{N}(\mu_1, \sigma^2) \,\|\, \mathcal{N}(\mu_2, \sigma^2))$?'
     a: 'With equal variances the KL divergence is $(\mu_1 - \mu_2)^2 / (2\sigma^2) = 1 / (2 \cdot 0.5) = 1$. The paper uses this fact to turn each KL term of the bound into a squared distance between two means.'

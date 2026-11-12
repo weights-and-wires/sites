@@ -18,9 +18,9 @@ prereqs:
 background: [cross-entropy, teacher-forcing, beam-search]
 course_links:
   - title: "Recurrent cells and backpropagation through time"
-    url: "https://ml.ifkash.dev/lessons/041-recurrent-cells-and-bptt"
+    url: "https://ml.ifkash.dev/lessons/052-recurrent-cells-and-bptt"
   - title: "Attention encoder-decoders"
-    url: "https://speech.ifkash.dev/lessons/032-attention-encoder-decoders"
+    url: "https://speech.ifkash.dev/lessons/033-attention-encoder-decoders"
 self_check:
   - q: 'Without reversal, a source of $n = 25$ tokens is followed by a target of 25 tokens, and source token $j$ translates to target token $j$. What is the lag between each pair, and what are the minimal and average lags after reversing only the source (Section 3.3)?'
     a: 'Without reversal every pair is $n = 25$ positions apart. After reversal the lags are $1, 3, 5, \ldots, 49$, so the minimal lag is 1 and the average is still 25, which is what Section 3.3 says: the average distance is unchanged, but the first source words sit next to the first target words. `scripts/reversal_lags.py` prints these values.'

@@ -18,9 +18,9 @@ prereqs:
 background: [codec-bitrate, multi-scale-spectral-loss]
 course_links:
   - title: "Neural audio codecs"
-    url: "https://speech.ifkash.dev/lessons/050-neural-audio-codecs"
+    url: "https://speech.ifkash.dev/lessons/060-neural-audio-codecs"
   - title: "Residual and scalar quantization"
-    url: "https://speech.ifkash.dev/lessons/049-residual-and-scalar-quantization"
+    url: "https://speech.ifkash.dev/lessons/059-residual-and-scalar-quantization"
 self_check:
   - q: 'EnCodec at 48 kHz uses strides $(2, 4, 5, 8)$ and 1024-entry codebooks. How many codebooks give 3 kbps, and how many tokens per second is that?'
     a: 'The stride product is $M = 320$, so 48 kHz audio gives $48000 / 320 = 150$ latent steps per second. Each codebook adds $150 \cdot 10 = 1500$ bps, so 3 kbps is 2 codebooks, or $150 \cdot 2 = 300$ tokens per second.'
@@ -186,7 +186,7 @@ Entropy coding needs the encoder and decoder to compute identical probabilities,
 ## Further reading
 
 - The EnCodec paper on arXiv: [2210.13438](https://arxiv.org/abs/2210.13438). The paper says its code and models are at github.com/facebookresearch/encodec.
-- Course lesson, [Neural audio codecs](https://speech.ifkash.dev/lessons/050-neural-audio-codecs), for how EnCodec fits among the neural codecs.
-- Course lesson, [Residual and scalar quantization](https://speech.ifkash.dev/lessons/049-residual-and-scalar-quantization), for the quantizer in more depth.
+- Course lesson, [Neural audio codecs](https://speech.ifkash.dev/lessons/060-neural-audio-codecs), for how EnCodec fits among the neural codecs.
+- Course lesson, [Residual and scalar quantization](https://speech.ifkash.dev/lessons/059-residual-and-scalar-quantization), for the quantizer in more depth.
 - The [SoundStream](/soundstream/) page on this site, for the design EnCodec starts from.
 - The VALL-E page, [/valle/](/valle/), for how the tokens are used downstream.

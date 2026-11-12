@@ -20,9 +20,9 @@ prereqs:
 background: [importance-sampling, clipping]
 course_links:
   - title: "Proximal policy optimization"
-    url: "https://rl.ifkash.dev/lessons/034-proximal-policy-optimization"
+    url: "https://rl.ifkash.dev/lessons/036-proximal-policy-optimization"
   - title: "PPO in practice"
-    url: "https://rl.ifkash.dev/lessons/035-ppo-in-practice"
+    url: "https://rl.ifkash.dev/lessons/037-ppo-in-practice"
 self_check:
   - q: 'TRPO limits each update with a KL constraint, solved by conjugate gradient. What does PPO use in place of the constraint, and does the replacement guarantee that the new policy stays close to the old one?'
     a: 'PPO clips the ratio $r_t(\theta)$ inside the objective (Equation 7), so a sample has no gradient once the ratio has moved past $1 \pm \epsilon$ in the direction the advantage favors. That removes the incentive to move further, but it is not a constraint. The sum of many samples, and the shared parameters of a network, can still push the ratio past the interval, so the policy can drift beyond $\epsilon$. In the bandit example on this page, the ratio reaches 1.29 with $\epsilon = 0.2$.'

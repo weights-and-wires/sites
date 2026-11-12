@@ -18,11 +18,11 @@ prereqs:
 background: [dynamic-programming, forward-backward-algorithm, alignment]
 course_links:
   - title: "CTC: many paths, one label"
-    url: "https://speech.ifkash.dev/lessons/028-ctc-many-paths-one-label"
+    url: "https://speech.ifkash.dev/lessons/029-ctc-many-paths-one-label"
   - title: "Computing CTC efficiently"
-    url: "https://speech.ifkash.dev/lessons/029-ctc-forward-backward"
+    url: "https://speech.ifkash.dev/lessons/030-ctc-forward-backward"
   - title: "Decoding CTC"
-    url: "https://speech.ifkash.dev/lessons/030-decoding-ctc"
+    url: "https://speech.ifkash.dev/lessons/031-decoding-ctc"
 self_check:
   - q: 'A CTC network emits $T = 3$ frames over the labels $\{a, b\}$ plus a blank. List the paths that collapse to $ab$. How many are there?'
     a: 'There are five: `-ab`, `a-b`, `aab`, `ab-`, and `abb`, where `-` is the blank. Each one passes through $a$ and then $b$ with at most one repeat or blank between them. `a-b` and `aab` both collapse to $ab$, because repeats merge and blanks drop out.'

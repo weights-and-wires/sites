@@ -20,9 +20,9 @@ prereqs:
 background: [contrastive-learning, infonce]
 course_links:
   - title: "Self-supervised speech"
-    url: "https://speech.ifkash.dev/lessons/036-self-supervised-speech"
+    url: "https://speech.ifkash.dev/lessons/039-self-supervised-speech"
   - title: "Attention as a soft lookup, with a dot product or a learned scorer"
-    url: "https://ml.ifkash.dev/lessons/045-attention-as-soft-lookup"
+    url: "https://ml.ifkash.dev/lessons/056-attention-as-soft-lookup"
 self_check:
   - q: 'A batch holds $N = 4$ aligned (image, text) pairs. How many positive pairs and how many negative pairs does the contrastive loss see, and what loss does a model that scores every pair equally get?'
     a: 'There are 4 positive pairs (the diagonal) and $N^2 - N = 12$ negative pairs. If every logit is equal, each softmax is uniform over 4 entries, so each cross-entropy term is $\ln 4 \approx 1.3863$ and so is the average.'

@@ -22,11 +22,11 @@ prereqs:
 background: [matrix-multiplication, softmax-numerics, residual-connections, positional-information]
 course_links:
   - title: "Scaled attention, many heads, and the causal mask"
-    url: "https://ml.ifkash.dev/lessons/047-scaled-attention-and-heads"
+    url: "https://ml.ifkash.dev/lessons/059-scaled-attention-and-heads"
   - title: "The transformer block: SwiGLU, residuals, and layer norm"
-    url: "https://ml.ifkash.dev/lessons/050-the-transformer-block"
+    url: "https://ml.ifkash.dev/lessons/063-the-transformer-block"
   - title: "Position encodings: sinusoidal clocks and rotary embeddings"
-    url: "https://ml.ifkash.dev/lessons/049-position-encodings"
+    url: "https://ml.ifkash.dev/lessons/062-position-encodings"
 self_check:
   - q: 'Compute $\operatorname{softmax}([2, 0])$ by hand. Why does an implementation subtract the row maximum before it calls `exp`?'
     a: 'The result is $[0.8808, 0.1192]$, because $e^2 / (e^2 + 1) \approx 0.8808$. Subtracting the maximum changes no output, because the constant cancels in the ratio, and it keeps `exp` from overflowing on scores such as 1000.'

@@ -16,7 +16,7 @@ prereqs: []
 background: [string-processing, frequency-counting]
 course_links:
   - title: "Tokenisation: bytes, byte-pair encoding, and what a tokeniser charges"
-    url: "https://ml.ifkash.dev/lessons/054-tokenisation"
+    url: "https://ml.ifkash.dev/lessons/071-tokenisation"
 self_check:
   - q: 'The paper represents the word `low` as `l o w </w>`. Why does it add the end-of-word symbol, and how many adjacent pairs does that word contain?'
     a: 'The symbol lets the decoder restore word boundaries after translation, and it lets a merge tell the end of a word from the middle: `er</w>` is a suffix, while `er` inside `era` is not. The word has 4 symbols and so 3 pairs: `(l, o)`, `(o, w)`, and `(w, </w>)`.'
@@ -140,4 +140,4 @@ Exercise 3 asks you to compute these statistics.
 - [subword-nmt](https://github.com/rsennrich/subword-nmt) is the authors' reference implementation of the learner and the encoder.
 - [minbpe](https://github.com/karpathy/minbpe), by Andrej Karpathy, is a short, readable byte-level BPE trainer and tokenizer.
 - Philip Gage, "A New Algorithm for Data Compression", *The C Users Journal*, 1994, is the compression method that the paper adapts (Section 3.2).
-- [Tokenisation: bytes, byte-pair encoding, and what a tokeniser charges](https://ml.ifkash.dev/lessons/054-tokenisation) covers the byte-level variant and the cost of a tokenizer in more depth.
+- [Tokenisation: bytes, byte-pair encoding, and what a tokeniser charges](https://ml.ifkash.dev/lessons/071-tokenisation) covers the byte-level variant and the cost of a tokenizer in more depth.

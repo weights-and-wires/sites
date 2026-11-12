@@ -18,9 +18,9 @@ prereqs:
 background: [bradley-terry-model, reward-modeling]
 course_links:
   - title: "Reward models from preferences"
-    url: "https://rl.ifkash.dev/lessons/051-reward-models"
+    url: "https://rl.ifkash.dev/lessons/067-reward-models"
   - title: "RLHF with PPO"
-    url: "https://rl.ifkash.dev/lessons/053-rlhf-with-ppo"
+    url: "https://rl.ifkash.dev/lessons/069-rlhf-with-ppo"
 self_check:
   - q: 'A reward predictor assigns return $3$ to segment $\sigma^1$ and $1$ to segment $\sigma^2$. What does Equation 1 give for $\hat P[\sigma^1 \succ \sigma^2]$, and what happens to it if you add $100$ to both returns?'
     a: 'It gives $e^3 / (e^3 + e^1) = \sigma(2) \approx 0.8808$. Adding $100$ to both returns changes nothing, because the probability depends only on the difference. This is why the learned reward is defined only up to a constant shift.'

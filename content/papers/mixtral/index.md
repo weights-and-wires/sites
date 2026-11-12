@@ -20,7 +20,7 @@ prereqs:
 background: [top-2-routing, active-vs-total-parameters]
 course_links:
   - title: "Mixtures of experts: routing, the router's gradient, and balance"
-    url: "https://ml.ifkash.dev/lessons/060-mixtures-of-experts"
+    url: "https://ml.ifkash.dev/lessons/081-mixtures-of-experts"
   - title: "Mixture-of-experts and sparse kernels"
     url: "https://gpu.ifkash.dev/c/20-moe-and-sparse-kernels"
 self_check:

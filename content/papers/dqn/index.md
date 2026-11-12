@@ -16,9 +16,9 @@ prereqs: []
 background: [mdp, bellman-equation, q-learning, epsilon-greedy]
 course_links:
   - title: "Deep Q-networks"
-    url: "https://rl.ifkash.dev/lessons/025-deep-q-networks"
+    url: "https://rl.ifkash.dev/lessons/026-deep-q-networks"
   - title: "Double and dueling DQN"
-    url: "https://rl.ifkash.dev/lessons/026-double-and-dueling-dqn"
+    url: "https://rl.ifkash.dev/lessons/027-double-and-dueling-dqn"
 self_check:
   - q: 'Section 2 defines the state as the whole sequence $s_t = x_1, a_1, x_2, \dots, a_{t-1}, x_t$ and not the current screen $x_t$. Why?'
     a: 'One screen does not show the ball''s direction or the speed of an enemy, so many emulator states look the same (perceptual aliasing), and the task is only partly observed. Treating the whole sequence as the state gives a Markov decision process again. The network then needs a fixed-length summary of that sequence, which is the job of the function $\phi$ that stacks the last 4 frames.'

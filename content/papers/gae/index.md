@@ -18,7 +18,7 @@ prereqs:
 background: [td-lambda, bias-variance-trade-off, value-function]
 course_links:
   - title: "Generalized advantage estimation"
-    url: "https://rl.ifkash.dev/lessons/032-generalized-advantage-estimation"
+    url: "https://rl.ifkash.dev/lessons/034-generalized-advantage-estimation"
 self_check:
   - q: 'If $V = V_{\pi,\gamma}$ exactly, why is the TD residual $\delta_t^V$ an unbiased estimate of the advantage? What goes wrong when $V$ is only approximate, and does $\text{GAE}(\gamma, 1)$ suffer from the same problem?'
     a: 'With the exact value function, $\mathbb{E}[r_t + \gamma V(s_{t+1}) \mid s_t, a_t] = Q_{\pi,\gamma}(s_t, a_t)$, so subtracting $V(s_t)$ gives $A_{\pi,\gamma}$ (Equation 10). An approximate $V$ makes $\gamma V(s_{t+1})$ a biased stand-in for the future return, and the bias goes straight into the policy gradient. $\text{GAE}(\gamma, 1)$ sums the actual rewards, so $V$ appears only as the baseline $-V(s_t)$. A baseline that depends on the state alone does not bias the gradient (Proposition 1), so $\text{GAE}(\gamma, 1)$ is $\gamma$-just for any $V$ (Equation 18).'

@@ -22,9 +22,9 @@ prereqs:
 background: [autoencoders, cross-attention]
 course_links:
   - title: "Diffusion for audio"
-    url: "https://speech.ifkash.dev/lessons/055-diffusion-for-audio"
+    url: "https://speech.ifkash.dev/lessons/065-diffusion-for-audio"
   - title: "Diffusion from scratch"
-    url: "https://speech.ifkash.dev/lessons/052-diffusion-from-scratch"
+    url: "https://speech.ifkash.dev/lessons/062-diffusion-from-scratch"
 self_check:
   - q: 'The paper''s KL-regularized autoencoder returns a mean $\mu$ and a variance $\sigma^2$ for every latent entry. How do you draw the latent $z$ that the diffusion model trains on, and why is the draw written that way?'
     a: 'Draw $\varepsilon \sim \mathcal{N}(0, I)$ and set $z = \mu + \sigma \cdot \varepsilon$. Writing the sample as a deterministic function of the parameters and an independent noise draw is the reparameterization trick, and it keeps the encoder differentiable.'

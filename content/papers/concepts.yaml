@@ -6,7 +6,7 @@
 concepts:
   sgd:
     label: "SGD"
-    url: "https://ml.ifkash.dev/lessons/031-sgd-adam-and-schedules"
+    url: "https://ml.ifkash.dev/lessons/038-sgd-adam-and-schedules"
     lesson: "SGD, Adam, and learning-rate schedules"
     anchor_match: exact
     refresher: "Step against the gradient of a loss estimated on a small random batch."
@@ -18,7 +18,7 @@ concepts:
     refresher: "Keep a running average of past gradients so steps build speed along consistent directions and damp oscillation."
   exponential-moving-averages:
     label: "exponential moving averages"
-    url: "https://ml.ifkash.dev/lessons/031-sgd-adam-and-schedules"
+    url: "https://ml.ifkash.dev/lessons/038-sgd-adam-and-schedules"
     lesson: "SGD, Adam, and learning-rate schedules"
     anchor_match: exact
     refresher: "A running average that weights recent values most, updated as new = beta * old + (1 - beta) * latest."
@@ -30,25 +30,25 @@ concepts:
     refresher: "Add the sum of squared weights, scaled by a coefficient, to the loss to discourage large weights."
   weight-decay:
     label: "weight decay"
-    url: "https://ml.ifkash.dev/lessons/034-weight-decay-and-early-stopping"
+    url: "https://ml.ifkash.dev/lessons/041-weight-decay-and-early-stopping"
     lesson: "Weight decay and early stopping: two ways to keep weights small"
     anchor_match: exact
     refresher: "Shrink every weight slightly toward zero at each update to keep weights small."
   backprop:
     label: "backprop"
-    url: "https://ml.ifkash.dev/lessons/029-backpropagation"
+    url: "https://ml.ifkash.dev/lessons/036-backpropagation"
     lesson: "Backpropagation"
     anchor_match: exact
     refresher: "Apply the chain rule backward through a network to get the gradient of the loss for every parameter."
   mean-and-variance:
     label: "mean and variance"
-    url: "https://ml.ifkash.dev/lessons/033-normalisation-layers"
+    url: "https://ml.ifkash.dev/lessons/040-normalisation-layers"
     lesson: "Normalisation layers: batch norm, layer norm, and their gradients"
     anchor_match: close
     refresher: "The average of a set of values, and the average squared distance of those values from that average."
   batch-statistics:
     label: "batch statistics"
-    url: "https://ml.ifkash.dev/lessons/033-normalisation-layers"
+    url: "https://ml.ifkash.dev/lessons/040-normalisation-layers"
     lesson: "Normalisation layers: batch norm, layer norm, and their gradients"
     anchor_match: exact
     refresher: "The mean and variance computed over the examples in the current mini-batch, used to normalize activations."
@@ -72,7 +72,7 @@ concepts:
     refresher: "Factor a matrix into rotations and non-negative singular values that show how it stretches each direction."
   spectral-norm:
     label: "spectral norm"
-    url: "https://ml.ifkash.dev/lessons/025-power-iteration-and-probabilistic-pca"
+    url: "https://ml.ifkash.dev/lessons/029-power-iteration-and-probabilistic-pca"
     lesson: "Power iteration and probabilistic PCA"
     anchor_match: close
     refresher: "The largest singular value of a matrix, which is the most it can stretch any unit vector."
@@ -84,7 +84,7 @@ concepts:
     refresher: "A matrix-multiplication-only iteration that pushes a matrix's singular values toward one, approximating its orthogonal factor."
   low-rank-factorization:
     label: "low-rank factorization"
-    url: "https://ml.ifkash.dev/lessons/057-fine-tuning-and-lora"
+    url: "https://ml.ifkash.dev/lessons/077-fine-tuning-and-lora"
     lesson: "Fine-tuning on a budget with LoRA"
     anchor_match: exact
     refresher: "Approximate a large matrix as the product of two thin matrices, which cuts parameters and compute."
@@ -102,25 +102,25 @@ concepts:
     refresher: "The number of linearly independent columns of a matrix, or equivalently its count of non-zero singular values."
   backprop-through-time:
     label: "backprop through time"
-    url: "https://ml.ifkash.dev/lessons/041-recurrent-cells-and-bptt"
+    url: "https://ml.ifkash.dev/lessons/052-recurrent-cells-and-bptt"
     lesson: "Recurrent cells and backpropagation through time"
     anchor_match: exact
     refresher: "Unroll a recurrent network across time steps and backpropagate through the unrolled graph, summing gradients for shared weights."
   vanishing-gradients:
     label: "vanishing gradients"
-    url: "https://ml.ifkash.dev/lessons/042-vanishing-gradients-and-clipping"
+    url: "https://ml.ifkash.dev/lessons/053-vanishing-gradients-and-clipping"
     lesson: "Vanishing gradients, exploding gradients, and clipping"
     anchor_match: exact
     refresher: "Gradients shrink as they pass back through many layers or steps, so early layers barely learn."
   cross-entropy:
     label: "cross-entropy"
-    url: "https://ml.ifkash.dev/lessons/030-softmax-and-whole-network-gradients"
+    url: "https://ml.ifkash.dev/lessons/037-softmax-and-whole-network-gradients"
     lesson: "Softmax and whole-network gradients"
     anchor_match: exact
     refresher: "A loss that measures how much probability a model assigns to the true class, computed as the negative log of that probability."
   teacher-forcing:
     label: "teacher forcing"
-    url: "https://ml.ifkash.dev/lessons/052-next-token-loss-and-safe-steps"
+    url: "https://ml.ifkash.dev/lessons/068-next-token-loss-and-safe-steps"
     lesson: "Training a language model: next-token loss, schedules, and clipping"
     anchor_match: exact
     refresher: "Train a sequence model by feeding it the true previous tokens instead of its own predictions."
@@ -132,19 +132,19 @@ concepts:
     refresher: "Decode by keeping the k highest-scoring partial sequences at each step instead of only the single best."
   softmax:
     label: "softmax"
-    url: "https://ml.ifkash.dev/lessons/030-softmax-and-whole-network-gradients"
+    url: "https://ml.ifkash.dev/lessons/037-softmax-and-whole-network-gradients"
     lesson: "Softmax and whole-network gradients"
     anchor_match: exact
     refresher: "Turn a vector of scores into probabilities by exponentiating each and dividing by the sum."
   alignment:
     label: "alignment"
-    url: "https://ml.ifkash.dev/lessons/046-attention-gradients-and-alignment"
+    url: "https://ml.ifkash.dev/lessons/057-attention-gradients-and-alignment"
     lesson: "Attention gradients and the alignment matrix"
     anchor_match: exact
     refresher: "A matrix of weights showing which input positions each output position attends to."
   weighted-average:
     label: "weighted average"
-    url: "https://ml.ifkash.dev/lessons/045-attention-as-soft-lookup"
+    url: "https://ml.ifkash.dev/lessons/056-attention-as-soft-lookup"
     lesson: "Attention as a soft lookup, with a dot product or a learned scorer"
     anchor_match: exact
     refresher: "Combine values by multiplying each by a weight and summing, with weights that add up to one."
@@ -162,37 +162,37 @@ concepts:
     refresher: "Subtract the maximum score before exponentiating so softmax never overflows and gives the same result."
   residual-connections:
     label: "residual connections"
-    url: "https://ml.ifkash.dev/lessons/040-residual-networks"
+    url: "https://ml.ifkash.dev/lessons/048-residual-networks"
     lesson: "Residual networks: the shortcut, the gradient, and the bottleneck"
     anchor_match: exact
     refresher: "Add a layer's input to its output so gradients and signal flow through a shortcut path."
   positional-information:
     label: "positional information"
-    url: "https://ml.ifkash.dev/lessons/049-position-encodings"
+    url: "https://ml.ifkash.dev/lessons/062-position-encodings"
     lesson: "Position encodings: sinusoidal clocks and rotary embeddings"
     anchor_match: exact
     refresher: "Extra signal that tells attention the order of tokens, which it cannot see from content alone."
   string-processing:
     label: "string processing"
-    url: "https://ml.ifkash.dev/lessons/054-tokenisation"
+    url: "https://ml.ifkash.dev/lessons/071-tokenisation"
     lesson: "Tokenisation: bytes, byte-pair encoding, and what a tokeniser charges"
     anchor_match: close
     refresher: "Operations on text as sequences of characters or bytes, such as splitting, counting, and merging adjacent symbols."
   frequency-counting:
     label: "frequency counting"
-    url: "https://ml.ifkash.dev/lessons/051-counts-to-a-language-model"
+    url: "https://ml.ifkash.dev/lessons/067-counts-to-a-language-model"
     lesson: "From counts to a language model, and word vectors"
     anchor_match: close
     refresher: "Tally how often each item occurs, the basis of count-based language models and merge rules in tokenizers."
   autoregressive-language-modeling:
     label: "autoregressive language modeling"
-    url: "https://ml.ifkash.dev/lessons/052-next-token-loss-and-safe-steps"
+    url: "https://ml.ifkash.dev/lessons/068-next-token-loss-and-safe-steps"
     lesson: "Training a language model: next-token loss, schedules, and clipping"
     anchor_match: exact
     refresher: "Predict each token from the tokens before it, so a text's probability is a product of next-token probabilities."
   perplexity:
     label: "perplexity"
-    url: "https://ml.ifkash.dev/lessons/051-counts-to-a-language-model"
+    url: "https://ml.ifkash.dev/lessons/067-counts-to-a-language-model"
     lesson: "From counts to a language model, and word vectors"
     anchor_match: exact
     refresher: "The exponential of the average negative log-likelihood per token; lower means the model is less surprised."
@@ -204,13 +204,13 @@ concepts:
     refresher: "Hide some tokens in the input and train the model to predict them using context from both sides."
   complex-numbers-and-rotations:
     label: "complex numbers and rotations"
-    url: "https://ml.ifkash.dev/lessons/049-position-encodings"
+    url: "https://ml.ifkash.dev/lessons/062-position-encodings"
     lesson: "Position encodings: sinusoidal clocks and rotary embeddings"
     anchor_match: close
     refresher: "Multiplying by a unit-length complex number rotates a point in the plane by that number's angle."
   dot-products:
     label: "dot products"
-    url: "https://ml.ifkash.dev/lessons/045-attention-as-soft-lookup"
+    url: "https://ml.ifkash.dev/lessons/056-attention-as-soft-lookup"
     lesson: "Attention as a soft lookup, with a dot product or a learned scorer"
     anchor_match: exact
     refresher: "Multiply two vectors element by element and sum; the result is larger when the vectors point the same way."
@@ -228,43 +228,43 @@ concepts:
     refresher: "The rate at which data moves between memory and compute units, often the limit for small or element-wise operations."
   in-context-learning:
     label: "in-context learning"
-    url: "https://ml.ifkash.dev/lessons/056-decoding-and-sampling"
+    url: "https://ml.ifkash.dev/lessons/075-decoding-and-sampling"
     lesson: "Decoding and sampling: cache, temperature, speculation"
     anchor_match: close
     refresher: "A language model picks up a task from examples placed in its prompt, with no weight updates."
   few-shot-prompting:
     label: "few-shot prompting"
-    url: "https://ml.ifkash.dev/lessons/056-decoding-and-sampling"
+    url: "https://ml.ifkash.dev/lessons/075-decoding-and-sampling"
     lesson: "Decoding and sampling: cache, temperature, speculation"
     anchor_match: close
     refresher: "Put a few worked input-output examples in the prompt so the model imitates the pattern on a new input."
   prompting:
     label: "prompting"
-    url: "https://ml.ifkash.dev/lessons/056-decoding-and-sampling"
+    url: "https://ml.ifkash.dev/lessons/075-decoding-and-sampling"
     lesson: "Decoding and sampling: cache, temperature, speculation"
     anchor_match: close
     refresher: "Condition a language model's output by choosing the text it starts from."
   exact-match-evaluation:
     label: "exact-match evaluation"
-    url: "https://ml.ifkash.dev/lessons/053p-project-train-a-tiny-transformer"
+    url: "https://ml.ifkash.dev/lessons/070p-project-train-a-tiny-transformer"
     lesson: "Train a tiny transformer to reverse digits"
     anchor_match: close
     refresher: "Score an output as correct only if it equals the reference answer character for character."
   power-laws:
     label: "power laws"
-    url: "https://ml.ifkash.dev/lessons/055-scaling-laws"
+    url: "https://ml.ifkash.dev/lessons/073-scaling-laws"
     lesson: "Scaling laws and the compute budget"
     anchor_match: exact
     refresher: "A relationship y = a * x^b that plots as a straight line on log-log axes."
   log-log-regression:
     label: "log-log regression"
-    url: "https://ml.ifkash.dev/lessons/055-scaling-laws"
+    url: "https://ml.ifkash.dev/lessons/073-scaling-laws"
     lesson: "Scaling laws and the compute budget"
     anchor_match: exact
     refresher: "Fit a straight line to the logarithms of both variables to estimate a power law's exponent."
   flops-estimate-6nd:
     label: "FLOPs estimate 6ND"
-    url: "https://ml.ifkash.dev/lessons/053-training-loop-and-cost"
+    url: "https://ml.ifkash.dev/lessons/069-training-loop-and-cost"
     lesson: "The training step, and what a run costs"
     anchor_match: exact
     refresher: "Training a transformer costs about 6 times parameters times tokens in floating-point operations."
@@ -282,7 +282,7 @@ concepts:
     refresher: "Divide activations by their root mean square and apply a learned scale, without subtracting the mean."
   swiglu:
     label: "SwiGLU"
-    url: "https://ml.ifkash.dev/lessons/050-the-transformer-block"
+    url: "https://ml.ifkash.dev/lessons/063-the-transformer-block"
     lesson: "The transformer block: SwiGLU, residuals, and layer norm"
     anchor_match: exact
     refresher: "A feed-forward layer that multiplies one linear projection by a Swish-activated gate from another."
@@ -306,19 +306,19 @@ concepts:
     refresher: "Sequence models that carry a fixed-size hidden state updated by a linear recurrence over the input."
   top-k-routing:
     label: "top-k routing"
-    url: "https://ml.ifkash.dev/lessons/060-mixtures-of-experts"
+    url: "https://ml.ifkash.dev/lessons/081-mixtures-of-experts"
     lesson: "Mixtures of experts: routing, the router's gradient, and balance"
     anchor_match: exact
     refresher: "A router scores all experts and sends each token only to the k experts with the highest scores."
   load-balancing:
     label: "load balancing"
-    url: "https://ml.ifkash.dev/lessons/060-mixtures-of-experts"
+    url: "https://ml.ifkash.dev/lessons/081-mixtures-of-experts"
     lesson: "Mixtures of experts: routing, the router's gradient, and balance"
     anchor_match: exact
     refresher: "Encourage a router to spread tokens evenly across experts so none is overloaded or unused."
   top-2-routing:
     label: "top-2 routing"
-    url: "https://ml.ifkash.dev/lessons/060-mixtures-of-experts"
+    url: "https://ml.ifkash.dev/lessons/081-mixtures-of-experts"
     lesson: "Mixtures of experts: routing, the router's gradient, and balance"
     anchor_match: exact
     refresher: "Send each token to its two highest-scoring experts and mix their outputs by normalized router weights."
@@ -330,13 +330,13 @@ concepts:
     refresher: "Total parameters count every expert, while active parameters count only those used for a given token."
   expert-specialization:
     label: "expert specialization"
-    url: "https://ml.ifkash.dev/lessons/060-mixtures-of-experts"
+    url: "https://ml.ifkash.dev/lessons/081-mixtures-of-experts"
     lesson: "Mixtures of experts: routing, the router's gradient, and balance"
     anchor_match: close
     refresher: "Experts in a mixture-of-experts layer learn to handle distinct kinds of inputs instead of duplicating one another."
   low-rank-projection:
     label: "low-rank projection"
-    url: "https://ml.ifkash.dev/lessons/057-fine-tuning-and-lora"
+    url: "https://ml.ifkash.dev/lessons/077-fine-tuning-and-lora"
     lesson: "Fine-tuning on a budget with LoRA"
     anchor_match: close
     refresher: "Map a vector through a narrow bottleneck dimension to represent it with fewer numbers."
@@ -348,55 +348,55 @@ concepts:
     refresher: "Train or run a model to predict several future tokens at once instead of only the next one."
   convolution:
     label: "convolution"
-    url: "https://ml.ifkash.dev/lessons/038-convolution-and-receptive-field"
+    url: "https://ml.ifkash.dev/lessons/046-convolution-and-receptive-field"
     lesson: "Convolution: slide a filter, count the weights, count the view"
     anchor_match: exact
     refresher: "Slide a small filter across an input and take a weighted sum at each position."
   downsampling-and-upsampling:
     label: "downsampling and upsampling"
-    url: "https://ml.ifkash.dev/lessons/038-convolution-and-receptive-field"
+    url: "https://ml.ifkash.dev/lessons/046-convolution-and-receptive-field"
     lesson: "Convolution: slide a filter, count the weights, count the view"
     anchor_match: close
     refresher: "Downsampling reduces spatial resolution, for example with strides, and upsampling increases it again."
   patch-embedding:
     label: "patch embedding"
-    url: "https://ml.ifkash.dev/lessons/038-convolution-and-receptive-field"
+    url: "https://ml.ifkash.dev/lessons/046-convolution-and-receptive-field"
     lesson: "Convolution: slide a filter, count the weights, count the view"
     anchor_match: close
     refresher: "Cut an image into fixed-size patches and linearly project each one to a vector, forming a token sequence."
   image-classification:
     label: "image classification"
-    url: "https://ml.ifkash.dev/lessons/036p-project-read-digits"
+    url: "https://ml.ifkash.dev/lessons/044p-project-read-digits"
     lesson: "Train a digit reader from scratch"
     anchor_match: close
     refresher: "Predict a single label for a whole image from its pixels."
   contrastive-learning:
     label: "contrastive learning"
-    url: "https://speech.ifkash.dev/lessons/036-self-supervised-speech"
+    url: "https://speech.ifkash.dev/lessons/039-self-supervised-speech"
     lesson: "Self-supervised speech"
     anchor_match: exact
     refresher: "Train representations so that matching pairs sit close together and mismatched pairs sit far apart."
   infonce:
     label: "InfoNCE"
-    url: "https://speech.ifkash.dev/lessons/036-self-supervised-speech"
+    url: "https://speech.ifkash.dev/lessons/039-self-supervised-speech"
     lesson: "Self-supervised speech"
     anchor_match: close
     refresher: "A contrastive loss that scores the true pair against negatives with a softmax over similarities."
   kl-divergence:
     label: "KL divergence"
-    url: "https://ml.ifkash.dev/lessons/061-autoencoders-and-vaes"
+    url: "https://ml.ifkash.dev/lessons/083-autoencoders-and-vaes"
     lesson: "Autoencoders and variational autoencoders"
     anchor_match: exact
     refresher: "A non-negative, asymmetric measure of how much one probability distribution differs from another."
   gaussian-distributions:
     label: "Gaussian distributions"
-    url: "https://ml.ifkash.dev/lessons/015-bayes-rule-and-gaussian-classes"
+    url: "https://ml.ifkash.dev/lessons/017-bayes-rule-and-gaussian-classes"
     lesson: "Bayes' rule and Gaussian classes"
     anchor_match: exact
     refresher: "The bell-shaped distribution defined by a mean and a variance, or a mean vector and covariance matrix."
   elbo:
     label: "ELBO"
-    url: "https://ml.ifkash.dev/lessons/061-autoencoders-and-vaes"
+    url: "https://ml.ifkash.dev/lessons/083-autoencoders-and-vaes"
     lesson: "Autoencoders and variational autoencoders"
     anchor_match: exact
     refresher: "A tractable lower bound on log-likelihood, equal to reconstruction quality minus a KL term to the prior."
@@ -408,19 +408,19 @@ concepts:
     refresher: "The probability-weighted average of a quantity over all its possible values."
   minimax-games:
     label: "minimax games"
-    url: "https://speech.ifkash.dev/lessons/045-gan-vocoders"
+    url: "https://speech.ifkash.dev/lessons/055-gan-vocoders"
     lesson: "GAN vocoders"
     anchor_match: close
     refresher: "Two players optimize opposite objectives, one minimizing and the other maximizing the same function."
   jensen-shannon-divergence:
     label: "Jensen-Shannon divergence"
-    url: "https://speech.ifkash.dev/lessons/045-gan-vocoders"
+    url: "https://speech.ifkash.dev/lessons/055-gan-vocoders"
     lesson: "GAN vocoders"
     anchor_match: close
     refresher: "A symmetric, bounded measure of distribution difference built from KL divergences to the average of the two."
   gaussian-noise:
     label: "Gaussian noise"
-    url: "https://speech.ifkash.dev/lessons/052-diffusion-from-scratch"
+    url: "https://speech.ifkash.dev/lessons/062-diffusion-from-scratch"
     lesson: "Diffusion from scratch"
     anchor_match: exact
     refresher: "Random values drawn from a Gaussian distribution, added to data in diffusion models."
@@ -432,73 +432,73 @@ concepts:
     refresher: "A random process in which the next state depends only on the current state."
   sdes:
     label: "SDEs"
-    url: "https://speech.ifkash.dev/lessons/053-fast-samplers"
+    url: "https://speech.ifkash.dev/lessons/063-fast-samplers"
     lesson: "Sampling faster: DDIM and the probability-flow ODE"
     anchor_match: close
     refresher: "Stochastic differential equations describe continuous-time evolution as a deterministic drift plus random Brownian noise."
   score-function:
     label: "score function"
-    url: "https://speech.ifkash.dev/lessons/052-diffusion-from-scratch"
+    url: "https://speech.ifkash.dev/lessons/062-diffusion-from-scratch"
     lesson: "Diffusion from scratch"
     anchor_match: close
     refresher: "The gradient of the log-density with respect to the data, which points toward higher-probability regions."
   fokker-planck:
     label: "Fokker-Planck"
-    url: "https://speech.ifkash.dev/lessons/053-fast-samplers"
+    url: "https://speech.ifkash.dev/lessons/063-fast-samplers"
     lesson: "Sampling faster: DDIM and the probability-flow ODE"
     anchor_match: close
     refresher: "A partial differential equation describing how the probability density of an SDE's state evolves over time."
   autoencoders:
     label: "autoencoders"
-    url: "https://ml.ifkash.dev/lessons/061-autoencoders-and-vaes"
+    url: "https://ml.ifkash.dev/lessons/083-autoencoders-and-vaes"
     lesson: "Autoencoders and variational autoencoders"
     anchor_match: exact
     refresher: "A network that compresses an input to a small code and reconstructs it from that code."
   cross-attention:
     label: "cross-attention"
-    url: "https://speech.ifkash.dev/lessons/032-attention-encoder-decoders"
+    url: "https://speech.ifkash.dev/lessons/033-attention-encoder-decoders"
     lesson: "Attention encoder-decoders"
     anchor_match: exact
     refresher: "Attention in which queries come from one sequence and keys and values come from another."
   conditional-generation:
     label: "conditional generation"
-    url: "https://speech.ifkash.dev/lessons/054-classifier-free-guidance"
+    url: "https://speech.ifkash.dev/lessons/064-classifier-free-guidance"
     lesson: "Classifier-free guidance"
     anchor_match: close
     refresher: "Generate samples guided by extra input such as a class label, text, or audio."
   adaln-conditioning:
     label: "adaLN conditioning"
-    url: "https://speech.ifkash.dev/lessons/055-diffusion-for-audio"
+    url: "https://speech.ifkash.dev/lessons/065-diffusion-for-audio"
     lesson: "Diffusion for audio"
     anchor_match: close
     refresher: "Predict a normalization layer's scale and shift from a conditioning vector so it modulates every block."
   patchify:
     label: "patchify"
-    url: "https://ml.ifkash.dev/lessons/038-convolution-and-receptive-field"
+    url: "https://ml.ifkash.dev/lessons/046-convolution-and-receptive-field"
     lesson: "Convolution: slide a filter, count the weights, count the view"
     anchor_match: close
     refresher: "Split an image or spectrogram into non-overlapping patches and flatten each into a vector."
   odes:
     label: "ODEs"
-    url: "https://speech.ifkash.dev/lessons/053-fast-samplers"
+    url: "https://speech.ifkash.dev/lessons/063-fast-samplers"
     lesson: "Sampling faster: DDIM and the probability-flow ODE"
     anchor_match: exact
     refresher: "Ordinary differential equations define a trajectory by a rule for how the state changes with time."
   continuous-normalizing-flows:
     label: "continuous normalizing flows"
-    url: "https://speech.ifkash.dev/lessons/056-flow-matching"
+    url: "https://speech.ifkash.dev/lessons/066-flow-matching"
     lesson: "Flow matching"
     anchor_match: exact
     refresher: "Transform a simple distribution into data by integrating a learned velocity field over time."
   probability-paths:
     label: "probability paths"
-    url: "https://speech.ifkash.dev/lessons/056-flow-matching"
+    url: "https://speech.ifkash.dev/lessons/066-flow-matching"
     lesson: "Flow matching"
     anchor_match: exact
     refresher: "A time-indexed family of distributions that smoothly connects a noise distribution to the data distribution."
   optimal-transport-intuition:
     label: "optimal transport intuition"
-    url: "https://speech.ifkash.dev/lessons/057-straighter-paths-and-better-solvers"
+    url: "https://speech.ifkash.dev/lessons/067-straighter-paths-and-better-solvers"
     lesson: "Straighter paths and better solvers"
     anchor_match: close
     refresher: "Moving one distribution into another along the cheapest, least-crossing paths, which suggests straight trajectories."
@@ -510,7 +510,7 @@ concepts:
     refresher: "The number of floating-point operations a kernel performs per byte it moves from memory."
   flops:
     label: "FLOPs"
-    url: "https://ml.ifkash.dev/lessons/053-training-loop-and-cost"
+    url: "https://ml.ifkash.dev/lessons/069-training-loop-and-cost"
     lesson: "The training step, and what a run costs"
     anchor_match: exact
     refresher: "Floating-point operations, the count of additions and multiplications used to measure compute cost."
@@ -624,7 +624,7 @@ concepts:
     refresher: "Process several requests together so each loaded weight is reused across more tokens."
   autoregressive-decoding:
     label: "autoregressive decoding"
-    url: "https://ml.ifkash.dev/lessons/056-decoding-and-sampling"
+    url: "https://ml.ifkash.dev/lessons/075-decoding-and-sampling"
     lesson: "Decoding and sampling: cache, temperature, speculation"
     anchor_match: exact
     refresher: "Generate text one token at a time, feeding each new token back in to produce the next."
@@ -768,13 +768,13 @@ concepts:
     refresher: "Time-correlated noise that drifts back toward a mean, once used to add exploration to continuous actions."
   policy-gradient-theorem:
     label: "policy gradient theorem"
-    url: "https://rl.ifkash.dev/lessons/030-where-the-gradient-comes-from"
+    url: "https://rl.ifkash.dev/lessons/032-where-the-gradient-comes-from"
     lesson: "The policy gradient theorem"
     anchor_match: exact
     refresher: "The gradient of expected return equals the expected return-weighted gradient of the log-probability of actions."
   conjugate-gradient:
     label: "conjugate gradient"
-    url: "https://rl.ifkash.dev/lessons/033-trust-regions-and-trpo"
+    url: "https://rl.ifkash.dev/lessons/035-trust-regions-and-trpo"
     lesson: "Natural gradients and trust regions"
     anchor_match: exact
     refresher: "An iterative method that solves linear systems using only matrix-vector products, without forming or inverting the matrix."
@@ -804,7 +804,7 @@ concepts:
     refresher: "Reweight samples from one distribution by the probability ratio to estimate expectations under another."
   clipping:
     label: "clipping"
-    url: "https://rl.ifkash.dev/lessons/034-proximal-policy-optimization"
+    url: "https://rl.ifkash.dev/lessons/036-proximal-policy-optimization"
     lesson: "Proximal policy optimization"
     anchor_match: exact
     refresher: "Limit a quantity, such as a probability ratio or gradient norm, to a fixed range to prevent huge updates."
@@ -858,79 +858,79 @@ concepts:
     refresher: "A learned model that predicts how a compressed hidden state changes after an action."
   offline-rl:
     label: "offline RL"
-    url: "https://rl.ifkash.dev/lessons/045-offline-rl"
+    url: "https://rl.ifkash.dev/lessons/053-offline-rl"
     lesson: "Offline reinforcement learning"
     anchor_match: exact
     refresher: "Learn a policy from a fixed dataset of past interactions, with no further environment access."
   return-to-go:
     label: "return-to-go"
-    url: "https://rl.ifkash.dev/lessons/045-offline-rl"
+    url: "https://rl.ifkash.dev/lessons/053-offline-rl"
     lesson: "Offline reinforcement learning"
     anchor_match: close
     refresher: "The sum of rewards still to come from the current step, used as a target or conditioning signal."
   bradley-terry-model:
     label: "Bradley-Terry model"
-    url: "https://rl.ifkash.dev/lessons/051-reward-models"
+    url: "https://rl.ifkash.dev/lessons/067-reward-models"
     lesson: "Reward models from preferences"
     anchor_match: exact
     refresher: "Model the probability that one item beats another as a sigmoid of the difference in their scores."
   reward-modeling:
     label: "reward modeling"
-    url: "https://rl.ifkash.dev/lessons/051-reward-models"
+    url: "https://rl.ifkash.dev/lessons/067-reward-models"
     lesson: "Reward models from preferences"
     anchor_match: exact
     refresher: "Train a model to predict human preferences so it can score outputs with a scalar reward."
   kl-penalty:
     label: "KL penalty"
-    url: "https://rl.ifkash.dev/lessons/053-rlhf-with-ppo"
+    url: "https://rl.ifkash.dev/lessons/069-rlhf-with-ppo"
     lesson: "RLHF with PPO"
     anchor_match: exact
     refresher: "Subtract a multiple of the KL divergence from a reference policy to keep the tuned model close to it."
   sft:
     label: "SFT"
-    url: "https://rl.ifkash.dev/lessons/049-sft-and-the-post-training-pipeline"
+    url: "https://rl.ifkash.dev/lessons/065-sft-and-the-post-training-pipeline"
     lesson: "Supervised fine-tuning and the post-training pipeline"
     anchor_match: exact
     refresher: "Supervised fine-tuning trains a model on example prompts and ideal responses with next-token loss."
   reward-model:
     label: "reward model"
-    url: "https://rl.ifkash.dev/lessons/051-reward-models"
+    url: "https://rl.ifkash.dev/lessons/067-reward-models"
     lesson: "Reward models from preferences"
     anchor_match: exact
     refresher: "A model that maps a prompt and response to a scalar score reflecting human preference."
   log-probability-ratios:
     label: "log-probability ratios"
-    url: "https://rl.ifkash.dev/lessons/054-direct-preference-optimization"
+    url: "https://rl.ifkash.dev/lessons/070-direct-preference-optimization"
     lesson: "Direct preference optimization"
     anchor_match: exact
     refresher: "Compare how likely the tuned policy and reference policy make a response, by the difference of their log-probabilities."
   closed-form-optimal-policy:
     label: "closed-form optimal policy"
-    url: "https://rl.ifkash.dev/lessons/054-direct-preference-optimization"
+    url: "https://rl.ifkash.dev/lessons/070-direct-preference-optimization"
     lesson: "Direct preference optimization"
     anchor_match: exact
     refresher: "The KL-regularized reward-maximizing policy equals the reference policy reweighted by exponentiated reward."
   group-relative-baselines:
     label: "group-relative baselines"
-    url: "https://rl.ifkash.dev/lessons/055-group-relative-policy-optimization"
+    url: "https://rl.ifkash.dev/lessons/071-group-relative-policy-optimization"
     lesson: "Group-relative policy optimization"
     anchor_match: exact
     refresher: "Sample several responses per prompt and use their mean reward as the baseline for each response's advantage."
   outcome-rewards:
     label: "outcome rewards"
-    url: "https://rl.ifkash.dev/lessons/056-verifiable-rewards"
+    url: "https://rl.ifkash.dev/lessons/072-verifiable-rewards"
     lesson: "Verifiable rewards"
     anchor_match: exact
     refresher: "Reward only the final result of a response, such as a correct answer, not the steps."
   verifiable-rewards:
     label: "verifiable rewards"
-    url: "https://rl.ifkash.dev/lessons/056-verifiable-rewards"
+    url: "https://rl.ifkash.dev/lessons/072-verifiable-rewards"
     lesson: "Verifiable rewards"
     anchor_match: exact
     refresher: "Rewards computed by a program that checks the answer, such as a math checker or unit tests."
   distillation:
     label: "distillation"
-    url: "https://rl.ifkash.dev/lessons/049-sft-and-the-post-training-pipeline"
+    url: "https://rl.ifkash.dev/lessons/065-sft-and-the-post-training-pipeline"
     lesson: "Supervised fine-tuning and the post-training pipeline"
     anchor_match: close
     refresher: "Train a smaller model to imitate the outputs of a larger one."
@@ -972,7 +972,7 @@ concepts:
     refresher: "Solve a problem by combining stored solutions to overlapping subproblems, as in Bellman updates."
   forward-backward-algorithm:
     label: "forward-backward algorithm"
-    url: "https://speech.ifkash.dev/lessons/029-ctc-forward-backward"
+    url: "https://speech.ifkash.dev/lessons/030-ctc-forward-backward"
     lesson: "Computing CTC efficiently"
     anchor_match: exact
     refresher: "Sum over all alignments efficiently by combining forward and backward partial probabilities at each position."
@@ -1002,7 +1002,7 @@ concepts:
     refresher: "A graph of the possible alignments between input frames and output tokens, over which probabilities are summed."
   dilated-causal-convolution:
     label: "dilated causal convolution"
-    url: "https://speech.ifkash.dev/lessons/044-wavenet"
+    url: "https://speech.ifkash.dev/lessons/054-wavenet"
     lesson: "WaveNet"
     anchor_match: exact
     refresher: "A convolution that sees only past samples and skips inputs with gaps, growing its receptive field exponentially."
@@ -1014,7 +1014,7 @@ concepts:
     refresher: "A logarithmic compression of audio amplitude that gives quiet sounds finer resolution at low bit depth."
   autoregressive-models:
     label: "autoregressive models"
-    url: "https://speech.ifkash.dev/lessons/044-wavenet"
+    url: "https://speech.ifkash.dev/lessons/054-wavenet"
     lesson: "WaveNet"
     anchor_match: exact
     refresher: "Models that generate a sequence one element at a time, conditioning on all earlier elements."
@@ -1032,91 +1032,91 @@ concepts:
     refresher: "Encode the distance between two tokens instead of their absolute positions in attention."
   vector-quantization:
     label: "vector quantization"
-    url: "https://speech.ifkash.dev/lessons/048-vector-quantization"
+    url: "https://speech.ifkash.dev/lessons/058-vector-quantization"
     lesson: "Vector quantization"
     anchor_match: exact
     refresher: "Replace each vector with the nearest entry from a learned codebook and keep only its index."
   self-supervised-learning:
     label: "self-supervised learning"
-    url: "https://speech.ifkash.dev/lessons/036-self-supervised-speech"
+    url: "https://speech.ifkash.dev/lessons/039-self-supervised-speech"
     lesson: "Self-supervised speech"
     anchor_match: exact
     refresher: "Learn representations from unlabeled data by predicting parts of the input from other parts."
   log-mel-features:
     label: "log-mel features"
-    url: "https://speech.ifkash.dev/lessons/012-log-mel-spectrograms"
+    url: "https://speech.ifkash.dev/lessons/013-log-mel-spectrograms"
     lesson: "Log-mel spectrograms"
     anchor_match: exact
     refresher: "Take a spectrogram, group its frequencies into mel-spaced bands, and apply a logarithm."
   multitask-token-format:
     label: "multitask token format"
-    url: "https://speech.ifkash.dev/lessons/037-whisper"
+    url: "https://speech.ifkash.dev/lessons/041-whisper"
     lesson: "Whisper and large-scale recognition"
     anchor_match: exact
     refresher: "Special tokens in the decoder prompt tell one model which task and language to perform."
   residual-vector-quantization:
     label: "residual vector quantization"
-    url: "https://speech.ifkash.dev/lessons/049-residual-and-scalar-quantization"
+    url: "https://speech.ifkash.dev/lessons/059-residual-and-scalar-quantization"
     lesson: "Residual and scalar quantization"
     anchor_match: exact
     refresher: "Quantize a vector in stages, with each codebook encoding the error left by the previous one."
   adversarial-losses:
     label: "adversarial losses"
-    url: "https://speech.ifkash.dev/lessons/045-gan-vocoders"
+    url: "https://speech.ifkash.dev/lessons/055-gan-vocoders"
     lesson: "GAN vocoders"
     anchor_match: exact
     refresher: "A discriminator learns to tell real from generated audio, and the generator is trained to fool it."
   codec-bitrate:
     label: "codec bitrate"
-    url: "https://speech.ifkash.dev/lessons/050-neural-audio-codecs"
+    url: "https://speech.ifkash.dev/lessons/060-neural-audio-codecs"
     lesson: "Neural audio codecs"
     anchor_match: exact
     refresher: "The number of bits per second of audio that a codec's compressed representation uses."
   multi-scale-spectral-loss:
     label: "multi-scale spectral loss"
-    url: "https://speech.ifkash.dev/lessons/045-gan-vocoders"
+    url: "https://speech.ifkash.dev/lessons/055-gan-vocoders"
     lesson: "GAN vocoders"
     anchor_match: close
     refresher: "Compare generated and real audio by spectrogram distance at several window sizes."
   semantic-vs-acoustic-tokens:
     label: "semantic vs. acoustic tokens"
-    url: "https://speech.ifkash.dev/lessons/051-codec-language-models"
+    url: "https://speech.ifkash.dev/lessons/061-codec-language-models"
     lesson: "Codec language models"
     anchor_match: exact
     refresher: "Semantic tokens capture content such as words, while acoustic tokens capture fine detail such as voice and recording quality."
   hierarchical-modeling:
     label: "hierarchical modeling"
-    url: "https://speech.ifkash.dev/lessons/051-codec-language-models"
+    url: "https://speech.ifkash.dev/lessons/061-codec-language-models"
     lesson: "Codec language models"
     anchor_match: close
     refresher: "Generate in stages, from coarse tokens to fine ones, with each stage conditioned on the previous."
   in-context-prompting:
     label: "in-context prompting"
-    url: "https://speech.ifkash.dev/lessons/051-codec-language-models"
+    url: "https://speech.ifkash.dev/lessons/061-codec-language-models"
     lesson: "Codec language models"
     anchor_match: close
     refresher: "Give a model a short example as a prefix so it continues in the same voice or style."
   autoregressive-and-non-autoregressive-decoding:
     label: "autoregressive and non-autoregressive decoding"
-    url: "https://speech.ifkash.dev/lessons/051-codec-language-models"
+    url: "https://speech.ifkash.dev/lessons/061-codec-language-models"
     lesson: "Codec language models"
     anchor_match: exact
     refresher: "Autoregressive decoding emits tokens one at a time, while non-autoregressive decoding predicts many positions in parallel."
   full-duplex:
     label: "full duplex"
-    url: "https://speech.ifkash.dev/lessons/065-full-duplex-and-voice-agents"
+    url: "https://speech.ifkash.dev/lessons/080-full-duplex-and-voice-agents"
     lesson: "Full-duplex models and voice agents"
     anchor_match: exact
     refresher: "A model listens and speaks at the same time, so it can handle interruptions and overlap."
   inner-monologue:
     label: "inner monologue"
-    url: "https://speech.ifkash.dev/lessons/065-full-duplex-and-voice-agents"
+    url: "https://speech.ifkash.dev/lessons/080-full-duplex-and-voice-agents"
     lesson: "Full-duplex models and voice agents"
     anchor_match: exact
     refresher: "Predict a text transcript alongside the speech tokens to guide what the model says."
   streaming:
     label: "streaming"
-    url: "https://speech.ifkash.dev/lessons/034-streaming-encoders"
+    url: "https://speech.ifkash.dev/lessons/036-streaming-encoders"
     lesson: "Streaming encoders"
     anchor_match: exact
     refresher: "Process input in small chunks as it arrives, with bounded delay, instead of waiting for the whole utterance."

@@ -18,9 +18,9 @@ prereqs:
 background: [sdes, score-function, fokker-planck]
 course_links:
   - title: "Sampling faster: DDIM and the probability-flow ODE"
-    url: "https://speech.ifkash.dev/lessons/053-fast-samplers"
+    url: "https://speech.ifkash.dev/lessons/063-fast-samplers"
   - title: "Diffusion from scratch"
-    url: "https://speech.ifkash.dev/lessons/052-diffusion-from-scratch"
+    url: "https://speech.ifkash.dev/lessons/062-diffusion-from-scratch"
 self_check:
   - q: 'The data are $x \sim \mathcal{N}(2, 0.25)$. What is the score $\nabla_x \log p(x)$ at $x = 1$, and which way does it point?'
     a: 'The score of $\mathcal{N}(\mu, v)$ is $-(x - \mu)/v = -(1 - 2)/0.25 = 4$. It is positive, so it points toward larger $x$, which is toward the mean and the region of higher density.'

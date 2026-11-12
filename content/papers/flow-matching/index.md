@@ -18,9 +18,9 @@ prereqs:
 background: [odes, continuous-normalizing-flows, probability-paths]
 course_links:
   - title: "Flow matching"
-    url: "https://speech.ifkash.dev/lessons/056-flow-matching"
+    url: "https://speech.ifkash.dev/lessons/066-flow-matching"
   - title: "Straighter paths and better solvers"
-    url: "https://speech.ifkash.dev/lessons/057-straighter-paths-and-better-solvers"
+    url: "https://speech.ifkash.dev/lessons/067-straighter-paths-and-better-solvers"
 self_check:
   - q: 'Integrate $\mathrm{d}x/\mathrm{d}t = x$ from $x(0) = 1$ to $t = 1$ with two Euler steps. What do you get, and what is the exact answer?'
     a: 'The step size is $h = 0.5$. The first step gives $1 + 0.5 \cdot 1 = 1.5$ and the second gives $1.5 + 0.5 \cdot 1.5 = 2.25$. The exact solution is $e \approx 2.7183$, so two steps leave an error of about 0.47. Sampling a flow means solving this kind of ODE with the learned field in place of $x$ (Section 2, Equations 1 and 2).'

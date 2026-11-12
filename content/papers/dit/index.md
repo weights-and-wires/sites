@@ -22,9 +22,9 @@ prereqs:
 background: [adaln-conditioning, patchify]
 course_links:
   - title: "Diffusion for audio"
-    url: "https://speech.ifkash.dev/lessons/055-diffusion-for-audio"
+    url: "https://speech.ifkash.dev/lessons/065-diffusion-for-audio"
   - title: "Diffusion from scratch"
-    url: "https://speech.ifkash.dev/lessons/052-diffusion-from-scratch"
+    url: "https://speech.ifkash.dev/lessons/062-diffusion-from-scratch"
 self_check:
   - q: 'A $512 \times 512$ image goes through the Stable Diffusion autoencoder (downsample factor 8, 4 latent channels) and DiT with patch size $p = 4$. How many tokens does the transformer see, and how long is each flattened patch before the linear embedding?'
     a: 'The latent is $64 \times 64 \times 4$. With $p = 4$ there are $(64/4)^2 = 256$ tokens, and each patch holds $4 \cdot 4 \cdot 4 = 64$ numbers. Halving $p$ would quadruple the token count.'

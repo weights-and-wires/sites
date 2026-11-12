@@ -16,7 +16,7 @@ prereqs: []
 background: [minimax-games, jensen-shannon-divergence]
 course_links:
   - title: "GAN vocoders"
-    url: "https://speech.ifkash.dev/lessons/045-gan-vocoders"
+    url: "https://speech.ifkash.dev/lessons/055-gan-vocoders"
 self_check:
   - q: 'In $\min_G \max_D V(D, G)$, which player controls which variable, and what does the inner $\max_D$ do for a fixed generator?'
     a: 'The generator $G$ controls $p_g$ and minimizes $V$. The discriminator $D$ maximizes $V$. For a fixed $G$, the inner maximization finds the best possible classifier of data against samples, $D^*_G(x) = p_{\text{data}}(x) / (p_{\text{data}}(x) + p_g(x))$.'

@@ -22,7 +22,7 @@ prereqs:
 background: [semantic-vs-acoustic-tokens, hierarchical-modeling]
 course_links:
   - title: "Codec language models"
-    url: "https://speech.ifkash.dev/lessons/051-codec-language-models"
+    url: "https://speech.ifkash.dev/lessons/061-codec-language-models"
 self_check:
   - q: 'A 10-second clip at 16 kHz has $T = 160000$ samples. How many semantic tokens and how many acoustic tokens (with $Q = 12$ layers) does AudioLM produce, and what is the acoustic bitrate with only the $Q'' = 4$ coarse layers?'
     a: 'The semantic rate is 25 Hz, so $T_S = T/640 = 250$. The acoustic rate is 50 Hz, so $T_A = T/320 = 500$ steps and $500 \cdot 12 = 6000$ tokens. With four layers of 1024 symbols the bitrate is $50 \cdot 4 \cdot \log_2 1024 = 2000$ bps (Section III-B).'

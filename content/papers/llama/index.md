@@ -24,7 +24,7 @@ prereqs:
 background: [rmsnorm, swiglu]
 course_links:
   - title: "The transformer block: SwiGLU, residuals, and layer norm"
-    url: "https://ml.ifkash.dev/lessons/050-the-transformer-block"
+    url: "https://ml.ifkash.dev/lessons/063-the-transformer-block"
   - title: "RMSNorm and the residual stream"
     url: "https://qwen.ifkash.dev/c/04-rmsnorm-and-residuals"
 self_check:

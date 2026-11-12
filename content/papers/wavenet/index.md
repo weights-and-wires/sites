@@ -16,7 +16,7 @@ prereqs: []
 background: [dilated-causal-convolution, mu-law, autoregressive-models]
 course_links:
   - title: "WaveNet"
-    url: "https://speech.ifkash.dev/lessons/044-wavenet"
+    url: "https://speech.ifkash.dev/lessons/054-wavenet"
 self_check:
   - q: 'A causal stack has filter length 2 and dilations $1, 2, 4, 8$. How many input samples does one output depend on, and why does the paper double the dilation at each layer?'
     a: 'The receptive field is $1 + (2-1)(1+2+4+8) = 16$. Doubling the dilation makes each layer reach twice as far back as the one before, so the receptive field grows exponentially with depth. With no dilation, it grows only linearly, as $\#\text{layers} + k - 1$.'

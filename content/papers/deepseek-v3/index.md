@@ -20,9 +20,9 @@ prereqs:
 background: [multi-token-prediction, load-balancing]
 course_links:
   - title: "Mixtures of experts: routing, the router's gradient, and balance"
-    url: "https://ml.ifkash.dev/lessons/060-mixtures-of-experts"
+    url: "https://ml.ifkash.dev/lessons/081-mixtures-of-experts"
   - title: "Reasoning with verifiable rewards"
-    url: "https://rl.ifkash.dev/lessons/057-reasoning-with-verifiable-rewards"
+    url: "https://rl.ifkash.dev/lessons/073-reasoning-with-verifiable-rewards"
 self_check:
   - q: 'In auxiliary-loss-free balancing, the bias $b_i$ decides which experts a token visits. Why does the paper keep it out of the gating value that multiplies the expert output?'
     a: 'The paper says the bias "is only used for routing" (Section 2.1.2). The gating value still comes from the original affinity $s_{i,t}$ (Equations 13 and 16). The bias then changes which experts see a token, and it doesn''t change how much an expert that is chosen contributes to the output.'
