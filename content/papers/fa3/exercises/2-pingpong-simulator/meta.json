@@ -1,0 +1,11 @@
+{
+  "title": "Simulate ping-pong scheduling",
+  "goal": "Build a toy timing model for the softmax-GEMM overlap of Section 3.1. A *task* is a tuple `(name, resource, duration, deps)`. The list `tasks` is in **issue order**, and `deps` holds indices of earlier tasks. A resource (the Tensor Core `\"tensor\"` or the special-function unit `\"sfu\"` that runs exp) runs one task at a time, in issue order. A task starts when its resource is free and all its dependencies have ended.\n\nWrite three functions:\n\n- `simulate(tasks)` returns `(makespan, busy)`. `makespan` is the time the last task ends. `busy` maps each resource to the sum of the durations of its tasks.\n- `utilization(tasks, resource=\"tensor\")` returns `busy[resource] / makespan`.\n- `pingpong_tasks(n, g, s)` builds the schedule for two warpgroups `A` and `B`. Each runs `n` iterations of a GEMM of duration `g` followed by a softmax of duration `s` on the `sfu`. Warpgroup `A` issues its GEMM before `B` in every round, which is what the `bar.sync` barriers enforce on the Tensor Core queue. Each GEMM waits for the same warpgroup's previous softmax, and each softmax waits for its own GEMM.\n\nThe starter gives you `serial_tasks`, the one-warpgroup schedule of Algorithm 1.",
+  "hints": [
+    "In `simulate`, keep a dict `free` that maps a resource to the time it becomes free, and a list `end` of finish times. For each task, `start = max(free.get(resource, 0.0), *[end[d] for d in deps])`.",
+    "After computing `start`, set `end.append(start + duration)` and `free[resource] = start + duration`. Add `duration` to `busy[resource]`.",
+    "In `pingpong_tasks`, loop `for j in range(n)` and then `for wg in (\"A\", \"B\")`. Append the GEMM, then the softmax. Remember the index of each warpgroup's last softmax in a dict, and pass it as the next GEMM's dependency (an empty list for `j = 0`).",
+    "A task's index is `len(tasks)` before you append it, so the softmax depends on `[len(tasks) - 1]` right after you append its GEMM."
+  ],
+  "runtime": "pyodide"
+}
