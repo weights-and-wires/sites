@@ -1,0 +1,11 @@
+{
+  "title": "Depthwise convolution",
+  "goal": "The convolution module of the Conformer block (Section 2.2) uses a single 1-D depthwise convolution. Each channel has its own filter, and the filter slides along time without mixing channels.\n\nWrite `depthwise_conv1d(x, w)`. `x` is a NumPy array of shape `(T, d)`: `T` frames and `d` channels. `w` has shape `(k, d)`: one length-`k` filter per channel. Return an array of shape `(T, d)` with\n\n$$\ny[t, c] = \\sum_{i=0}^{k-1} w[i, c] \\cdot x_{\\text{pad}}[t + i, c]\n$$\n\nwhere `x_pad` is `x` padded with zeros along time: `(k - 1) // 2` frames at the start and `k - 1 - (k - 1) // 2` at the end. This keeps the length at `T` for odd and even `k`. The paper's kernel size is 32, which is even. The padding rule is this page's choice, because the paper doesn't state one. Do not flip the filter: this is cross-correlation, as in deep learning libraries.",
+  "hints": [
+    "Pad with `np.pad(x, ((left, right), (0, 0)))`. Pad only along the time axis.",
+    "Start with a loop over the `k` filter taps. For tap `i`, the slice `xp[i:i + T]` holds the frames that line up with `w[i]`.",
+    "Multiply the slice by `w[i]` (shape `(d,)`, which broadcasts across time) and add it to the output. No tap ever combines two channels.",
+    "For an impulse at one frame, the output is the filter laid out around that frame. With `k = 3` and `w = [1, 2, 3]`, an impulse at frame 3 gives 3, 2, 1 at frames 2, 3, 4."
+  ],
+  "runtime": "pyodide"
+}
