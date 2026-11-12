@@ -1156,3 +1156,21 @@ concepts:
     lesson: "Evaluating RL honestly"
     anchor_match: close
     refresher: "A test that asks how often a gap as large as the one you measured would appear if both samples came from the same distribution."
+  n-step-returns:
+    label: "n-step returns"
+    url: "https://rl.ifkash.dev/lessons/019-n-step-returns"
+    lesson: "n-step returns"
+    anchor_match: exact
+    refresher: "Sum n discounted rewards and then bootstrap from the value n steps ahead, which trades more variance for less bias than a one-step target."
+  prioritized-replay:
+    label: "prioritized replay"
+    url: "https://rl.ifkash.dev/lessons/028-prioritized-replay"
+    lesson: "Prioritized experience replay"
+    anchor_match: exact
+    refresher: "Sample stored transitions in proportion to a power of their TD error, and correct the resulting bias with importance weights."
+  distributional-rl:
+    label: "distributional RL"
+    url: "https://rl.ifkash.dev/lessons/029-distributional-rl"
+    lesson: "Distributional reinforcement learning"
+    anchor_match: exact
+    refresher: "Learn the whole distribution of returns instead of only its mean, for example as probabilities on a fixed grid of atoms."

@@ -1,0 +1,10 @@
+{
+  "title": "The n-step target",
+  "goal": "Write `n_step_target(rewards, done, q_boot, gamma)`, the target of the multi-step loss in Section 2 (Equation 2 and the loss below it).\n\n- `rewards` is a list of the $m \\le n$ rewards $R_{t+1}, \\dots, R_{t+m}$ that the window holds.\n- `done` is `True` when the episode ended on the last of those rewards. Then there is no state to bootstrap from.\n- `q_boot` is $\\max_{a'} q(S_{t+m}, a')$ from the target network. Ignore it when `done` is `True`.\n\nReturn the float $R_t^{(m)} + \\gamma^m \\, q_{boot}$ for a live window, and $R_t^{(m)}$ for a finished one, where $R_t^{(m)} = \\sum_{k=0}^{m-1} \\gamma^k R_{t+k+1}$. The constant discount $\\gamma$ replaces the paper's $\\gamma_t$, which is zero only at termination.\n\nThe tiny example on the page gives `6.265` for rewards `[1, 0, 2]`, $\\gamma = 0.9$, and `q_boot = 5`.",
+  "hints": [
+    "The reward at offset $k$ is discounted by $\\gamma^k$. The first reward is not discounted at all.",
+    "The bootstrap term is discounted by $\\gamma^m$ where $m$ is `len(rewards)`, not by a fixed $n$. A window cut short by the end of the episode has fewer than $n$ rewards.",
+    "When `done` is `True`, return the discounted reward sum alone. A big `q_boot` must not change the answer."
+  ],
+  "runtime": "pyodide"
+}
