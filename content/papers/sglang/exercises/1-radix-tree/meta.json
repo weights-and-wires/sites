@@ -1,0 +1,12 @@
+{
+  "title": "A radix tree over token ids",
+  "goal": "Build the index that RadixAttention keeps over cached prefixes (Section 3, Figure 3).\n\nThe starter gives you `Node` and a `RadixTree` with `num_nodes()` and `num_tokens()`. Each node owns the tokens on the edge above it, and a parent keys its children by the first token of their edges. Write two methods:\n\n- `match(tokens)` returns the length of the longest prefix of `tokens` that the tree stores. The prefix can end in the middle of an edge. The method changes nothing.\n- `insert(tokens)` stores `tokens` and returns how many tokens were new. When the tokens diverge from an edge, or end inside it, split that edge in two so the shared part becomes its own node.\n\nThe tests compare your tree with a brute-force set of prefixes.",
+  "hints": [
+    "Walk down from the root. At each step look up `node.children.get(tokens[i])`. If there is no child, the walk is over.",
+    "Compare the child's edge with `tokens[i:]` one token at a time and call the number of equal tokens `k`. If `k == len(child.edge)`, move into the child and add `k` to `i`. Otherwise the match stops after `k` more tokens.",
+    "In `insert`, a missing child means one new leaf holds all the remaining tokens, so return `len(tokens) - i`.",
+    "To split an edge after `k` tokens, make `mid = Node(child.edge[:k], node)`, put it under `node` at the old key, shorten `child.edge` to `child.edge[k:]`, point `child.parent` at `mid`, and put `child` under `mid` keyed by its new first token.",
+    "A sequence that ends inside an edge splits it too, so the end of the sequence is a node. That sequence adds no tokens, so return 0."
+  ],
+  "runtime": "pyodide"
+}

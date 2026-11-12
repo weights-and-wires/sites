@@ -1,0 +1,11 @@
+{
+  "title": "Jump-forward over a compressed FSM",
+  "goal": "Decode constrained output with the compressed finite state machine of Section 4.\n\nThe starter gives you `FSM` (a dict `edges` from state to `{character: next state}`, plus `start` and `accepting`), `build_fsm(segments)`, and `decode_naive`, which spends one step per character. A *forced* state has exactly one outgoing edge and is not accepting. Write two functions:\n\n- `jump_forward(fsm, state)` follows forced states and returns `(text, end_state)`, where `text` holds the characters it passed. It stops at the first state that is not forced.\n- `decode(fsm, choose)` returns `(text, steps)`. Loop: jump forward and append the text. If the state has no edges, stop. Otherwise call `choose(options)` once, where `options` is the sorted list of allowed characters plus `None` when the state is accepting. That call is one step. If it returns `None`, stop. Otherwise append the character and follow its edge.\n\nThe model runs once per choice, not once per character. A character here stands for a token, which is a simplification the page discusses.",
+  "hints": [
+    "A state is forced when `len(fsm.edges[state]) == 1 and state not in fsm.accepting`. Unpack the single edge with `(ch, nxt), = fsm.edges[state].items()`.",
+    "In `jump_forward`, keep a list of characters, move to `nxt` in a `while` loop, and join the list at the end.",
+    "An accepting state with one edge is not forced: the model may emit the end token there. That is why `decode` adds `None` to the options.",
+    "In `decode`, `steps` goes up by one for each call to `choose`, including the call that returns `None`."
+  ],
+  "runtime": "pyodide"
+}

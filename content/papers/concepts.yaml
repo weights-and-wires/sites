@@ -690,14 +690,14 @@ concepts:
     refresher: "Service level objectives are latency or availability targets, such as a time-to-first-token limit."
   radix-tree:
     label: "radix tree"
-    url: "https://qwen.ifkash.dev/c/15-paged-attention"
-    lesson: "Paged attention"
+    url: "https://qwen.ifkash.dev/c/15a-prefix-caching-and-radix-trees"
+    lesson: "Prefix caching and radix trees"
     anchor_match: close
     refresher: "A compressed prefix tree that stores sequences by shared prefixes, so common beginnings are stored once."
   prefix-caching:
     label: "prefix caching"
-    url: "https://qwen.ifkash.dev/c/15-paged-attention"
-    lesson: "Paged attention"
+    url: "https://qwen.ifkash.dev/c/15a-prefix-caching-and-radix-trees"
+    lesson: "Prefix caching and radix trees"
     anchor_match: close
     refresher: "Reuse stored KV cache blocks for requests that share the same prompt prefix."
   quantization:
