@@ -16,7 +16,7 @@ prereqs: []
 background: [convolution, vanishing-gradients, backprop]
 course_links:
   - title: "Residual networks: the shortcut, the gradient, and the bottleneck"
-    url: "https://ml.ifkash.dev/lessons/040-residual-networks"
+    url: "https://ml.ifkash.dev/lessons/048-residual-networks"
 self_check:
   - q: 'A 3×3 convolution maps 64 channels to 64 channels and has no bias. How many weights does it have, and how many does a 1×1 convolution from 256 channels to 64 channels have?'
     a: 'The 3×3 convolution has $3 \cdot 3 \cdot 64 \cdot 64 = 36{,}864$ weights. The 1×1 convolution has $1 \cdot 1 \cdot 256 \cdot 64 = 16{,}384$. The kernel size enters squared, which is why a 1×1 layer is cheap and why the bottleneck block puts the 3×3 layer at the narrow width.'

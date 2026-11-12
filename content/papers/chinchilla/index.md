@@ -18,9 +18,9 @@ prereqs:
 background: [flops-estimate-6nd, curve-fitting]
 course_links:
   - title: "Scaling laws and the compute budget"
-    url: "https://ml.ifkash.dev/lessons/055-scaling-laws"
+    url: "https://ml.ifkash.dev/lessons/073-scaling-laws"
   - title: "The training step, and what a run costs"
-    url: "https://ml.ifkash.dev/lessons/053-training-loop-and-cost"
+    url: "https://ml.ifkash.dev/lessons/069-training-loop-and-cost"
 self_check:
   - q: 'A run has a budget of $C = 5.88 \times 10^{23}$ FLOPs and a model with $N = 7 \times 10^{10}$ parameters. How many tokens $D$ does it see if it spends the whole budget, using $C \approx 6ND$?'
     a: '$D = C / (6N) = 5.88 \times 10^{23} / (4.2 \times 10^{11}) = 1.4 \times 10^{12}$ tokens, which is 20 tokens per parameter. The 6 is 2 FLOPs per parameter per token in the forward pass plus 4 in the backward pass.'
@@ -186,4 +186,4 @@ The headline results are the following:
 - [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361), by Kaplan et al., is the study that this paper revises. See [the Kaplan page](/kaplan/) on this site.
 - [Chinchilla Scaling: A replication attempt](https://arxiv.org/abs/2404.10102), by Besiroglu et al., re-fits the parametric loss from the paper's data and reports that the published Approach 3 constants don't reproduce well. Read it with the Equation 10 caution above.
 - [Scaling Language Models: Methods, Analysis & Insights from Training Gopher](https://arxiv.org/abs/2112.11446), by Rae et al., describes the baseline model that Chinchilla is compared against.
-- [Scaling laws and the compute budget](https://ml.ifkash.dev/lessons/055-scaling-laws) is the course lesson that walks through the same fits.
+- [Scaling laws and the compute budget](https://ml.ifkash.dev/lessons/073-scaling-laws) is the course lesson that walks through the same fits.

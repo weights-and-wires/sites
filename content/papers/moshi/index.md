@@ -22,9 +22,9 @@ prereqs:
 background: [full-duplex, inner-monologue, streaming]
 course_links:
   - title: "Full-duplex models and voice agents"
-    url: "https://speech.ifkash.dev/lessons/065-full-duplex-and-voice-agents"
+    url: "https://speech.ifkash.dev/lessons/080-full-duplex-and-voice-agents"
   - title: "Spoken language models"
-    url: "https://speech.ifkash.dev/lessons/064-spoken-language-models"
+    url: "https://speech.ifkash.dev/lessons/078-spoken-language-models"
 self_check:
   - q: 'Mimi has encoder strides $(4, 5, 6, 8, 2)$ on 24 kHz audio. How many frames per second does it produce, and how many tokens per second does a single audio stream add with $Q = 8$ codebooks?'
     a: 'The hop is $4 \cdot 5 \cdot 6 \cdot 8 \cdot 2 = 1920$ samples, so $24000 / 1920 = 12.5$ frames per second, or 80 ms per frame. With 8 codebooks that is 100 tokens per second, which is why Moshi does not flatten the codebooks into one sequence.'
@@ -181,4 +181,4 @@ Exercise 4 asks you to implement this alignment.
 - [SpeechTokenizer](https://arxiv.org/abs/2308.16692), by Zhang et al., is the earlier codec that distills semantic information into the first RVQ level. Mimi follows it.
 - [Simple and Controllable Music Generation](https://arxiv.org/abs/2306.05284), by Copet et al., introduced the codebook delay pattern that Moshi shortens.
 - [Autoregressive Image Generation using Residual Quantization](https://arxiv.org/abs/2203.01941), by Lee et al., proposed the RQ-Transformer.
-- [Full-duplex models and voice agents](https://speech.ifkash.dev/lessons/065-full-duplex-and-voice-agents) covers the full-duplex idea in the speech course.
+- [Full-duplex models and voice agents](https://speech.ifkash.dev/lessons/080-full-duplex-and-voice-agents) covers the full-duplex idea in the speech course.

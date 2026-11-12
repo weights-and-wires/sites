@@ -18,7 +18,7 @@ prereqs:
 background: [complex-numbers-and-rotations, dot-products]
 course_links:
   - title: "Position encodings: sinusoidal clocks and rotary embeddings"
-    url: "https://ml.ifkash.dev/lessons/049-position-encodings"
+    url: "https://ml.ifkash.dev/lessons/062-position-encodings"
   - title: "Rotary position embeddings"
     url: "https://qwen.ifkash.dev/c/05-rotary-embeddings"
 self_check:

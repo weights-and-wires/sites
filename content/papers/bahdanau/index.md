@@ -18,9 +18,9 @@ prereqs:
 background: [softmax, alignment, weighted-average]
 course_links:
   - title: "Attention as a soft lookup, with a dot product or a learned scorer"
-    url: "https://ml.ifkash.dev/lessons/045-attention-as-soft-lookup"
+    url: "https://ml.ifkash.dev/lessons/056-attention-as-soft-lookup"
   - title: "Attention gradients and the alignment matrix"
-    url: "https://ml.ifkash.dev/lessons/046-attention-gradients-and-alignment"
+    url: "https://ml.ifkash.dev/lessons/057-attention-gradients-and-alignment"
 self_check:
   - q: 'Three alignment scores are $e = [\ln 3, 0, 0]$. Compute the weights $\alpha$ by hand, and then the context $c$ for annotations $h_1 = [1, 0]$, $h_2 = [0, 1]$, $h_3 = [1, 1]$.'
     a: 'The softmax is $[3, 1, 1] / 5 = [0.6, 0.2, 0.2]$. The context is $0.6\,[1, 0] + 0.2\,[0, 1] + 0.2\,[1, 1] = [0.8, 0.4]$, a weighted average that lies inside the span of the annotations. `scripts/additive_example.py` prints both.'

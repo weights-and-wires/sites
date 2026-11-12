@@ -16,9 +16,9 @@ prereqs: []
 background: [backprop-through-time, vanishing-gradients]
 course_links:
   - title: "The LSTM, a belt with three gates"
-    url: "https://ml.ifkash.dev/lessons/043-the-lstm"
+    url: "https://ml.ifkash.dev/lessons/054-the-lstm"
   - title: "Backpropagation through the LSTM, and the GRU"
-    url: "https://ml.ifkash.dev/lessons/044-lstm-backward-and-the-gru"
+    url: "https://ml.ifkash.dev/lessons/055-lstm-backward-and-the-gru"
 self_check:
   - q: 'A recurrent unit with a logistic sigmoid activation has a self-connection of weight $w = 3$. By what factor does Equation 3.2 scale an error that travels back $q = 10$ steps, at most?'
     a: 'Each step scales the error by $f''(\mathit{net}) \, w \le 0.25 \cdot 3 = 0.75$, so ten steps scale it by at most $0.75^{10} \approx 0.056$. After 50 steps the factor is about $5.7 \times 10^{-7}$. The unit has no gate or other mechanism that could keep the error alive.'

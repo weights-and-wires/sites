@@ -20,7 +20,7 @@ course_links:
   - title: "Lost digits, and how QR and the SVD keep them"
     url: "https://ml.ifkash.dev/lessons/004-stable-least-squares"
   - title: "SGD, Adam, and learning-rate schedules"
-    url: "https://ml.ifkash.dev/lessons/031-sgd-adam-and-schedules"
+    url: "https://ml.ifkash.dev/lessons/038-sgd-adam-and-schedules"
 self_check:
   - q: 'A matrix $G = U S V^\top$ has singular values $(3, 1, 0.1)$. What is $\mathrm{Ortho}(G)$, and what are its singular values?'
     a: 'It is $U V^\top$, the nearest matrix with orthonormal rows or columns to $G$ in Frobenius norm. Its three singular values are all $1$, so the direction that carried $3$ and the direction that carried $0.1$ now have the same size.'

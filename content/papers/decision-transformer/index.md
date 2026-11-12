@@ -20,9 +20,9 @@ prereqs:
 background: [offline-rl, return-to-go]
 course_links:
   - title: "Offline reinforcement learning"
-    url: "https://rl.ifkash.dev/lessons/045-offline-rl"
+    url: "https://rl.ifkash.dev/lessons/053-offline-rl"
   - title: "Imitation learning"
-    url: "https://rl.ifkash.dev/lessons/043-imitation-learning"
+    url: "https://rl.ifkash.dev/lessons/051-imitation-learning"
 self_check:
   - q: 'An episode has rewards $r = [1, 0, 2, -1]$. What are the returns-to-go $\hat{R}_1, \dots, \hat{R}_4$, and what does Decision Transformer do with them at test time?'
     a: 'Each entry sums the rewards from that step to the end: $\hat{R} = [2, 1, 1, -1]$. At test time you set $\hat{R}_1$ to the return you want, then after every step you subtract the reward you just received, so $\hat{R}_{t+1} = \hat{R}_t - r_t$ (Section 3).'

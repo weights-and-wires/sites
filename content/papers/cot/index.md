@@ -18,9 +18,9 @@ prereqs:
 background: [prompting, exact-match-evaluation]
 course_links:
   - title: "Reasoning with verifiable rewards"
-    url: "https://rl.ifkash.dev/lessons/057-reasoning-with-verifiable-rewards"
+    url: "https://rl.ifkash.dev/lessons/073-reasoning-with-verifiable-rewards"
   - title: "Process rewards and test-time search"
-    url: "https://rl.ifkash.dev/lessons/058-process-rewards-and-search"
+    url: "https://rl.ifkash.dev/lessons/074-process-rewards-and-search"
 self_check:
   - q: 'Figure 1 shows a standard prompt and a chain-of-thought prompt for the same question. What differs between them, how many exemplars does the main arithmetic experiment use, and does any model weight change?'
     a: 'Only the exemplars differ. Each standard exemplar is an (input, answer) pair, and each chain-of-thought exemplar is an (input, chain of thought, answer) triple, with the chain written by hand. The main arithmetic experiments use a single set of eight hand-written exemplars for every benchmark except AQuA, which gets four exemplars from its training set (Section 3.1). No weights change: the paper states that no language model was fine-tuned (Section 6).'

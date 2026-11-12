@@ -20,7 +20,7 @@ prereqs:
 background: [contrastive-learning, vector-quantization, self-supervised-learning]
 course_links:
   - title: "Self-supervised speech"
-    url: "https://speech.ifkash.dev/lessons/036-self-supervised-speech"
+    url: "https://speech.ifkash.dev/lessons/039-self-supervised-speech"
 self_check:
   - q: 'The feature encoder has strides $(5,2,2,2,2,2,2)$. What is its total stride, and why does one second of 16 kHz audio give 49 frames instead of 50?'
     a: 'The total stride is $5 \cdot 2^6 = 320$ samples, or 20 ms. Each unpadded convolution loses $k - s$ samples at the edge, so the length is $\lfloor (n - k)/s \rfloor + 1$ layer by layer, and 16,000 samples end at 49 frames. A single division $16000 / 320 = 50$ ignores that loss (Section 4.2).'

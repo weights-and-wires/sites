@@ -18,7 +18,7 @@ prereqs:
 background: [conditional-generation]
 course_links:
   - title: "Classifier-free guidance"
-    url: "https://speech.ifkash.dev/lessons/054-classifier-free-guidance"
+    url: "https://speech.ifkash.dev/lessons/064-classifier-free-guidance"
 self_check:
   - q: 'In DDPM notation, $\bar\alpha_3 = 0.504$. This paper writes the same noise level with $\alpha_\lambda^2 = \bar\alpha_t$ and $\sigma_\lambda^2 = 1 - \bar\alpha_t$. What is the log-SNR $\lambda = \log(\alpha_\lambda^2 / \sigma_\lambda^2)$?'
     a: 'The signal variance is $0.504$ and the noise variance is $1 - 0.504 = 0.496$, so $\lambda = \ln(0.504 / 0.496) = 0.016$. The noise level is almost exactly the point where signal and noise are equal. The two parameterizations describe the same forward process; $\lambda$ increases as noise decreases.'

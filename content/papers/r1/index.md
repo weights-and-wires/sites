@@ -20,9 +20,9 @@ prereqs:
 background: [verifiable-rewards, distillation]
 course_links:
   - title: "Reasoning with verifiable rewards"
-    url: "https://rl.ifkash.dev/lessons/057-reasoning-with-verifiable-rewards"
+    url: "https://rl.ifkash.dev/lessons/073-reasoning-with-verifiable-rewards"
   - title: "Verifiable rewards"
-    url: "https://rl.ifkash.dev/lessons/056-verifiable-rewards"
+    url: "https://rl.ifkash.dev/lessons/072-verifiable-rewards"
 self_check:
   - q: 'Four completions of one question earn rule rewards $[2, 1, 1, 0]$ under Equation 4. What are their GRPO advantages (Equation 3, population standard deviation)?'
     a: 'The mean is $1$ and the standard deviation is $\sqrt{0.5} \approx 0.7071$. The advantages are $[1.4142, 0, 0, -1.4142]$. The two middle completions sit exactly at the group mean, so they get no push in either direction.'

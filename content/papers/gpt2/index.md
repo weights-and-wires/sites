@@ -20,9 +20,9 @@ prereqs:
 background: [autoregressive-language-modeling, perplexity]
 course_links:
   - title: "Training a language model: next-token loss, schedules, and clipping"
-    url: "https://ml.ifkash.dev/lessons/052-next-token-loss-and-safe-steps"
+    url: "https://ml.ifkash.dev/lessons/068-next-token-loss-and-safe-steps"
   - title: "Train a tiny transformer to reverse digits"
-    url: "https://ml.ifkash.dev/lessons/053p-project-train-a-tiny-transformer"
+    url: "https://ml.ifkash.dev/lessons/070p-project-train-a-tiny-transformer"
 self_check:
   - q: 'A language model assigns $p(\text{the}) = 0.5$, $p(\text{cat} \mid \text{the}) = 0.4$, and $p(\text{sat} \mid \text{the cat}) = 0.5$. What is the probability of the sequence, and what is its perplexity?'
     a: 'The sequence probability is $0.5 \times 0.4 \times 0.5 = 0.1$, by the chain rule in Equation 1. Perplexity is $\exp$ of the average negative log-probability, which is $0.1^{-1/3} \approx 2.154$. A model that picked uniformly among $V$ tokens would have perplexity $V$.'

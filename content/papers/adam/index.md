@@ -16,7 +16,7 @@ prereqs: []
 background: [sgd, momentum, exponential-moving-averages]
 course_links:
   - title: "SGD, Adam, and learning-rate schedules"
-    url: "https://ml.ifkash.dev/lessons/031-sgd-adam-and-schedules"
+    url: "https://ml.ifkash.dev/lessons/038-sgd-adam-and-schedules"
 self_check:
   - q: 'Adam starts with $m_0 = 0$ and $\beta_1 = 0.9$. For a constant gradient $g_t = 1$, what is $m_1$, and what is $\hat m_1$ after the bias correction?'
     a: 'The result is $m_1 = 0.9 \cdot 0 + 0.1 \cdot 1 = 0.1$, ten times too small. Dividing by $1 - \beta_1^1 = 0.1$ gives $\hat m_1 = 1$, the true mean of the gradient.'

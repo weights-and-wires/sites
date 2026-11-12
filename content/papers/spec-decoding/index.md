@@ -20,7 +20,7 @@ course_links:
   - title: "Speculative decoding"
     url: "https://qwen.ifkash.dev/c/20-speculative-decoding"
   - title: "Decoding and sampling: cache, temperature, speculation"
-    url: "https://ml.ifkash.dev/lessons/056-decoding-and-sampling"
+    url: "https://ml.ifkash.dev/lessons/075-decoding-and-sampling"
 self_check:
   - q: 'Decoding $K$ tokens with a Transformer takes how many serial runs of the model, and why can''t the runs overlap?'
     a: 'It takes $K$ serial runs. Token $t$ is sampled from a distribution that depends on token $t-1$, so run $t$ can''t start until run $t-1$ has produced its token. Each run is also dominated by reading the weights and the KV cache, not by arithmetic, which is the slack speculative decoding uses.'
@@ -198,4 +198,4 @@ The best $\gamma$ grows with $\alpha$ and shrinks with $c$. For $\alpha = 0.8$ t
 
 - [Leviathan, Kalman, and Matias, "Fast Inference from Transformers via Speculative Decoding" (arXiv 2211.17192)](https://arxiv.org/abs/2211.17192). Read Appendix A.1 for the correctness proof and Appendix A.5 for the lenience variant, which trades exactness for a higher $\alpha$.
 - [Chen et al., "Accelerating Large Language Model Decoding with Speculative Sampling" (arXiv 2302.01318)](https://arxiv.org/abs/2302.01318). An independent, concurrent paper with the same accept/reject rule.
-- [Speculative decoding lesson](https://qwen.ifkash.dev/c/20-speculative-decoding) and [Decoding and sampling lesson](https://ml.ifkash.dev/lessons/056-decoding-and-sampling) in the course.
+- [Speculative decoding lesson](https://qwen.ifkash.dev/c/20-speculative-decoding) and [Decoding and sampling lesson](https://ml.ifkash.dev/lessons/075-decoding-and-sampling) in the course.

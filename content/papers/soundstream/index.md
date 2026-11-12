@@ -20,9 +20,9 @@ prereqs:
 background: [residual-vector-quantization, adversarial-losses]
 course_links:
   - title: "Neural audio codecs"
-    url: "https://speech.ifkash.dev/lessons/050-neural-audio-codecs"
+    url: "https://speech.ifkash.dev/lessons/060-neural-audio-codecs"
   - title: "Residual and scalar quantization"
-    url: "https://speech.ifkash.dev/lessons/049-residual-and-scalar-quantization"
+    url: "https://speech.ifkash.dev/lessons/059-residual-and-scalar-quantization"
 self_check:
   - q: 'A codec runs at 6 kbps on 75 embedding frames per second. How many bits does each frame get, how large would one plain codebook be, and how many vectors does a residual quantizer with $N_q = 8$ stages store instead?'
     a: 'Each frame gets $6000 / 75 = 80$ bits. A plain codebook would need $2^{80}$ entries. With $N_q = 8$ stages of $\log_2 N = 10$ bits each, each stage has $N = 1024$ entries, so the quantizer stores $8 \cdot 1024 = 8192$ vectors and can still express $2^{80}$ distinct sums.'
@@ -163,6 +163,6 @@ A conditioning bit lets the same model denoise or not. The paper feeds a two-way
 ## Further reading
 
 - The SoundStream paper on arXiv: [2107.03312](https://arxiv.org/abs/2107.03312).
-- Course lesson, [Residual and scalar quantization](https://speech.ifkash.dev/lessons/049-residual-and-scalar-quantization), for the quantization side in more depth.
-- Course lesson, [Neural audio codecs](https://speech.ifkash.dev/lessons/050-neural-audio-codecs), for how later codecs build on this design.
+- Course lesson, [Residual and scalar quantization](https://speech.ifkash.dev/lessons/059-residual-and-scalar-quantization), for the quantization side in more depth.
+- Course lesson, [Neural audio codecs](https://speech.ifkash.dev/lessons/060-neural-audio-codecs), for how later codecs build on this design.
 - The VQ-VAE paper (van den Oord et al., 2017), which the paper extends with the residual cascade (Section II).

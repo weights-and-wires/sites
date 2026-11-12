@@ -16,7 +16,7 @@ prereqs: []
 background: [policy-gradient-theorem, kl-divergence, conjugate-gradient]
 course_links:
   - title: "Natural gradients and trust regions"
-    url: "https://rl.ifkash.dev/lessons/033-trust-regions-and-trpo"
+    url: "https://rl.ifkash.dev/lessons/035-trust-regions-and-trpo"
 self_check:
   - q: 'The surrogate $L_\pi(\tilde\pi)$ uses the state visitation $\rho_\pi$ of the old policy, where the true return uses $\rho_{\tilde\pi}$. What does that ignore, and what does Equation 4 guarantee anyway?'
     a: 'It ignores how the new policy changes which states get visited. Even so, $L$ and $\eta$ have the same value and the same gradient at the old parameters, which is the policy gradient theorem restated. So a small enough step that improves $L$ also improves $\eta$, but Equation 4 says nothing about how small "small enough" is.'

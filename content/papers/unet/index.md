@@ -18,9 +18,9 @@ prereqs:
 background: [convolution, downsampling-and-upsampling]
 course_links:
   - title: "Convolution: slide a filter, count the weights, count the view"
-    url: "https://ml.ifkash.dev/lessons/038-convolution-and-receptive-field"
+    url: "https://ml.ifkash.dev/lessons/046-convolution-and-receptive-field"
   - title: "Diffusion for audio"
-    url: "https://speech.ifkash.dev/lessons/055-diffusion-for-audio"
+    url: "https://speech.ifkash.dev/lessons/065-diffusion-for-audio"
 self_check:
   - q: 'A 572 x 572 single-channel input passes through two unpadded 3x3 convolutions and one 2x2 max pool with stride 2. What is the height and width of the result?'
     a: 'Each unpadded 3x3 convolution trims 2 pixels from each side length, so the sizes go $572 \to 570 \to 568$. The pool halves 568 to 284. Padding would keep 572 through the convolutions, but the U-Net uses none.'

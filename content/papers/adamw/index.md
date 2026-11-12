@@ -18,9 +18,9 @@ prereqs:
 background: [l2-regularization, weight-decay]
 course_links:
   - title: "Weight decay and early stopping: two ways to keep weights small"
-    url: "https://ml.ifkash.dev/lessons/034-weight-decay-and-early-stopping"
+    url: "https://ml.ifkash.dev/lessons/041-weight-decay-and-early-stopping"
   - title: "SGD, Adam, and learning-rate schedules"
-    url: "https://ml.ifkash.dev/lessons/031-sgd-adam-and-schedules"
+    url: "https://ml.ifkash.dev/lessons/038-sgd-adam-and-schedules"
 self_check:
   - q: 'Plain SGD with step $\alpha$ runs on the loss $f(\theta) + \frac{\lambda''}{2}\lVert\theta\rVert_2^2$. Write one update. What decay factor $\lambda$ does it match in $\theta \leftarrow (1 - \lambda)\theta - \alpha\nabla f(\theta)$?'
     a: 'The update is $\theta \leftarrow \theta - \alpha\nabla f(\theta) - \alpha\lambda''\theta = (1 - \alpha\lambda'')\theta - \alpha\nabla f(\theta)$. It matches decay $\lambda = \alpha\lambda''$, so $\lambda'' = \lambda / \alpha$ (Proposition 1). The two knobs are tied together by the learning rate.'

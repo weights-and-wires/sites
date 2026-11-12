@@ -18,9 +18,9 @@ prereqs:
 background: [in-context-learning, few-shot-prompting]
 course_links:
   - title: "Scaling laws and the compute budget"
-    url: "https://ml.ifkash.dev/lessons/055-scaling-laws"
+    url: "https://ml.ifkash.dev/lessons/073-scaling-laws"
   - title: "Training a language model: next-token loss, schedules, and clipping"
-    url: "https://ml.ifkash.dev/lessons/052-next-token-loss-and-safe-steps"
+    url: "https://ml.ifkash.dev/lessons/068-next-token-loss-and-safe-steps"
 self_check:
   - q: 'Section 2.1 says GPT-3 uses "the same model and architecture as GPT-2". Name the changes the paper lists, in the architecture and in the context length.'
     a: 'The paper keeps the modified initialization, pre-normalization, and tokenization, and adds alternating dense and locally banded sparse attention layers, like the Sparse Transformer. The context window is $n_{\text{ctx}} = 2048$ tokens for every model, against 1024 for GPT-2. The other changes are scale: 96 layers and $d_{\text{model}} = 12288$ for the largest model.'
