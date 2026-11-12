@@ -1,0 +1,12 @@
+{
+  "title": "Relative position scores",
+  "goal": "Section 2.1 says the Conformer attention module uses the relative sinusoidal encoding of Transformer-XL. A query at frame $i$ scores a key at frame $j$ with a term that depends on the offset $r = i - j$. The course lesson writes the score for one head as\n\n$$\nA_{ij} = \\frac{(q_i + u)^\\top k_j + (q_i + v)^\\top p_{i-j}}{\\sqrt{d_k}}\n$$\n\nThe paper cites Transformer-XL for this form and doesn't write it out, so this equation comes from that work. Here `u` and `v` are learned vectors, and `p_r` is the already-projected encoding of offset `r`.\n\nWrite `rel_scores(q, k, p, u, v)`. `q` and `k` have shape `(T, dk)`. `p` has shape `(2T - 1, dk)`, and row `m` holds the encoding for offset `r = T - 1 - m`. So row 0 is offset `T - 1`, the middle row is offset 0, and the last row is offset `-(T - 1)`. `u` and `v` have shape `(dk,)`. Return the `(T, T)` array `A`.",
+  "hints": [
+    "Offset `i - j` lives in row `m = T - 1 - (i - j) = T - 1 - i + j` of `p`.",
+    "Compute the content term as `(q + u) @ k.T`, a `(T, T)` array.",
+    "Compute `(q + v) @ p.T`, a `(T, 2T - 1)` array whose column `m` scores every query against row `m` of `p`. Then pick the right column for each pair.",
+    "Build the pick with index arrays: `idx = (T - 1) - np.arange(T)[:, None] + np.arange(T)[None, :]`, and then `np.take_along_axis(pos, idx, axis=1)`.",
+    "Divide the sum by `np.sqrt(dk)`."
+  ],
+  "runtime": "pyodide"
+}

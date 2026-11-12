@@ -1,0 +1,12 @@
+{
+  "title": "The Macaron block",
+  "goal": "Section 2.4 (Equation 1) defines one Conformer block. Two feed-forward modules sandwich the attention and convolution modules, and each adds only half of its output:\n\n$$\n\\tilde x = x + \\tfrac12 \\mathrm{FFN}(x), \\quad x' = \\tilde x + \\mathrm{MHSA}(\\tilde x), \\quad x'' = x' + \\mathrm{Conv}(x'), \\quad y = \\mathrm{LayerNorm}\\!\\left(x'' + \\tfrac12 \\mathrm{FFN}(x'')\\right)\n$$\n\nWrite `conformer_block(x, ffn1, mhsa, conv, ffn2, final_ln)`. `x` is a `(T, d)` array. The other five arguments are functions from a `(T, d)` array to a `(T, d)` array. `ffn1` is the first feed-forward module and `ffn2` is the second. Return `y`. Each module adds its own pre-norm inside the function you receive, so this function only wires the residual connections.",
+  "hints": [
+    "Write one line per equation: `x1 = x + 0.5 * ffn1(x)`, then `x2 = x1 + mhsa(x1)`, and so on.",
+    "Each module reads the output of the previous line, not the original `x`.",
+    "The two feed-forward modules are different functions with their own weights. Call `ffn1` first and `ffn2` last.",
+    "Only the feed-forward residuals use the factor 0.5. The attention and convolution residuals add the full output.",
+    "Apply `final_ln` once, to the sum after the second feed-forward residual."
+  ],
+  "runtime": "pyodide"
+}

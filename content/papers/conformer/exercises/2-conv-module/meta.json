@@ -1,0 +1,12 @@
+{
+  "title": "The convolution module",
+  "goal": "Section 2.2 and Figure 2 describe the Conformer convolution module: a pointwise convolution that doubles the channels, a gated linear unit (GLU), one 1-D depthwise convolution, batch normalization, Swish, and a final pointwise convolution. The paper also shows a layer norm at the start and dropout at the end. This exercise includes the layer norm and leaves out dropout and the residual connection.\n\nWrite `conv_module(x, w_pw1, w_dw, gamma, beta, w_pw2, eps=1e-5)`. The shapes are `x`: `(T, d)`, `w_pw1`: `(d, 2d)`, `w_dw`: `(k, d)`, `gamma` and `beta`: `(d,)`, `w_pw2`: `(d, d)`. Return a `(T, d)` array computed in this order:\n\n1. Layer norm of each frame over its `d` channels, with no learned scale or shift: `(x - mean) / sqrt(var + eps)`.\n2. Pointwise convolution: `h = x @ w_pw1`, a `(T, 2d)` array.\n3. GLU: split `h` into `a = h[:, :d]` and `b = h[:, d:]`, and return `a * sigmoid(b)`. The paper doesn't say which half gates; this page follows the common library convention.\n4. Depthwise convolution along time with `w_dw`, using the padding rule of exercise 1.\n5. Batch norm with batch statistics: for each channel, subtract the mean over the `T` frames and divide by `sqrt(var + eps)`, then scale by `gamma` and shift by `beta`. Use the biased variance (divide by `T`).\n6. Swish: `z * sigmoid(z)`.\n7. Pointwise convolution: `z @ w_pw2`.",
+  "hints": [
+    "Write `sigmoid(z) = 1 / (1 + np.exp(-z))` as a small helper. The starter already has it.",
+    "The layer norm uses `x.mean(axis=1, keepdims=True)`: statistics per frame, over channels. The batch norm uses `axis=0`: statistics per channel, over time.",
+    "The GLU halves are `h[:, :d]` and `h[:, d:]`. Only the second half goes through the sigmoid.",
+    "The starter includes `depthwise_conv1d` from exercise 1. Call it on the GLU output.",
+    "`np.var` divides by `T` by default, which is the biased variance this exercise asks for."
+  ],
+  "runtime": "pyodide"
+}

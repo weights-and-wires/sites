@@ -1020,13 +1020,13 @@ concepts:
     refresher: "Models that generate a sequence one element at a time, conditioning on all earlier elements."
   depthwise-convolution:
     label: "depthwise convolution"
-    url: "https://speech.ifkash.dev/lessons/035-conformers-and-specaugment"
+    url: "https://speech.ifkash.dev/lessons/037-conformers-and-specaugment"
     lesson: "Conformers and SpecAugment"
     anchor_match: exact
     refresher: "A convolution applied separately to each channel, which uses far fewer parameters than a full convolution."
   relative-position:
     label: "relative position"
-    url: "https://speech.ifkash.dev/lessons/035-conformers-and-specaugment"
+    url: "https://speech.ifkash.dev/lessons/037-conformers-and-specaugment"
     lesson: "Conformers and SpecAugment"
     anchor_match: exact
     refresher: "Encode the distance between two tokens instead of their absolute positions in attention."
