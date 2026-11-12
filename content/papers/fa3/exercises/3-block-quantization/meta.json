@@ -1,0 +1,11 @@
+{
+  "title": "Block quantization to E4M3",
+  "goal": "Implement the block quantization of Section 3.3 in NumPy. Write `quantize_blocks(x, block_rows)`. `x` is a 2-D array. Split it into blocks of `block_rows` rows (the last block can be shorter). For each block:\n\n1. Compute the scale `amax / 448`, where `amax` is the largest absolute value in the block and 448 is the largest E4M3 value.\n2. Divide the block by the scale, round with `round_e4m3`, and multiply by the scale again.\n\nThe function returns the dequantized array with the same shape as `x`. If a block is all zeros, return zeros. Passing `block_rows = x.shape[0]` gives one scale per tensor. The starter gives you `round_e4m3`.",
+  "hints": [
+    "Loop `for i in range(0, x.shape[0], block_rows)` and take `blk = x[i:i + block_rows]`. A slice past the end is shorter, which handles the last block.",
+    "`amax = np.abs(blk).max()`. If `amax == 0`, copy the zeros and continue. Otherwise `scale = amax / 448.0`.",
+    "Write `out[i:i + block_rows] = round_e4m3(blk / scale) * scale`. Allocate `out = np.zeros_like(x, dtype=float)` first.",
+    "Check by hand: the row `[1, 2, 3, 4]` has scale `4 / 448`. The 3 maps to 336, which is a tie between 320 and 352 in E4M3, so it rounds to the even mantissa, 320."
+  ],
+  "runtime": "pyodide"
+}

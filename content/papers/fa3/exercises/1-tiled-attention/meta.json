@@ -1,0 +1,11 @@
+{
+  "title": "Tiled attention with an online softmax",
+  "goal": "Implement the consumer loop of Algorithm 1 (Section 3.1, lines 13 to 25) for one query block in NumPy. Write `tiled_attention(Q, K, V, Bc, tau=1.0)`. `Q` has shape `(Br, d)`, `K` has shape `(N, d)`, and `V` has shape `(N, dv)`. The function returns `(O, L)`:\n\n- `O` has shape `(Br, dv)` and equals $\\operatorname{softmax}(\\tau QK^\\top)V$.\n- `L` has shape `(Br,)` and holds $L_i = m_i + \\log \\ell_i$ (line 24), the logsumexp of each row of $\\tau QK^\\top$.\n\nStream `K` and `V` in blocks of `Bc` rows (the last block can be shorter). Never form the full `Br x N` score matrix. The starter gives you `naive_attention` to compare against. The paper omits the scale $\\tau$ in the algorithm; apply it to the scores.",
+  "hints": [
+    "Start the on-chip state as `O = 0` with shape `(Br, dv)`, `l = 0`, and `m = -inf` (line 13). Loop over `j in range(0, N, Bc)`.",
+    "For one block, compute `S = tau * Q @ K[j:j+Bc].T` (line 17). Then `m_new = np.maximum(m, S.max(axis=1))` (line 18) and `P = np.exp(S - m_new[:, None])` (line 19). On the first block `m` is `-inf`, so `np.exp(m - m_new)` is 0 and the empty state drops out.",
+    "Both the sum and the output carry one rescale factor, `alpha = np.exp(m - m_new)`. Update `l = alpha * l + P.sum(axis=1)` (line 19) and `O = alpha[:, None] * O + P @ V[j:j+Bc]` (line 21). Then set `m = m_new`.",
+    "Divide by `l` once, after the loop: `O / l[:, None]` (line 24), and return `m + np.log(l)` as `L`. Do not divide inside the loop."
+  ],
+  "runtime": "pyodide"
+}

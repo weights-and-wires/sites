@@ -1,0 +1,11 @@
+{
+  "title": "Incoherent processing",
+  "goal": "Reproduce the idea behind the incoherent processing of Section 3.3 on a toy. The starter gives you `round_e4m3` and `quantize_blocks` from the previous exercise. Write three functions:\n\n- `hadamard_transform(x)` applies the orthonormal Walsh-Hadamard transform over the **last** axis of `x`, whose length `d` is a power of two. It computes $x H_d / \\sqrt{d}$ in $O(d \\log d)$ per row, where $H_d$ is the Sylvester Hadamard matrix with entries $\\pm 1$.\n- `incoherent(x, signs)` multiplies each column by the random sign (`x * signs`) and then applies `hadamard_transform`. This is the paper's $M$, a product of a random $\\pm 1$ diagonal matrix and a Hadamard matrix.\n- `relative_score_error(Q, K, block_rows, signs=None)` returns $\\sqrt{\\operatorname{mean}((S - \\hat S)^2)} / \\sqrt{\\operatorname{mean}(S^2)}$, where $S = QK^\\top$ and $\\hat S$ is the same product after you rotate `Q` and `K` with `incoherent` (skip the rotation when `signs` is `None`) and quantize each with `quantize_blocks(., block_rows)`.",
+  "hints": [
+    "A Hadamard transform of length `d` has `log2(d)` butterfly stages. In stage `h = 1, 2, 4, ...`, split each row into pairs of length-`h` groups `(a, b)` and replace them with `(a + b, a - b)`. Divide by `sqrt(d)` at the end.",
+    "A vectorized butterfly: `x = x.reshape(*x.shape[:-1], d // (2 * h), 2, h)`, then `np.stack([x[..., 0, :] + x[..., 1, :], x[..., 0, :] - x[..., 1, :]], axis=-2)`, then reshape back to `(..., d)`.",
+    "Test your transform against the explicit matrix for `d = 4`: `H = [[1, 1, 1, 1], [1, -1, 1, -1], [1, 1, -1, -1], [1, -1, -1, 1]] / 2`. Applying it twice returns the input.",
+    "For the score error, rotate both `Q` and `K` with the same `signs`. The product $(QM)(KM)^\\top$ equals $QK^\\top$ before quantization, so any difference after quantization is rounding error."
+  ],
+  "runtime": "pyodide"
+}
