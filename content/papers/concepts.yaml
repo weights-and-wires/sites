@@ -948,7 +948,7 @@ concepts:
     refresher: "Skip prompts whose sampled responses all earn the same reward, since they give no learning signal."
   process-vs-outcome-supervision:
     label: "process vs. outcome supervision"
-    url: "https://rl.ifkash.dev/lessons/058-process-rewards-and-search"
+    url: "https://rl.ifkash.dev/lessons/074-process-rewards-and-search"
     lesson: "Process rewards and test-time search"
     anchor_match: exact
     refresher: "Process supervision scores each reasoning step, while outcome supervision scores only the final answer."
