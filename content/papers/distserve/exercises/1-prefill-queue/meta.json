@@ -1,0 +1,12 @@
+{
+  "title": "Prefill queue and parallelism",
+  "goal": "After disaggregation, a prefill instance behaves like an M/D/1 queue: Poisson arrivals at rate $R$, one request at a time, and a fixed execution time $D$ (Section 3.1). Write four functions. Each returns `float(\"inf\")` when the queue is not stable, which means the utilization reaches its limit.\n\n- `avg_ttft(rate, d)` returns Equation 1, $D + \\frac{R D^2}{2(1 - RD)}$. It is `inf` when $RD \\ge 1$.\n- `avg_ttft_inter(rate, d)` returns Equation 2 for 2-way inter-op parallelism, $D + \\frac{R D^2}{4(2 - RD)}$. It is `inf` when $RD \\ge 2$.\n- `avg_ttft_intra(rate, d, k)` returns Equation 3 for 2-way intra-op parallelism with speedup $K$, $\\frac{D}{K} + \\frac{R D^2}{2K(K - RD)}$. It is `inf` when $RD \\ge K$.\n- `better_parallelism(rate, d, k)` returns `\"intra\"` or `\"inter\"`, whichever has the lower average TTFT. Return `\"intra\"` on a tie.",
+  "hints": [
+    "Compute the utilization once, `rho = rate * d`, and check it before you divide. Each equation has its own limit: 1, 2, and `k`.",
+    "Equation 1 is `d + rate * d * d / (2 * (1 - rho))`.",
+    "Equation 2 has a 4 and a `(2 - rho)` in the denominator. A quick check: at `rate = 1` and `d = 1` it gives 1.25.",
+    "In Equation 3 the execution time is `d / k`, and the queue term is `rate * d * d / (2 * k * (k - rho))`.",
+    "For `better_parallelism`, compute both averages and compare. When one of them is `inf`, the comparison still works in Python."
+  ],
+  "runtime": "pyodide"
+}

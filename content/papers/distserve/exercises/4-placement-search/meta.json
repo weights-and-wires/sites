@@ -1,0 +1,11 @@
+{
+  "title": "Prefill and decoding placement",
+  "goal": "Algorithm 1 (Section 4.1) finds the goodput of one prefill instance and one decoding instance, then replicates each until the traffic is covered. Here you search the counts by brute force. Each instance is one GPU. `g_prefill` and `g_decode` are the goodputs of one prefill GPU and one decoding GPU, in requests per second.\n\nWrite two functions:\n\n- `replicas_needed(rate, goodput)` returns the smallest number of instances that serve `rate` requests per second, which is $\\lceil R / \\text{goodput} \\rceil$ in the last step of Algorithm 1.\n- `best_split(budget, g_prefill, g_decode)` tries every `n_p >= 1` and `n_d >= 1` with `n_p + n_d <= budget` and returns `(rate, n_p, n_d)`. The system rate is `min(n_p * g_prefill, n_d * g_decode)`, because the slower phase limits the pipeline. Return the split with the highest rate. If several splits tie, return the one that uses the fewest GPUs. If `budget < 2`, return `(0.0, 0, 0)`.",
+  "hints": [
+    "For `replicas_needed`, `math.ceil(rate / goodput)` is close. Floating-point error can turn 3.0000000000000004 into 4, so subtract a tiny epsilon such as `1e-9` first.",
+    "Loop `n_p` from 1 to `budget - 1`. For each, loop `n_d` from 1 to `budget - n_p`. Both ends are included.",
+    "Keep the best `(rate, n_p, n_d)` so far. Replace it only when the new rate is larger, or when the rate is equal and `n_p + n_d` is smaller.",
+    "Compare rates with a small tolerance, since `3 * 6.8` and `6.8 * 3` can differ in the last digit."
+  ],
+  "runtime": "pyodide"
+}
