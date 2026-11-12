@@ -1,0 +1,11 @@
+{
+  "title": "Causal top-k key selection",
+  "goal": "Implement the selection rule behind Equation 2 (Section 2.1). Use `topk_mask(I, k)`, where `I` is an `(L, L)` array of index scores with `-np.inf` for $s > t$. Return an `(L, L)` boolean array whose entry `[t, s]` is `True` when key `s` is among the `k` largest scores of row `t`. A query with fewer than `k` visible keys (`t + 1 < k`) selects all of them, and never selects a key with `s > t`. Assume row scores have no ties.",
+  "hints": [
+    "Row `t` has `t + 1` visible keys, so it selects `n = min(k, t + 1)` of them.",
+    "`np.argsort(-I[t])[:n]` gives the indices of the `n` largest scores. Visible scores are finite, so they sort ahead of `-inf`.",
+    "Set `mask[t, idx] = True` in a loop over rows, or sort the whole array at once.",
+    "Check `mask.sum(axis=1)`. It must equal `np.minimum(k, np.arange(L) + 1)`."
+  ],
+  "runtime": "pyodide"
+}

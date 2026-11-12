@@ -1,0 +1,11 @@
+{
+  "title": "The indexer's KL loss",
+  "goal": "Implement the indexer training loss of Equations 3 and 4 (Section 2.1.1). Use `indexer_kl(attn, I, k=None)`. `attn` has shape `(H, L, L)` and holds the main model's causal attention weights per head (each row sums to 1 over `s <= t`, and is 0 for `s > t`). `I` is the `(L, L)` index-score array with `-np.inf` for $s > t$. For each query `t`, sum `attn` over heads and L1-normalize along `s` to get the target $p_{t,:}$. With `k=None` (dense warm-up, Equation 3), return $\\sum_t D_{KL}(p_{t,:} \\,\\|\\, \\mathrm{softmax}(I_{t,:}))$ over the visible keys `s <= t`. With an integer `k` (sparse stage, Equation 4), restrict to the `k` top-scoring visible keys $\\mathcal{S}_t$ (all of them when `t + 1 < k`), renormalize both $p$ and the softmax over $\\mathcal{S}_t$, and sum the KL. The paper doesn't say whether Equation 4 renormalizes; this exercise does. The starter gives you `softmax` and `selected_keys`.",
+  "hints": [
+    "`p = attn.sum(axis=0)`, then divide each row by its sum. The head sum has total mass `H`, so the target needs this division.",
+    "For row `t`, take `S = selected_keys(I[t], k, t)`. Compute `pS = p[t, S] / p[t, S].sum()` and `qS = softmax(I[t, S])`.",
+    "The KL is `sum(pS * (log(pS) - log(qS)))` over entries with `pS > 0`. The first argument is the target `p`.",
+    "Add the per-row values into one float and return it."
+  ],
+  "runtime": "pyodide"
+}
