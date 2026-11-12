@@ -1,0 +1,11 @@
+{
+  "title": "Cache-aware scheduling",
+  "goal": "Reorder waiting requests by their cached prefix, as in Algorithm 1 (Section 3), and measure the hit rate.\n\nThe starter gives you `RadixCache(capacity)`: a radix tree with a token budget, `peek(tokens)` (the longest cached prefix, no side effects), and `admit(tokens)` (serve one request: return its cached prefix length, store it, and evict least recently used leaves down to the budget). Write two functions:\n\n- `pick_next(waiting, cache, policy)` returns the position in `waiting` of the next request. Policy `\"fcfs\"` returns 0. Policy `\"lpm\"` returns the request with the longest `cache.peek`, and the earliest one wins a tie.\n- `serve(requests, capacity, policy)` serves every request one at a time on an empty cache and returns `(hit_tokens, total_tokens, order)`, where `order` lists the original indices in service order. Choose again after every request, because each one changes what the cache holds.\n\nThe hit rate is `hit_tokens / total_tokens`, the fraction of prompt tokens already cached. The tests include the single-batch claim that longest-prefix-first matches DFS order.",
+  "hints": [
+    "For `\"lpm\"`, start with `best, best_len = 0, -1` and update only when `peek` is strictly greater. Strict `>` keeps the earliest request on a tie.",
+    "In `serve`, keep `waiting` as a list of `(original_index, request)` pairs. Call `pick_next` on the list of requests only, then `waiting.pop(pos)`.",
+    "`cache.admit(request)` returns the hit length for that request. Add it to `hits` before you move on, and add `len(request)` to `total`.",
+    "When the cache holds everything, the order cannot change the total hits. The order matters only when the budget forces evictions."
+  ],
+  "runtime": "pyodide"
+}

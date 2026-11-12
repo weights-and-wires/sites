@@ -1,0 +1,11 @@
+{
+  "title": "LRU eviction of leaves",
+  "goal": "Add the eviction policy of Section 3 to the radix cache.\n\nThe starter gives you a `RadixCache` whose `insert` stamps every node on the path with a clock value, `last_access`, and whose `lock(tokens)` and `unlock(tokens)` add and remove one reference (`ref`) on every node of a stored request. Write one method:\n\n- `evict(num_tokens)` frees at least `num_tokens` tokens and returns how many it freed. Repeat the following until you have freed enough: among the nodes that are not the root, have no children, and have `ref == 0`, remove the one with the smallest `last_access`. A node goes whole, so you can free more than you asked for. When no node can go, stop and return what you freed so far.\n\nA parent that loses its last child becomes a leaf and can go in a later round. The tests check that locked requests survive and that no subtree is dropped.",
+  "hints": [
+    "`self._nodes()` yields every node. Filter it with `n is not self.root and not n.children and n.ref == 0`.",
+    "Pick the victim with `min(leaves, key=lambda n: n.last_access)`. Recompute the list of leaves in every round, because a removal can create a new leaf.",
+    "To remove a node, delete it from its parent: `del victim.parent.children[victim.edge[0]]`. Add `len(victim.edge)` to `freed`.",
+    "Stop with `break` when the list of leaves is empty. Then the loop cannot hang when everything left is locked."
+  ],
+  "runtime": "pyodide"
+}
