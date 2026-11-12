@@ -1,0 +1,11 @@
+{
+  "title": "Reparameterisation check",
+  "goal": "Test the claim from Section 2 that the Fisher metric defines the same distance whatever coordinates you use, and that the plain gradient doesn't.\n\nRescale the parameters as $\\theta = c \\odot u$, where $c$ is a vector of positive scales and $\\odot$ is element-wise multiplication. The policy is unchanged: its logits are $\\theta\\cdot\\phi = u\\cdot(c \\odot \\phi)$.\n\nWrite `scaled_step(phi, theta, rho, Q, c, alpha, natural)`. It computes the gradient $g_u$ and the Fisher matrix $F_u$ in the $u$ coordinates, takes one step there, and returns the change $\\Delta\\theta = c \\odot \\Delta u$ as a `(d,)` array in the original coordinates.\n\n- If `natural` is false, $\\Delta u = \\alpha\\, g_u$.\n- If `natural` is true, $\\Delta u = \\alpha\\, F_u^{-1} g_u$. Use a plain solve with no damping.\n\nThe helpers `probs`, `scores`, `fisher`, and `policy_gradient` are given.",
+  "hints": [
+    "Build the features for the new coordinates with `phi_u = phi * c`, which broadcasts over the last axis, and the new parameters with `u = theta / c`. Then `phi_u @ u` equals `phi @ theta`.",
+    "Call `policy_gradient(phi_u, u, rho, Q)` and `fisher(phi_u, u, rho)`. Both take the rescaled features and parameters.",
+    "In theory, $g_u = c \\odot g_\\theta$ and $F_u = \\mathrm{diag}(c)\\,F_\\theta\\,\\mathrm{diag}(c)$. So the plain step in $\\theta$ coordinates is $\\alpha\\, c^2 \\odot g_\\theta$, and $c$ cancels in the natural step.",
+    "Return `c * delta_u`. Without the final multiplication you compare steps in different units."
+  ],
+  "runtime": "pyodide"
+}

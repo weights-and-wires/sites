@@ -1,0 +1,11 @@
+{
+  "title": "The natural gradient with damping",
+  "goal": "Compute the natural gradient of Equation 4, $\\tilde\\nabla\\eta = F^{-1}\\nabla\\eta$, with the damping that Section 5 of the paper adds to keep $F$ invertible.\n\nWrite two functions:\n\n- `policy_gradient(phi, theta, rho, Q)` returns $\\nabla\\eta = \\sum_{s,a} \\rho(s)\\,\\nabla\\pi(a; s, \\theta)\\,Q(s, a)$ (Equation 1) as a `(d,)` array. Treat `rho` and `Q` as fixed arrays with shapes `(S,)` and `(S, K)`.\n- `natural_gradient(F, g, lam=1e-3)` returns the solution `x` of $(F + \\lambda I)\\,x = g$. Don't form an inverse.\n\nThe helpers `probs`, `scores` (the $\\psi$ features), and `fisher` are given.",
+  "hints": [
+    "The gradient of a softmax policy is $\\nabla\\pi = \\pi\\,\\psi$. Equation 1 becomes `np.einsum(\"s,sk,skd,sk->d\", rho, pi, psi, Q)`.",
+    "Because $\\sum_a \\pi\\,\\psi = 0$, adding a constant to all of $Q(s, \\cdot)$ in one state leaves the gradient unchanged. If yours changes, you used $\\phi$ where you needed $\\psi$.",
+    "For the damped solve, use `np.linalg.solve(F + lam * np.eye(len(g)), g)`. The damping adds $\\lambda$ to the diagonal only.",
+    "The tabular softmax $F$ is singular, with null vector $[1, 1, 1]$. With $\\lambda = 10^{-6}$ your function still returns a finite answer, and $w \\cdot \\psi(a)$ equals the advantage."
+  ],
+  "runtime": "pyodide"
+}

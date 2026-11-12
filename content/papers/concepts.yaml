@@ -1138,3 +1138,9 @@ concepts:
     lesson: "Maximization bias and double learning"
     anchor_match: exact
     refresher: "A maximum over noisy value estimates is higher on average than the maximum of the true values, so Q-learning targets overestimate."
+  fisher-information:
+    label: "Fisher information"
+    url: "https://rl.ifkash.dev/lessons/035-trust-regions-and-trpo"
+    lesson: "Natural gradients and trust regions"
+    anchor_match: exact
+    refresher: "The matrix F = E[grad log p * grad log p^T] of a probability model. It measures how fast the distribution changes when the parameters move, and it equals the Hessian of the KL divergence at the current parameters."

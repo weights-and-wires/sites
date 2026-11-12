@@ -1,0 +1,12 @@
+{
+  "title": "The Fisher matrix of a softmax policy",
+  "goal": "Compute the metric that defines the natural gradient. Use the notation of Section 2 of Kakade's paper: a softmax policy $\\pi(a; s, \\theta) \\propto \\exp(\\theta \\cdot \\phi_{sa})$, the score $\\psi(s, a) = \\nabla_\\theta \\log \\pi(a; s, \\theta)$, and the state distribution $\\rho$.\n\nWrite two functions:\n\n- `fisher_softmax(p)` takes the action probabilities `p` of one state, with shape `(K,)`, for a tabular softmax policy (one logit per action). It returns the `(K, K)` matrix $F_s = E_\\pi[\\psi\\psi^\\top]$ (Equation 2).\n- `fisher(phi, theta, rho)` takes features `phi` with shape `(S, K, d)`, parameters `theta` with shape `(d,)`, and the state distribution `rho` with shape `(S,)`. It returns the `(d, d)` matrix $F(\\theta) = \\sum_s \\rho(s)\\, E_{\\pi(a;s,\\theta)}[\\psi\\psi^\\top]$ (Equations 2 and 3).\n\n`probs(phi, theta)` is given. It returns the `(S, K)` array of action probabilities.",
+  "hints": [
+    "For a tabular softmax, $\\psi(a) = e_a - \\pi$, where $e_a$ is the one-hot vector of action $a$. Then $E_\\pi[\\psi\\psi^\\top]$ simplifies to `np.diag(p) - np.outer(p, p)`.",
+    "For linear logits, $\\psi(s, a) = \\phi_{sa} - \\sum_b \\pi(b; s)\\,\\phi_{sb}$. Compute `pi = probs(phi, theta)`, then subtract the policy-weighted mean feature of each state from every feature of that state.",
+    "`np.einsum(\"sk,skd->sd\", pi, phi)` gives the mean feature of each state with shape `(S, d)`. Use `[:, None, :]` to broadcast it over the actions.",
+    "Sum the outer products over states and actions with weights $\\rho(s)\\,\\pi(a; s)$: `np.einsum(\"s,sk,ska,skb->ab\", rho, pi, psi, psi)`.",
+    "Check your work against two facts from the page. `fisher_softmax` has the null vector `[1, 1, 1]`. Adding the same vector to every feature in one state doesn't change `fisher`."
+  ],
+  "runtime": "pyodide"
+}
