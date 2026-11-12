@@ -1,0 +1,11 @@
+{
+  "title": "Overlong reward shaping",
+  "goal": "Implement the soft overlong punishment of Equation 13 (Section 3.4) and the total reward it adds to.\n\nWrite two functions:\n\n- `soft_overlong_penalty(length, l_max=20480, l_cache=4096)` returns $R_{length}(y)$ for a response of `length` tokens: 0 when `length <= l_max - l_cache`, then a linear ramp $\\frac{(L_{max} - L_{cache}) - |y|}{L_{cache}}$ while `length <= l_max`, and $-1$ beyond `l_max`. With the defaults, which are the paper's constants from Section 4.1, the ramp starts at 16384 tokens.\n- `total_reward(correct, length, l_max=20480, l_cache=4096)` returns the rule-based reward of Equation 7 ($+1$ for a correct answer, $-1$ otherwise) plus the penalty. `correct` is a bool.",
+  "hints": [
+    "Use three branches in the order of the equation: `if length <= l_max - l_cache`, then `elif length <= l_max`, then `else`.",
+    "The ramp is `((l_max - l_cache) - length) / l_cache`. It is 0 at the start of the interval and exactly -1 at `l_max`, so the function is continuous.",
+    "`total_reward` is `(1.0 if correct else -1.0) + soft_overlong_penalty(...)`. Pass `l_max` and `l_cache` through.",
+    "Check by hand: a length of 18432 is halfway through the 4096-token ramp, so the penalty is `-0.5`."
+  ],
+  "runtime": "pyodide"
+}

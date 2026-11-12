@@ -1,0 +1,11 @@
+{
+  "title": "Token-level and sample-level loss",
+  "goal": "Compare the two ways to reduce per-token terms into one objective value: the sample-level mean of GRPO (Section 2.2, Equation 5) and the token-level mean of DAPO (Section 3.3, Equation 12).\n\nThe argument `terms` is a list with one 1-D NumPy array per output, each holding that output's per-token terms (the clipped surrogate values). The arrays can have different lengths.\n\nWrite two functions:\n\n- `objective(terms, level)` returns one number. For `level == \"sample\"` it averages the tokens within each output and then averages over outputs, $\\frac{1}{G}\\sum_i \\frac{1}{|o_i|}\\sum_t x_{i,t}$. For `level == \"token\"` it sums every term and divides by the total token count, $\\frac{1}{\\sum_i |o_i|}\\sum_i\\sum_t x_{i,t}$. Raise `ValueError` for any other `level`.\n- `token_weights(lengths, level)` returns a list with one array per output, holding the weight that each token of that output gets in the objective. The weight of a token is its coefficient in the sum above.",
+  "hints": [
+    "For the sample level, take `t.mean()` for every array first, then the mean of those means.",
+    "For the token level, `sum(t.sum() for t in terms)` divided by `sum(len(t) for t in terms)`.",
+    "The sample-level weight of every token in output `i` is `1 / (G * lengths[i])`, where `G = len(lengths)`. The token-level weight is `1 / sum(lengths)` for every token.",
+    "Check by hand: outputs of length 2 and 8 with terms `+1` and `-1` give `0` at the sample level and `(2 - 8) / 10 = -0.6` at the token level."
+  ],
+  "runtime": "pyodide"
+}

@@ -936,13 +936,13 @@ concepts:
     refresher: "Train a smaller model to imitate the outputs of a larger one."
   entropy-collapse:
     label: "entropy collapse"
-    url: "https://rl.ifkash.dev/lessons/057-reasoning-with-verifiable-rewards"
+    url: "https://rl.ifkash.dev/lessons/073-reasoning-with-verifiable-rewards"
     lesson: "Reasoning with verifiable rewards"
     anchor_match: exact
     refresher: "The policy becomes nearly deterministic too early, so exploration stops and learning stalls."
   dynamic-sampling:
     label: "dynamic sampling"
-    url: "https://rl.ifkash.dev/lessons/055-group-relative-policy-optimization"
+    url: "https://rl.ifkash.dev/lessons/071-group-relative-policy-optimization"
     lesson: "Group-relative policy optimization"
     anchor_match: close
     refresher: "Skip prompts whose sampled responses all earn the same reward, since they give no learning signal."
