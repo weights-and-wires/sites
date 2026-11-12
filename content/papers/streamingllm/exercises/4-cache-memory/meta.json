@@ -1,0 +1,10 @@
+{
+  "title": "Cache memory against text length",
+  "goal": "Count the memory of a full KV cache and of a StreamingLLM cache. Write three functions.\n\n`kv_bytes_per_token(layers, kv_heads, head_dim, bytes_per_value)` returns the bytes that one token adds to the cache: a key and a value for every KV head in every layer. `cache_slots(n, sinks, window)` returns how many tokens the cache holds after `n` tokens. `cache_bytes(n, per_token, sinks=None, window=None)` returns the cache size in bytes: `n * per_token` when `sinks` is `None` (a full cache), and `cache_slots(n, sinks, window) * per_token` otherwise.\n\nFor Llama-2-7B (32 layers, 32 KV heads, head dimension 128, 2-byte values), one token takes 524,288 bytes.",
+  "hints": [
+    "A token stores two vectors (key and value) of `head_dim` numbers for each of `kv_heads` heads in each of `layers` layers.",
+    "`cache_slots` is `min(n, sinks + window)`. Before the cache fills, it holds every token.",
+    "`cache_bytes` with `sinks=None` is a full cache and grows with `n`. With `sinks` set, it stops growing at `(sinks + window) * per_token`."
+  ],
+  "runtime": "pyodide"
+}

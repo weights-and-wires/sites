@@ -1,0 +1,11 @@
+{
+  "title": "Softmax and the sink",
+  "goal": "Reproduce the effect of Section 3.1 on a toy attention row. Write four functions.\n\n`softmax(x)` is the stable softmax of a 1-D array. `softmax_one(x)` is SoftMax_1 from Equation 2: `exp(x_i) / (1 + sum_j exp(x_j))`. It must not overflow for logits near 1000 and must not underflow to NaN for logits near -1000. `sink_mass(scores, num_sinks)` returns the total softmax weight on the first `num_sinks` entries. `attend(scores, V, evict=0)` drops the first `evict` tokens, takes the softmax over the remaining scores, and returns the weighted sum of the remaining rows of `V`, with shape `(d,)`.\n\nWith a large sink logit and a near-zero sink value, `attend` with `evict=0` returns a small vector. With `evict=1` the same query returns a much larger one, which is why window attention fails after the first token leaves.",
+  "hints": [
+    "Subtract `np.max(x)` before `np.exp` in `softmax`. The result stays the same and no logit overflows.",
+    "For `softmax_one`, multiply the numerator and denominator by `exp(-m)` with `m = max(max(x), 0)`. The denominator becomes `exp(-m) + sum(exp(x - m))`.",
+    "`sink_mass` is `softmax(scores)[:num_sinks].sum()`.",
+    "In `attend`, slice both `scores[evict:]` and `V[evict:]` before the softmax. Evicting a token removes its logit from the denominator too."
+  ],
+  "runtime": "pyodide"
+}

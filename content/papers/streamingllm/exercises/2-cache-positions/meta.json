@@ -1,0 +1,11 @@
+{
+  "title": "Positions inside the cache",
+  "goal": "StreamingLLM assigns rotary positions by place in the cache, not by place in the text (Section 3.2, Figure 4). Keys are stored before the rotary transform, and the rotation is applied when the cache is read.\n\nWrite two functions. `cache_positions(kept)` takes the list of original token indices that the cache holds, in order, and returns the NumPy integer array `[0, 1, ..., len(kept) - 1]`. `streaming_scores(q, K, kept, base=10000.0)` takes the un-rotated query `q` with shape `(d,)` of the current token and the un-rotated keys `K` with shape `(m, d)`, where the last row is the current token's own key, and returns the `(m,)` scores `q' . k'_j` after rotating both by their cache positions. Here `kept` lists the original index of each row of `K`. The scores must not depend on the values in `kept`, only on how many rows there are.\n\nThe starter gives a `rotate(x, positions, base)` helper that applies the rotary transform of RoFormer to each row of `x`. You don't edit it.",
+  "hints": [
+    "For the example of Figure 4, the cache holds tokens `[0, 1, 2, 3, 6, 7, 8]` and token 9 is decoded. `kept` is `[0, 1, 2, 3, 6, 7, 8, 9]` and the positions are `0` to `7`.",
+    "`cache_positions` is `np.arange(len(kept))`. It never reads the values in `kept`.",
+    "The query is the last token, so its position is `len(kept) - 1`. Use `rotate(q[None, :], positions[-1:], base)[0]`.",
+    "Rotate all of `K` with `rotate(K, positions, base)`, then take `K_rot @ q_rot`. Don't use the original indices anywhere."
+  ],
+  "runtime": "pyodide"
+}

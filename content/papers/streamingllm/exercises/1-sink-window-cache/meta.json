@@ -1,0 +1,11 @@
+{
+  "title": "Sink plus window cache",
+  "goal": "Write the cache of StreamingLLM (Section 3.2, Figure 4) as three functions on token indices.\n\n`kept_indices(n, sinks, window)` returns the sorted list of token indices that the cache holds after `n` tokens (indices `0` to `n - 1`) have been processed. It holds the first `sinks` tokens and the last `window` tokens. When `n <= sinks + window`, nothing has been evicted yet and it holds every token. `evicted_indices(n, sinks, window)` returns the sorted indices that the cache has dropped. `cache_step(cache, new_index, sinks, window)` adds one token to a cache list and returns the new list, evicting the oldest token that is not a sink when the cache is over capacity. It must not change `cache` in place.\n\nThe two ways of building the cache must agree: feeding tokens `0` to `n - 1` through `cache_step` gives `kept_indices(n, sinks, window)`.",
+  "hints": [
+    "When `n > sinks + window`, the sinks are `range(sinks)` and the window is `range(n - window, n)`. The two ranges never overlap, because `n - window > sinks`.",
+    "`evicted_indices` is every index in `range(n)` that `kept_indices` doesn't return. For `n = 9`, 4 sinks, and a window of 3, it returns `[4, 5]`.",
+    "In `cache_step`, append `new_index` to a copy of the list. If the length is now above `sinks + window`, delete the element at position `sinks`, which is the oldest non-sink token.",
+    "Edge case: `window = 0` keeps only the sinks, and `sinks = 0` is plain window attention, where the first token gets evicted too."
+  ],
+  "runtime": "pyodide"
+}
