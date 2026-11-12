@@ -1,0 +1,12 @@
+{
+  "title": "Striding and bigram outputs",
+  "goal": "Section 3.6 explains why striding hurts English: CTC needs at least one time step per output symbol. Bigram outputs shorten the transcript, so the network can stride further. This exercise computes the arithmetic. Write four functions.\n\n- `to_bigrams(text)`: split `text` into non-overlapping bigrams inside each word, and keep each space as its own token. A word with an odd number of letters ends in a one-letter token. For `\"the cat sat\"` the result is `['th', 'e', ' ', 'ca', 't', ' ', 'sa', 't']`.\n- `output_length(T, strides)`: the number of steps after a stack of *same* convolutions (Section 3.5, which preserves the length at stride 1). Each layer with time stride `s` turns `T` steps into `ceil(T / s)`. `strides` lists the time stride of each layer in order.\n- `min_ctc_frames(tokens)`: the fewest frames in which CTC can emit `tokens`. That is the number of tokens, plus one for each pair of equal neighbors, because CTC needs a blank between them.\n- `max_stride(T, tokens)`: the largest integer `s` such that `output_length(T, [s])` is at least `min_ctc_frames(tokens)`. Return 0 if even `s = 1` is too short.",
+  "hints": [
+    "For `to_bigrams`, `text.split(\" \")` gives the words. Add a `\" \"` token between words, and slice each word with `word[i:i + 2]` for `i` in `range(0, len(word), 2)`.",
+    "Use `math.ceil(T / s)` at every layer. For `T = 10` and strides `[2, 2]` the result is `ceil(ceil(10 / 2) / 2) = ceil(5 / 2) = 3`.",
+    "Count equal neighbors with `zip(tokens, tokens[1:])`. The word `hello` has the letters `h e l l o`, and the pair `l l` needs a blank between them, so it takes at least 6 frames.",
+    "In bigrams, `hello` is `['he', 'll', 'o']`. No two neighbors are equal, so 3 frames are enough.",
+    "For `max_stride`, try every `s` from 1 to `T` and keep the largest one that fits. The result is monotone, so the first failure ends the search, but a plain loop is fine."
+  ],
+  "runtime": "pyodide"
+}

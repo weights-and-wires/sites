@@ -984,7 +984,7 @@ concepts:
     refresher: "A time-frequency image showing how a signal's energy at each frequency changes over time."
   batch-norm-for-rnns:
     label: "batch norm for RNNs"
-    url: "https://ml.ifkash.dev/lessons/033-normalisation-layers"
+    url: "https://ml.ifkash.dev/lessons/040-normalisation-layers"
     lesson: "Normalisation layers: batch norm, layer norm, and their gradients"
     anchor_match: close
     refresher: "Normalize recurrent-network activations using batch statistics, which needs care across time steps."

@@ -1,0 +1,12 @@
+{
+  "title": "Row convolution",
+  "goal": "Section 3.7 replaces bidirectional recurrence with forward-only layers plus one row convolution on top, so the model needs only a small, fixed amount of future context. With a future context of $\\tau$ steps, the layer computes (Equation 11)\n\n$$r_{t,i} = \\sum_{j=1}^{\\tau+1} W_{i,j}\\, h_{t+j-1,\\,i}.$$\n\nWrite `row_convolution(h, W)`. `h` has shape `(T, d)`, and `W` has shape `(d, tau + 1)`. Return `r` with shape `(T, d)`. The sum runs over the current and the next `tau` time steps of the same feature `i`, and it never mixes features. The paper doesn't say what happens at the end of the utterance. This exercise treats `h` as zero beyond step `T - 1`.\n\nIn 0-based code, `r[t, i] = sum(W[i, j] * h[t + j, i] for j in range(tau + 1))`.",
+  "hints": [
+    "Pad `h` with `tau` rows of zeros at the bottom: `np.vstack([h, np.zeros((tau, d))])`. Then `padded[j : j + T]` is `h` shifted up by `j` steps.",
+    "Loop over `j` in `range(tau + 1)` and add `W[:, j] * padded[j : j + T]` to the result. `W[:, j]` has shape `(d,)` and broadcasts over the time axis.",
+    "Each feature has its own filter. Don't use a matrix product over features, because the layer is a depthwise operation.",
+    "With `tau = 0`, the layer multiplies every feature by `W[:, 0]`. Use that as a first check.",
+    "The output at time `t` must not depend on `h[:t]`. If it does, you shifted in the wrong direction."
+  ],
+  "runtime": "pyodide"
+}

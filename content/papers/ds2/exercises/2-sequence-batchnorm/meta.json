@@ -1,0 +1,12 @@
+{
+  "title": "Sequence-wise batch normalization",
+  "goal": "Section 3.2 compares two ways to put BatchNorm in a recurrent layer. Equation 7 normalizes the whole pre-activation $W h_t + U h_{t-1}$, so statistics come from a single time step. Equation 8 normalizes only the input-to-hidden term, $B(W h_t^{l-1})$, with statistics over the minibatch and every time step (\"sequence-wise\"). This exercise implements the normalization of Equation 6 both ways on a tensor `a` of shape `(B, T, d)` that holds $W h_t^{l-1}$ for each utterance, time step, and unit.\n\nWrite two functions. Both use $B(x) = \\gamma \\frac{x - E[x]}{\\sqrt{Var[x] + \\epsilon}} + \\beta$ with the biased variance (divide by the count, not count minus one). `gamma` and `beta` have shape `(d,)`.\n\n- `sequence_batchnorm(a, lengths, gamma, beta, eps=1e-5)`: `lengths[b]` is the number of real frames in utterance `b`. For each unit, compute the mean and variance over all `(b, t)` with `t < lengths[b]`. Normalize every valid position, and return 0 at padded positions.\n- `framewise_batchnorm(a, gamma, beta, eps=1e-5)`: for each time step `t` and unit, compute the mean and variance over the batch axis only. There is no padding mask.",
+  "hints": [
+    "Build the mask with `np.arange(T)[None, :] < lengths[:, None]`. It has shape `(B, T)`.",
+    "`a[mask]` gathers the valid rows into an array of shape `(N, d)`, where `N = sum(lengths)`. Take `mean(axis=0)` and `var(axis=0)` of that array. NumPy's `var` divides by `N` by default.",
+    "Apply the formula to the full tensor, then use `np.where(mask[:, :, None], out, 0.0)` to zero the padded positions. Padded values must not enter the statistics.",
+    "For the frame-wise version, the statistics have shape `(1, T, d)`. Use `a.mean(axis=0, keepdims=True)`.",
+    "With a batch of one utterance, frame-wise statistics come from a single value, so the variance is 0 and the output is `beta` at every position. Sequence-wise statistics still use all `T` frames."
+  ],
+  "runtime": "pyodide"
+}
