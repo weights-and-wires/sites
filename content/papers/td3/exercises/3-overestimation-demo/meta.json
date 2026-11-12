@@ -1,0 +1,10 @@
+{
+  "title": "Maximizing over noisy estimates",
+  "goal": "Reproduce the toy from Section 4. An agent has `n_actions` actions whose true value is 0. Two independent critics $A$ and $B$ each estimate every action as the truth plus $\\mathcal{N}(0, \\sigma)$ noise.\n\nWrite `bias_estimates(n_actions, sigma, trials, seed)`. Draw `qa = rng.normal(0, sigma, (trials, n_actions))` first and `qb` with the same call second, where `rng = np.random.default_rng(seed)`. Pick `star = qa.argmax(axis=1)` per trial and return a dict of three averages over the trials:\n\n- `\"max\"`: the mean of `qa.max(axis=1)`, the standard Q-learning target.\n- `\"double\"`: the mean of `qb` at the action `star`, the Double Q-learning target.\n- `\"clipped\"`: the mean of `min(qa, qb)` at the action `star`, the clipped double-Q target (Equation 10).\n\nWith 2 actions and $\\sigma = 1$ the exact value of `\"max\"` is $1/\\sqrt{\\pi} \\approx 0.5642$. Every value should be a Python `float`.",
+  "hints": [
+    "Index the rows with `rows = np.arange(trials)`, then `qb[rows, star]` is critic $B$'s value at the action that critic $A$ chose.",
+    "`\"double\"` has mean 0 because $B$'s noise is independent of the choice of `star`.",
+    "`\"clipped\"` takes `np.minimum(qa[rows, star], qb[rows, star])`. The minimum of two estimates can only lower the target, so it sits at or below `\"double\"`."
+  ],
+  "runtime": "pyodide"
+}
