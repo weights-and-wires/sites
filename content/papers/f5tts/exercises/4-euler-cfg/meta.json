@@ -1,0 +1,11 @@
+{
+  "title": "Euler sampling with classifier-free guidance",
+  "goal": "Sampling from F5-TTS integrates the ODE $\\mathrm{d}x/\\mathrm{d}t = v$ from noise at $t = 0$ to data at $t = 1$ with the Euler solver (Section 4). Each step evaluates the model twice, once with the condition and once without, and combines the results with classifier-free guidance (Section 2.2, Equation 4):\n\n$$v_{\\text{CFG}} = v_{\\text{cond}} + w\\,(v_{\\text{cond}} - v_{\\text{uncond}})$$\n\nWrite two functions:\n\n- `cfg_velocity(v_cond, v_uncond, w)` returns $v_{\\text{cond}} + w\\,(v_{\\text{cond}} - v_{\\text{uncond}})$.\n- `euler_cfg(v_fn, x0, ts, w)` integrates from `x0` through the flow-step boundaries `ts` (a NumPy array of increasing values from 0 to 1, evenly spaced or not). `v_fn(x, t, cond)` returns the velocity at `x` and time `t`; `cond` is `True` for the conditional call and `False` for the unconditional call. For each interval `[ts[i], ts[i+1]]`, evaluate both velocities at `x` and `ts[i]`, combine them with `cfg_velocity`, and update `x = x + (ts[i+1] - ts[i]) * v`. When `w == 0` do not call the unconditional branch. Return the final `x`. The input `x0` must not be modified.",
+  "hints": [
+    "Loop with `for a, b in zip(ts[:-1], ts[1:])`. The step size is `b - a`, which is not constant when you pass Sway Sampling steps.",
+    "Evaluate both velocities at the current `x` before you update it: `vc = v_fn(x, a, True)` and `vu = v_fn(x, a, False)`.",
+    "Euler uses the velocity at the left end of the interval, so use `a`, not `b`, as the time you pass to `v_fn`.",
+    "Build a new array with `x = x + dt * v` instead of `x += ...`, so the caller's `x0` stays unchanged."
+  ],
+  "runtime": "pyodide"
+}

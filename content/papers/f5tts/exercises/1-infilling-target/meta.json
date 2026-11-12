@@ -1,0 +1,11 @@
+{
+  "title": "Infilling inputs and the masked loss",
+  "goal": "Build the training inputs and the loss of Section 3.1. Time runs from noise at $t = 0$ to data at $t = 1$, the paper's convention. The paper's boundary conditions give $\\sigma_1 = 0$ (Section 2.1), so the OT target is $x_1 - x_0$ (Equation 3).\n\nWrite two functions. Arrays have shape `(N, F)`: `N` mel frames and `F` mel channels. `mask` has shape `(N,)` with `1` for a frame the model must generate and `0` for a context frame.\n\n- `make_infill_inputs(x1, x0, t, mask)` returns `(x_t, cond, target)`. Here `x_t` is the noisy speech $(1 - t)\\,x_0 + t\\,x_1$, `cond` is the masked speech $(1 - m) \\odot x_1$ (context frames kept, masked frames zeroed), and `target` is $x_1 - x_0$.\n- `masked_cfm_loss(pred, target, mask)` returns the mean squared error over the masked frames only, as a float. The mean runs over the masked frames times the `F` channels, so it is the sum of the masked squared errors divided by `mask.sum() * F`.\n\nThe inputs must not be modified.",
+  "hints": [
+    "`mask` has shape `(N,)`, so use `mask[:, None]` to broadcast it over the `F` channels.",
+    "`x_t = (1 - t) * x0 + t * x1`. The condition keeps the frames where the mask is 0: `cond = (1 - mask[:, None]) * x1`.",
+    "The target is `x1 - x0` for every frame, masked or not. The mask only decides which frames count in the loss.",
+    "For the loss, square the error, multiply by `mask[:, None]`, sum, and divide by `mask.sum() * pred.shape[1]`. A context frame with a large error must not change the result."
+  ],
+  "runtime": "pyodide"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Filler-padded text and the duration estimate",
+  "goal": "F5-TTS has no duration model. It pads the character sequence with a filler token $\\langle F \\rangle$ up to the mel length $N$ (Equation 5) and, at inference, estimates $N$ from the ratio of character counts (Section 3.1).\n\nWrite two functions:\n\n- `pad_text(chars, n_frames, filler=\"<F>\")` takes a list of characters and returns a list of length `n_frames`: the characters first, then `n_frames - len(chars)` copies of `filler`. It raises `ValueError` when the characters do not fit. The input list must not be modified.\n- `estimate_total_frames(ref_frames, ref_text, gen_text)` returns the total mel length $N$ for the reference plus the new speech as an `int`. The generated part takes `ref_frames * len(gen_text) / len(ref_text)` frames, **rounded down** (the paper does not say how to round; this exercise floors). The total is the reference frames plus the generated frames.",
+  "hints": [
+    "`list(chars) + [filler] * (n_frames - len(chars))` builds a new list, so the input stays unchanged.",
+    "Check `len(chars) > n_frames` first and raise `ValueError`.",
+    "The generated length is `int(ref_frames * len(gen_text) / len(ref_text))`. Multiply before you divide, or use floats, so you do not truncate the ratio early.",
+    "Return `ref_frames + gen_frames`. For 320 reference frames, 40 reference characters, and 60 new characters, the answer is 800."
+  ],
+  "runtime": "pyodide"
+}

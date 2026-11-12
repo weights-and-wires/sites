@@ -1,0 +1,11 @@
+{
+  "title": "Sway Sampling of flow steps",
+  "goal": "At inference F5-TTS does not use evenly spaced flow steps. It samples $u$ evenly on $[0, 1]$ and warps it with the Sway Sampling function (Section 3.2, Equation 7):\n\n$$f_{\\text{sway}}(u; s) = u + s\\left(\\cos\\left(\\tfrac{\\pi}{2}u\\right) - 1 + u\\right)$$\n\nThe function is monotonic for $s \\in [-1, \\tfrac{2}{\\pi - 2}]$, and $s = -1$ is the paper's default (Section 5).\n\nWrite two functions:\n\n- `sway(u, s)` applies Equation 7 to a NumPy array `u` (or a float) and returns the warped values.\n- `sway_steps(nfe, s)` returns the `nfe + 1` flow-step boundaries `t_0, ..., t_nfe` as a NumPy array: `sway` applied to `np.linspace(0, 1, nfe + 1)`. It raises `ValueError` when `s` is outside the allowed range.",
+  "hints": [
+    "`np.cos` works on arrays, so `u + s * (np.cos(np.pi / 2 * u) - 1 + u)` is the whole function.",
+    "Check the limits: for `u = 0` the cosine term is `1 - 1 + 0 = 0`, and for `u = 1` it is `0 - 1 + 1 = 0`, so the endpoints stay at 0 and 1 for every `s`.",
+    "Compute the upper bound as `2 / (np.pi - 2)`, about 1.7519. Compare with a tiny tolerance such as `1e-12` so the bound itself is allowed.",
+    "With `s = -1` and `u = 0.5` you should get `1 - cos(pi / 4) = 0.2929`."
+  ],
+  "runtime": "pyodide"
+}
