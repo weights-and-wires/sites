@@ -1,0 +1,7 @@
+.woof-ref, .woof-align { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.5rem 0; }
+.woof-tok { display: inline-flex; flex-direction: column; align-items: center; min-width: 3.2rem; padding: 0.25rem 0.4rem; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); font-family: var(--mono); font-size: 0.85rem; }
+.woof-tok small { font-size: 0.68rem; color: var(--muted); }
+.woof-tok.sub { background: var(--accent-soft); border-color: var(--accent); }
+.woof-tok.del, .woof-tok.ins { background: var(--error-soft); border-color: var(--error); }
+.woof-input { width: 100%; box-sizing: border-box; padding: 0.4rem 0.5rem; font: inherit; font-family: var(--mono); border: 1px solid var(--strong-line); border-radius: 6px; background: var(--surface); color: var(--ink); }
+.woof-tok .blank { color: var(--muted); }
