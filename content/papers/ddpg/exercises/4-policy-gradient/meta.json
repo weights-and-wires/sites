@@ -1,0 +1,10 @@
+{
+  "title": "Deterministic policy gradient",
+  "goal": "Check Equation 6 on a problem where you can verify it. The actor is linear, $\\mu_\\theta(s) = \\theta^\\top s$, and the critic is quadratic, $Q(s, a) = -(a - k^\\top s)^2$. Here `S` has shape `(N, d)`, one state per row, and `theta` and `k` have shape `(d,)`.\n\n- `actor_gradient(theta, S, k)` returns $\\frac{1}{N}\\sum_i \\nabla_a Q(s_i, a)\\big|_{a=\\mu(s_i)}\\, \\nabla_\\theta \\mu_\\theta(s_i)$, a vector of shape `(d,)`. Use the chain rule. Don't differentiate numerically.\n- `ascend(theta, S, k, lr, steps)` takes `steps` gradient-ascent steps $\\theta \\leftarrow \\theta + \\text{lr}\\cdot\\nabla_\\theta J$ and returns the new `theta`.\n\nThe page shows a gradient of `[0.4667, -0.6667]` for $\\theta = (0.2, 0.4)$, $k = (1, -0.5)$, and states $(1,0), (0,1), (1,1)$.",
+  "hints": [
+    "Here $\\nabla_a Q(s, a) = -2(a - k^\\top s)$, and $\\nabla_\\theta \\mu_\\theta(s) = s$. Compute `a = S @ theta` first.",
+    "Multiply each row of `S` by its own scalar $\\nabla_a Q$ with `dq_da[:, None] * S`, then average over rows. Averaging only `dq_da` drops the factor $\\nabla_\\theta \\mu$.",
+    "`ascend` is a loop that calls `actor_gradient`. The sign is plus, because you maximize $J$."
+  ],
+  "runtime": "pyodide"
+}
