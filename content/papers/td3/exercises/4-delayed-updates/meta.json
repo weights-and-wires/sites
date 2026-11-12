@@ -1,0 +1,10 @@
+{
+  "title": "Delayed policy updates",
+  "goal": "Write the bookkeeping of Algorithm 1's `if t mod d` branch (Section 5.2).\n\n- `actor_update_steps(total_steps, d)` returns the list of 1-based time steps $t \\in \\{1, \\dots, T\\}$ at which the actor and both target networks update, that is, the steps where $t$ is a multiple of `d`. The critics update at every step.\n- `target_gap(gap0, tau, total_steps, d)` returns the gap between a target weight and its source after `total_steps` critic steps, when the source stays fixed and the target moves by $\\theta' \\leftarrow \\tau\\theta + (1-\\tau)\\theta'$ only on actor-update steps.\n\nWith $d = 2$ and 10 steps the actor steps are `[2, 4, 6, 8, 10]`. With $\\tau = 0.005$ and 1000 steps, a starting gap of 1 shrinks to `0.0816` with $d = 2$ and to `0.0067` with $d = 1$.",
+  "hints": [
+    "Use `range(1, total_steps + 1)` and keep `t` when `t % d == 0`. Step 0 doesn't exist.",
+    "The gap shrinks by a factor $1 - \\tau$ per target update, so after $k$ updates it is `gap0 * (1 - tau) ** k`.",
+    "The number $k$ of target updates is the length of the list that `actor_update_steps` returns."
+  ],
+  "runtime": "pyodide"
+}

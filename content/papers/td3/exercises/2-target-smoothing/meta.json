@@ -1,0 +1,10 @@
+{
+  "title": "Target policy smoothing",
+  "goal": "Write the target action of Algorithm 1, $\\tilde a = \\pi_{\\phi'}(s') + \\epsilon$ with $\\epsilon \\sim \\mathrm{clip}(\\mathcal{N}(0, \\sigma), -c, c)$ (Equation 14), and then clip the result to the action bounds.\n\n- `smoothed_action(mu_next, z, sigma, c, low, high)` takes the target actor's actions `mu_next`, standard normal draws `z` of the same shape, the noise scale `sigma`, the noise clip `c`, and the action bounds `low` and `high`. It returns `clip(mu_next + clip(sigma * z, -c, c), low, high)`.\n- `sample_smoothed_action(mu_next, sigma, c, low, high, rng)` draws `z = rng.standard_normal(mu_next.shape)` once and calls `smoothed_action`.\n\nThe example on the page uses `mu = 0.8`, `sigma = 0.2`, `c = 0.5`, bounds of $[-1, 1]$, and draws `z = [0.5, 3.0, -4.0]`. It gives noise `[0.1, 0.5, -0.5]` and actions `[0.9, 1.0, 0.3]`.",
+  "hints": [
+    "Scale first: `sigma * z` is the raw noise. Then clip it to $[-c, c]$. Clipping `z` before scaling gives a different answer.",
+    "Add the clipped noise to `mu_next`, and only then clip to `[low, high]`. The noise clip keeps the target near the action. The bound clip keeps the target legal.",
+    "`np.clip(x, lo, hi)` works elementwise, and `low` and `high` can be scalars or arrays."
+  ],
+  "runtime": "pyodide"
+}

@@ -1132,3 +1132,9 @@ concepts:
     lesson: "Log-mel spectrograms"
     anchor_match: exact
     refresher: "A spectrogram whose frequency axis follows the mel scale, which matches how people perceive pitch."
+  maximization-bias:
+    label: "maximization bias"
+    url: "https://rl.ifkash.dev/lessons/018-maximization-bias"
+    lesson: "Maximization bias and double learning"
+    anchor_match: exact
+    refresher: "A maximum over noisy value estimates is higher on average than the maximum of the true values, so Q-learning targets overestimate."

@@ -1,0 +1,10 @@
+{
+  "title": "Clipped double-Q target",
+  "goal": "Write the critic side of Algorithm 1. For a minibatch of $N$ transitions:\n\n- `clipped_target(r, done, gamma, q1_next, q2_next)` returns $y_i = r_i + \\gamma\\,(1 - \\text{done}_i)\\,\\min(Q'_1, Q'_2)$ (Equation 15), where `q1_next[i]` and `q2_next[i]` are $Q'_1(s'_i, \\tilde a_i)$ and $Q'_2(s'_i, \\tilde a_i)$ for the same smoothed action. All four arguments except `gamma` have shape `(N,)`. Return an array of shape `(N,)`.\n- `twin_critic_loss(q1, q2, y)` returns the sum of the two critics' mean squared errors against the same target: $\\frac{1}{N}\\sum_i (y_i - Q_{\\theta_1,i})^2 + \\frac{1}{N}\\sum_i (y_i - Q_{\\theta_2,i})^2$ (Algorithm 1).\n\nThe example on the page gives targets `[2.8, 3.6, 2.0]` and a summed loss of `0.53333`. Algorithm 1 doesn't show terminal states. The mask is the standard addition, as on the DDPG page.",
+  "hints": [
+    "Take the elementwise minimum of the two target critics with `np.minimum`. Don't use `np.min` on a stacked array without choosing the axis, and don't average the two.",
+    "Multiply the bootstrap term by `(1.0 - done)`, so a terminal row gets $y_i = r_i$ whatever the critics say.",
+    "Both critics regress to the same `y`. Compute one mean squared error per critic and add them."
+  ],
+  "runtime": "pyodide"
+}
