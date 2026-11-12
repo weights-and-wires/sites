@@ -654,14 +654,14 @@ concepts:
     refresher: "Propose a sample from an easy distribution and accept or reject it so accepted samples follow a target distribution."
   feature-level-drafting:
     label: "feature-level drafting"
-    url: "https://qwen.ifkash.dev/c/20-speculative-decoding"
-    lesson: "Speculative decoding"
+    url: "https://qwen.ifkash.dev/c/20a-tree-speculation"
+    lesson: "Tree speculation and speculation under load"
     anchor_match: close
     refresher: "Predict the target model's next hidden features with a small head, then sample draft tokens from them."
   tree-attention:
     label: "tree attention"
-    url: "https://qwen.ifkash.dev/c/20-speculative-decoding"
-    lesson: "Speculative decoding"
+    url: "https://qwen.ifkash.dev/c/20a-tree-speculation"
+    lesson: "Tree speculation and speculation under load"
     anchor_match: close
     refresher: "Verify several candidate token branches in one pass using a mask that lets each token see only its own ancestors."
   prefill-vs-decode:

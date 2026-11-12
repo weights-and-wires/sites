@@ -1,0 +1,11 @@
+{
+  "title": "Verify k candidates at one node",
+  "goal": "Implement the multi-round speculative sampling step that verifies the children of one tree node (Section 3.3 and Appendix A.2).\n\nThe draft proposed `k` candidate tokens for the same position. They were drawn i.i.d. from the draft distribution `q`. The target distribution at that position is `p`.\n\nWrite `verify_node(p, q, cands, u, rng)`.\n\n- Test the candidates in order. Candidate `i` is accepted when `u[i] <= p_cur[x] / q[x]`, where `x = cands[i]` and `p_cur` is the current target distribution.\n- After each rejection, replace `p_cur` with `norm(max(0, p_cur - q))`.\n- If a candidate is accepted, return `(x, i)`.\n- If every candidate is rejected, draw one token from `p_cur` with `rng.choice` and return `(token, -1)`.\n\nThe tokens are Python ints. `p`, `q` are arrays of shape `(V,)`, and `u` holds `k` uniform draws from $U(0, 1)$. The starter includes `residual_distribution`.",
+  "hints": [
+    "Keep a variable `cur = p` and loop over `zip(cands, u)`. Return as soon as a candidate passes.",
+    "The test uses `cur`, not the original `p`. After a rejection, set `cur = residual_distribution(cur, q)`.",
+    "After the loop, every candidate failed. Sample the replacement token from `cur`, the last adjusted distribution. Sampling from the original `p` is the common bug, and only a distribution test shows it.",
+    "Return `int(...)` values so the tests can compare them with plain integers."
+  ],
+  "runtime": "pyodide"
+}

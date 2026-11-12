@@ -1,0 +1,11 @@
+{
+  "title": "Expected accepted length of a draft tree",
+  "goal": "Compute the expected number of tokens one round yields, for any draft tree.\n\nUse this model. Node `i` is tested only if its parent was accepted and every earlier sibling (a smaller index with the same parent) was rejected. When tested, it is accepted with probability `accept[i]`. The target model always adds one more token: the replacement token or the bonus token.\n\nWrite `expected_length(parents, accept)`.\n\n- `parents[i]` is the parent of node `i`, with `-1` for a child of the last context token. Parents come before their children.\n- Return `1 + sum_i P(node i is accepted)` as a float.\n\nFor a chain of depth $d$ with the same `accept = alpha` at every node, this is $\\sum_{k=0}^{d} \\alpha^k$. A tree can beat that chain because a rejected first child leaves a sibling to try. This model is an assumption of the exercise and not a result of the paper.",
+  "hints": [
+    "Keep an array `reach` where `reach[i]` is the probability that node `i` is accepted. A root's parent is always \"accepted\", so use 1.0 for it.",
+    "Keep, for each parent, the probability that the parent was accepted and every sibling so far was rejected. Call it `remaining[parent]`. It starts at `reach[parent]`.",
+    "For node `i`: `reach[i] = remaining[p] * accept[i]`, then `remaining[p] *= 1 - accept[i]`.",
+    "Check a chain first: three nodes with `accept = 0.5` give 1 + 0.5 + 0.25 + 0.125 = 1.875."
+  ],
+  "runtime": "pyodide"
+}
