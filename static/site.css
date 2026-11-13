@@ -440,7 +440,7 @@
 
   /* Scrollable boxes show a shadow on the edge that has more content. The
      "local" layers cover the shadow once the box is scrolled to that edge. */
-  .math-display, .katex-display, .prose table, .code-block pre {
+  .math-display, .prose table, .code-block pre {
     --scroll-bg: var(--paper);
     --scroll-shadow: color-mix(in srgb, var(--ink) 20%, transparent);
     max-width: 100%;
@@ -451,7 +451,9 @@
       linear-gradient(to right, var(--scroll-shadow), transparent) 0 0 / 12px 100% no-repeat scroll,
       linear-gradient(to left, var(--scroll-shadow), transparent) 100% 0 / 12px 100% no-repeat scroll;
   }
-  .math-display, .katex-display { overflow-y: hidden; padding-bottom: 0.4em; }
+  .math-display { overflow-y: hidden; padding-bottom: 0.4em; }
+  /* KaTeX's own display box would nest a second scroller inside this one. */
+  .math-display .katex-display { overflow: visible; }
   .code-block pre { --scroll-bg: var(--code-bg); --scroll-shadow: rgb(0 0 0 / 0.4); }
 
   /* Two-row top bar: brand and buttons on the first row, links on the
@@ -471,12 +473,15 @@
     }
     .topbar-nav::-webkit-scrollbar { display: none; }
     .topbar-nav a { flex: none; }
+    /* The hub has one link, which fits on the first row. */
+    .site-courses .topbar-nav { order: 0; flex: 0 1 auto; margin: 0; -webkit-mask-image: none; mask-image: none; }
+    .site-courses .topbar { padding-bottom: 10px; }
   }
 
   @media (max-width: 620px) {
     .topbar { padding: 8px 16px 2px; }
     .topbar-nav a { padding: 8px 9px; font-size: 13px; }
-    .home-link { padding: 0 2px; }
+    .home-link { gap: 3px; padding: 0 2px; }
     /* Toolbar: file name on its own line, buttons wrap under it. */
     .code-toolbar { flex-wrap: wrap; gap: 8px; padding: 8px 12px; }
     .editor-block .code-toolbar span { flex: 1 0 100%; margin-right: 0; }
