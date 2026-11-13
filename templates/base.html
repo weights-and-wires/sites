@@ -21,14 +21,14 @@
     <span class="brand-type"><span class="brand-name">{{.Site.Wordmark}}<span class="brand-slash"> /</span></span><span class="brand-subtitle">{{.Site.Subtitle}}</span></span>
   </a>
   <nav class="topbar-nav" aria-label="{{.Site.Name}}">
-    {{if eq .Site.ID "papers"}}<a href="/">Papers index</a><a href="/graph/">Graph</a><a href="/paths/">Paths</a><a href="/tracks/">Tracks</a><a href="/dives/">Deep dives</a>{{else}}<a href="/#all-courses">All courses</a>{{end}}
+    {{if eq .Site.ID "papers"}}<a href="/">Papers</a><a href="/graph/">Graph</a><a href="/paths/">Paths</a><a href="/tracks/">Tracks</a><a href="/dives/">Deep dives</a>{{else}}<a href="/#all-courses">All courses</a>{{end}}
   </nav>
   {{if eq .Site.ID "papers"}}<button class="icon-button search-button" type="button" data-search-open aria-label="Search papers (press /)" aria-keyshortcuts="/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>{{end}}
   <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
     <svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
     <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
   </button>
-  <a class="home-link" href="https://home.ifkash.dev/" aria-label="ifkash.dev home"><span aria-hidden="true">←</span> home</a>
+  <a class="home-link" href="https://home.ifkash.dev/" title="home.ifkash.dev"><span aria-hidden="true">←</span> home</a>
 </header>
 <main id="main" tabindex="-1">
 {{template "page" .}}
