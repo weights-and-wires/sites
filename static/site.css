@@ -132,11 +132,6 @@
     .brand-mark { width: 32px; height: 32px; }
     .brand-name { font-size: 19px; }
     .brand-subtitle { display: none; }
-    .topbar-nav a { flex: none; padding: 7px 8px; }
-    /* Six links don't fit a phone: the nav scrolls sideways instead of
-       widening the page. */
-    .topbar-nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
-    .topbar-nav::-webkit-scrollbar { display: none; }
     main { padding: 28px 16px 44px; }
     .site-footer { padding: 18px 16px 24px; }
   }
@@ -415,7 +410,7 @@
   .py-cell .runner-stdout { margin: 0; background: transparent; padding: 0; color: var(--ink); }
 
   @media (max-width: 620px) {
-    .widget { padding: 14px 12px 12px; margin-left: -4px; margin-right: -4px; }
+    .widget { padding: 14px 12px 12px; }
     .widget-controls { gap: 8px 14px; }
     /* One row per slider: the label wraps inside its column, so the value
        never drops to a line of its own. */
@@ -423,5 +418,104 @@
     .widget-slider label { white-space: normal; }
     .widget-slider input[type="range"] { width: 100%; min-width: 0; }
     .widget-value { min-width: 0; text-align: right; }
+  }
+}
+
+/* Phone and tablet layout. */
+@layer site {
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+  .brand-name, .topbar-nav a, .run-button { white-space: nowrap; }
+  .graph-filters fieldset { min-width: 0; }
+
+  /* Wrapped inline code keeps its box on every line, and long identifiers
+     and URLs break instead of pushing past the measure. */
+  p, li { overflow-wrap: anywhere; }
+  :not(pre) > code {
+    overflow-wrap: break-word;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  .code-block { max-width: 100%; }
+
+  /* Scrollable boxes show a shadow on the edge that has more content. The
+     "local" layers cover the shadow once the box is scrolled to that edge. */
+  .math-display, .prose table, .code-block pre {
+    --scroll-bg: var(--paper);
+    --scroll-shadow: color-mix(in srgb, var(--ink) 20%, transparent);
+    max-width: 100%;
+    overflow-x: auto;
+    background:
+      linear-gradient(to right, var(--scroll-bg) 30%, transparent) 0 0 / 28px 100% no-repeat local,
+      linear-gradient(to left, var(--scroll-bg) 30%, transparent) 100% 0 / 28px 100% no-repeat local,
+      linear-gradient(to right, var(--scroll-shadow), transparent) 0 0 / 12px 100% no-repeat scroll,
+      linear-gradient(to left, var(--scroll-shadow), transparent) 100% 0 / 12px 100% no-repeat scroll;
+  }
+  .math-display { overflow-y: hidden; padding-bottom: 0.4em; }
+  /* KaTeX's own display box would nest a second scroller inside this one. */
+  .math-display .katex-display { overflow: visible; }
+  .code-block pre { --scroll-bg: var(--code-bg); --scroll-shadow: rgb(0 0 0 / 0.4); }
+
+  /* Two-row top bar: brand and buttons on the first row, links on the
+     second, so every link stays visible. */
+  @media (max-width: 960px) {
+    .topbar { flex-wrap: wrap; gap: 2px 10px; min-height: 0; padding: 10px 42px 4px; }
+    .brand { margin-right: auto; }
+    .topbar-nav {
+      order: 10;
+      flex: 1 0 100%;
+      min-width: 0;
+      margin: 0 -8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent);
+      mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent);
+    }
+    .topbar-nav::-webkit-scrollbar { display: none; }
+    .topbar-nav a { flex: none; }
+    /* The hub has one link, which fits on the first row. */
+    .site-courses .topbar-nav { order: 0; flex: 0 1 auto; margin: 0; -webkit-mask-image: none; mask-image: none; }
+    .site-courses .topbar { padding-bottom: 10px; }
+  }
+
+  @media (max-width: 620px) {
+    .topbar { padding: 8px 16px 2px; }
+    .topbar-nav a { padding: 8px 9px; font-size: 13px; }
+    .home-link { gap: 3px; padding: 0 2px; }
+    /* Toolbar: file name on its own line, buttons wrap under it. */
+    .code-toolbar { flex-wrap: wrap; gap: 8px; padding: 8px 12px; }
+    .editor-block .code-toolbar span { flex: 1 0 100%; margin-right: 0; }
+    .editor-block .code-toolbar button { flex: 1 1 auto; }
+  }
+
+  /* Touch: 44 px hit areas, and 16 px text in fields so iOS Safari doesn't
+     zoom on focus. */
+  @media (pointer: coarse), (max-width: 620px) {
+    .icon-button { width: 44px; height: 44px; }
+    .topbar-nav a, .home-link { display: inline-flex; align-items: center; min-height: 44px; }
+    .brand, .button, .chain-button { min-height: 44px; }
+
+    .code-toolbar button { min-height: 44px; padding: 0 14px; font-size: 12px; }
+
+    .hints summary, .self-check summary, .solution-details summary {
+      padding: 12px 0;
+      line-height: 20px;
+    }
+    .hints details { padding-block: 0; }
+    .hints details[open] { padding-bottom: 8px; }
+
+    .graph-filter { min-height: 44px; margin-right: 6px; gap: 8px; padding-right: 6px; }
+    .graph-filter input, .progress-toggle input, .widget-toggle input { width: 22px; height: 22px; margin: 0; }
+    .progress-toggle { min-height: 44px; gap: 10px; }
+    .path-check { display: flex; align-items: flex-start; padding: 0; }
+    .path-check input { width: 22px; height: 22px; margin: 11px; }
+    .widget-control { min-height: 44px; }
+    .widget-slider input[type="range"] { min-height: 44px; }
+    .widget select { min-height: 44px; padding: 6px 10px; }
+    .widget-button { min-height: 44px; padding: 8px 16px; }
+
+    .editor-host .cm-editor, .editor-host .cm-content, .editor-host .cm-scroller { font-size: 16px !important; }
+    .editor-fallback { font-size: 16px; }
+    select, textarea, input:not([type="checkbox"], [type="radio"], [type="range"]), .widget select { font-size: 16px; }
   }
 }
