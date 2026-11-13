@@ -10,7 +10,7 @@
 # reader's progress from the browser. The server's CSP (connect-src in
 # internal/server/server.go) must list the course's origin.
 title: "Learn how AI systems work, from the <em>silicon</em> up."
-lede: "Hands-on courses that run from operating systems and CPUs to GPU kernels, inference engines, reinforcement learning, and speech, with a paper library alongside. Every lesson ends in code you write and checks that grade it."
+lede: "Hands-on courses that run from operating systems and CPUs to GPU kernels, inference engines, reinforcement learning, and speech. Every lesson ends in code you write and checks that grade it."
 
 stages:
   - id: foundations
@@ -25,9 +25,6 @@ stages:
   - id: applied
     label: RL and speech
     note: "Post-training, agents, and audio"
-  - id: papers
-    label: Papers
-    note: "Read alongside every stage"
 
 courses:
   - id: os
@@ -144,27 +141,3 @@ courses:
     glob: "content/lessons/*.md"
     progress: true
     paths: [speech-ctc-to-speech-llms]
-  - id: papers
-    mark: PDF
-    name: Papers
-    url: https://papers.ifkash.dev/
-    blurb: "One page per paper, with the prerequisites you need first, worked examples, and exercises that run in your browser."
-    unit: papers
-    stage: papers
-    order: 10
-    tracks: [reading]
-    paths:
-      - transformer-to-modern-llm
-      - path-to-flashattention
-      - rl-to-rlhf-to-reasoning
-      - speech-ctc-to-speech-llms
-      - serving-an-llm-fast
-  - id: dives
-    mark: DD
-    name: Deep dives
-    url: https://papers.ifkash.dev/dives/
-    blurb: "Interactive walkthroughs of technical blog posts: the problem each one solves, the mechanism step by step, and a small version you can run and change in your browser."
-    unit: dives
-    stage: papers
-    order: 11
-    tracks: [reading, interactive]
