@@ -47,7 +47,7 @@ type Site struct {
 
 var sites = []Site{
 	{ID: "papers", Name: "Papers", Wordmark: "papers", Subtitle: "reading paths", Host: "papers.ifkash.dev"},
-	{ID: "courses", Name: "Courses", Wordmark: "courses", Subtitle: "ifkash.dev", Host: "courses.ifkash.dev"},
+	{ID: "courses", Name: "Courses", Wordmark: "courses", Subtitle: "learn ai systems", Host: "courses.ifkash.dev"},
 }
 
 // Assets are the fingerprinted file names every page links to.
@@ -180,7 +180,7 @@ func (b *builder) run() error {
 	if err != nil {
 		return err
 	}
-	hubView := b.hubView(hub, paths, len(papers), len(dives))
+	hubView := b.hubView(hub, paths)
 
 	concepts, err := content.LoadConcepts(filepath.Join(b.root, "content/papers/concepts.yaml"))
 	if err != nil {
@@ -266,7 +266,7 @@ func (b *builder) run() error {
 
 // hubView fills in lesson counts and reading paths. A course whose count
 // can't be fetched keeps the count from courses.yaml.
-func (b *builder) hubView(hub content.Hub, paths []content.Path, papers, dives int) HubView {
+func (b *builder) hubView(hub content.Hub, paths []content.Path) HubView {
 	token := os.Getenv("COURSES_READ_TOKEN")
 	if token == "" {
 		token = os.Getenv("GITHUB_TOKEN")
@@ -285,10 +285,6 @@ func (b *builder) hubView(hub content.Hub, paths []content.Path, papers, dives i
 	for i, c := range hub.Courses {
 		cv := CourseView{Course: c, Number: fmt.Sprintf("%02d", i+1), Count: c.Lessons, StageLabel: stageLabel[c.Stage]}
 		switch {
-		case c.ID == "papers":
-			cv.Count, cv.Live = papers, true
-		case c.ID == "dives":
-			cv.Count, cv.Live = dives, true
 		case c.Repo != "" && c.Glob != "" && !b.offline:
 			n, err := counts.Count(context.Background(), client, c.Repo, c.Glob, token)
 			if err != nil {
@@ -302,9 +298,7 @@ func (b *builder) hubView(hub content.Hub, paths []content.Path, papers, dives i
 				cv.Paths = append(cv.Paths, p)
 			}
 		}
-		if c.Stage != "papers" {
-			v.TotalLessons += cv.Count
-		}
+		v.TotalLessons += cv.Count
 		v.Courses = append(v.Courses, cv)
 	}
 	for i, st := range hub.Stages {
@@ -336,7 +330,11 @@ func (b *builder) writeAssets(site string, math bool) (Assets, error) {
 	if err != nil {
 		return Assets{}, err
 	}
-	favicon, err := os.ReadFile(filepath.Join(b.root, "static/favicon.svg"))
+	faviconFile := "static/favicon.svg"
+	if site == "courses" {
+		faviconFile = "static/favicon-courses.svg"
+	}
+	favicon, err := os.ReadFile(filepath.Join(b.root, faviconFile))
 	if err != nil {
 		return Assets{}, err
 	}

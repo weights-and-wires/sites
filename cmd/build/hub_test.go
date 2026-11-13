@@ -22,7 +22,7 @@ func renderHub(t *testing.T) (string, Assets) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	page := Page{Site: sites[1], Assets: assets, Title: "Courses", Built: "test", Hub: b.hubView(hub, nil, 0, 0)}
+	page := Page{Site: sites[1], Assets: assets, Title: "Courses", Built: "test", Hub: b.hubView(hub, nil)}
 	if err := b.page("courses", "index.html", "hub.html", page); err != nil {
 		t.Fatal(err)
 	}
@@ -48,7 +48,7 @@ func TestHubRendersProgressOnlyForOptedInCourses(t *testing.T) {
 	if got := strings.Count(html, `data-progress-out aria-live="polite"`); got != len(want) {
 		t.Errorf("progress placeholders = %d, want %d", got, len(want))
 	}
-	for _, id := range []string{"os", "cpu", "tpu", "arm64", "papers"} {
+	for _, id := range []string{"os", "cpu", "tpu", "arm64"} {
 		if strings.Contains(html, "https://"+id+".ifkash.dev/api/progress") {
 			t.Errorf("course %s must not render a progress URL", id)
 		}
