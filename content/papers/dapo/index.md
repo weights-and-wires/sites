@@ -18,9 +18,9 @@ prereqs:
 background: [entropy-collapse, dynamic-sampling]
 course_links:
   - title: "Reasoning with verifiable rewards"
-    url: "https://rl.ifkash.dev/lessons/073-reasoning-with-verifiable-rewards"
+    url: "https://rl.ifkash.dev/lessons/075-reasoning-with-verifiable-rewards"
   - title: "Group-relative policy optimization"
-    url: "https://rl.ifkash.dev/lessons/071-group-relative-policy-optimization"
+    url: "https://rl.ifkash.dev/lessons/072-group-relative-policy-optimization"
 self_check:
   - q: 'R1-Zero trains a base model with reinforcement learning and a reward that a program computes, with no human-written reasoning traces. What does DAPO use as its reward, and why does it avoid a learned reward model?'
     a: 'DAPO uses a rule: $+1$ if the predicted answer is equivalent to the ground truth and $-1$ otherwise (Section 2.4, Equation 7). The paper says reward models are prone to reward hacking, and a rule on a checkable answer is not. To make the rule reliable, the authors rewrite every training answer into an integer (Section 3.5).'

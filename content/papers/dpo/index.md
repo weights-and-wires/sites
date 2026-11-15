@@ -18,7 +18,7 @@ prereqs:
 background: [log-probability-ratios, closed-form-optimal-policy]
 course_links:
   - title: "Direct preference optimization"
-    url: "https://rl.ifkash.dev/lessons/070-direct-preference-optimization"
+    url: "https://rl.ifkash.dev/lessons/071-direct-preference-optimization"
   - title: "PPO and DPO: two ways to reach the leashed optimum"
     url: "https://ml.ifkash.dev/lessons/081-ppo-and-dpo"
 self_check:

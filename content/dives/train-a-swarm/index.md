@@ -17,7 +17,7 @@ prereqs:
 background: [policy-gradient-theorem, group-relative-baselines]
 course_links:
   - {title: "The policy gradient", url: "https://rl.ifkash.dev/lessons/031-the-policy-gradient"}
-  - {title: "Group-relative policy optimization", url: "https://rl.ifkash.dev/lessons/071-group-relative-policy-optimization"}
+  - {title: "Group-relative policy optimization", url: "https://rl.ifkash.dev/lessons/072-group-relative-policy-optimization"}
 ---
 
 ## The problem

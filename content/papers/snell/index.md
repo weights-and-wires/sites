@@ -20,7 +20,7 @@ prereqs:
 background: [best-of-n, beam-search, compute-optimal-allocation]
 course_links:
   - title: "Process rewards and test-time search"
-    url: "https://rl.ifkash.dev/lessons/074-process-rewards-and-search"
+    url: "https://rl.ifkash.dev/lessons/076-process-rewards-and-search"
 self_check:
   - q: 'A PRM gives the three steps of one solution the scores $0.9$, $0.2$, and $0.8$. What score does the paper assign to the whole solution, and what would the minimum and the product give?'
     a: 'The paper uses the PRM''s prediction at the last step, so the score is $0.8$ (Section 5.1). The minimum gives $0.2$ and the product gives $0.9 \cdot 0.2 \cdot 0.8 = 0.144$. Appendix E finds that the last step works best for this PRM, which is trained on soft Monte Carlo labels, while the [Let''s Verify Step by Step](/prm/) paper multiplies step probabilities from a PRM trained on human labels.'
