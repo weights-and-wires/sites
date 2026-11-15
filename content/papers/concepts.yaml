@@ -900,31 +900,31 @@ concepts:
     refresher: "A model that maps a prompt and response to a scalar score reflecting human preference."
   log-probability-ratios:
     label: "log-probability ratios"
-    url: "https://rl.ifkash.dev/lessons/070-direct-preference-optimization"
+    url: "https://rl.ifkash.dev/lessons/071-direct-preference-optimization"
     lesson: "Direct preference optimization"
     anchor_match: exact
     refresher: "Compare how likely the tuned policy and reference policy make a response, by the difference of their log-probabilities."
   closed-form-optimal-policy:
     label: "closed-form optimal policy"
-    url: "https://rl.ifkash.dev/lessons/070-direct-preference-optimization"
+    url: "https://rl.ifkash.dev/lessons/071-direct-preference-optimization"
     lesson: "Direct preference optimization"
     anchor_match: exact
     refresher: "The KL-regularized reward-maximizing policy equals the reference policy reweighted by exponentiated reward."
   group-relative-baselines:
     label: "group-relative baselines"
-    url: "https://rl.ifkash.dev/lessons/071-group-relative-policy-optimization"
+    url: "https://rl.ifkash.dev/lessons/072-group-relative-policy-optimization"
     lesson: "Group-relative policy optimization"
     anchor_match: exact
     refresher: "Sample several responses per prompt and use their mean reward as the baseline for each response's advantage."
   outcome-rewards:
     label: "outcome rewards"
-    url: "https://rl.ifkash.dev/lessons/072-verifiable-rewards"
+    url: "https://rl.ifkash.dev/lessons/073-verifiable-rewards"
     lesson: "Verifiable rewards"
     anchor_match: exact
     refresher: "Reward only the final result of a response, such as a correct answer, not the steps."
   verifiable-rewards:
     label: "verifiable rewards"
-    url: "https://rl.ifkash.dev/lessons/072-verifiable-rewards"
+    url: "https://rl.ifkash.dev/lessons/073-verifiable-rewards"
     lesson: "Verifiable rewards"
     anchor_match: exact
     refresher: "Rewards computed by a program that checks the answer, such as a math checker or unit tests."
@@ -936,31 +936,31 @@ concepts:
     refresher: "Train a smaller model to imitate the outputs of a larger one."
   entropy-collapse:
     label: "entropy collapse"
-    url: "https://rl.ifkash.dev/lessons/073-reasoning-with-verifiable-rewards"
+    url: "https://rl.ifkash.dev/lessons/075-reasoning-with-verifiable-rewards"
     lesson: "Reasoning with verifiable rewards"
     anchor_match: exact
     refresher: "The policy becomes nearly deterministic too early, so exploration stops and learning stalls."
   dynamic-sampling:
     label: "dynamic sampling"
-    url: "https://rl.ifkash.dev/lessons/071-group-relative-policy-optimization"
+    url: "https://rl.ifkash.dev/lessons/072-group-relative-policy-optimization"
     lesson: "Group-relative policy optimization"
     anchor_match: close
     refresher: "Skip prompts whose sampled responses all earn the same reward, since they give no learning signal."
   process-vs-outcome-supervision:
     label: "process vs. outcome supervision"
-    url: "https://rl.ifkash.dev/lessons/074-process-rewards-and-search"
+    url: "https://rl.ifkash.dev/lessons/076-process-rewards-and-search"
     lesson: "Process rewards and test-time search"
     anchor_match: exact
     refresher: "Process supervision scores each reasoning step, while outcome supervision scores only the final answer."
   best-of-n:
     label: "best-of-n"
-    url: "https://rl.ifkash.dev/lessons/074-process-rewards-and-search"
+    url: "https://rl.ifkash.dev/lessons/076-process-rewards-and-search"
     lesson: "Process rewards and test-time search"
     anchor_match: exact
     refresher: "Sample n responses and keep the one a scorer rates highest."
   compute-optimal-allocation:
     label: "compute-optimal allocation"
-    url: "https://rl.ifkash.dev/lessons/074-process-rewards-and-search"
+    url: "https://rl.ifkash.dev/lessons/076-process-rewards-and-search"
     lesson: "Process rewards and test-time search"
     anchor_match: close
     refresher: "Split a fixed inference compute budget between samples and search to get the best accuracy."

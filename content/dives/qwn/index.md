@@ -16,7 +16,7 @@ prereqs:
   - {id: bpe, reason: "The reason a model cannot see letters is that it reads subword tokens, which this paper introduced for translation."}
 background: [softmax, sft, kl-penalty, group-relative-baselines, optimizer-state-memory]
 course_links:
-  - {title: "RL lesson 71: group-relative policy optimization", url: "https://rl.ifkash.dev/lessons/071-group-relative-policy-optimization"}
+  - {title: "RL lesson 71: group-relative policy optimization", url: "https://rl.ifkash.dev/lessons/072-group-relative-policy-optimization"}
   - {title: "ML lesson 77: fine-tuning and LoRA", url: "https://ml.ifkash.dev/lessons/078-fine-tuning-and-lora"}
 ---
 

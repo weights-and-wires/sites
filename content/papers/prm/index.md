@@ -20,9 +20,9 @@ prereqs:
 background: [process-vs-outcome-supervision, best-of-n]
 course_links:
   - title: "Process rewards and test-time search"
-    url: "https://rl.ifkash.dev/lessons/074-process-rewards-and-search"
+    url: "https://rl.ifkash.dev/lessons/076-process-rewards-and-search"
   - title: "Credit assignment for LLMs"
-    url: "https://rl.ifkash.dev/lessons/075-credit-assignment-for-llms"
+    url: "https://rl.ifkash.dev/lessons/077-credit-assignment-for-llms"
   - title: "Reward models"
     url: "https://rl.ifkash.dev/lessons/067-reward-models"
 self_check:

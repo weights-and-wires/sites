@@ -22,9 +22,9 @@ prereqs:
 background: [verifiable-rewards, self-play, group-relative-baselines]
 course_links:
   - title: "AI feedback and self-improvement"
-    url: "https://rl.ifkash.dev/lessons/076-ai-feedback-and-self-improvement"
+    url: "https://rl.ifkash.dev/lessons/078-ai-feedback-and-self-improvement"
   - title: "Verifiable rewards"
-    url: "https://rl.ifkash.dev/lessons/072-verifiable-rewards"
+    url: "https://rl.ifkash.dev/lessons/073-verifiable-rewards"
 self_check:
   - q: 'A solver attempts a proposed task 8 times and succeeds 2 times. What is the proposer reward under Equation 4, and what is it if the solver succeeds 0 times or 8 times?'
     a: 'The mean solver reward is $2/8 = 0.25$, so the proposer reward is $1 - 0.25 = 0.75$. With 0 successes the reward is $0$ by definition, and with 8 successes it is $1 - 1 = 0$. The proposer earns nothing for tasks that are too hard or too easy.'
