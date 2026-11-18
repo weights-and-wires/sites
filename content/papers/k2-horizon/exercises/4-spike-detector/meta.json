@@ -1,0 +1,11 @@
+{
+  "title": "Robust loss-spike detector",
+  "goal": "Section 3.3.2 flags loss spikes with a robust z-score (Equation 12). Over a trailing window of $w$ steps, take the median $m_t$ and the median absolute deviation $\\mathrm{MAD}_t$, and set $z_t = (y_t - m_t) / (1.4826\\, \\mathrm{MAD}_t)$. A spike episode starts when $z_t > 5$ and ends when $z$ stays below 2 for three consecutive steps. This page reads the window as the $w$ steps before $t$, not including $t$.\n\nWrite the following functions:\n\n- `robust_z(y, w)` returns an array like `y`. Entries before index `w` are 0.\n- `spike_episodes(z, on=5.0, off=2.0, calm=3)` returns a list of `(start, end)` pairs. `start` is the step where `z > on` first fires, and `end` is the step of the third consecutive calm value. An episode still open at the end of the array ends at the last index.",
+  "hints": [
+    "For step `t`, the window is `y[t - w:t]`.",
+    "The MAD is the median of `abs(window - median(window))`, not the standard deviation.",
+    "Reset the calm counter whenever `z` goes back above `off` inside an episode.",
+    "A new episode can't start until the previous one has ended."
+  ],
+  "runtime": "pyodide"
+}

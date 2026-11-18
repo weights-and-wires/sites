@@ -1,0 +1,10 @@
+{
+  "title": "Softplus attention gate",
+  "goal": "Gated attention multiplies the attention output $Y$ element-wise by $\\gamma = \\varphi(X W_\\gamma + b_\\gamma)$ (Section 2.3, Equations 7-8). K2-Horizon uses $\\varphi(x) = \\mathrm{softplus}(x; \\beta) = \\frac{1}{\\beta}\\log(1 + e^{\\beta x})$ with $\\beta = \\log 2$, so the gate is 1 at a zero pre-activation (Equation 9).\n\nWrite the following functions:\n\n- `softplus(x, beta)` returns Equation 9 for an array `x`. It must not overflow for large `x`.\n- `gated_output(Y, X, W_g, b_g, beta=np.log(2))` returns `Y * softplus(X @ W_g + b_g, beta)`.",
+  "hints": [
+    "`np.logaddexp(0, beta * x) / beta` computes $\\log(1 + e^{\\beta x})/\\beta$ without overflow.",
+    "Check your function at 0: with $\\beta = \\log 2$ it returns exactly 1.",
+    "For large positive $x$, softplus approaches $x$, which is how the gate amplifies."
+  ],
+  "runtime": "pyodide"
+}

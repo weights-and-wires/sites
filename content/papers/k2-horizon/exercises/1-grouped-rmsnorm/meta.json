@@ -1,0 +1,10 @@
+{
+  "title": "Grouped RMSNorm",
+  "goal": "K2-Horizon splits the $d$ features of a hidden vector into $k$ groups of size $d_g = d/k$ and normalizes each group by its own root mean square (Section 2.1, Equation 3). Each output element then lies within $\\pm\\sqrt{d_g}$ instead of $\\pm\\sqrt{d}$.\n\nWrite the following functions. `x` has shape `(..., d)`, and `weight` has shape `(d,)`:\n\n- `rmsnorm(x, weight, eps=1e-6)` returns `x / sqrt(mean(x**2) + eps) * weight`, with the mean over the last axis.\n- `grouped_rmsnorm(x, weight, k, eps=1e-6)` splits the last axis into `k` contiguous groups, normalizes each group by its own RMS, multiplies by `weight`, and returns an array with the shape of `x`. Raise `ValueError` when `d` isn't divisible by `k`.",
+  "hints": [
+    "`x.reshape(*x.shape[:-1], k, d // k)` puts each group on its own axis.",
+    "Take the mean over the new last axis with `keepdims=True`, then reshape back before you multiply by `weight`.",
+    "With `k = 1`, `grouped_rmsnorm` must equal `rmsnorm`."
+  ],
+  "runtime": "pyodide"
+}

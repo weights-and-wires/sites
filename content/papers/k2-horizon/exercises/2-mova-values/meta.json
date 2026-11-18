@@ -1,0 +1,11 @@
+{
+  "title": "Mixture-of-value experts",
+  "goal": "MoVA replaces the value projection with $E$ linear value experts (Section 2.2, Equations 5-6). A router picks the top $k$ experts for each token, and the value is $v(x_t) = \\sum_{i \\in \\mathcal{V}(x_t)} p_i(x_t)\\, \\mathrm{SiLU}(x_t W_v^{(i)})$. This page reads $p_i$ as a softmax over the router logits of the chosen experts.\n\nWrite the following functions. `x` has shape `(T, d)`, `W_r` has shape `(d, E)`, and `W_v` has shape `(E, d, d_v)`:\n\n- `silu(z)` returns `z * sigmoid(z)`.\n- `route(x, W_r, k)` returns `(idx, p)`: `idx` of shape `(T, k)` holds the top `k` experts by logit, best first, and `p` of shape `(T, k)` holds the softmax of their logits.\n- `mova_values(x, W_r, W_v, k)` returns the `(T, d_v)` value vectors.",
+  "hints": [
+    "`np.argsort(-logits, axis=1)[:, :k]` gives the top `k` per row, best first.",
+    "Subtract the row maximum before `np.exp` so large logits don't overflow.",
+    "Apply SiLU to each expert's output before you weight it. The weighted sum of linear experts without SiLU is a different, linear method.",
+    "`np.einsum('td,tkdv->tkv', x, W_v[idx])` computes every chosen expert's output at once."
+  ],
+  "runtime": "pyodide"
+}
